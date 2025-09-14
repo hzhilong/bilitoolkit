@@ -1,0 +1,63 @@
+{
+  "name": "bili-toolkit",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "dist-electron/main.mjs",
+  "productName": "BiliToolkit",
+  "productCNName": "哔哩工具姬",
+  "description": "BiliToolkit「哔哩工具姬」是一款面向B站用户和开发者的开源工具箱，采用模块化插件架构设计，致力于通过可扩展的功能集合提升用户体验。用户可自由安装/卸载功能模块，开发者可快速开发新插件共享至社区。",
+  "author": "hzhilong",
+  "keywords": [
+    "BiliToolkit",
+    "哔哩工具姬"
+  ],
+  "appId": "io.github.hzhilong.bilitoolkit",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hzhilong/BiliToolkit"
+  },
+  "bugs": {
+    "url": "https://github.com/hzhilong/BiliToolkit/issues"
+  },
+  "homepage": "https://github.com/hzhilong/BiliToolkit#readme",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "chcp 65001 && vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build",
+    "lint": "eslint . --fix",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "pinia": "^3.0.3",
+    "vue": "^3.5.18",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.2",
+    "@types/node": "^22.16.5",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue-jsx": "^5.0.1",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/tsconfig": "^0.7.0",
+    "electron": "^38.1.0",
+    "electron-builder": "^26.0.12",
+    "eslint": "^9.31.0",
+    "eslint-plugin-vue": "~10.3.0",
+    "jiti": "^2.4.2",
+    "npm-run-all2": "^8.0.4",
+    "prettier": "3.6.2",
+    "typescript": "~5.8.0",
+    "vite": "^7.0.6",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-vue-devtools": "^8.0.0",
+    "vue-tsc": "^3.0.4"
+  }
+}

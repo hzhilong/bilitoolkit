@@ -1,0 +1,29 @@
+{
+  "extends": "@tsconfig/node22/tsconfig.json",
+  "include": [
+    "./src/main/**/*.ts",
+    "./src/shared/**/*.d.ts",
+    "./src/shared/**/*.ts"
+  ],
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": "./",
+    // 指定增量编译信息的存储路径，提升后续编译速度（集中在 node_modules/.tmp 避免污染项目目录）
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    // 使用 .ts 和 .tsx 扩展名
+    "allowImportingTsExtensions": true,
+    // 显式声明全局类型依赖（仅包含 Node.js 类型定义，避免加载无关的浏览器环境类型）
+    "types": [
+      "node"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+    },
+    // 启用所有严格类型检查
+    "strict": true
+  }
+}
