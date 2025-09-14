@@ -1,5 +1,5 @@
 {
-  "name": "bili-toolkit",
+  "name": "bilitoolkit",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -27,6 +27,7 @@
   },
   "scripts": {
     "dev": "chcp 65001 && vite",
+    "添加本地依赖包": "yalc add bilitoolkit-api-types @ybgnb/utils",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -35,7 +36,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@ybgnb/utils": "file:.yalc/@ybgnb/utils",
     "axios": "^1.12.1",
+    "bilitoolkit-api-types": "file:.yalc/bilitoolkit-api-types",
     "consola": "^3.4.2",
     "dayjs": "^1.11.18",
     "element-plus": "^2.11.2",
