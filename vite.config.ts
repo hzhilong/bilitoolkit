@@ -6,6 +6,9 @@ import electron from 'vite-plugin-electron/simple'
 import { fileURLToPath, URL } from 'node:url'
 import path from 'path'
 import packageJson from './package.json'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 /**
  * 基础的 vite 配置
@@ -52,6 +55,13 @@ const baseConfig = ({ mode }: ConfigEnv): UserConfig => {
       vue(),
       vueJsx() /*vueDevTools()*/,
       vueDevTools(),
+      // 按需引入组件 https://github.com/unplugin/unplugin-vue-components
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+      }),
     ],
     // 定义全局常量替换（适用于一些常量，在js使用）
     define: defineData,

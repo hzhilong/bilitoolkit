@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import AppIcon from '@/renderer/components/common/AppIcon.vue'
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div>
+    <AppIcon icon="admin"/>
+    <el-button>测试</el-button>
+  </div>
 </template>

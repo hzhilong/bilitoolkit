@@ -1,0 +1,14 @@
+<svg width="128" height="128" fill="#FFFFFF" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" stroke-width="10">
+    <defs>
+        <!-- 创建遮罩：白色区域显示，黑色区域透明 -->
+        <mask id="hole-mask">
+            <rect x="20" y="38" width="88" height="62" rx="12" fill="transparent" stroke="white"/>
+            <line x1="34" x2="94" y1="58" y2="58" stroke-linecap="round" stroke="white"/>
+            <line x1="42" x2="42" y1="58" y2="77" stroke-linecap="round" stroke="white"/>
+            <line x1="86" x2="86" y1="58" y2="77" stroke-linecap="round" stroke="white"/>
+            <line x1="56" x2="36" y1="38" y2="26" stroke-linecap="round" stroke="white"/>
+            <line x1="72" x2="92" y1="38" y2="26" stroke-linecap="round" stroke="white"/>
+        </mask>
+    </defs>
+    <rect width="100%" height="100%" rx="20" mask="url(#hole-mask)"/>
+</svg>
