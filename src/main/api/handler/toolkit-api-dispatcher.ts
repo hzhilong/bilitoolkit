@@ -6,6 +6,9 @@ import type { WindowManager } from '@/main/window/window-manager.ts'
 import { WindowApiHandler } from '@/main/api/handler/api-handler-window.ts'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
+import { DBApiHandler } from '@/main/api/handler/api-handler-db.ts'
+import { FileApiHandler } from '@/main/api/handler/api-handler-file.ts'
+
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
 /**
@@ -18,6 +21,8 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     super()
     this.windowManage = wm
     this.register('window', new WindowApiHandler(wm))
+    this.register('db', new DBApiHandler())
+    this.register('file', new FileApiHandler())
   }
 
   /**

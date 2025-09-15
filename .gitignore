@@ -32,3 +32,8 @@ coverage
 
 .yalc
 yalc.lock
+
+# 工具箱生成的文件
+files
+dbs
+logs

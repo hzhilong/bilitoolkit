@@ -7,6 +7,8 @@ import { CommonError, execBiz } from '@ybgnb/utils'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
 import { ToolkitApiDispatcher } from '@/main/api/handler/toolkit-api-dispatcher.ts'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
+import { getPluginDBPath } from '@/main/api/handler/api-handler-db.ts'
+import { getPluginBaseFilePath } from '@/main/api/handler/api-handler-file.ts'
 
 type WebContents = Electron.WebContents
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
@@ -69,8 +71,8 @@ export class WindowManager {
         envType: 'host',
         window: window,
         webContents: sender,
-        dbPath: '',
-        filePath: '',
+        dbPath: getPluginDBPath('host'),
+        filePath: getPluginBaseFilePath('host'),
       } satisfies ApiCallerContext
     } else {
       //TODO 插件环境调用API
