@@ -33,7 +33,6 @@ if (process.platform === 'win32') app.setAppUserModelId(app.getName())
 const createWindow = () => {
   mainWindow = windowManager.createWindow(
     {
-      transparent: false,
       width: 1000,
       height: 700,
       minWidth: 1000,
