@@ -1,9 +1,11 @@
 {
   "extends": "@tsconfig/node22/tsconfig.json",
-  "include": [
-    "./src/main/**/*.ts",
-    "./src/shared/**/*.d.ts",
-    "./src/shared/**/*.ts"
+  "include": ["./src/main/**/*.ts", "./src/shared/**/*.d.ts", "./src/shared/**/*.ts"],
+  "exclude": [
+    "./node_modules",
+    ".yalc",
+    "yalc.lock",
+    "./src/**/__tests__/*"
   ],
   "compilerOptions": {
     "noEmit": true,
@@ -14,14 +16,12 @@
     "moduleResolution": "bundler",
     // 使用 .ts 和 .tsx 扩展名
     "allowImportingTsExtensions": true,
+    // 类型导入必须使用 type
+    "verbatimModuleSyntax": true,
     // 显式声明全局类型依赖（仅包含 Node.js 类型定义，避免加载无关的浏览器环境类型）
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
+      "@/*": ["./src/*"]
     },
     // 启用所有严格类型检查
     "strict": true

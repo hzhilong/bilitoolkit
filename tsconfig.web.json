@@ -12,6 +12,8 @@
   ],
   "exclude": [
     "./node_modules",
+    ".yalc",
+    "yalc.lock",
     "./src/**/__tests__/*"
   ],
   "compilerOptions": {

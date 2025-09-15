@@ -28,6 +28,7 @@
   "scripts": {
     "dev": "chcp 65001 && vite",
     "添加本地依赖包": "yalc add bilitoolkit-api-types @ybgnb/utils",
+    "移除本地依赖包": "yalc remove --all",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -43,6 +44,7 @@
     "dayjs": "^1.11.18",
     "element-plus": "^2.11.2",
     "log4js": "^6.9.1",
+    "lowdb": "^7.0.1",
     "nanoid": "^5.1.5",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",
@@ -54,6 +56,7 @@
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
     "@types/node": "^22.16.5",
+    "@types/source-map-support": "^0.5.10",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitejs/plugin-vue-jsx": "^5.0.1",
     "@vue/eslint-config-prettier": "^10.2.0",
@@ -73,6 +76,7 @@
     "vite": "^7.0.6",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-vue-devtools": "^8.0.0",
-    "vue-tsc": "^3.0.4"
+    "vue-tsc": "^3.0.4",
+    "source-map-support": "^0.5.21"
   }
 }

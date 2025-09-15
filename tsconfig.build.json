@@ -8,6 +8,12 @@
     "playwright.config.*",
     "eslint.config.*",
   ],
+  "exclude": [
+    "./node_modules",
+    ".yalc",
+    "yalc.lock",
+    "./src/**/__tests__/*"
+  ],
   "compilerOptions": {
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
