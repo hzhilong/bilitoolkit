@@ -8,18 +8,19 @@ import { useAppSessionStore } from '@/renderer/stores/app-session.ts'
 const { maxWindow } = storeToRefs(useAppSessionStore())
 const switchWindowMax = () => {
   maxWindow.value = !maxWindow.value
+  toolkitApi.window.maximize(maxWindow.value)
 }
 </script>
 
 <template>
   <div class="window-options">
-    <span class="window-options__item icon-minimize" />
+    <span class="window-options__item icon-minimize" @click="$toolkitApi.window.minimize()" />
     <span
       class="window-options__item"
       :class="maxWindow ? 'icon-cancel-maximize' : 'icon-maximize'"
       @click="switchWindowMax"
     ></span>
-    <span class="window-options__item icon-close"></span>
+    <span class="window-options__item icon-close" @click="$toolkitApi.window.close()"></span>
   </div>
 </template>
 

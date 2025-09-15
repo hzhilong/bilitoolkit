@@ -6,7 +6,6 @@ import * as os from 'node:os'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { mainEnv } from '@/main/common/main-env.ts'
 import { appPath } from '@/main/common/app-path.ts'
-import { showDevTools } from '@/main/utils/dev-tools.ts'
 
 // 主窗口
 let mainWindow: BrowserWindow | null = null
@@ -51,7 +50,7 @@ const createWindow = () => {
   })
 
   // 初始化主窗口相关的 IPC 事件监听和处理
-  windowManager.initMain(mainWindow)
+  windowManager.initMainWindow(mainWindow)
 
   if (appPath.devUrl) {
     // 开发

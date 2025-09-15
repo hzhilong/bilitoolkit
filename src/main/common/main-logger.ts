@@ -1,5 +1,5 @@
-import { appPath } from '@/main/common/app-path'
-import { mainEnv } from '@/main/common/main-env'
+import { appPath } from '@/main/common/app-path.ts'
+import { mainEnv } from '@/main/common/main-env.ts'
 import log4js from 'log4js'
 import path from 'path'
 

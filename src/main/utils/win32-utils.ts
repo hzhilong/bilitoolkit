@@ -1,4 +1,4 @@
-import { mainLogger } from '@/main/utils/main-logger'
+import { mainLogger } from '@/main/common/main-logger.ts'
 import { FileUtils } from '@/main/utils/file-utils'
 import { AbortedError, CommonError } from '@ybgnb/utils'
 import { exec } from 'child_process'

@@ -1,5 +1,5 @@
 import { mainEnv } from '@/main/common/main-env'
-import { mainLogger } from '@/main/utils/main-logger'
+import { mainLogger } from '@/main/common/main-logger.ts'
 import { Win32Utils } from '@/main/utils/win32-utils'
 import { BaseUtils } from '@ybgnb/utils'
 import { shell } from 'electron'
