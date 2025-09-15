@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import AppIcon from '@/renderer/components/common/AppIcon.vue'
+
+import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 </script>
 
 <template>
-  <div>
-    <AppIcon icon="admin"/>
-    <el-button>测试</el-button>
-  </div>
+  <PageContainer>
+    Home
+  </PageContainer>
 </template>
+
+<style scoped lang="scss">
+</style>

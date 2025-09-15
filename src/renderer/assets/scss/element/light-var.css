@@ -1,0 +1,232 @@
+:root {
+  color-scheme: light;
+  --app-color-foreground: #000000;
+  --app-color-background: #FFFFFF;
+  --app-primary-color: rgb(98, 132, 223);
+  --app-background-primary-color: #6284DF;
+
+  --el-color-primary: var(--app-primary-color);
+  --el-color-primary-light-1: color-mix(in srgb, rgb(98, 132, 223) 90%, #FFFFFF);
+  --el-color-primary-light-2: color-mix(in srgb, rgb(98, 132, 223) 80%, #FFFFFF);
+  --el-color-primary-light-3: color-mix(in srgb, rgb(98, 132, 223) 70%, #FFFFFF);
+  --el-color-primary-light-4: color-mix(in srgb, rgb(98, 132, 223) 60%, #FFFFFF);
+  --el-color-primary-light-5: color-mix(in srgb, rgb(98, 132, 223) 50%, #FFFFFF);
+  --el-color-primary-light-6: color-mix(in srgb, rgb(98, 132, 223) 40%, #FFFFFF);
+  --el-color-primary-light-7: color-mix(in srgb, rgb(98, 132, 223) 30%, #FFFFFF);
+  --el-color-primary-light-8: color-mix(in srgb, rgb(98, 132, 223) 20%, #FFFFFF);
+  --el-color-primary-light-9: color-mix(in srgb, rgb(98, 132, 223) 10%, #FFFFFF);
+
+  --el-color-primary-dark-1: color-mix(in srgb, rgb(98, 132, 223) 90%, #000000);
+  --el-color-primary-dark-2: color-mix(in srgb, rgb(98, 132, 223) 80%, #000000);
+  --el-color-primary-dark-3: color-mix(in srgb, rgb(98, 132, 223) 70%, #000000);
+  --el-color-primary-dark-4: color-mix(in srgb, rgb(98, 132, 223) 60%, #000000);
+  --el-color-primary-dark-5: color-mix(in srgb, rgb(98, 132, 223) 50%, #000000);
+  --el-color-primary-dark-6: color-mix(in srgb, rgb(98, 132, 223) 40%, #000000);
+  --el-color-primary-dark-7: color-mix(in srgb, rgb(98, 132, 223) 30%, #000000);
+  --el-color-primary-dark-8: color-mix(in srgb, rgb(98, 132, 223) 20%, #000000);
+  --el-color-primary-dark-9: color-mix(in srgb, rgb(98, 132, 223) 10%, #000000);
+
+  /*半透明，这里只是示例。具体js会设置*/
+  --app-color-primary-transparent-2: rgba(98, 132, 223, 0.02);
+  --app-color-primary-transparent-3: rgba(98, 132, 223, 0.03);
+  --app-color-primary-transparent-4: rgba(98, 132, 223, 0.04);
+  --app-color-primary-transparent-5: rgba(98, 132, 223, 0.05);
+  --app-color-primary-transparent-6: rgba(98, 132, 223, 0.06);
+  --app-color-primary-transparent-7: rgba(98, 132, 223, 0.07);
+  --app-color-primary-transparent-8: rgba(98, 132, 223, 0.08);
+  --app-color-primary-transparent-9: rgba(98, 132, 223, 0.09);
+  --app-color-primary-transparent-10: rgba(98, 132, 223, 0.1);
+  --app-color-primary-transparent-15: rgba(98, 132, 223, 0.15);
+  --app-color-primary-transparent-20: rgba(98, 132, 223, 0.2);
+  --app-color-primary-transparent-25: rgba(98, 132, 223, 0.25);
+  --app-color-primary-transparent-30: rgba(98, 132, 223, 0.3);
+  --app-color-primary-transparent-35: rgba(98, 132, 223, 0.35);
+  --app-color-primary-transparent-40: rgba(98, 132, 223, 0.4);
+  --app-color-primary-transparent-45: rgba(98, 132, 223, 0.45);
+  --app-color-primary-transparent-50: rgba(98, 132, 223, 0.5);
+  --app-color-primary-transparent-55: rgba(98, 132, 223, 0.55);
+  --app-color-primary-transparent-60: rgba(98, 132, 223, 0.6);
+  --app-color-primary-transparent-65: rgba(98, 132, 223, 0.65);
+  --app-color-primary-transparent-70: rgba(98, 132, 223, 0.7);
+  --app-color-primary-transparent-75: rgba(98, 132, 223, 0.75);
+  --app-color-primary-transparent-80: rgba(98, 132, 223, 0.8);
+  --app-color-primary-transparent-85: rgba(98, 132, 223, 0.85);
+  --app-color-primary-transparent-90: rgba(98, 132, 223, 0.9);
+  --app-color-primary-transparent-95: rgba(98, 132, 223, 0.95);
+
+  --app-color-foreground-transparent-2: rgba(0, 0, 0, 0.02);
+  --app-color-foreground-transparent-3: rgba(0, 0, 0, 0.03);
+  --app-color-foreground-transparent-4: rgba(0, 0, 0, 0.04);
+  --app-color-foreground-transparent-5: rgba(0, 0, 0, 0.05);
+  --app-color-foreground-transparent-6: rgba(0, 0, 0, 0.06);
+  --app-color-foreground-transparent-7: rgba(0, 0, 0, 0.07);
+  --app-color-foreground-transparent-8: rgba(0, 0, 0, 0.08);
+  --app-color-foreground-transparent-9: rgba(0, 0, 0, 0.09);
+  --app-color-foreground-transparent-10: rgba(0, 0, 0, 0.1);
+  --app-color-foreground-transparent-15: rgba(0, 0, 0, 0.15);
+  --app-color-foreground-transparent-20: rgba(0, 0, 0, 0.2);
+  --app-color-foreground-transparent-25: rgba(0, 0, 0, 0.25);
+  --app-color-foreground-transparent-30: rgba(0, 0, 0, 0.3);
+  --app-color-foreground-transparent-35: rgba(0, 0, 0, 0.35);
+  --app-color-foreground-transparent-40: rgba(0, 0, 0, 0.4);
+  --app-color-foreground-transparent-45: rgba(0, 0, 0, 0.45);
+  --app-color-foreground-transparent-50: rgba(0, 0, 0, 0.5);
+  --app-color-foreground-transparent-55: rgba(0, 0, 0, 0.55);
+  --app-color-foreground-transparent-60: rgba(0, 0, 0, 0.6);
+  --app-color-foreground-transparent-65: rgba(0, 0, 0, 0.65);
+  --app-color-foreground-transparent-70: rgba(0, 0, 0, 0.7);
+  --app-color-foreground-transparent-75: rgba(0, 0, 0, 0.75);
+  --app-color-foreground-transparent-80: rgba(0, 0, 0, 0.8);
+  --app-color-foreground-transparent-85: rgba(0, 0, 0, 0.85);
+  --app-color-foreground-transparent-90: rgba(0, 0, 0, 0.9);
+  --app-color-foreground-transparent-95: rgba(0, 0, 0, 0.95);
+
+  --app-color-background-transparent-2: rgba(255, 255, 255, 0.02);
+  --app-color-background-transparent-3: rgba(255, 255, 255, 0.03);
+  --app-color-background-transparent-4: rgba(255, 255, 255, 0.04);
+  --app-color-background-transparent-5: rgba(255, 255, 255, 0.05);
+  --app-color-background-transparent-6: rgba(255, 255, 255, 0.06);
+  --app-color-background-transparent-7: rgba(255, 255, 255, 0.07);
+  --app-color-background-transparent-8: rgba(255, 255, 255, 0.08);
+  --app-color-background-transparent-9: rgba(255, 255, 255, 0.09);
+  --app-color-background-transparent-10: rgba(255, 255, 255, 0.1);
+  --app-color-background-transparent-15: rgba(255, 255, 255, 0.15);
+  --app-color-background-transparent-20: rgba(255, 255, 255, 0.2);
+  --app-color-background-transparent-25: rgba(255, 255, 255, 0.25);
+  --app-color-background-transparent-30: rgba(255, 255, 255, 0.3);
+  --app-color-background-transparent-35: rgba(255, 255, 255, 0.35);
+  --app-color-background-transparent-40: rgba(255, 255, 255, 0.4);
+  --app-color-background-transparent-45: rgba(255, 255, 255, 0.45);
+  --app-color-background-transparent-50: rgba(255, 255, 255, 0.5);
+  --app-color-background-transparent-55: rgba(255, 255, 255, 0.55);
+  --app-color-background-transparent-60: rgba(255, 255, 255, 0.6);
+  --app-color-background-transparent-65: rgba(255, 255, 255, 0.65);
+  --app-color-background-transparent-70: rgba(255, 255, 255, 0.7);
+  --app-color-background-transparent-75: rgba(255, 255, 255, 0.75);
+  --app-color-background-transparent-80: rgba(255, 255, 255, 0.8);
+  --app-color-background-transparent-85: rgba(255, 255, 255, 0.85);
+  --app-color-background-transparent-90: rgba(255, 255, 255, 0.9);
+  --app-color-background-transparent-95: rgba(255, 255, 255, 0.95);
+
+  --el-text-color-primary: color-mix(in srgb, #FFFFFF 19%, #000000);
+  --el-text-color-regular: color-mix(in srgb, #FFFFFF 38%, #000000);
+  --el-text-color-secondary: color-mix(in srgb, #FFFFFF 56%, #000000);
+  --el-text-color-placeholder: color-mix(in srgb, #FFFFFF 75%, #000000);
+  --el-text-color-disabled: color-mix(in srgb, #000000 24%, #FFFFFF);
+
+  --el-border-color: color-mix(in srgb, #FFFFFF 87%, #000000);
+  --el-border-color-light: color-mix(in srgb, #FFFFFF 91%, #000000);
+  --el-border-color-lighter: color-mix(in srgb, #FFFFFF 93%, #000000);
+  --el-border-color-extra-light: color-mix(in srgb, #FFFFFF 95%, #000000);
+  --el-border-color-dark: color-mix(in srgb, #000000 83.1%, #FFFFFF);
+  --el-border-color-darker: color-mix(in srgb, #000000 80.4%, #FFFFFF);
+
+  --el-fill-color: color-mix(in srgb, #FFFFFF 95%, #000000);
+  --el-fill-color-light: color-mix(in srgb, #FFFFFF 97%, #000000);
+  --el-fill-color-lighter: color-mix(in srgb, #FFFFFF 98%, #000000);
+  --el-fill-color-extra-light: color-mix(in srgb, #FFFFFF 99%, #000000);
+  --el-fill-color-dark: color-mix(in srgb, #000000, #FFFFFF 93%);
+  --el-fill-color-darker: color-mix(in srgb, #000000, #FFFFFF 91%);
+  --el-fill-color-blank: color-mix(in srgb, #000000, #FFFFFF 100%);
+
+
+  --el-box-shadow: 0px 6px 16px 2px rgba(0, 0, 0, .04), 0px 4px 10px rgba(0, 0, 0, .08);
+  --el-box-shadow-light: 0px 0px 6px rgba(0, 0, 0, .12);
+  --el-box-shadow-lighter: 0px 0px 3px rgba(0, 0, 0, .12);
+  --el-box-shadow-dark: 0px 8px 24px 8px rgba(0, 0, 0, .08), 0px 6px 16px rgba(0, 0, 0, .12), 0px 4px 8px -4px rgba(0, 0, 0, .16);
+
+  --el-disabled-bg-color: var(--el-fill-color-light);
+  --el-disabled-text-color: var(--el-text-color-placeholder);
+  --el-disabled-border-color: var(--el-border-color-light);
+
+  /* --el-overlay-color: rgba(0, 0, 0, .8); */
+  /* --el-overlay-color-light: rgba(0, 0, 0, .7); */
+  /* --el-overlay-color-lighter: rgba(0, 0, 0, .5); */
+  /*  */
+  /* --el-mask-color: rgba(255, 255, 255, .9); */
+  /* --el-mask-color-extra-light: rgba(255, 255, 255, .3); */
+
+  --el-border-width: 1px;
+  --el-border-style: solid;
+  --el-border-color-hover: var(--el-text-color-disabled);
+  --el-border: var(--el-border-width) var(--el-border-style) var(--el-border-color);
+  --el-svg-monochrome-grey: var(--el-border-color);
+
+  --app-success-color: #67c23a;
+  --el-color-success: var(--app-success-color);
+  --el-color-success-light-3: color-mix(in srgb, #67c23a 70%, #FFFFFF);
+  --el-color-success-light-5: color-mix(in srgb, #67c23a 50%, #FFFFFF);
+  --el-color-success-light-7: color-mix(in srgb, #67c23a 30%, #FFFFFF);
+  --el-color-success-light-8: color-mix(in srgb, #67c23a 20%, #FFFFFF);
+  --el-color-success-light-9: color-mix(in srgb, #67c23a 10%, #FFFFFF);
+  --el-color-success-dark-2: color-mix(in srgb, #67c23a 80%, #000000);
+
+  --app-warning-color: #e6a23c;
+  --el-color-warning: var(--app-warning-color);
+  --el-color-warning-light-3: color-mix(in srgb, #e6a23c 70%, #FFFFFF);
+  --el-color-warning-light-5: color-mix(in srgb, #e6a23c 50%, #FFFFFF);
+  --el-color-warning-light-7: color-mix(in srgb, #e6a23c 30%, #FFFFFF);
+  --el-color-warning-light-8: color-mix(in srgb, #e6a23c 20%, #FFFFFF);
+  --el-color-warning-light-9: color-mix(in srgb, #e6a23c 10%, #FFFFFF);
+  --el-color-warning-dark-2: color-mix(in srgb, #e6a23c 80%, #000000);
+
+  --app-danger-color: #f56c6c;
+  --el-color-danger: var(--app-danger-color);
+  --el-color-danger-light-3: color-mix(in srgb, #f56c6c 70%, #FFFFFF);
+  --el-color-danger-light-5: color-mix(in srgb, #f56c6c 50%, #FFFFFF);
+  --el-color-danger-light-7: color-mix(in srgb, #f56c6c 30%, #FFFFFF);
+  --el-color-danger-light-8: color-mix(in srgb, #f56c6c 20%, #FFFFFF);
+  --el-color-danger-light-9: color-mix(in srgb, #f56c6c 10%, #FFFFFF);
+  --el-color-danger-dark-2: color-mix(in srgb, #f56c6c 80%, #000000);
+
+  --app-error-color: #f56c6c;
+  --el-color-error: var(--app-error-color);
+  --el-color-error-light-3: color-mix(in srgb, #f56c6c 70%, #FFFFFF);
+  --el-color-error-light-5: color-mix(in srgb, #f56c6c 50%, #FFFFFF);
+  --el-color-error-light-7: color-mix(in srgb, #f56c6c 30%, #FFFFFF);
+  --el-color-error-light-8: color-mix(in srgb, #f56c6c 20%, #FFFFFF);
+  --el-color-error-light-9: color-mix(in srgb, #f56c6c 10%, #FFFFFF);
+  --el-color-error-dark-2: color-mix(in srgb, #f56c6c 80%, #000000);
+
+  --app-info-color: #909399;
+  --el-color-info: var(--app-info-color);
+  --el-color-info-light-3: color-mix(in srgb, #909399 70%, #FFFFFF);
+  --el-color-info-light-5: color-mix(in srgb, #909399 50%, #FFFFFF);
+  --el-color-info-light-7: color-mix(in srgb, #909399 30%, #FFFFFF);
+  --el-color-info-light-8: color-mix(in srgb, #909399 20%, #FFFFFF);
+  --el-color-info-light-9: color-mix(in srgb, #909399 10%, #FFFFFF);
+  --el-color-info-dark-2: color-mix(in srgb, #909399 80%, #000000);
+
+  --app-page-padding: 18px;
+
+  /* 半透明遮罩，用于更高层级的背景覆盖。 */
+  --app-bg-color-overlay: var(--app-color-background-transparent-5);
+  --app-bg-color-overlay-hover: var(--app-color-background-transparent-15);
+  /* 主页面遮罩 */
+  --app-bg-color-page: var(--app-color-primary-transparent-5);
+  /* 应用主页面菜单栏+顶部栏+边框的背景 */
+  --app-bg-color-menus: var(--app-color-primary-transparent-5);
+
+  /*菜单相关*/
+  --app-color-menu: var(--el-text-color-regular);
+  --app-bg-menu: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--app-color-primary-transparent-5) 50%,
+    transparent 100%
+  );
+  --app-bg-menu-tag: var(--el-color-primary-light-5);
+  --app-color-menu-icon: var(--el-color-primary-light-1);
+
+  --app-color-menu-hover: var(--el-color-primary-light-1);
+  --app-color-menu-icon-hover: var(--el-color-primary-light-1);
+  --app-bg-menu-hover: var(--app-color-primary-transparent-8);
+  --app-shadow-menu-hover: unset;
+
+  --app-color-menu-icon-active: var(--el-color-primary-light-1);
+  --app-color-menu-active: var(--el-color-primary-light-1);
+  --app-bg-menu-active: var(--app-color-primary-transparent-10);
+  --app-shadow-menu-active-hover: unset;
+
+  --app-color-logo: var(--el-color-primary);
+}

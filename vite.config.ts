@@ -110,7 +110,7 @@ export default defineConfig((env: ConfigEnv) => {
       outDir: 'dist-electron/',
       rollupOptions: {
         output: {
-          entryFileNames: `[name].mjs`,
+          entryFileNames: `[name].js`,
         },
       },
     },

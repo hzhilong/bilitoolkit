@@ -1,0 +1,108 @@
+@use '../common/scrollbar' as *;
+@use '../global' as *;
+
+body {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  padding: $body-padding;
+  box-sizing: border-box;
+  margin: 0;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  // 浏览器在绘制文本时将着重考虑易读性，而不是渲染速度和几何精度。它会使字间距和连字有效。
+  text-rendering: optimizeLegibility;
+  // WebKit 字体抗锯齿
+  -webkit-font-smoothing: antialiased;
+  // macOS 字体灰度抗锯齿
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #00000000;
+
+  #app {
+    width: 100%;
+    height: 100%;
+    border-radius: $app-border-radius;
+    overflow: hidden;
+    color: var(--el-text-color-regular);
+  }
+}
+
+/* 省略右边内容*/
+.txt-ellipsis {
+  @include txt-ellipsis;
+}
+
+/* 图标按钮 */
+.icon-btn {
+  @include icon-btn;
+}
+
+/* 圆形图标按钮 */
+.circle-icon-btn {
+  @include circle-icon-btn;
+}
+
+/* 旋转的圆形图标按钮 */
+.circle-icon-btn--rotate {
+  @include circle-icon-btn--rotate;
+}
+
+/* 旋转动画 */
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// 选项关闭按钮（一般位于右上角）
+.options-close-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  @include pseudo-svg-icon(url('@/renderer/assets/images/icon-close.svg'), var(--el-text-color-secondary), 4px);
+
+  &:hover {
+    background: var(--app-color-primary-transparent-15);
+  }
+}
+
+.el-button {
+  // 解决文本没有垂直居中的问题
+  line-height: normal !important;
+}
+
+/* 解决ele遮罩超出内容区域 */
+body .el-overlay {
+  &,
+  & > div[role='dialog'] {
+    top: $body-padding !important;
+    // right: $body-padding !important;
+    // bottom: $body-padding !important;
+    left: $body-padding !important;
+    border-radius: $app-border-radius !important;
+    height: calc(100% - 2 * $body-padding) !important;
+    width: calc(100% - 2 * $body-padding) !important;
+    // box-sizing: border-box !important;
+  }
+}

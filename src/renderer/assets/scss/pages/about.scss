@@ -1,0 +1,92 @@
+@use '@/renderer/assets/scss/global' as *;
+
+.page-container{
+  @include tech-angled-bg(var(--app-color-primary-transparent-5), var(--app-color-primary-transparent-5), 80%, 10%);
+  padding: 0;
+}
+
+.about {
+  width: 100%;
+  height: 100%;
+  padding: var(--app-page-padding);
+  box-sizing: border-box;
+  background: var(--app-color-background-transparent-3);
+  backdrop-filter: blur(10px);
+  font-size: 16px;
+  user-select: none;
+
+  &__app-logo {
+    width: 80px;
+    height: 80px;
+    transition: 0.3s ease;
+    @include app-logo-style(var(--el-color-primary));
+    background-size: cover;
+    cursor: pointer;
+
+    &:hover {
+      width: 100px;
+      height: 100px;
+      animation: rotate 3s linear infinite;
+      backface-visibility: hidden;
+    }
+  }
+
+  &__app-title {
+    width: fit-content;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--el-color-primary);
+    letter-spacing: 1px;
+    padding: 2px 4px;
+    border-radius: 1vmin;
+    margin: 8px 0;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--app-color-background);
+      background: var(--el-color-primary-light-1);
+    }
+  }
+
+  &__info-list {
+    width: fit-content;
+    flex-direction: column;
+    justify-items: start;
+
+    &__item {
+      /* 不要使用flex，会将里面的元素变成块，影响后面的下划线动画 */
+      justify-items: start;
+      vertical-align: top;
+      line-height: 1.8;
+      padding: 6px 0;
+      border-radius: 4px;
+      max-width: 500px;
+
+      &__title {
+        white-space: nowrap;
+        user-select: none;
+        padding-bottom: 4px;
+        color: var(--el-text-color-secondary);
+      }
+
+      &__desc {
+        color: var(--el-text-color-primary);
+        background: linear-gradient(to right, var(--el-color-primary-light-2), var(--el-color-primary-light-7)) no-repeat right bottom;
+        background-size: 0 2px;
+        transition: background-size .5s ease;
+        padding-bottom: 4px;
+
+        &.url {
+          cursor: pointer;
+          color: var(--el-color-primary);
+        }
+      }
+
+      &:hover &__desc {
+        background-size: 100% 2px;
+        background-position: bottom left;
+      }
+    }
+  }
+
+}

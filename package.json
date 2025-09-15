@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "main": "dist-electron/main.mjs",
+  "main": "dist-electron/main.js",
   "productName": "BiliToolkit",
   "productCNName": "哔哩工具姬",
   "description": "BiliToolkit「哔哩工具姬」是一款面向B站用户和开发者的开源工具箱，采用模块化插件架构设计，致力于通过可扩展的功能集合提升用户体验。用户可自由安装/卸载功能模块，开发者可快速开发新插件共享至社区。",
