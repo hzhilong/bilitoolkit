@@ -16,6 +16,8 @@ import '@/renderer/assets/scss/app/host-app.scss'
 import App from '@/renderer/App.vue'
 
 const app = createApp(App)
+// 挂载到全局属性
+app.config.globalProperties.$toolkitApi = window.toolkitApi
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedState)

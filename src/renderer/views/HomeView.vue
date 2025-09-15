@@ -5,7 +5,7 @@ import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 
 <template>
   <PageContainer>
-    Home
+    <el-button @click="$toolkitApi.core.openLogsFolder()">测试</el-button>
   </PageContainer>
 </template>
 
