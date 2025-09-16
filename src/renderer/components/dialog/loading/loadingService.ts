@@ -1,6 +1,6 @@
 import { createVNode, nextTick, render, type VNode } from 'vue'
-import type { GlobalLoadingDialogProps, LoadingDialogExposed } from '@/renderer/components/dialog/loading-dialog/loading-dialog'
-import LoadingDialog from '@/renderer/components/dialog/loading-dialog/LoadingDialog.vue'
+import type { GlobalLoadingDialogProps, LoadingDialogExposed } from '@/renderer/components/dialog/loading/types.ts'
+import LoadingDialog from '@/renderer/components/dialog/loading/LoadingDialog.vue'
 
 let instance: VNode | undefined = undefined
 let container: HTMLElement | null = null

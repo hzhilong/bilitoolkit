@@ -5,7 +5,7 @@ import { reactive, ref, watch } from 'vue'
 import type {
   LoadingDialogExposed,
   LoadingDialogProps,
-} from '@/renderer/components/dialog/loading-dialog/loading-dialog'
+} from '@/renderer/components/dialog/loading/types.ts'
 
 const visible = defineModel<boolean>({ required: true })
 const props = withDefaults(defineProps<LoadingDialogProps>(), {
