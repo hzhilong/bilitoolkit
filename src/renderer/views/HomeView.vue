@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { AppLoadingDialog } from '@/renderer/components/dialog/loading-dialog/loadingService.ts'
 
 const test = async () => {
-  // console.log('init db', await window.toolkitApi.db.init('dddd', { a: 1, b: 2 }))
-  // console.log('write file', await window.toolkitApi.file.write('ffff.txt', new TextEncoder().encode('你好')))
-  await toolkitApi.system.showItemInFolder("E:\\")
+  await AppLoadingDialog.show({
+    loadingText: '测试...',
+    autoCloseDelay: 5000,
+  })
 }
 </script>
 
