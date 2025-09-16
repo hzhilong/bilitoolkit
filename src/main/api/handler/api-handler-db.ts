@@ -91,10 +91,10 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
    * 读取文档内容对象
    * @param docPath 文档路径
    */
-  readDocObject(docPath: string): object {
+  readDocObject<T extends object>(docPath: string): T {
     const db = new JSONFileSync<object>(docPath)
     if (db === null) throw new CommonError(`文档[${path.basename(docPath)}]为空`)
-    return db.read() as object
+    return db.read() as T
   }
 
   /**
@@ -103,7 +103,7 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
    * @param id      文档id
    * @param data    文档数据
    */
-  writeDoc(context: ApiCallerContext, id: string, data: object) {
+  writeDoc<T extends object>(context: ApiCallerContext, id: string, data: T) {
     const db = new LowSync(new JSONFileSync<object>(this.getDocFilePath(context, id)), {})
     db.data = data
     db.write()
@@ -113,15 +113,15 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
     return fs.existsSync(this.getDocFilePath(context, id))
   }
 
-  async read(context: ApiCallerContext, id: string): Promise<object> {
-    return this.readDocObject(this.getExistsDocFilePath(context, id))
+  async read<T extends object>(context: ApiCallerContext, id: string): Promise<T> {
+    return this.readDocObject<T>(this.getExistsDocFilePath(context, id))
   }
 
-  async init(context: ApiCallerContext, id: string, defaultData: object): Promise<object> {
+  async init<T extends object>(context: ApiCallerContext, id: string, defaultData: T): Promise<object> {
     const filePath = this.getDocFilePath(context, id)
     if (fs.existsSync(filePath)) {
       // 文档存在，直接读取
-      return this.readDocObject(filePath)
+      return this.readDocObject<T>(filePath)
     } else {
       // 文档不存在，初始化
       fs.writeFileSync(filePath, '')
@@ -132,20 +132,20 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
     }
   }
 
-  async bulkRead(context: ApiCallerContext, idPrefix: string | undefined): Promise<object[]> {
+  async bulkRead<T extends object>(context: ApiCallerContext, idPrefix: string | undefined): Promise<T[]> {
     const paths = FileUtils.getFilesByPrefixAndSuffix(context.dbPath, idPrefix)
     const dataArr = []
     for (const docPath of paths) {
-      dataArr.push(this.readDocObject(docPath))
+      dataArr.push(this.readDocObject<T>(docPath))
     }
     return dataArr
   }
 
-  async write(context: ApiCallerContext, id: string, data: object): Promise<void> {
-    this.writeDoc(context, id, data)
+  async write<T extends object>(context: ApiCallerContext, id: string, data: T): Promise<void> {
+    this.writeDoc<T>(context, id, data)
   }
 
-  async bulkWrite(context: ApiCallerContext, docs: { id: string; data: object }[]): Promise<void> {
+  async bulkWrite<T extends object>(context: ApiCallerContext, docs: { id: string; data: T }[]): Promise<void> {
     const overlayArr: { db: LowSync<object>; oldData: object }[] = []
     try {
       for (const doc of docs) {

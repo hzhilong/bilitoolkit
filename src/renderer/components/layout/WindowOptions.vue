@@ -4,6 +4,7 @@
  */
 import { storeToRefs } from 'pinia'
 import { useAppSessionStore } from '@/renderer/stores/app-session.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 
 const { maxWindow } = storeToRefs(useAppSessionStore())
 const switchWindowMax = () => {

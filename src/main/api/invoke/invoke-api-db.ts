@@ -1,4 +1,4 @@
-import { invokeApi } from './base-invoke';
+import { invokeApi } from './base-invoke'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
 import type { ToolkitDBApi } from 'bilitoolkit-api-types'
 
@@ -11,16 +11,16 @@ export const invokeDBApi = async <T = void>(
 }
 
 export const dbApi: ToolkitDBApi = {
-  init<T = unknown>(id: string, defaultData: T): Promise<T> {
+  init<T extends object>(id: string, defaultData: T): Promise<T> {
     return invokeDBApi('init', id, defaultData)
   },
   bulkDelete(idPrefix: string | undefined): Promise<string[]> {
     return invokeDBApi('bulkDelete', idPrefix)
   },
-  bulkRead<T = unknown>(idPrefix: string | undefined): Promise<T[]> {
+  bulkRead<T extends object>(idPrefix: string | undefined): Promise<T[]> {
     return invokeDBApi('bulkRead', idPrefix)
   },
-  bulkWrite<T = unknown>(docs: { id: string; data: T }[]): Promise<void> {
+  bulkWrite<T extends object>(docs: { id: string; data: T }[]): Promise<void> {
     return invokeDBApi('bulkWrite', docs)
   },
   delete(id: string): Promise<void> {
@@ -29,10 +29,10 @@ export const dbApi: ToolkitDBApi = {
   has(id: string): Promise<boolean> {
     return invokeDBApi('has', id)
   },
-  read<T = unknown>(id: string): Promise<T> {
+  read<T extends object>(id: string): Promise<T> {
     return invokeDBApi('read', id)
   },
-  write<T = unknown>(id: string, data: T): Promise<void> {
+  write<T extends object>(id: string, data: T): Promise<void> {
     return invokeDBApi('write', id, data)
   },
 }

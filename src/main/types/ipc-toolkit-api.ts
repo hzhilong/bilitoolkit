@@ -30,6 +30,8 @@ type CommonApiCallerContext = {
 }
 export type HostApiCallerContext = CommonApiCallerContext & {
   envType: 'host'
+  // 所属的WebContents
+  webContents: WebContents
 }
 
 export type PluginApiCallerContext = CommonApiCallerContext & {
@@ -37,6 +39,8 @@ export type PluginApiCallerContext = CommonApiCallerContext & {
   envType: 'plugin'
   // 插件信息
   plugin: ToolkitPlugin
+  // 所属的WebContents
+  webContents: WebContents
   // 所属的插件WebContentsView
   webContentsView: WebContentsView
   // 所属宿主WebContents

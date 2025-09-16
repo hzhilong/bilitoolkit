@@ -3,16 +3,18 @@ import { dbApi } from '@/main/api/invoke/invoke-api-db.ts'
 import { fileApi } from '@/main/api/invoke/invoke-api-file.ts'
 import { systemApi } from '@/main/api/invoke/invoke-api-system.ts'
 import { eventApi } from './invoke-api-event'
+import { globalApi } from '@/main/api/invoke/invoke-api-global.ts'
 
 /**
  * 暴露给插件环境的通用API
  */
 export const exposeToolkitApi = {
-  windowApi,
-  dbApi,
-  fileApi,
-  systemApi,
-  eventApi,
+  window: windowApi,
+  db: dbApi,
+  file: fileApi,
+  system: systemApi,
+  event: eventApi,
+  global: globalApi,
 }
 /**
  * 暴露给宿主环境的API
