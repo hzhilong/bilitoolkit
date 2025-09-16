@@ -16,25 +16,46 @@ import { logger } from '@/renderer/common/renderer-logger.ts'
 import { useAppSettingsStore } from '@/renderer/stores/app-settings.ts'
 import { useAppThemeStore } from '@/renderer/stores/app-theme.ts'
 import { ThemeUtils } from '@/renderer/utils/theme-utils.ts'
+import DialogApp from '@/renderer/DialogApp.vue'
+import { initHostDialogListener } from '@/renderer/api/dialog-init.ts'
+import { initHostListener } from '@/renderer/api/host-init.ts'
 
 async function bootstrapApp() {
-  // TODO 根据app类型加载不同样式和组件
-  const app = createApp(App)
-  // 导入自己的样式
-  import('@/renderer/assets/scss/app/host-app.scss')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let app: any
+  const _windowApp = window._windowApp
+
+  // 根据app类型加载不同样式和组件
+  if (_windowApp?.type === 'dialogApp') {
+    logger.log('当前为对话框APP')
+    import('@/renderer/assets/scss/app/dialog-app.scss')
+    app = createApp(DialogApp)
+  } else {
+    logger.log('当前为宿主环境APP')
+    import('@/renderer/assets/scss/app/host-app.scss')
+    app = createApp(App)
+  }
 
   // 挂载到全局属性
   app.config.globalProperties.$toolkitApi = window.toolkitApi
 
+  app.use(ElementPlus, { size: 'small', zIndex: 3000 })
+
   const pinia = createPinia()
   pinia.use(piniaPluginPersistedState)
   app.use(pinia)
-  app.use(ElementPlus, { size: 'small', zIndex: 3000 })
 
-  logger.log('宿主环境初始化')
-  await useAppSettingsStore().init()
-  await useAppThemeStore().init()
-  await ThemeUtils.initAppTheme()
+  if (_windowApp?.type === 'dialogApp') {
+    logger.log('对话框环境初始化')
+    await ThemeUtils.updateCssVar(await window.toolkitApi.system.getAppThemeState())
+    await initHostDialogListener()
+  } else {
+    logger.log('宿主环境初始化')
+    await useAppSettingsStore().init()
+    await useAppThemeStore().init()
+    await ThemeUtils.initAppTheme()
+    await initHostListener()
+  }
 
   app.use(router)
   app.mount('#app')

@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
 // 全局类型
 declare global {
   export interface Window {
+    _windowApp: WindowApp | undefined
     toolkitApi: ToolkitApiWithCore
   }
 }
