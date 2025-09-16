@@ -9,6 +9,7 @@ import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { DBApiHandler } from '@/main/api/handler/api-handler-db.ts'
 import { FileApiHandler } from '@/main/api/handler/api-handler-file.ts'
 import { SystemApiHandler } from '@/main/api/handler/api-handler-system.ts'
+import { EventApiHandler } from '@/main/api/handler/api-handler-event.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -25,6 +26,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     this.register('db', new DBApiHandler())
     this.register('file', new FileApiHandler())
     this.register('system', new SystemApiHandler())
+    this.register('event', new EventApiHandler(wm))
   }
 
   /**

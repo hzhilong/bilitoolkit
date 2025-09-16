@@ -10,7 +10,7 @@ export const invokeFileApi = async <T = void>(
   return await invokeApi<ToolkitFileApi, T>('file', name, ...args)
 }
 
-export const file: ToolkitFileApi = {
+export const fileApi: ToolkitFileApi = {
   bulkDelete(filePaths: string[]): Promise<void> {
     return invokeFileApi('bulkDelete', filePaths)
   },

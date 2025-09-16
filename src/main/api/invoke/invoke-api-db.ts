@@ -10,17 +10,17 @@ export const invokeDBApi = async <T = void>(
   return await invokeApi<ToolkitDBApi, T>('db', name, ...args)
 }
 
-export const db: ToolkitDBApi = {
-  init(id: string, defaultData: object): Promise<object> {
+export const dbApi: ToolkitDBApi = {
+  init<T = unknown>(id: string, defaultData: T): Promise<T> {
     return invokeDBApi('init', id, defaultData)
   },
   bulkDelete(idPrefix: string | undefined): Promise<string[]> {
     return invokeDBApi('bulkDelete', idPrefix)
   },
-  bulkRead(idPrefix: string | undefined): Promise<object[]> {
+  bulkRead<T = unknown>(idPrefix: string | undefined): Promise<T[]> {
     return invokeDBApi('bulkRead', idPrefix)
   },
-  bulkWrite(docs: { id: string; data: object }[]): Promise<void> {
+  bulkWrite<T = unknown>(docs: { id: string; data: T }[]): Promise<void> {
     return invokeDBApi('bulkWrite', docs)
   },
   delete(id: string): Promise<void> {
@@ -29,10 +29,10 @@ export const db: ToolkitDBApi = {
   has(id: string): Promise<boolean> {
     return invokeDBApi('has', id)
   },
-  read(id: string): Promise<object> {
+  read<T = unknown>(id: string): Promise<T> {
     return invokeDBApi('read', id)
   },
-  write(id: string, data: object): Promise<void> {
+  write<T = unknown>(id: string, data: T): Promise<void> {
     return invokeDBApi('write', id, data)
   },
 }

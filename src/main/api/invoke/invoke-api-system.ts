@@ -10,7 +10,7 @@ export const invokeSystemApi = async <T = void>(
   return await invokeApi<ToolkitSystemApi, T>('system', name, ...args)
 }
 
-export const system: ToolkitSystemApi = {
+export const systemApi: ToolkitSystemApi = {
   browsePage(path: string): Promise<void> {
     return invokeSystemApi('browsePage', path);
   },

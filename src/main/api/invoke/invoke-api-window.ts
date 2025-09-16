@@ -10,7 +10,7 @@ export const invokeWindowApi = async <T = void>(
   return await invokeApi<ToolkitWindowApi, T>('window', name, ...args)
 }
 
-export const window: ToolkitWindowApi = {
+export const windowApi: ToolkitWindowApi = {
   close(): Promise<void> {
     return invokeWindowApi('close')
   },

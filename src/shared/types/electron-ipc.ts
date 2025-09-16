@@ -1,5 +1,5 @@
 // IPC 通道
-export const IpcChannels = ['PLUGIN_APIS', 'REQUEST_DATA', 'RESPONSE_DATA'] as const
+export const IpcChannels = ['PLUGIN_APIS', 'REQUEST_DATA', 'RESPONSE_DATA', 'TOOLKIT_EVENT'] as const
 // IPC 通道联合类型
 export type IpcChannel = (typeof IpcChannels)[number]
 // IPC 通道对象（方便获取）
