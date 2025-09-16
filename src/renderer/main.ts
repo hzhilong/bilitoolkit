@@ -19,6 +19,7 @@ import { ThemeUtils } from '@/renderer/utils/theme-utils.ts'
 import DialogApp from '@/renderer/DialogApp.vue'
 import { initHostDialogListener } from '@/renderer/api/dialog-init.ts'
 import { initHostListener } from '@/renderer/api/host-init.ts'
+import { AppUtils } from '@/renderer/utils/app-utils.ts'
 
 async function bootstrapApp() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,9 +59,17 @@ async function bootstrapApp() {
   }
 
   app.use(router)
+  // Vue 组件中发生的错误
+  app.config.errorHandler = AppUtils.handleError
+  // 捕捉那些没有被catch处理的Promise错误
+  window.addEventListener('unhandledrejection', (event) => {
+    AppUtils.handleError(event.reason)
+  })
   app.mount('#app')
 }
 
-bootstrapApp().then(() => {
-  logger.info('App 启动成功')
-})
+bootstrapApp()
+  .then(() => {
+    logger.info('App 启动成功')
+  })
+  .catch(AppUtils.handleError)
