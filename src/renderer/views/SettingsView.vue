@@ -24,10 +24,9 @@ const initSettingDesc = (desc: Ref<string>, init: () => Promise<string>) => {
       desc.value = `总大小：获取失败，${BaseUtils.getErrorMessage(error)}`
     })
 }
-// initSettingDesc(logsDesc, toolkitApi.core.getLogsFolderSize)
-// initSettingDesc(dbsDesc, toolkitApi.core.getDBsFolderSize)
-// initSettingDesc(filesDesc, toolkitApi.core.getFilesFolderSize)
-
+initSettingDesc(logsDesc, toolkitApi.core.getLogsFolderSize)
+initSettingDesc(dbsDesc, toolkitApi.core.getDBsFolderSize)
+initSettingDesc(filesDesc, toolkitApi.core.getFilesFolderSize)
 </script>
 
 <template>

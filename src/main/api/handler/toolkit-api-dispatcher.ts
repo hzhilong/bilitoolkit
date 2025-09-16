@@ -12,6 +12,7 @@ import { SystemApiHandler } from '@/main/api/handler/api-handler-system.ts'
 import { EventApiHandler } from '@/main/api/handler/api-handler-event.ts'
 import { GlobalApiHandler } from '@/main/api/handler/api-handler-global.ts'
 import { AccountApiHandler } from '@/main/api/handler/api-handler-account.ts'
+import { CoreApiHandler } from '@/main/api/handler/api-handler-core.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -31,6 +32,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     this.register('event', new EventApiHandler(wm))
     this.register('global', new GlobalApiHandler())
     this.register('account', new AccountApiHandler())
+    this.register('core', new CoreApiHandler())
   }
 
   /**

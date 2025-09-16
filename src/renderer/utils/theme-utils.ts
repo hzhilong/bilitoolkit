@@ -1,5 +1,6 @@
+import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { useAppThemeStore } from '@/renderer/stores/app-theme'
-import type { AppThemeMode } from 'bilitoolkit-api-types'
+import type { AppThemeMode, AppThemeState } from 'bilitoolkit-api-types'
 
 const whiteColor = '#ffffff'
 const blackColor = '#000000'
@@ -126,8 +127,21 @@ const baseUpdateThemeColor = (primaryColor: string, themeMode: AppThemeMode, isD
 
 export class ThemeUtils {
   static async isDark(themeMode?: AppThemeMode) {
-    // TODO 读取持久化的数据
-    return themeMode === 'dark'
+    const newMode = themeMode ?? (await toolkitApi.system.getAppThemeState()).themeMode
+    if (newMode === 'system') {
+      return await toolkitApi.system.shouldUseDarkColors()
+    } else {
+      return newMode === 'dark'
+    }
+  }
+
+  /**
+   * 更新css变量
+   */
+  static async updateCssVar(initState?: AppThemeState) {
+    const state = initState ?? (await toolkitApi.system.getAppThemeState())
+    const dark = await ThemeUtils.isDark(state.themeMode)
+    baseUpdateThemeColor(state.primaryColor, state.themeMode, dark)
   }
 
   static async toggleThemeMode(themeMode: AppThemeMode) {
