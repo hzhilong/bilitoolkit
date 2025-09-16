@@ -9,6 +9,12 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElColorPicker: typeof import('element-plus/es')['ElColorPicker']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElOption: typeof import('element-plus/es')['ElOption']
+    ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
+    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
+    ElSelect: typeof import('element-plus/es')['ElSelect']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

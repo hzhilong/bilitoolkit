@@ -1,8 +1,11 @@
-import { logger } from '@/renderer/common/renderer-logger'
+import { toolkitApi } from '@/renderer/api/toolkit-api'
+import { AppConstants, defaultAppThemeState } from '@/shared/common/app-constants'
 import type { AppThemeMode, AppThemeState } from 'bilitoolkit-api-types'
+import { cloneDeep } from 'lodash'
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
-import { AppConstants, defaultAppThemeState } from '@/shared/common/app-constants.ts'
+import { reactive, watch } from 'vue'
+import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
+import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 
 // 默认备选的颜色
 const DEFAULT_PRIMARY_COLORS = AppConstants.THEME.DEFAULT_PRIMARY_COLORS
@@ -15,8 +18,27 @@ export const useAppThemeStore = defineStore(
   () => {
     const state = reactive<AppThemeState>(defaultAppThemeState)
 
-    //TODO 获取数据库配置
-    //TODO 写入配置
+    const init = async () => {
+      // 获取数据库配置
+      const dbConfig = (await window.toolkitApi.db.init(
+        HOST_GLOBAL_DATA.APP_THEME_STATE,
+        defaultAppThemeState,
+      )) as AppThemeState
+      Object.assign(state, dbConfig)
+    }
+
+    // 设置变化后更新数据库
+    watch(
+      () => state,
+      (newVal) => {
+        // 写入配置
+        const data = cloneDeep(newVal)
+        toolkitApi.db.write(HOST_GLOBAL_DATA.APP_THEME_STATE, data).then(async () => {
+          await toolkitApi.event.emit(HOST_EVENT_CHANNELS.UPDATE_APP_THEME, data)
+        })
+      },
+      { deep: true },
+    )
 
     /**
      * 切换主题颜色
@@ -24,7 +46,6 @@ export const useAppThemeStore = defineStore(
     const switchThemeColor = () => {
       state.currPrimaryColorIndex = (state.currPrimaryColorIndex + 1) % DEFAULT_PRIMARY_COLORS.length
       const newColor = DEFAULT_PRIMARY_COLORS[state.currPrimaryColorIndex]
-      logger.debug(`SwitchThemeColor`, state.currPrimaryColorIndex, newColor)
       return setPrimaryColor(newColor)
     }
     /**
@@ -46,7 +67,7 @@ export const useAppThemeStore = defineStore(
       return state.themeMode
     }
 
-    return { state, switchThemeColor, setPrimaryColor, setThemeMode }
+    return { init, state, switchThemeColor, setPrimaryColor, setThemeMode }
   },
   {
     // 自己实现配置的持久化
