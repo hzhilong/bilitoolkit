@@ -27,6 +27,8 @@ export abstract class BaseWindowManager {
   public readonly webContentsToViewMap
   public readonly pluginToViewMap
   private readonly pluginResizeListeners
+  // app对话框窗口
+  public appDialogWindow: BrowserWindow | undefined = undefined
 
   protected constructor() {
     this.webContentsToPluginMap = new Map<number, ToolkitPlugin>()

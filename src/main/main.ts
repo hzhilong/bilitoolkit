@@ -43,12 +43,6 @@ const createWindow = () => {
     { show: true },
   )
 
-  // 在开发环境和生产环境均可通过快捷键打开devTools
-  globalShortcut.register('CommandOrControl+Shift+i', function () {
-    // showDevTools()
-    mainWindow?.webContents.openDevTools()
-  })
-
   // 初始化主窗口相关的 IPC 事件监听和处理
   windowManager.initMainWindow(mainWindow)
 

@@ -1,9 +1,10 @@
-import { BrowserWindow, ipcMain } from 'electron'
+import { BrowserWindow, globalShortcut, ipcMain } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
 import { execBiz } from '@ybgnb/utils'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
 import { ToolkitApiDispatcher } from '@/main/api/handler/toolkit-api-dispatcher.ts'
 import { BaseWindowManager } from '@/main/window/base-window-manager.ts'
+import { showDevTools } from '@/main/utils/dev-tools.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -38,6 +39,10 @@ export class WindowManager extends BaseWindowManager {
       return await execBiz(async () => {
         return await this.apiDispatcher.handle(event, options, this.getApiCallerContext(event))
       })
+    })
+    // 在开发环境和生产环境均可通过快捷键打开devTools
+    globalShortcut.register('CommandOrControl+Shift+i', function () {
+      showDevTools()
     })
   }
 }
