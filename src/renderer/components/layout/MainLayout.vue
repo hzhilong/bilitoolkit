@@ -2,9 +2,26 @@
 import { ref } from 'vue'
 import SideBar from '@/renderer/components/layout/SideBar.vue'
 import TopBar from '@/renderer/components/layout/TopBar.vue'
+import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
+import { CommonError, execBiz } from '@ybgnb/utils'
 
 const mainContentRef = ref<HTMLElement>()
 
+toolkitApi.global.register(HOST_GLOBAL_DATA.CONTENT_BOUNDS, () => {
+  return execBiz(async () => {
+    if (!mainContentRef.value) {
+      throw new CommonError('内部错误：窗口未被加载')
+    }
+    const rect = mainContentRef.value.getBoundingClientRect()
+    return {
+      width: rect.width - 2,
+      height: rect.height - 2,
+      x: rect.x + 1,
+      y: rect.y + 1,
+    }
+  })
+})
 </script>
 
 <template>

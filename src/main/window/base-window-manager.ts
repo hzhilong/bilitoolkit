@@ -179,7 +179,7 @@ export abstract class BaseWindowManager {
   public showPluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const contentView = context.window.contentView
     if (contentView.children && contentView.children.length > 0) {
-      mainLogger.log(`createPluginView 当前${contentView.children.length}个子view`)
+      mainLogger.log(`showPluginView 当前${contentView.children.length}个子view`)
       contentView.children.forEach((c) => contentView.removeChildView(c))
     }
     contentView.addChildView(this.getMappingView(plugin))

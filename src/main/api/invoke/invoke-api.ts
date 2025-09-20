@@ -3,7 +3,7 @@ import { dbApi } from '@/main/api/invoke/invoke-api-db.ts'
 import { fileApi } from '@/main/api/invoke/invoke-api-file.ts'
 import { systemApi } from '@/main/api/invoke/invoke-api-system.ts'
 import { eventApi } from './invoke-api-event'
-import { globalApi } from '@/main/api/invoke/invoke-api-global.ts'
+import { globalApi, hostGlobalApi } from '@/main/api/invoke/invoke-api-global.ts'
 import { accountApi } from '@/main/api/invoke/invoke-api-account.ts'
 import { coreApi } from '@/main/api/invoke/invoke-api-core.ts'
 
@@ -24,5 +24,6 @@ export const exposeToolkitApi = {
  */
 export const exposeHostToolkitApi = {
   ...exposeToolkitApi,
+  global: hostGlobalApi,
   core: coreApi,
 }
