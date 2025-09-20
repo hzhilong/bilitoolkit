@@ -4,21 +4,13 @@
 import { app, BrowserWindow } from 'electron'
 import * as os from 'node:os'
 import { windowManager } from '@/main/window/window-manager.ts'
-import { mainEnv } from '@/main/common/main-env.ts'
 import { appPath } from '@/main/common/app-path.ts'
-
-// 主窗口
-let mainWindow: BrowserWindow | null = null
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 app.commandLine.appendSwitch('disable-web-security')
 
-if (!mainEnv.isProd()) {
-  // Source Map 支持库 => 开发环境打印日志时输出源码路径和行号
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  await import('source-map-support/register')
-}
+// 主窗口
+let mainWindow: BrowserWindow | null = null
 
 // 禁用 Windows 7 的 GPU 加速
 if (os.release().startsWith('6.1')) {
