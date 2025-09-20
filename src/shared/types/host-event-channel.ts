@@ -1,13 +1,9 @@
-// 自带的事件通道
-export const HostEventChannels = ['UPDATE_APP_THEME', 'ACCOUNT_LOGOUTED', 'WINDOW_SHOWN'] as const
 // 自带的事件通道联合类型
-export type HostEventChannel = (typeof HostEventChannels)[number]
+export type HostEventChannel = (typeof HOST_EVENT_CHANNELS)[keyof typeof HOST_EVENT_CHANNELS]
 
-export const HOST_EVENT_CHANNELS = HostEventChannels.reduce(
-  (acc, channel) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(acc as any)[channel] = channel
-    return acc
-  },
-  {} as { [K in HostEventChannel]: K },
-)
+// 自带的事件通道
+export const HOST_EVENT_CHANNELS = {
+  UPDATE_APP_THEME: 'UPDATE_APP_THEME',
+  ON_ACCOUNT_LOGOUT: 'ON_ACCOUNT_LOGOUT',
+  ON_WINDOW_SHOWN: 'ON_WINDOW_SHOWN',
+} as const

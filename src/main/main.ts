@@ -1,7 +1,7 @@
 // https://www.electronjs.org/zh/docs/latest/tutorial/quick-start
 // app 控制应用程序的事件生命周期（相当于应用程序）
 // BrowserWindow 创建并控制浏览器窗口（相当于打开桌面弹框）
-import { app, BrowserWindow, globalShortcut } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import * as os from 'node:os'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { mainEnv } from '@/main/common/main-env.ts'

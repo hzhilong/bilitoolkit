@@ -2,9 +2,9 @@ import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { cloneDeep } from 'lodash'
 import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'
-import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
 import type { AppSettings } from '@/shared/types/app-settings.ts'
 import { defaultAppSettings } from '@/shared/common/app-constants.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db-key.ts'
 
 /**
  * 应用设置
@@ -17,7 +17,7 @@ export const useAppSettingsStore = defineStore(
     const init = async () => {
       // 获取数据库配置
       const dbConfig = (await window.toolkitApi.db.init(
-        HOST_GLOBAL_DATA.APP_SETTINGS,
+        APP_DB_KEYS.APP_SETTINGS,
         defaultAppSettings,
       )) as AppSettings
       Object.assign(appSettings, dbConfig)
@@ -28,7 +28,7 @@ export const useAppSettingsStore = defineStore(
       () => appSettings,
       (newVal) => {
         // 写入配置
-        toolkitApi.db.write(HOST_GLOBAL_DATA.APP_SETTINGS, cloneDeep(newVal)).then()
+        toolkitApi.db.write(APP_DB_KEYS.APP_SETTINGS, cloneDeep(newVal)).then()
       },
       { deep: true },
     )

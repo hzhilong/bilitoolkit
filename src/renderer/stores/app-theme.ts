@@ -4,7 +4,7 @@ import type { AppThemeMode, AppThemeState } from 'bilitoolkit-api-types'
 import { cloneDeep } from 'lodash'
 import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'
-import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db-key.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 
 // 默认备选的颜色
@@ -21,7 +21,7 @@ export const useAppThemeStore = defineStore(
     const init = async () => {
       // 获取数据库配置
       const dbConfig = (await window.toolkitApi.db.init(
-        HOST_GLOBAL_DATA.APP_THEME_STATE,
+        APP_DB_KEYS.APP_THEME_STATE,
         defaultAppThemeState,
       )) as AppThemeState
       Object.assign(state, dbConfig)
@@ -33,7 +33,7 @@ export const useAppThemeStore = defineStore(
       (newVal) => {
         // 写入配置
         const data = cloneDeep(newVal)
-        toolkitApi.db.write(HOST_GLOBAL_DATA.APP_THEME_STATE, data).then(async () => {
+        toolkitApi.db.write(APP_DB_KEYS.APP_THEME_STATE, data).then(async () => {
           await toolkitApi.event.emit(HOST_EVENT_CHANNELS.UPDATE_APP_THEME, data)
         })
       },

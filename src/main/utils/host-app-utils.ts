@@ -1,11 +1,12 @@
-import { defaultAppSettings } from '@/shared/common/app-constants';
-import { defaultsDeep } from 'lodash';
-import { JSONFileSync } from 'lowdb/node';
-import path from 'path';
-import { getPluginDBPath } from '../api/handler/api-handler-db';
-import { FileUtils } from './file-utils';
+import { defaultAppSettings, defaultAppThemeState } from '@/shared/common/app-constants'
+import { defaultsDeep } from 'lodash'
+import { JSONFileSync } from 'lowdb/node'
+import path from 'path'
+import { getPluginDBPath } from '../api/handler/api-handler-db'
+import { FileUtils } from './file-utils'
 import type { AppSettings } from '@/shared/types/app-settings.ts'
-import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db-key.ts'
+import type { AppThemeState } from 'bilitoolkit-api-types'
 
 const hostDBPath = getPluginDBPath('host')
 
@@ -22,5 +23,9 @@ const readHostDBDoc = <T extends object>(docName: string): T | undefined => {
 }
 
 export const getAppSettings = (): AppSettings => {
-  return defaultsDeep(readHostDBDoc<AppSettings>(HOST_GLOBAL_DATA.APP_SETTINGS), defaultAppSettings)
+  return defaultsDeep(readHostDBDoc<AppSettings>(APP_DB_KEYS.APP_SETTINGS), defaultAppSettings)
+}
+
+export const getAppThemeState = (): AppThemeState => {
+  return defaultsDeep(readHostDBDoc<AppThemeState>(APP_DB_KEYS.APP_THEME_STATE), defaultAppThemeState)
 }

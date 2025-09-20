@@ -1,4 +1,4 @@
-import type { AppThemeState } from 'bilitoolkit-api-types';
+import type { AppThemeState } from 'bilitoolkit-api-types'
 import { type AppSettings, DevToolsType } from '@/shared/types/app-settings.ts'
 
 /**
@@ -33,11 +33,11 @@ export const defaultAppThemeState: AppThemeState = {
   themeMode: 'light',
   bgMode: 'default',
   dark: false,
-}
+} as const
 
 /**
  * 默认的应用设置
  */
 export const defaultAppSettings: AppSettings = {
   devToolsType: DevToolsType.MAIN,
-}
+} as const

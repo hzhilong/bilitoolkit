@@ -5,6 +5,7 @@ import { CommonError } from '@ybgnb/utils'
 import { nativeTheme, shell } from 'electron'
 import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-toolkit-api.ts'
 import type { AppLog, AppThemeState } from 'bilitoolkit-api-types'
+import { getAppThemeState } from '@/main/utils/host-app-utils.ts'
 
 /**
  * 系统相关API处理器
@@ -42,7 +43,6 @@ export class SystemApiHandler extends ApiHandleStrategy implements IpcToolkitSys
   }
 
   async getAppThemeState(_: ApiCallerContext): Promise<AppThemeState> {
-    // return (await getGlobalData(context, 'host', HOST_GLOBAL_DATA.APP_THEME_STATE)) as AppThemeState
-    this.notAdaptedCurrPlatform()
+    return Promise.resolve(getAppThemeState())
   }
 }

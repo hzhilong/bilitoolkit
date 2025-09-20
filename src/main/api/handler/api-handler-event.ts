@@ -1,6 +1,6 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { CommonError } from '@ybgnb/utils'
-import { type HostEventChannel, HostEventChannels } from '@/shared/types/host-event-channel.ts'
+import { HOST_EVENT_CHANNELS, type HostEventChannel } from '@/shared/types/host-event-channel.ts'
 import type { IpcEventEmiter } from '@/main/types/ipc-event.ts'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
 import type { ApiCallerContext, IpcToolkitEventApi } from '@/main/types/ipc-toolkit-api.ts'
@@ -35,7 +35,7 @@ export class EventApiHandler extends ApiHandleStrategy implements Pick<IpcToolki
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async emit(context: ApiCallerContext, eventName: string, ...data: any[]): Promise<void> {
-    if (context.envType !== 'host' && HostEventChannels.includes(eventName as HostEventChannel)) {
+    if (context.envType !== 'host' && eventName in HOST_EVENT_CHANNELS) {
       throw new CommonError(`内部错误，插件不能注册[${eventName}]事件`)
     }
     emit(eventName, ...data)
