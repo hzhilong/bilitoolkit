@@ -1,12 +1,12 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { IdUtils } from '@/main/utils/id-utils'
 import { CommonError } from '@ybgnb/utils'
+import type { WebContents } from 'electron'
 import { ipcMain } from 'electron'
 import { cloneDeep } from 'lodash'
 import type { IpcRequestBody, IpcResponseBody } from '@/main/types/ipc-request.ts'
 import type { ApiCallerContext, ApiCallerEnvType, IpcToolkitGlobalApi } from '@/main/types/ipc-toolkit-api.ts'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
-import WebContents = Electron.WebContents
 
 type IpcMainEvent = Electron.IpcMainEvent
 

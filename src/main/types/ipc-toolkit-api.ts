@@ -1,5 +1,5 @@
 import { BrowserWindow, WebContentsView } from 'electron'
-import WebContents = Electron.WebContents
+import type { WebContents } from 'electron'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import type { ToolkitCoreApi } from '@/shared/types/toolkit-core-api.ts'
 import type {

@@ -2,7 +2,6 @@ import { mainLogger } from '@/main/common/main-logger'
 import { ApiDispatcher } from '@/main/types/api-dispatcher'
 import { BaseUtils, CommonError } from '@ybgnb/utils'
 import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
-import type { WindowManager } from '@/main/window/window-manager.ts'
 import { WindowApiHandler } from '@/main/api/handler/api-handler-window.ts'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
@@ -13,6 +12,7 @@ import { EventApiHandler } from '@/main/api/handler/api-handler-event.ts'
 import { GlobalApiHandler } from '@/main/api/handler/api-handler-global.ts'
 import { AccountApiHandler } from '@/main/api/handler/api-handler-account.ts'
 import { CoreApiHandler } from '@/main/api/handler/api-handler-core.ts'
+import { BaseWindowManager } from '@/main/window/base-window-manager.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -20,16 +20,16 @@ type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
  * 哔哩工具姬API调度器
  */
 export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
-  private windowManage: WindowManager
+  private windowManage: BaseWindowManager
 
-  constructor(wm: WindowManager) {
+  constructor(wm: BaseWindowManager) {
     super()
     this.windowManage = wm
     this.register('window', new WindowApiHandler(wm))
     this.register('db', new DBApiHandler())
     this.register('file', new FileApiHandler())
     this.register('system', new SystemApiHandler())
-    this.register('event', new EventApiHandler(wm))
+    this.register('event', new EventApiHandler())
     this.register('global', new GlobalApiHandler())
     this.register('account', new AccountApiHandler())
     this.register('core', new CoreApiHandler())

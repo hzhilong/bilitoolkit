@@ -27,3 +27,10 @@ export interface PluginInstallOptions {
   id: string
   version?: string
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function isToolkitPlugin(obj: any): obj is ToolkitPlugin {
+  return typeof obj === 'object'
+    && obj !== null
+    && 'webContentsView' in obj
+}

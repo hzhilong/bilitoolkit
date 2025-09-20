@@ -1,16 +1,15 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { CommonError } from '@ybgnb/utils'
-import type { WindowManager } from '@/main/window/window-manager.ts'
 import { type HostEventChannel, HostEventChannels } from '@/shared/types/host-event-channel.ts'
 import type { IpcEventEmiter } from '@/main/types/ipc-event.ts'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
 import type { ApiCallerContext, IpcToolkitEventApi } from '@/main/types/ipc-toolkit-api.ts'
+import { webContents } from 'electron'
 
 /**
  * 发射事件
  */
 export const emit = (
-  wm: WindowManager,
   channel: HostEventChannel | string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...data: any[]
@@ -20,9 +19,9 @@ export const emit = (
     payload: data,
   }
 
-  const webContents = wm.webContentsToWindowMap.keys()
-  for (const web of webContents) {
-    web.send(IPC_CHANNELS.TOOLKIT_EVENT, emitter)
+  const all = webContents.getAllWebContents()
+  for (const wc of all) {
+    wc.send(IPC_CHANNELS.TOOLKIT_EVENT, emitter)
   }
 }
 
@@ -30,11 +29,8 @@ export const emit = (
  * 事件 API 处理器
  */
 export class EventApiHandler extends ApiHandleStrategy implements Pick<IpcToolkitEventApi, 'emit'> {
-  private readonly windowManage: WindowManager
-
-  constructor(wm: WindowManager) {
+  constructor() {
     super()
-    this.windowManage = wm
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,6 +38,6 @@ export class EventApiHandler extends ApiHandleStrategy implements Pick<IpcToolki
     if (context.envType !== 'host' && HostEventChannels.includes(eventName as HostEventChannel)) {
       throw new CommonError(`内部错误，插件不能注册[${eventName}]事件`)
     }
-    emit(this.windowManage, eventName, ...data)
+    emit(eventName, ...data)
   }
 }

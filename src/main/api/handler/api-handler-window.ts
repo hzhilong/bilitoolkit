@@ -1,20 +1,20 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { BrowserWindow } from 'electron'
-import type { WindowManager } from '@/main/window/window-manager.ts'
 import type { ApiCallerContext, IpcToolkitWindowApi } from '@/main/types/ipc-toolkit-api.ts'
+import type { BaseWindowManager } from '@/main/window/base-window-manager.ts'
 
 /**
  * 窗口API处理器
  */
 export class WindowApiHandler extends ApiHandleStrategy implements IpcToolkitWindowApi {
-  private windowManage: WindowManager
+  private windowManage: BaseWindowManager
 
   // 存储 BrowserWindow 到 窗口上次大小 的映射
   private readonly windowToLastSize
   // 存储 BrowserWindow 到 窗口上次位置 的映射
   private readonly windowToLastPosition
 
-  constructor(wm: WindowManager) {
+  constructor(wm: BaseWindowManager) {
     super()
     this.windowManage = wm
     this.windowToLastSize = new Map<BrowserWindow, number[]>()
