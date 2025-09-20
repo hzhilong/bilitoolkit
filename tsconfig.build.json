@@ -7,6 +7,7 @@
     "nightwatch.conf.*",
     "playwright.config.*",
     "eslint.config.*",
+    "./scripts/**/*.ts"
   ],
   "exclude": [
     "./node_modules",
@@ -18,7 +19,11 @@
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "types": ["node"]
+    "moduleResolution": "bundler",
+    // 使用 .ts 和 .tsx 扩展名
+    "allowImportingTsExtensions": true,
+    // 显式声明全局类型依赖（仅包含 Node.js 类型定义，避免加载无关的浏览器环境类型）
+    "types": ["node"],
+    "target": "ES2022"
   }
 }

@@ -7,7 +7,7 @@ import { exposeHostToolkitApi } from '@/main/api/invoke/invoke-api.ts'
 import { EXPOSE_KEYS } from '@/shared/types/expose-keys.ts'
 
 // 初始化宿主app的api暴露
-export const initHostApp = (windowApp: WindowApp) => {
+export const initApp = (windowApp: WindowApp) => {
   // 暴露应用类型给渲染进程（宿主环境）
   contextBridge.exposeInMainWorld(EXPOSE_KEYS._windowApp, windowApp)
 

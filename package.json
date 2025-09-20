@@ -29,6 +29,7 @@
     "dev": "chcp 65001 && vite",
     "添加本地依赖包": "yalc add bilitoolkit-api-types @ybgnb/utils",
     "移除本地依赖包": "yalc remove --all",
+    "build:preloads": "tsx scripts/build-preloads.ts",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -70,13 +71,14 @@
     "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
     "sass": "^1.92.1",
+    "source-map-support": "^0.5.21",
+    "tsx": "^4.20.5",
     "typescript": "~5.8.0",
     "unplugin-auto-import": "^20.1.0",
     "unplugin-vue-components": "^29.0.0",
     "vite": "^7.0.6",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-vue-devtools": "^8.0.0",
-    "vue-tsc": "^3.0.4",
-    "source-map-support": "^0.5.21"
+    "vue-tsc": "^3.0.4"
   }
 }
