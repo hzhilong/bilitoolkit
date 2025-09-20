@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AppIcon from '@/renderer/components/common/AppIcon.vue'
 import { ref } from 'vue'
+import { AppIcon } from 'bilitoolkit-ui'
 
 const props = defineProps<{
   title: string

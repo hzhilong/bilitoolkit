@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
-import { AppLoadingDialog } from '@/renderer/components/dialog/loading/loadingService.ts'
+import { AppLoadingDialog } from 'bilitoolkit-ui'
 
 const test = async () => {
   await AppLoadingDialog.show({

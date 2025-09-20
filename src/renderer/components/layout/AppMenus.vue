@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import AppIcon from '@/renderer/components/common/AppIcon.vue'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { AppIcon } from 'bilitoolkit-ui'
 
 /**
  * 应用菜单

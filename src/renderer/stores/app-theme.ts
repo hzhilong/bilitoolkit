@@ -14,7 +14,7 @@ const DEFAULT_PRIMARY_COLORS = AppConstants.THEME.DEFAULT_PRIMARY_COLORS
  * 应用主题状态 Store
  */
 export const useAppThemeStore = defineStore(
-  'AppThemeStore',
+  'BiliToolkit-AppThemeStore',
   () => {
     const state = reactive<AppThemeState>(defaultAppThemeState)
 
@@ -41,20 +41,21 @@ export const useAppThemeStore = defineStore(
     )
 
     /**
-     * 切换主题颜色
-     */
-    const switchThemeColor = () => {
-      state.currPrimaryColorIndex = (state.currPrimaryColorIndex + 1) % DEFAULT_PRIMARY_COLORS.length
-      const newColor = DEFAULT_PRIMARY_COLORS[state.currPrimaryColorIndex]
-      return setPrimaryColor(newColor)
-    }
-    /**
      * 设置主题色
      * @param color
      */
     const setPrimaryColor = (color: string) => {
       state.primaryColor = color
       return state.primaryColor
+    }
+
+    /**
+     * 切换主题颜色
+     */
+    const switchThemeColor = () => {
+      state.currPrimaryColorIndex = (state.currPrimaryColorIndex + 1) % DEFAULT_PRIMARY_COLORS.length
+      const newColor = DEFAULT_PRIMARY_COLORS[state.currPrimaryColorIndex]
+      return setPrimaryColor(newColor)
     }
     /**
      * 设置主题模式

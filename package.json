@@ -27,7 +27,8 @@
   },
   "scripts": {
     "dev": "chcp 65001 && vite",
-    "添加本地依赖包": "yalc add bilitoolkit-api-types @ybgnb/utils",
+    "添加本地依赖包": "yalc add bilitoolkit-api-types @ybgnb/utils bilitoolkit-ui --peer",
+    "备注": "本地依赖库在版本未更改的情况下，代码会被vite缓存，注意！！！",
     "移除本地依赖包": "yalc remove --all",
     "build:preloads": "tsx scripts/build-preloads.ts",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -41,6 +42,7 @@
     "@ybgnb/utils": "file:.yalc/@ybgnb/utils",
     "axios": "^1.12.1",
     "bilitoolkit-api-types": "file:.yalc/bilitoolkit-api-types",
+    "bilitoolkit-ui": "file:.yalc/bilitoolkit-ui",
     "consola": "^3.4.2",
     "dayjs": "^1.11.18",
     "element-plus": "^2.11.2",
@@ -56,8 +58,8 @@
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
-    "@types/node": "^22.16.5",
     "@types/lodash": "^4.17.16",
+    "@types/node": "^22.16.5",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitejs/plugin-vue-jsx": "^5.0.1",
     "@vue/eslint-config-prettier": "^10.2.0",
@@ -68,6 +70,7 @@
     "eslint": "^9.31.0",
     "eslint-plugin-vue": "~10.3.0",
     "jiti": "^2.4.2",
+    "lodash": "^4.17.21",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
     "sass": "^1.92.1",
@@ -78,7 +81,6 @@
     "vite": "^7.0.6",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-vue-devtools": "^8.0.0",
-    "vue-tsc": "^3.0.4",
-    "lodash": "^4.17.21"
+    "vue-tsc": "^3.0.4"
   }
 }

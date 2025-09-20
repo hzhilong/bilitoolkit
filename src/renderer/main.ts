@@ -3,23 +3,16 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
 
 import router from './router'
-// 导入自定义的css变量
-import '@/renderer/assets/scss/element/dark-var.css'
-import '@/renderer/assets/scss/element/light-var.css'
-// 集成 ElementPlus
-import ElementPlus from 'element-plus'
-import 'element-plus/theme-chalk/dark/css-vars.css'
-// 集成 remixicon
-import 'remixicon/fonts/remixicon.css'
 import App from '@/renderer/App.vue'
 import { logger } from '@/renderer/common/renderer-logger.ts'
 import { useAppSettingsStore } from '@/renderer/stores/app-settings.ts'
 import { useAppThemeStore } from '@/renderer/stores/app-theme.ts'
-import { ThemeUtils } from '@/renderer/utils/theme-utils.ts'
 import DialogApp from '@/renderer/DialogApp.vue'
 import { initHostDialogListener } from '@/renderer/api/dialog-init.ts'
 import { initHostListener } from '@/renderer/api/host-init.ts'
 import { AppUtils } from '@/renderer/utils/app-utils.ts'
+import { initBilitoolkitUi } from 'bilitoolkit-ui'
+import 'bilitoolkit-ui/style.css'
 
 async function bootstrapApp() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,24 +33,23 @@ async function bootstrapApp() {
   // 挂载到全局属性
   app.config.globalProperties.$toolkitApi = window.toolkitApi
 
-  app.use(ElementPlus, { size: 'small', zIndex: 3000 })
-
   const pinia = createPinia()
   pinia.use(piniaPluginPersistedState)
   app.use(pinia)
 
+  const ui = await initBilitoolkitUi()
+
   if (_windowApp?.type === 'dialogApp') {
     logger.log('对话框环境初始化')
-    await ThemeUtils.updateCssVar(await window.toolkitApi.system.getAppThemeState())
     await initHostDialogListener()
   } else {
     logger.log('宿主环境初始化')
     await useAppSettingsStore().init()
     await useAppThemeStore().init()
-    await ThemeUtils.initAppTheme()
     await initHostListener()
   }
 
+  app.use(ui)
   app.use(router)
   // Vue 组件中发生的错误
   app.config.errorHandler = AppUtils.handleError

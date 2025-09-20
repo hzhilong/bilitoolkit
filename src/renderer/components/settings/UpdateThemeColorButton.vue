@@ -3,7 +3,7 @@ import { useAppThemeStore } from '@/renderer/stores/app-theme'
 import { ThemeUtils } from '@/renderer/utils/theme-utils'
 import { AppConstants } from '@/shared/common/app-constants'
 import { ref } from 'vue'
-import CountdownDialog from '@/renderer/components/dialog/countdown/CountdownDialog.vue'
+import { CountdownDialog } from 'bilitoolkit-ui'
 
 // 保存的主题状态
 const appThemeStore = useAppThemeStore()

@@ -12,12 +12,12 @@ export const appMenus: MenuItem[] = [
   {
     title: '我的收藏',
     icon: 'star',
-    path: '/settings',
+    path: '/settings2',
   },
   {
     title: '插件市场',
     icon: 'puzzle-2',
-    path: '/settings',
+    path: '/settings3',
   },
   {
     title: '账号管理',
