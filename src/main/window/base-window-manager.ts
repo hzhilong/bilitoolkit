@@ -33,8 +33,22 @@ export abstract class BaseWindowManager {
   protected constructor() {
     this.webContentsToPluginMap = new Map<number, ToolkitPlugin>()
     this.webContentsToViewMap = new Map<number, WebContentsView>()
-    this.pluginToViewMap = new Map<ToolkitPlugin, WebContentsView>()
-    this.pluginResizeListeners = new Map<ToolkitPlugin, () => void>()
+    this.pluginToViewMap = new Map<string, WebContentsView>()
+    this.pluginResizeListeners = new Map<string, () => void>()
+  }
+
+  protected getOwnerBrowserWindow(contents: WebContents): BrowserWindow | null {
+    let current: WebContents | null = contents
+
+    while (current) {
+      const window = BrowserWindow.fromWebContents(current)
+      if (window) {
+        return window
+      }
+      current = current.hostWebContents ?? null
+    }
+
+    return null
   }
 
   protected getMappingPlugin(sender: WebContents): ToolkitPlugin {
@@ -46,7 +60,7 @@ export abstract class BaseWindowManager {
   protected getMappingView(sender: WebContents | ToolkitPlugin): WebContentsView {
     let view
     if (isToolkitPlugin(sender)) {
-      view = this.pluginToViewMap.get(sender)
+      view = this.pluginToViewMap.get(sender.id)
     } else {
       view = this.webContentsToViewMap.get(sender.id)
     }
@@ -55,7 +69,7 @@ export abstract class BaseWindowManager {
   }
 
   protected isHost(sender: WebContents) {
-    return sender.hostWebContents === null || sender.hostWebContents === undefined
+    return !this.webContentsToPluginMap.has(sender.id);
   }
 
   /**
@@ -64,7 +78,7 @@ export abstract class BaseWindowManager {
    */
   public getApiCallerContext(event: IpcMainInvokeEvent): ApiCallerContext {
     const sender = event.sender
-    const window = BrowserWindow.fromWebContents(sender)
+    const window = this.getOwnerBrowserWindow(sender)
     if (!window) {
       throw new CommonError('关联的窗口对象为空')
     }
@@ -86,7 +100,7 @@ export abstract class BaseWindowManager {
         window: window,
         webContents: sender,
         webContentsView: this.getMappingView(sender),
-        hostWebContents: sender.hostWebContents,
+        hostWebContents: window.webContents,
         dbPath: getPluginDBPath('plugin', plugin),
         filePath: getPluginBaseFilePath('plugin', plugin),
       } satisfies PluginApiCallerContext
@@ -135,18 +149,18 @@ export abstract class BaseWindowManager {
       throw new CommonError('非法调用')
     }
     const window = context.window
-    mainLogger.log(`createPluginView`, plugin)
+    mainLogger.debug(`createPluginView`, plugin)
     try {
       const webView = this.getMappingView(plugin)
       if (webView) {
-        mainLogger.log(`createPluginView 插件[${plugin.id}]已存在`)
+        mainLogger.info(`createPluginView 插件[${plugin.id}]已存在`)
         return webView
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (ignoredError) {}
 
     const ses = session.fromPartition('<' + plugin.id + '>')
-    const preload = path.join(appPath.preloadsDir, `plugin-preload.js`)
+    const preload = path.join(appPath.preloadsDir, `plugin-preload.cjs`)
     ses.registerPreloadScript({
       filePath: preload,
       type: 'frame',
@@ -175,33 +189,33 @@ export abstract class BaseWindowManager {
 
     this.webContentsToPluginMap.set(view.webContents.id, plugin)
     this.webContentsToViewMap.set(view.webContents.id, view)
-    this.pluginToViewMap.set(plugin, view)
-    this.pluginResizeListeners.set(plugin, updateBounds)
+    this.pluginToViewMap.set(plugin.id, view)
+    this.pluginResizeListeners.set(plugin.id, updateBounds)
   }
   public showPluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const contentView = context.window.contentView
     if (contentView.children && contentView.children.length > 0) {
-      mainLogger.log(`showPluginView 当前${contentView.children.length}个子view`)
+      mainLogger.info(`showPluginView 当前${contentView.children.length}个子view`)
       contentView.children.forEach((c) => contentView.removeChildView(c))
     }
     contentView.addChildView(this.getMappingView(plugin))
   }
   public hidePluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
-    const view = this.pluginToViewMap.get(plugin)
+    const view = this.pluginToViewMap.get(plugin.id)
     if (!view) {
       throw new CommonError('该插件未创建视图，关闭失败')
     }
     context.window.contentView.removeChildView(view)
   }
   public closePluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
-    const view = this.pluginToViewMap.get(plugin)
+    const view = this.pluginToViewMap.get(plugin.id)
     if (!view) {
       throw new CommonError('该插件未创建视图，关闭失败')
     }
     this.webContentsToPluginMap.delete(view.webContents.id)
     this.webContentsToViewMap.delete(view.webContents.id)
-    this.pluginToViewMap.delete(plugin)
-    this.pluginResizeListeners.delete(plugin)
+    this.pluginToViewMap.delete(plugin.id)
+    this.pluginResizeListeners.delete(plugin.id)
     context.window.contentView.removeChildView(view)
     if (!view.webContents.isDestroyed()) {
       view.webContents.close()

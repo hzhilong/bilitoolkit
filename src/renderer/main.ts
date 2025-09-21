@@ -56,6 +56,7 @@ async function bootstrapApp() {
   // 捕捉那些没有被catch处理的Promise错误
   window.addEventListener('unhandledrejection', (event) => {
     AppUtils.handleError(event.reason)
+    event.preventDefault() // 阻止默认控制台报错
   })
   app.mount('#app')
 }

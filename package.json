@@ -27,7 +27,7 @@
   },
   "scripts": {
     "dev": "chcp 65001 && vite",
-    "添加本地依赖包": "yalc add bilitoolkit-api-types @ybgnb/utils bilitoolkit-ui --peer",
+    "添加本地依赖包": "yalc add bilitoolkit-api-types @ybgnb/utils bilitoolkit-ui",
     "备注": "本地依赖库在版本未更改的情况下，代码会被vite缓存，注意！！！",
     "移除本地依赖包": "yalc remove --all",
     "build:preloads": "tsx scripts/build-preloads.ts",

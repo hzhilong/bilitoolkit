@@ -32,5 +32,5 @@ export interface PluginInstallOptions {
 export function isToolkitPlugin(obj: any): obj is ToolkitPlugin {
   return typeof obj === 'object'
     && obj !== null
-    && 'webContentsView' in obj
+    && 'indexPath' in obj
 }

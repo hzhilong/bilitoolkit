@@ -73,7 +73,7 @@ export class FileUtils {
           fs.unlinkSync(filePath)
         }
       }
-      mainLogger.log(`已成功删除 ${directory} 下的所有文件和目录`)
+      mainLogger.info(`已成功删除 ${directory} 下的所有文件和目录`)
     } catch (error) {
       mainLogger.error('删除文件时出错：', error)
       throw BaseUtils.convertToCommonError(error, '删除文件时出错：')

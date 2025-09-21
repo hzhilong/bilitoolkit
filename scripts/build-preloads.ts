@@ -43,12 +43,12 @@ async function buildIndividualPreloads() {
           lib: {
             entry: entryFile,
             formats: ['cjs'],
-            fileName: () => outputFileName,
+            fileName: () => outputFileName.replace(/\.js$/, ".cjs"),
           },
           rollupOptions: {
             external: ['electron'], // 保持 electron 为外部依赖
             output: {
-              entryFileNames: '[name].js',
+              entryFileNames: '[name].cjs',
               manualChunks: () => null,
             },
           },

@@ -5,6 +5,7 @@ import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
 import { ToolkitApiDispatcher } from '@/main/api/handler/toolkit-api-dispatcher.ts'
 import { BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import { showDevTools } from '@/main/utils/dev-tools.ts'
+import { mainLogger } from '@/main/common/main-logger.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -37,7 +38,14 @@ export class WindowManager extends BaseWindowManager {
     // 初始化插件API监听
     ipcMain.handle(IPC_CHANNELS.PLUGIN_APIS, async (event: IpcMainInvokeEvent, options: PluginApiInvokeOptions) => {
       return await execBiz(async () => {
-        return await this.apiDispatcher.handle(event, options, this.getApiCallerContext(event))
+        try {
+          const apiCallerContext = this.getApiCallerContext(event)
+          mainLogger.debug(`apiCallerContext`, apiCallerContext)
+          return await this.apiDispatcher.handle(event, options, apiCallerContext)
+        } catch (e) {
+          mainLogger.error(`调用API错误`, options)
+          mainLogger.error(`错误信息`, e)
+        }
       })
     })
     // 在开发环境和生产环境均可通过快捷键打开devTools

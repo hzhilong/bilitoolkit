@@ -3,6 +3,7 @@ import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { FileUtils } from '@/main/utils/file-utils'
 import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolkit-api.ts'
 import type { PluginInstallOptions, ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import { windowManager } from '@/main/window/window-manager.ts'
 
 /**
  * 核心API处理器
@@ -55,12 +56,14 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   }
 
   async openPlugin(context: ApiCallerContext, plugin: ToolkitPlugin): Promise<void> {
-    // TODO
+    await windowManager.createPluginView(context, plugin)
+    windowManager.showPluginView(context, plugin)
   }
 
   async closePlugin(context: ApiCallerContext, plugin: ToolkitPlugin): Promise<void> {
-    // TODO
+    windowManager.closePluginView(context, plugin)
   }
+
 
   async hideCurrPlugin(context: ApiCallerContext): Promise<void> {
     const contentView = context.window.contentView
