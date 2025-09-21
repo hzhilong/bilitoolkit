@@ -1,13 +1,18 @@
 @use '../global' as *;
 @use 'base-app' as *;
 
-body .el-overlay {
-  &,
-  & > div[role='dialog'] {
-    top: $body-padding !important;
-    left: $body-padding !important;
-    border-radius: $app-border-radius !important;
-    height: calc(100% - 1 * $body-padding) !important;
-    width: calc(100% - 1 * $body-padding) !important;
+body {
+
+  background-color: #00000000;
+
+  .el-overlay {
+    &,
+    & > div[role='dialog'] {
+      top: $body-padding !important;
+      left: $body-padding !important;
+      border-radius: $app-border-radius !important;
+      height: calc(100% - 1 * $body-padding) !important;
+      width: calc(100% - 1 * $body-padding) !important;
+    }
   }
 }

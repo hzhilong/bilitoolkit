@@ -1,10 +1,12 @@
 <!--标题栏-->
 <script setup lang="ts">
 import WindowOptions from '@/renderer/components/layout/WindowOptions.vue'
+import PluginTabControls from '@/renderer/components/layout/PluginTabControls.vue'
 </script>
 
 <template>
   <div class="top-bar">
+    <PluginTabControls/>
     <WindowOptions class="top-bar__options" />
   </div>
 </template>

@@ -1,7 +1,6 @@
 import { ConfigEnv, defineConfig, loadEnv, mergeConfig, UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import vueDevTools from 'vite-plugin-vue-devtools'
 import electron from 'vite-plugin-electron/simple'
 import { fileURLToPath, URL } from 'node:url'
 import path from 'path'
@@ -53,8 +52,7 @@ const baseConfig = ({ mode }: ConfigEnv): UserConfig => {
     envPrefix: envPrefixes,
     plugins: [
       vue(),
-      vueJsx() /*vueDevTools()*/,
-      vueDevTools(),
+      vueJsx(),
       // 按需引入组件 https://github.com/unplugin/unplugin-vue-components
       AutoImport({
         resolvers: [ElementPlusResolver()],

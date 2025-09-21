@@ -40,7 +40,6 @@ export class WindowManager extends BaseWindowManager {
       return await execBiz(async () => {
         try {
           const apiCallerContext = this.getApiCallerContext(event)
-          mainLogger.debug(`apiCallerContext`, apiCallerContext)
           return await this.apiDispatcher.handle(event, options, apiCallerContext)
         } catch (e) {
           mainLogger.error(`调用API错误`, options)

@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { AppIcon } from 'bilitoolkit-ui'
+import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 
 /**
  * 应用菜单
@@ -37,7 +38,7 @@ const menuItemClass = (item: MenuItem, index: number) => {
 }
 
 const handleMenuItemClick = async (event: MouseEvent, menu: MenuItem, index: number) => {
-  // TODO 点击其他菜单时隐藏当前插件页面
+  PluginUtils.hideCurrPluginView().then()
   menuIndex.value = index
   if (menu.onclick) {
     menu.onclick()
