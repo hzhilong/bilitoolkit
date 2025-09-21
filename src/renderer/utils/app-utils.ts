@@ -2,7 +2,7 @@ import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { logger } from '@/renderer/common/renderer-logger'
 import { BaseUtils } from '@ybgnb/utils';
 import type { AppLog, LogLevel } from 'bilitoolkit-api-types';
-import { ElMessage, ElMessageBox, type ElMessageBoxOptions, type MessageParams } from 'element-plus'
+import { type ElMessageBoxOptions, type MessageParams } from 'element-plus'
 import { defaultsDeep } from 'lodash'
 
 /**

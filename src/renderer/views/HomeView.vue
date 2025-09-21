@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
+import { AppUtils } from '@/renderer/utils/app-utils.ts'
 
 let num = 0
 const test1 = async () => {
@@ -14,11 +15,14 @@ const test1 = async () => {
     }),
   )
 }
+const test2 = async () => {
+  AppUtils.message('test')
+}
 </script>
 
 <template>
   <PageContainer>
-    <el-button @click="test1()">测试</el-button>
+    <el-button @click="test2()">测试</el-button>
   </PageContainer>
 </template>
 
