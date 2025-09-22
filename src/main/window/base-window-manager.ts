@@ -23,6 +23,7 @@ export abstract class BaseWindowManager {
   public mainWindow: BrowserWindow | null = null
   // 存储 所有插件WebContents 到 Plugin 的映射
   public readonly webContentsToPluginMap
+  public readonly webContentsToWindow
   // 存储 所有插件WebContents 到 WebContentsView 的映射
   public readonly webContentsToViewMap
   public readonly pluginToViewMap
@@ -33,22 +34,15 @@ export abstract class BaseWindowManager {
   protected constructor() {
     this.webContentsToPluginMap = new Map<number, ToolkitPlugin>()
     this.webContentsToViewMap = new Map<number, WebContentsView>()
+    this.webContentsToWindow = new Map<number, BrowserWindow>()
     this.pluginToViewMap = new Map<string, WebContentsView>()
     this.pluginResizeListeners = new Map<string, () => void>()
   }
 
-  protected getOwnerBrowserWindow(contents: WebContents): BrowserWindow | null {
-    let current: WebContents | null = contents
-
-    while (current) {
-      const window = BrowserWindow.fromWebContents(current)
-      if (window) {
-        return window
-      }
-      current = current.hostWebContents ?? null
-    }
-
-    return null
+  protected getOwnerBrowserWindow(contents: WebContents): BrowserWindow {
+    const window = this.webContentsToWindow.get(contents.id)
+    if (!window) throw new CommonError('关联的窗口对象为空')
+    return window
   }
 
   protected getMappingPlugin(sender: WebContents): ToolkitPlugin {
@@ -69,7 +63,7 @@ export abstract class BaseWindowManager {
   }
 
   protected isHost(sender: WebContents) {
-    return !this.webContentsToPluginMap.has(sender.id);
+    return !this.webContentsToPluginMap.has(sender.id)
   }
 
   /**
@@ -79,9 +73,6 @@ export abstract class BaseWindowManager {
   public getApiCallerContext(event: IpcMainInvokeEvent): ApiCallerContext {
     const sender = event.sender
     const window = this.getOwnerBrowserWindow(sender)
-    if (!window) {
-      throw new CommonError('关联的窗口对象为空')
-    }
     if (this.isHost(sender)) {
       // 宿主环境调用API
       return {
@@ -126,6 +117,7 @@ export abstract class BaseWindowManager {
         show: false,
       }),
     )
+    this.webContentsToWindow.set(window.webContents.id, window)
     // 隐藏 MacOS 交通信号灯
     if (process.platform === 'darwin') {
       window.setWindowButtonVisibility(false)
@@ -142,7 +134,9 @@ export abstract class BaseWindowManager {
     return window
   }
   public closeWindow(context: ApiCallerContext) {
-    context.window.close()
+    const window = context.window
+    this.webContentsToWindow.delete(window.webContents.id)
+    window.close()
   }
   public async createPluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
     if (!this.isHost(context.webContents)) {
@@ -185,12 +179,14 @@ export abstract class BaseWindowManager {
     window.addListener('resize', updateBounds)
     await updateBounds()
 
-    await view.webContents.loadURL(plugin.indexPath)
-
-    this.webContentsToPluginMap.set(view.webContents.id, plugin)
-    this.webContentsToViewMap.set(view.webContents.id, view)
+    const webContentsId = view.webContents.id
+    this.webContentsToPluginMap.set(webContentsId, plugin)
+    this.webContentsToViewMap.set(webContentsId, view)
     this.pluginToViewMap.set(plugin.id, view)
     this.pluginResizeListeners.set(plugin.id, updateBounds)
+    this.webContentsToWindow.set(webContentsId, window)
+
+    await view.webContents.loadURL(plugin.indexPath)
   }
   public showPluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const contentView = context.window.contentView
@@ -214,6 +210,7 @@ export abstract class BaseWindowManager {
     }
     this.webContentsToPluginMap.delete(view.webContents.id)
     this.webContentsToViewMap.delete(view.webContents.id)
+    this.webContentsToWindow.delete(view.webContents.id)
     this.pluginToViewMap.delete(plugin.id)
     this.pluginResizeListeners.delete(plugin.id)
     context.window.contentView.removeChildView(view)

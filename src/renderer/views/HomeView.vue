@@ -22,7 +22,7 @@ const test2 = async () => {
 
 <template>
   <PageContainer>
-    <el-button @click="test1()">测试</el-button>
+    <el-button @click="test1()">测试1</el-button>
   </PageContainer>
 </template>
 

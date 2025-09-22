@@ -37,7 +37,7 @@ async function bootstrapApp() {
   pinia.use(piniaPluginPersistedState)
   app.use(pinia)
 
-  const ui = await initBilitoolkitUi()
+  const ui = await initBilitoolkitUi(pinia)
 
   if (_windowApp?.type === 'dialogApp') {
     logger.log('对话框环境初始化')
