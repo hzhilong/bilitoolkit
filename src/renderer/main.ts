@@ -22,11 +22,9 @@ async function bootstrapApp() {
   // 根据app类型加载不同样式和组件
   if (_windowApp?.type === 'dialogApp') {
     logger.log('当前为对话框APP')
-    import('@/renderer/assets/scss/app/dialog-app.scss')
     app = createApp(DialogApp)
   } else {
     logger.log('当前为宿主环境APP')
-    import('@/renderer/assets/scss/app/host-app.scss')
     app = createApp(App)
   }
 
@@ -41,9 +39,11 @@ async function bootstrapApp() {
 
   if (_windowApp?.type === 'dialogApp') {
     logger.log('对话框环境初始化')
+    import('@/renderer/assets/scss/app/dialog-app.scss')
     await initHostDialogListener()
   } else {
     logger.log('宿主环境初始化')
+    import('@/renderer/assets/scss/app/host-app.scss')
     await useAppSettingsStore().init()
     await useAppThemeStore().init()
     await initHostListener()

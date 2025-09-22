@@ -38,7 +38,7 @@ const menuItemClass = (item: MenuItem, index: number) => {
 }
 
 const handleMenuItemClick = async (event: MouseEvent, menu: MenuItem, index: number) => {
-  PluginUtils.hideCurrPluginView().then()
+  await PluginUtils.hideCurrPluginView()
   menuIndex.value = index
   if (menu.onclick) {
     menu.onclick()

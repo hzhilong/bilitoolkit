@@ -2,7 +2,6 @@
 @use 'base-app' as *;
 
 body {
-
   background-color: #00000000;
 
   .el-overlay {
@@ -14,5 +13,9 @@ body {
       height: calc(100% - 1 * $body-padding) !important;
       width: calc(100% - 1 * $body-padding) !important;
     }
+  }
+
+  #app{
+    background-color: #00000000;
   }
 }
