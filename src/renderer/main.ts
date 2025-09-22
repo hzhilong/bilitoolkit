@@ -13,6 +13,7 @@ import { initHostListener } from '@/renderer/api/host-init.ts'
 import { AppUtils } from '@/renderer/utils/app-utils.ts'
 import { initBilitoolkitUi } from 'bilitoolkit-ui'
 import 'bilitoolkit-ui/style.css'
+import 'remixicon/fonts/remixicon.css'
 
 async function bootstrapApp() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -16,6 +16,11 @@ const router = createRouter({
           component: () => import('../views/HomeView.vue'),
         },
         {
+          name: '插件市场',
+          path: '/market',
+          component: () => import('../views/PluginMarket.vue'),
+        },
+        {
           name: '设置',
           path: '/settings',
           component: () => import('../views/SettingsView.vue'),

@@ -4,18 +4,18 @@
 export interface ToolkitPlugin {
   // 插件id   package.name
   id: string
-  // 插件名称 package.pluginName
+  // 插件名称 package.keywords.bilitoolkit-plugin:pluginName
   name: string
   // 作者 package.*
-  // author: string
+  author: string
   // 描述 package.*
-  // description: string
-  // 图标 package.*   url或者本地相对路径
-  // icon: string
-  // 版本 package.*
-  // version: string
-  // 插件主页
-  // homePage: string
+  description: string
+  // 版本号 package.*
+  version: string
+  // 发布时间 ISO 格式字符串
+  date: string
+  // 链接：homepage>repository>npm
+  link: string
   // index 路径
   indexPath: string
 }
@@ -33,4 +33,10 @@ export function isToolkitPlugin(obj: any): obj is ToolkitPlugin {
   return typeof obj === 'object'
     && obj !== null
     && 'indexPath' in obj
+}
+
+export interface PluginSearchResult {
+  total: number
+  time: string
+  plugins: Array<ToolkitPlugin>
 }

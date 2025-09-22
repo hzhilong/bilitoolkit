@@ -8,6 +8,7 @@ import packageJson from './package.json'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import vueDevTools from 'vite-plugin-vue-devtools'
 
 /**
  * 基础的 vite 配置
@@ -53,6 +54,7 @@ const baseConfig = ({ mode }: ConfigEnv): UserConfig => {
     plugins: [
       vue(),
       vueJsx(),
+      vueDevTools(),
       // 按需引入组件 https://github.com/unplugin/unplugin-vue-components
       AutoImport({
         resolvers: [ElementPlusResolver()],

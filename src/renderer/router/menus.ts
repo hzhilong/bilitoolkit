@@ -17,7 +17,7 @@ export const appMenus: MenuItem[] = [
   {
     title: '插件市场',
     icon: 'puzzle-2',
-    path: '/settings3',
+    path: '/market',
   },
   {
     title: '账号管理',
