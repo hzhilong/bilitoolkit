@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { IconButton } from 'bilitoolkit-ui'
-import { onMounted, ref, unref } from 'vue'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import { cloneDeep } from 'lodash'
+import { toRefs } from 'vue'
+import { usePluginIconSrc } from '@/renderer/composables/usePluginIcon.ts'
 
 const props = withDefaults(defineProps<ToolkitPlugin>(), {})
-const iconSrc = ref('')
-const loadPluginIcon = async () => {
-  iconSrc.value = await toolkitApi.core.getPluginIcon(cloneDeep(unref(props)))
-}
-onMounted(() => {
-  loadPluginIcon()
-})
+const { iconSrc } = usePluginIconSrc(toRefs(props))
 </script>
 
 <template>

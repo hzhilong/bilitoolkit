@@ -5,6 +5,7 @@ import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs'
 import { GithubUtils } from '@/main/utils/github-utils.ts'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { FileUtils } from '@/main/utils/file-utils.ts'
+import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
 
 let defaultPluginIcon: string | undefined = undefined
 FileUtils.ensureDirExists(appPath.pluginIcons)
@@ -44,15 +45,13 @@ export class IconUtils {
       return readFileSync(saveTo, 'utf8')
     }
     try {
-      const info = GithubUtils.parseGithubUrl(plugin.links.repository)
+      const repo = parseGithubRepo(plugin.links.repository)
       try {
-        info.filePath = 'public/favicon.ico'
-        await GithubUtils.downloadFromGithubRaw(info, saveTo)
+        await GithubUtils.downloadFromGithubRaw(repo, 'public/favicon.ico', saveTo)
         return this.convertIconFile(saveTo, 'image/x-icon')
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (ignored) {
-        info.filePath = 'public/favicon.png'
-        await GithubUtils.downloadFromGithubRaw(info, saveTo)
+        await GithubUtils.downloadFromGithubRaw(repo, 'public/favicon.png', saveTo)
         return this.convertIconFile(saveTo, 'image/png')
       }
     } catch (error: unknown) {
