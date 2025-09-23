@@ -12,7 +12,7 @@ const defaultIconClass = ref('equalizer-2')
 
 <template>
   <div class="setting-item">
-    <AppIcon class="setting-item__icon" :icon="props.iconClass || defaultIconClass" />
+    <AppIcon class="setting-item__icon" :icon="props.iconClass || defaultIconClass" icon-size="20px"/>
     <div class="setting-item__content">
       <div class="setting-item__content__title">{{ props.title }}</div>
       <div class="setting-item__content__desc" v-if="props.desc">{{ props.desc }}</div>

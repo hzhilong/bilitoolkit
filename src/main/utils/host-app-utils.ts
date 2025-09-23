@@ -2,13 +2,13 @@ import { defaultAppSettings, defaultAppThemeState } from '@/shared/common/app-co
 import { defaultsDeep } from 'lodash'
 import { JSONFileSync } from 'lowdb/node'
 import path from 'path'
-import { getPluginDBPath } from '../api/handler/api-handler-db'
 import { FileUtils } from './file-utils'
 import type { AppSettings } from '@/shared/types/app-settings.ts'
 import { APP_DB_KEYS } from '@/shared/common/app-db-key.ts'
 import type { AppThemeState } from 'bilitoolkit-api-types'
+import DBUtils from '@/main/utils/db-utils.ts'
 
-const hostDBPath = getPluginDBPath('host')
+const hostDBPath = DBUtils.getDBPath('host')
 
 /**
  * 读取host环境的文档

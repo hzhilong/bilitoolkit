@@ -1,13 +1,23 @@
 <script setup lang="ts">
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { IconButton } from 'bilitoolkit-ui'
+import { onMounted, ref, unref } from 'vue'
+import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { cloneDeep } from 'lodash'
 
 const props = withDefaults(defineProps<ToolkitPlugin>(), {})
+const iconSrc = ref('')
+const loadPluginIcon = async () => {
+  iconSrc.value = await toolkitApi.core.getPluginIcon(cloneDeep(unref(props)))
+}
+onMounted(() => {
+  loadPluginIcon()
+})
 </script>
 
 <template>
   <div class="plugin-card">
-    <div class="icon"></div>
+    <img class="icon" :src="iconSrc" />
     <div class="plugin-info">
       <div class="meta-info">
         <span class="name">
@@ -54,7 +64,8 @@ const props = withDefaults(defineProps<ToolkitPlugin>(), {})
   gap: 6px;
 
   .icon {
-    @include app-logo-style(var(--el-color-primary-light-1));
+    display: inline-block;
+    user-select: none;
     width: 36px;
     height: 36px;
   }

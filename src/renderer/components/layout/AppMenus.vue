@@ -59,7 +59,7 @@ const handleMenuItemClick = async (event: MouseEvent, menu: MenuItem, index: num
       :class="menuItemClass(item, index)"
       @click="handleMenuItemClick($event, item, index)"
     >
-      <AppIcon class="menu__item__icon" :icon="item.icon" />
+      <AppIcon class="menu__item__icon" :icon="item.icon" icon-size="18px"/>
       <span class="menu__item__text">{{ item.title }}</span>
     </div>
   </div>

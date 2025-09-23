@@ -43,7 +43,7 @@ export class PluginUtils {
           description: p.package.description,
           version: p.package.version,
           date: BaseUtils.getFormattedDate(new Date(p.package.date)),
-          link: p.package.links.npm,
+          links: p.package.links,
           indexPath: 'index.html',
         } satisfies ToolkitPlugin
       }),

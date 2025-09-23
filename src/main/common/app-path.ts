@@ -82,6 +82,14 @@ const defaultWindowIcon = path.join(appPublicPath, 'favicon.ico')
  * preloads目录
  */
 const preloadsDir = path.join(appPublicPath, 'preloads')
+/**
+ * 默认的插件图标路径
+ */
+const defaultPluginIcon = path.join(appPublicPath, '/images/plugin-default-icon.png')
+/**
+ * 插件图标根路径
+ */
+const pluginIcons = path.join(programRoot, '/plugin-icons')
 
 export const appPath = {
   devUrl,
@@ -100,4 +108,6 @@ export const appPath = {
   filePath,
   pluginsPath,
   preloadsDir,
+  defaultPluginIcon,
+  pluginIcons,
 }

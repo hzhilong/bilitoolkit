@@ -1,0 +1,66 @@
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import { appPath } from '@/main/common/app-path.ts'
+import path from 'path'
+import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs'
+import { GithubUtils } from '@/main/utils/github-utils.ts'
+import { mainLogger } from '@/main/common/main-logger.ts'
+import { FileUtils } from '@/main/utils/file-utils.ts'
+
+let defaultPluginIcon: string | undefined = undefined
+FileUtils.ensureDirExists(appPath.pluginIcons)
+
+type MediaType = 'image/x-icon' | 'image/jpeg' | 'image/png'
+
+export class IconUtils {
+  static readIconBase64(filePath: string, mediaType: MediaType): string {
+    const data = readFileSync(filePath)
+    return `data:${mediaType};base64,${data.toString('base64')}`
+  }
+
+  static getDefaultPluginIcon() {
+    if (!defaultPluginIcon) {
+      defaultPluginIcon = this.readIconBase64(appPath.defaultPluginIcon, 'image/png')
+    }
+    return defaultPluginIcon
+  }
+
+  static getPluginIconFilePath(plugin: ToolkitPlugin) {
+    return path.join(appPath.pluginIcons, plugin.id + '.icon')
+  }
+
+  static convertIconFile(filePath: string, mediaType: MediaType) {
+    const base64 = this.readIconBase64(filePath, mediaType)
+    writeFileSync(filePath, base64, 'utf8')
+    return base64
+  }
+
+  static async getPluginIcon(plugin: ToolkitPlugin) {
+    mainLogger.debug('getPluginIcon', plugin)
+    if (!plugin.links.repository) {
+      return this.getDefaultPluginIcon()
+    }
+    const saveTo = this.getPluginIconFilePath(plugin)
+    if (existsSync(saveTo)) {
+      return readFileSync(saveTo, 'utf8')
+    }
+    try {
+      const info = GithubUtils.parseGithubUrl(plugin.links.repository)
+      try {
+        info.filePath = 'public/favicon.ico'
+        await GithubUtils.downloadFromGithubRaw(info, saveTo)
+        return this.convertIconFile(saveTo, 'image/x-icon')
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (ignored) {
+        info.filePath = 'public/favicon.png'
+        await GithubUtils.downloadFromGithubRaw(info, saveTo)
+        return this.convertIconFile(saveTo, 'image/png')
+      }
+    } catch (error: unknown) {
+      mainLogger.error('获取插件图标失败', plugin, error)
+      if (existsSync(saveTo)) {
+        unlinkSync(saveTo)
+      }
+      return this.getDefaultPluginIcon()
+    }
+  }
+}

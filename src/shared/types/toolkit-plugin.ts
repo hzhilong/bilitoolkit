@@ -14,8 +14,12 @@ export interface ToolkitPlugin {
   version: string
   // 发布时间 ISO 格式字符串
   date: string
-  // 链接：homepage>repository>npm
-  link: string
+  links:{
+    npm: string
+    homepage?: string
+    repository?: string
+    bugs?: string
+  },
   // index 路径
   indexPath: string
 }

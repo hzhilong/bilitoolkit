@@ -4,6 +4,7 @@ import { FileUtils } from '@/main/utils/file-utils'
 import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolkit-api.ts'
 import type { PluginInstallOptions, ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
+import { IconUtils } from '@/main/utils/icon-utils.ts'
 
 /**
  * 核心API处理器
@@ -64,7 +65,6 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     windowManager.closePluginView(context, plugin)
   }
 
-
   async hideCurrPlugin(context: ApiCallerContext): Promise<void> {
     const contentView = context.window.contentView
     if (contentView.children && contentView.children.length > 0) {
@@ -74,5 +74,9 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
 
   async hideAppDialogWindow(context: ApiCallerContext): Promise<void> {
     // TODO
+  }
+
+  async getPluginIcon(context: ApiCallerContext, plugin: ToolkitPlugin): Promise<string> {
+    return await IconUtils.getPluginIcon(plugin)
   }
 }

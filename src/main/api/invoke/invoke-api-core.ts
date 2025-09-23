@@ -54,4 +54,7 @@ export const coreApi: ToolkitCoreApi = {
   hideAppDialogWindow: function (): Promise<void> {
     return invokeCoreApi('hideAppDialogWindow')
   },
+  getPluginIcon(plugin: ToolkitPlugin): Promise<string> {
+    return invokeCoreApi('getPluginIcon', plugin)
+  },
 }
