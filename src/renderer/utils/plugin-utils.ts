@@ -2,6 +2,7 @@ import type { PluginSearchResult, ToolkitPlugin } from '@/shared/types/toolkit-p
 import { eventBus } from '@/renderer/utils/event-bus.ts'
 import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
 import { BaseUtils } from '@ybgnb/utils'
+import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {
@@ -47,5 +48,12 @@ export class PluginUtils {
         } satisfies ToolkitPlugin
       }),
     } satisfies PluginSearchResult
+  }
+
+  static async install(plugin: ToolkitPlugin) {
+    return await toolkitApi.core.installPlugin({
+      ...plugin,
+      installDate: BaseUtils.getFormattedDateTime(),
+    })
   }
 }

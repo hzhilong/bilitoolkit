@@ -23,16 +23,13 @@ export interface ToolkitPlugin {
 /**
  * 插件安装选项
  */
-export interface PluginInstallOptions {
-  id: string
-  version?: string
+export interface PluginInstallOptions extends ToolkitPlugin {
+  installDate: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isToolkitPlugin(obj: any): obj is ToolkitPlugin {
-  return typeof obj === 'object'
-    && obj !== null
-    && 'indexPath' in obj
+  return typeof obj === 'object' && obj !== null && 'indexPath' in obj
 }
 
 export interface PluginSearchResult {

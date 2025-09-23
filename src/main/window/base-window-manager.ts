@@ -4,7 +4,6 @@ import type { CreateWindowOptions } from '@/main/types/create-window.ts'
 import type { ApiCallerContext, HostApiCallerContext, PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { isToolkitPlugin, type ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { CommonError } from '@ybgnb/utils'
-import { getPluginDBPath } from '@/main/api/handler/api-handler-db.ts'
 import { getPluginBaseFilePath } from '@/main/api/handler/api-handler-file.ts'
 import path from 'path'
 import { mainLogger } from '@/main/common/main-logger.ts'
@@ -12,6 +11,7 @@ import { appPath } from '@/main/common/app-path.ts'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
 import { getGlobalData } from '@/main/api/handler/api-handler-global.ts'
 import { defaultsDeep } from 'lodash'
+import DBUtils from '@/main/utils/db-utils.ts'
 
 type Rectangle = Electron.Rectangle
 
@@ -79,7 +79,7 @@ export abstract class BaseWindowManager {
         envType: 'host',
         window: window,
         webContents: sender,
-        dbPath: getPluginDBPath('host'),
+        dbPath: DBUtils.getDBPath('host'),
         filePath: getPluginBaseFilePath('host'),
       } satisfies HostApiCallerContext
     } else {
@@ -92,7 +92,7 @@ export abstract class BaseWindowManager {
         webContents: sender,
         webContentsView: this.getMappingView(sender),
         hostWebContents: window.webContents,
-        dbPath: getPluginDBPath('plugin', plugin),
+        dbPath: DBUtils.getDBPath('plugin', plugin),
         filePath: getPluginBaseFilePath('plugin', plugin),
       } satisfies PluginApiCallerContext
     }
