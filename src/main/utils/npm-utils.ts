@@ -3,8 +3,8 @@ import path from 'path'
 import { appPath } from '@/main/common/app-path.ts'
 import { writeFileSync, unlinkSync } from 'node:fs'
 import * as tar from 'tar'
-import { mainLogger } from '@/main/common/main-logger.ts'
 import { FileUtils } from '@/main/utils/file-utils.ts'
+import { BaseUtils } from '@ybgnb/utils'
 
 export default class NpmUtils {
   static pkgNameToDirName(pkgName: string) {
@@ -12,10 +12,9 @@ export default class NpmUtils {
   }
 
   /**
-   * 下载 npm 包并解压到指定目录（axios 版本）
-   * @param pkgName npm 包名
-   * @param version 版本号，可选，默认 latest
-   * @param targetDir 解压目标目录
+   * 下载 npm 包并解压到指定目录并返回
+   * @param pkgName
+   * @param version
    */
   static async downloadPluginPackage(pkgName: string, version: string = 'latest') {
     try {
@@ -36,7 +35,7 @@ export default class NpmUtils {
       const tempFile = path.join(appPath.temp, `${dirName}-${ver}.tgz`)
       writeFileSync(tempFile, tarballBuffer)
 
-      const tarTo = path.join(appPath.pluginsPath, `/${dirName}`)
+      const tarTo = path.join(appPath.pluginsPath, `${dirName}`)
       FileUtils.ensureDirExists(tarTo)
 
       // 解压
@@ -48,8 +47,9 @@ export default class NpmUtils {
 
       // 删除临时文件
       unlinkSync(tempFile)
-    } catch (error) {
-      mainLogger.error(`下载插件包[${pkgName}-${version}]时出错`, error)
+      return tarTo
+    } catch (error: unknown) {
+      throw BaseUtils.convertToCommonError(error, `下载插件包[${pkgName}-${version}]时出错`)
     }
   }
 }

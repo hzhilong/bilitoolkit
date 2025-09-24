@@ -7,4 +7,8 @@ export const APP_DB_KEYS = {
    * 应用设置状态
    */
   APP_SETTINGS: 'APP_SETTINGS',
-} as const;
+  /**
+   * 应用已安装的插件
+   */
+  APP_INSTALLED_PLUGINS: 'APP_INSTALLED_PLUGINS',
+} as const

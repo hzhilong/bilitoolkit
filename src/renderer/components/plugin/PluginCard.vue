@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { IconButton } from 'bilitoolkit-ui'
+import { IconButton, useLoadingData, AppUtils } from 'bilitoolkit-ui'
 import { toRefs } from 'vue'
 import { usePluginIconSrc } from '@/renderer/composables/usePluginIcon.ts'
 import { toolkitApi, sanitizeForIPC } from '@/renderer/api/toolkit-api.ts'
@@ -8,16 +8,20 @@ import { BaseUtils } from '@ybgnb/utils'
 
 const props = withDefaults(defineProps<ToolkitPlugin>(), {})
 const { iconSrc } = usePluginIconSrc(toRefs(props))
+const {loading, loadingData} = useLoadingData()
 const installPlugin = () => {
-  toolkitApi.core.installPlugin({
-    ...sanitizeForIPC(props),
-    installDate: BaseUtils.getFormattedDateTime(),
+  loadingData(async () => {
+    await toolkitApi.core.installPlugin({
+      ...sanitizeForIPC(props),
+      installDate: BaseUtils.getFormattedDateTime(),
+    })
+    AppUtils.message('插件安装成功')
   })
 }
 </script>
 
 <template>
-  <div class="plugin-card">
+  <div class="plugin-card" v-loading="loading">
     <img class="icon" :src="iconSrc" />
     <div class="plugin-info">
       <div class="meta-info">

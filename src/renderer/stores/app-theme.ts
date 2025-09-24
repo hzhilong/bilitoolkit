@@ -4,7 +4,7 @@ import type { AppThemeMode, AppThemeState } from 'bilitoolkit-api-types'
 import { cloneDeep } from 'lodash'
 import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'
-import { APP_DB_KEYS } from '@/shared/common/app-db-key.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 
 // 默认备选的颜色

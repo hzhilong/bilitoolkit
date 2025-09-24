@@ -2,7 +2,7 @@ import { appPath } from '@/main/common/app-path'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { FileUtils } from '@/main/utils/file-utils'
 import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolkit-api.ts'
-import type { PluginInstallOptions, ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { PluginInstallOptions, ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { pluginManager } from '@/main/plugin/plugin-manage.ts'
@@ -47,9 +47,8 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return Promise.resolve([])
   }
 
-  async installPlugin(_: ApiCallerContext, options: PluginInstallOptions): Promise<ToolkitPlugin> {
-    await pluginManager.installPlugin(options)
-    return Promise.reject(undefined)
+  async installPlugin(_: ApiCallerContext, options: PluginInstallOptions): Promise<InstalledToolkitPlugin> {
+    return await pluginManager.installPlugin(options)
   }
 
   uninstallPlugin(_: ApiCallerContext, id: string): Promise<void> {
@@ -58,8 +57,7 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   }
 
   async openPlugin(context: ApiCallerContext, plugin: ToolkitPlugin): Promise<void> {
-    await windowManager.createPluginView(context, plugin)
-    windowManager.showPluginView(context, plugin)
+    return await pluginManager.openPlugin(context, plugin)
   }
 
   async closePlugin(context: ApiCallerContext, plugin: ToolkitPlugin): Promise<void> {

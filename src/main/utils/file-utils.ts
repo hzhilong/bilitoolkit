@@ -1,7 +1,7 @@
 import { mainEnv } from '@/main/common/main-env'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { Win32Utils } from '@/main/utils/win32-utils'
-import { BaseUtils } from '@ybgnb/utils'
+import { BaseUtils, CommonError } from '@ybgnb/utils'
 import { shell } from 'electron'
 import fs from 'fs'
 import path from 'path'
@@ -174,5 +174,14 @@ export class FileUtils {
    */
   static isFile(filePath: string): boolean {
     return fs.existsSync(filePath) && fs.statSync(filePath).isFile()
+  }
+
+  static readJsonFile<T>(filePath: string): T {
+    if (!this.isFile(filePath)) {
+      throw new CommonError('文件不存在')
+    }
+    const packagePath = path.join(filePath, 'package.json')
+    const packageJsonRaw = fs.readFileSync(packagePath, 'utf-8')
+    return JSON.parse(packageJsonRaw) as T
   }
 }

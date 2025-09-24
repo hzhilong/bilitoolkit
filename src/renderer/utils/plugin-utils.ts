@@ -44,7 +44,6 @@ export class PluginUtils {
           version: p.package.version,
           date: BaseUtils.getFormattedDate(new Date(p.package.date)),
           links: p.package.links,
-          indexPath: 'index.html',
         } satisfies ToolkitPlugin
       }),
     } satisfies PluginSearchResult

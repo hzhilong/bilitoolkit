@@ -4,9 +4,10 @@ import { JSONFileSync } from 'lowdb/node'
 import path from 'path'
 import { FileUtils } from './file-utils'
 import type { AppSettings } from '@/shared/types/app-settings.ts'
-import { APP_DB_KEYS } from '@/shared/common/app-db-key.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 import type { AppThemeState } from 'bilitoolkit-api-types'
 import DBUtils from '@/main/utils/db-utils.ts'
+import type { AppInstalledPlugins } from '@/shared/types/toolkit-plugin.ts'
 
 const hostDBPath = DBUtils.getDBPath('host')
 
@@ -28,4 +29,11 @@ export const getAppSettings = (): AppSettings => {
 
 export const getAppThemeState = (): AppThemeState => {
   return defaultsDeep(readHostDBDoc<AppThemeState>(APP_DB_KEYS.APP_THEME_STATE), defaultAppThemeState)
+}
+
+export const getAppInstalledPlugins = (): AppInstalledPlugins => {
+  return defaultsDeep(readHostDBDoc<AppThemeState>(APP_DB_KEYS.APP_INSTALLED_PLUGINS), {
+    appVersion: import.meta.env.APP_VERSION,
+    plugins: new Map(),
+  } satisfies AppInstalledPlugins)
 }

@@ -61,19 +61,19 @@ const appURL = devUrl ? devUrl : indexHtml
 /**
  * 总的日志路径
  */
-const logsPath = path.join(programRoot, '/logs')
+const logsPath = path.join(programRoot, 'logs')
 /**
  * 数据库路径
  */
-const dbPath = path.join(programRoot, '/dbs')
+const dbPath = path.join(programRoot, 'dbs')
 /**
  * 文件路径
  */
-const filePath = path.join(programRoot, '/files')
+const filePath = path.join(programRoot, 'files')
 /**
  * 插件目录
  */
-const pluginsPath = path.join(programRoot, '/plugins')
+const pluginsPath = path.join(programRoot, 'plugins')
 FileUtils.ensureDirExists(pluginsPath)
 
 /**
@@ -87,16 +87,16 @@ const preloadsDir = path.join(appPublicPath, 'preloads')
 /**
  * 默认的插件图标路径
  */
-const defaultPluginIcon = path.join(appPublicPath, '/images/plugin-default-icon.png')
+const defaultPluginIcon = path.join(appPublicPath, 'images/plugin-default-icon.png')
 /**
  * 插件图标根路径
  */
-const pluginIcons = path.join(programRoot, '/plugin-icons')
+const pluginIcons = path.join(programRoot, 'plugin-icons')
 FileUtils.ensureDirExists(pluginIcons)
 /**
  * 临时目录
  */
-const temp = path.join(programRoot, '/temp')
+const temp = path.join(programRoot, 'temp')
 FileUtils.ensureDirExists(temp)
 
 export const appPath = {

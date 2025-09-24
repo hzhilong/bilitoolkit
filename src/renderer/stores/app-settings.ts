@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'
 import type { AppSettings } from '@/shared/types/app-settings.ts'
 import { defaultAppSettings } from '@/shared/common/app-constants.ts'
-import { APP_DB_KEYS } from '@/shared/common/app-db-key.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 
 /**
  * 应用设置

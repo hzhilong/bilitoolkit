@@ -1,7 +1,7 @@
 import { invokeApi } from './base-invoke'
 import type { ToolkitCoreApi } from '@/shared/types/toolkit-core-api.ts'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
-import type { PluginInstallOptions, ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { PluginInstallOptions, ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 
 export const invokeCoreApi = async <T = void>(
   name: LeafFunctionPaths<ToolkitCoreApi> & string,
@@ -42,7 +42,7 @@ export const coreApi: ToolkitCoreApi = {
   getInstalledPlugins(): Promise<ToolkitPlugin[]> {
     return invokeCoreApi('getInstalledPlugins')
   },
-  installPlugin(options: PluginInstallOptions): Promise<ToolkitPlugin> {
+  installPlugin(options: PluginInstallOptions): Promise<InstalledToolkitPlugin> {
     return invokeCoreApi('installPlugin', options)
   },
   openPlugin(plugin: ToolkitPlugin): Promise<void> {

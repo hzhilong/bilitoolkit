@@ -2,7 +2,7 @@ import type { WebContents } from 'electron'
 import { BrowserWindow, session, WebContentsView } from 'electron'
 import type { CreateWindowOptions } from '@/main/types/create-window.ts'
 import type { ApiCallerContext, HostApiCallerContext, PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
-import { isToolkitPlugin, type ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import { isToolkitPlugin, type ToolkitPlugin, type InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { CommonError } from '@ybgnb/utils'
 import { getPluginBaseFilePath } from '@/main/api/handler/api-handler-file.ts'
 import path from 'path'
@@ -138,7 +138,7 @@ export abstract class BaseWindowManager {
     this.webContentsToWindow.delete(window.webContents.id)
     window.close()
   }
-  public async createPluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
+  public async createPluginView(context: ApiCallerContext, plugin: InstalledToolkitPlugin) {
     if (!this.isHost(context.webContents)) {
       throw new CommonError('非法调用')
     }
@@ -186,7 +186,7 @@ export abstract class BaseWindowManager {
     this.pluginResizeListeners.set(plugin.id, updateBounds)
     this.webContentsToWindow.set(webContentsId, window)
 
-    await view.webContents.loadURL(plugin.indexPath)
+    await view.webContents.loadURL(plugin.files.indexPath)
   }
   public showPluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const contentView = context.window.contentView

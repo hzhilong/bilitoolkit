@@ -39,6 +39,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@npm/types": "^2.1.0",
     "@ybgnb/utils": "file:.yalc/@ybgnb/utils",
     "axios": "^1.12.1",
     "bilitoolkit-api-types": "file:.yalc/bilitoolkit-api-types",
