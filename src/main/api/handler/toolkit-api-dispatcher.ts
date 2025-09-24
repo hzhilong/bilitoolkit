@@ -42,7 +42,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
    * @param context 上下文
    */
   public async handle(event: IpcMainInvokeEvent, options: PluginApiInvokeOptions, context: ApiCallerContext) {
-    mainLogger.info(`调用API：`, options)
+    mainLogger.info(`调用API：`, JSON.stringify(options))
     if (!options) {
       throw new CommonError('API调用失败：缺少调用参数')
     }
@@ -68,8 +68,9 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
       }
 
       // 绑定正确上下文后执行
+      mainLogger.info(`API【${options.module}.${options.name}】执行中...`, JSON.stringify(options.args))
       const result = await nested.handler.bind(nested.parent)(context, ...options.args)
-      mainLogger.info(`API ${options.module}.${options.name} 执行成功`, result || '')
+      mainLogger.info(`API【${options.module}.${options.name}】执行成功  ${result ? JSON.stringify(result) : ''}\n`)
       return result
     } catch (e: unknown) {
       mainLogger.error(e)

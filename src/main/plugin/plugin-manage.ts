@@ -14,16 +14,32 @@ import { appPath } from '@/main/common/app-path.ts'
 import type { PackageJSON } from '@npm/types'
 import path from 'path'
 import { mainLogger } from '@/main/common/main-logger.ts'
+import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
+import { eventBus } from '@/main/event/event-bus.ts'
+
+type PluginRegistry = {
+  appVersion: string
+  plugins: Map<string, InstalledToolkitPlugin>
+}
 
 class PluginManager {
-  private registry: AppInstalledPlugins
+  private readonly registry: PluginRegistry
 
-  constructor() {
-    this.registry = getAppInstalledPlugins()
+  private buildRegistryPlugins(plugins: InstalledToolkitPlugin[]) {
+    return new Map<string, InstalledToolkitPlugin>(plugins.map((plugin) => [plugin.id, plugin]))
   }
 
-  reLoadPlugins() {
-    this.registry = getAppInstalledPlugins()
+  constructor() {
+    const installedPlugins = getAppInstalledPlugins()
+    this.registry = {
+      appVersion: installedPlugins.appVersion,
+      plugins: this.buildRegistryPlugins(installedPlugins.plugins),
+    }
+    mainLogger.info(`插件已加载`, this.registry)
+    eventBus.on(HOST_EVENT_CHANNELS.UPDATE_APP_INSTALLED_PLUGINS, (newData: AppInstalledPlugins) => {
+      this.registry.appVersion = newData.appVersion
+      this.registry.plugins = this.buildRegistryPlugins(newData.plugins)
+    })
   }
 
   getInstalledPlugin(id: string): InstalledToolkitPlugin {
@@ -56,7 +72,7 @@ class PluginManager {
 
   async installPlugin(options: PluginInstallOptions) {
     mainLogger.info(`插件${options.id} ${options.version} 安装中……`)
-    const pluginDir = await NpmUtils.downloadPluginPackage(options.id, options.version)
+    await NpmUtils.downloadPluginPackage(options.id, options.version)
     const plugin = this.loadPluginFiles(options)
     this.registry.plugins.set(options.id, plugin)
     mainLogger.info(`插件${options.id} ${options.version} 安装成功！`)

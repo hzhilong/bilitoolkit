@@ -5,6 +5,7 @@ import type { IpcEventEmiter } from '@/main/types/ipc-event.ts'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
 import type { ApiCallerContext, IpcToolkitEventApi } from '@/main/types/ipc-toolkit-api.ts'
 import { webContents } from 'electron'
+import { eventBus } from '@/main/event/event-bus.ts'
 
 /**
  * 发射事件
@@ -19,6 +20,10 @@ export const emit = (
     payload: data,
   }
 
+  // 发送给主进程的内部监听器
+  eventBus.emit(channel, ...data)
+
+  // 发送给渲染进程
   const all = webContents.getAllWebContents()
   for (const wc of all) {
     wc.send(IPC_CHANNELS.TOOLKIT_EVENT, emitter)

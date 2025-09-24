@@ -1,4 +1,4 @@
-import { defaultAppSettings, defaultAppThemeState } from '@/shared/common/app-constants'
+import { defaultAppSettings, defaultAppThemeState, defaultAppInstalledPlugins } from '@/shared/common/app-constants'
 import { defaultsDeep } from 'lodash'
 import { JSONFileSync } from 'lowdb/node'
 import path from 'path'
@@ -32,8 +32,7 @@ export const getAppThemeState = (): AppThemeState => {
 }
 
 export const getAppInstalledPlugins = (): AppInstalledPlugins => {
-  return defaultsDeep(readHostDBDoc<AppThemeState>(APP_DB_KEYS.APP_INSTALLED_PLUGINS), {
-    appVersion: import.meta.env.APP_VERSION,
-    plugins: new Map(),
-  } satisfies AppInstalledPlugins)
+  const data = defaultsDeep(readHostDBDoc<AppThemeState>(APP_DB_KEYS.APP_INSTALLED_PLUGINS), defaultAppInstalledPlugins) as AppInstalledPlugins
+  data.plugins = Array.from(data.plugins)
+  return data
 }

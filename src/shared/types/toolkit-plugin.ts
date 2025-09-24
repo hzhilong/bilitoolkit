@@ -65,5 +65,5 @@ export interface InstalledToolkitPlugin extends PluginInstallOptions {
  */
 export interface AppInstalledPlugins {
   appVersion: string
-  plugins: Map<string, InstalledToolkitPlugin>
+  plugins: Array<InstalledToolkitPlugin>
 }
