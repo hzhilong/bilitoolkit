@@ -22,19 +22,19 @@ export default class DBUtils {
    * 获取数据库路径
    * @param env     调用环境
    */
-  static getDBPath(env: 'host'): string
+  static getPluginDBPath(env: 'host'): string
   /**
    * 获取数据库路径
    * @param env     调用环境
    * @param plugin  关联的插件
    */
-  static getDBPath(env: 'plugin', plugin: ToolkitPlugin): string
+  static getPluginDBPath(env: 'plugin', plugin: ToolkitPlugin): string
   /**
    * 获取数据库路径
    * @param env     调用环境
    * @param plugin  关联的插件
    */
-  static getDBPath(env: ApiCallerEnvType, plugin?: ToolkitPlugin): string {
+  static getPluginDBPath(env: ApiCallerEnvType, plugin?: ToolkitPlugin): string {
     if (env === 'host') {
       return path.resolve(path.join(appPath.dbPath, MainConstants.DB.CORE_NAME))
     } else {

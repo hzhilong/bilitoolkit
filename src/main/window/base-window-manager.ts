@@ -4,7 +4,6 @@ import type { CreateWindowOptions } from '@/main/types/create-window.ts'
 import type { ApiCallerContext, HostApiCallerContext, PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { isToolkitPlugin, type ToolkitPlugin, type InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { CommonError } from '@ybgnb/utils'
-import { getPluginBaseFilePath } from '@/main/api/handler/api-handler-file.ts'
 import path from 'path'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { appPath } from '@/main/common/app-path.ts'
@@ -12,6 +11,7 @@ import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
 import { getGlobalData } from '@/main/api/handler/api-handler-global.ts'
 import { defaultsDeep } from 'lodash'
 import DBUtils from '@/main/utils/db-utils.ts'
+import { FileUtils } from '@/main/utils/file-utils.ts'
 
 type Rectangle = Electron.Rectangle
 
@@ -79,8 +79,8 @@ export abstract class BaseWindowManager {
         envType: 'host',
         window: window,
         webContents: sender,
-        dbPath: DBUtils.getDBPath('host'),
-        filePath: getPluginBaseFilePath('host'),
+        dbPath: DBUtils.getPluginDBPath('host'),
+        filePath: FileUtils.getPluginRootPath('host'),
       } satisfies HostApiCallerContext
     } else {
       // 插件环境调用API
@@ -92,8 +92,8 @@ export abstract class BaseWindowManager {
         webContents: sender,
         webContentsView: this.getMappingView(sender),
         hostWebContents: window.webContents,
-        dbPath: DBUtils.getDBPath('plugin', plugin),
-        filePath: getPluginBaseFilePath('plugin', plugin),
+        dbPath: DBUtils.getPluginDBPath('plugin', plugin),
+        filePath: FileUtils.getPluginRootPath('plugin', plugin),
       } satisfies PluginApiCallerContext
     }
   }

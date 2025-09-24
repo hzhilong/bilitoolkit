@@ -5,8 +5,37 @@ import { BaseUtils, CommonError } from '@ybgnb/utils'
 import { shell } from 'electron'
 import fs from 'fs'
 import path from 'path'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { ApiCallerEnvType } from '@/main/types/ipc-toolkit-api.ts'
+import { appPath } from '@/main/common/app-path.ts'
+import { MainConstants } from '@/main/common/main-constants.ts'
+import NpmUtils from '@/main/utils/npm-utils.ts'
 
 export class FileUtils {
+  /**
+   * 获取文件根目录
+   * @param env     调用环境
+   */
+  static getPluginRootPath(env: 'host'): string
+  /**
+   * 获取文件根目录
+   * @param env     调用环境
+   * @param plugin  关联的插件
+   */
+  static getPluginRootPath(env: 'plugin', plugin: ToolkitPlugin): string
+  /**
+   * 获取文件根目录
+   * @param env     调用环境
+   * @param plugin  关联的插件
+   */
+  static getPluginRootPath(env: ApiCallerEnvType, plugin?: ToolkitPlugin): string {
+    if (env === 'host') {
+      return path.resolve(path.join(appPath.filePath, MainConstants.FILE.CORE_NAME))
+    } else {
+      return path.resolve(path.join(appPath.filePath, NpmUtils.pkgNameToDirName(plugin!.id)))
+    }
+  }
+
   /**
    * 打开资源管理器
    * @param fileOrDir 定位的目录或文件
@@ -184,4 +213,6 @@ export class FileUtils {
     const packageJsonRaw = fs.readFileSync(packagePath, 'utf-8')
     return JSON.parse(packageJsonRaw) as T
   }
+
+
 }

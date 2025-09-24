@@ -1,25 +1,10 @@
 import { appPath } from '@/main/common/app-path'
-import { MainConstants } from '@/main/common/main-constants'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { FileUtils } from '@/main/utils/file-utils'
 import { CommonError } from '@ybgnb/utils'
 import fs from 'fs'
 import path from 'path'
-import type { ApiCallerContext, ApiCallerEnvType, IpcToolkitFileApi } from '@/main/types/ipc-toolkit-api.ts'
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-
-/**
- * 获取插件基础文件目录
- * @param env
- * @param plugin
- */
-export const getPluginBaseFilePath = (env: ApiCallerEnvType, plugin?: ToolkitPlugin): string => {
-  if (env === 'host') {
-    return path.resolve(path.join(appPath.filePath, MainConstants.FILE.CORE_NAME))
-  } else {
-    return path.resolve(path.join(appPath.dbPath, plugin!.id))
-  }
-}
+import type { ApiCallerContext, IpcToolkitFileApi } from '@/main/types/ipc-toolkit-api.ts'
 
 /**
  * 核心API处理器

@@ -44,6 +44,7 @@ export interface PluginSearchResult {
  * 已安装的插件
  */
 export interface InstalledToolkitPlugin extends PluginInstallOptions {
+  iconBase64: string
   files: {
     // 文件根目录
     rootPath: string

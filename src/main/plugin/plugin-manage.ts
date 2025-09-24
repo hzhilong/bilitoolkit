@@ -16,6 +16,7 @@ import path from 'path'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 import { eventBus } from '@/main/event/event-bus.ts'
+import { IconUtils } from '@/main/utils/icon-utils.ts'
 
 type PluginRegistry = {
   appVersion: string
@@ -58,8 +59,9 @@ class PluginManager {
     const pluginRootPath = path.join(appPath.pluginsPath, NpmUtils.pkgNameToDirName(plugin.id))
     const size = FileUtils.getFolderSizeSync(pluginRootPath) / 1024
     const sizeDesc = FileUtils.formatKBSize(size)
-    return {
+    const installed = {
       ...plugin,
+      iconBase64: '',
       files: {
         rootPath: pluginRootPath,
         distPath: path.join(pluginRootPath, 'dist'),
@@ -68,6 +70,8 @@ class PluginManager {
         sizeDesc: sizeDesc,
       },
     } satisfies InstalledToolkitPlugin
+    installed.iconBase64 = IconUtils.getInstalledPluginIcon(installed)
+    return installed
   }
 
   async installPlugin(options: PluginInstallOptions) {

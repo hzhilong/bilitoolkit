@@ -66,10 +66,17 @@ const logsPath = path.join(programRoot, 'logs')
  * 数据库路径
  */
 const dbPath = path.join(programRoot, 'dbs')
+FileUtils.ensureDirExists(dbPath)
 /**
  * 文件路径
  */
 const filePath = path.join(programRoot, 'files')
+FileUtils.ensureDirExists(filePath)
+/**
+ * 主应用文件路径
+ */
+const hostAppFilePath =  FileUtils.getPluginRootPath('host')
+FileUtils.ensureDirExists(hostAppFilePath)
 /**
  * 插件目录
  */
@@ -114,6 +121,7 @@ export const appPath = {
   logsPath,
   dbPath,
   filePath,
+  hostAppFilePath,
   pluginsPath,
   preloadsDir,
   defaultPluginIcon,

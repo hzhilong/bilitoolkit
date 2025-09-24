@@ -1,4 +1,4 @@
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import path from 'path'
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs'
@@ -59,5 +59,17 @@ export class IconUtils {
       }
       return this.getDefaultPluginIcon()
     }
+  }
+
+  static getInstalledPluginIcon(plugin: InstalledToolkitPlugin) {
+    const ico = path.join(plugin.files.distPath, 'favicon.ico')
+    if (existsSync(ico)) {
+      return this.readIconBase64(ico, 'image/x-icon')
+    }
+    const png = path.join(plugin.files.distPath, 'favicon.png')
+    if (existsSync(png)) {
+      return this.readIconBase64(png, 'image/png')
+    }
+    return this.getDefaultPluginIcon()
   }
 }

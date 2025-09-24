@@ -9,7 +9,7 @@ import type { AppThemeState } from 'bilitoolkit-api-types'
 import DBUtils from '@/main/utils/db-utils.ts'
 import type { AppInstalledPlugins } from '@/shared/types/toolkit-plugin.ts'
 
-const hostDBPath = DBUtils.getDBPath('host')
+const hostDBPath = DBUtils.getPluginDBPath('host')
 
 /**
  * 读取host环境的文档
@@ -36,3 +36,4 @@ export const getAppInstalledPlugins = (): AppInstalledPlugins => {
   data.plugins = Array.from(data.plugins)
   return data
 }
+
