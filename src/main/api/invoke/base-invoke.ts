@@ -18,7 +18,7 @@ export async function invokeApi<A, T = void>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...args: any[]
 ): Promise<T> {
-  const options: PluginApiInvokeOptions = { module, name, args: cloneDeep(args) }
+  const options: PluginApiInvokeOptions = { module, name, args: args }
   // 当作前后端通信就行，后端只能传序列化的数据，所有异步任务的结果需要包装成BuResult，获取后再解包成Promise
   const result = (await ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_APIS, options)) as BizResult<T>
   if (result.success) {

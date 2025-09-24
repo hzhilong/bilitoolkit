@@ -3,9 +3,17 @@ import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { IconButton } from 'bilitoolkit-ui'
 import { toRefs } from 'vue'
 import { usePluginIconSrc } from '@/renderer/composables/usePluginIcon.ts'
+import { toolkitApi, sanitizeForIPC } from '@/renderer/api/toolkit-api.ts'
+import { BaseUtils } from '@ybgnb/utils'
 
 const props = withDefaults(defineProps<ToolkitPlugin>(), {})
 const { iconSrc } = usePluginIconSrc(toRefs(props))
+const installPlugin = () => {
+  toolkitApi.core.installPlugin({
+    ...sanitizeForIPC(props),
+    installDate: BaseUtils.getFormattedDateTime(),
+  })
+}
 </script>
 
 <template>
@@ -36,7 +44,7 @@ const { iconSrc } = usePluginIconSrc(toRefs(props))
       </div>
     </div>
     <div class="options">
-      <icon-button icon="install" confirm="确认安装？"></icon-button>
+      <icon-button icon="install" confirm="确认安装？" @click="installPlugin"></icon-button>
     </div>
   </div>
 </template>

@@ -4,11 +4,9 @@ import path from 'path'
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs'
 import { GithubUtils } from '@/main/utils/github-utils.ts'
 import { mainLogger } from '@/main/common/main-logger.ts'
-import { FileUtils } from '@/main/utils/file-utils.ts'
 import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
 
 let defaultPluginIcon: string | undefined = undefined
-FileUtils.ensureDirExists(appPath.pluginIcons)
 
 type MediaType = 'image/x-icon' | 'image/jpeg' | 'image/png'
 

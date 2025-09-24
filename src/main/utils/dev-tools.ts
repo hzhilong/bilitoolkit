@@ -13,7 +13,6 @@ export const showDevTools = () => {
   const [plugin] = windowManager.mainWindow?.contentView.children ?? []
   const pluginWeb = plugin ? (plugin as WebContentsView).webContents : undefined
 
-  console.log('PLUGIN----------', type)
   if (type === DevToolsType.MAIN) {
     // 主窗口
     mainWeb.openDevTools()

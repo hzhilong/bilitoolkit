@@ -37,4 +37,6 @@ yalc.lock
 files
 dbs
 logs
+temp
+plugins
 plugin-icons

@@ -1,5 +1,6 @@
 import { app } from 'electron'
 import path from 'path'
+import { FileUtils } from '@/main/utils/file-utils.ts'
 
 /**
  * 应用相关路径数据
@@ -73,6 +74,7 @@ const filePath = path.join(programRoot, '/files')
  * 插件目录
  */
 const pluginsPath = path.join(programRoot, '/plugins')
+FileUtils.ensureDirExists(pluginsPath)
 
 /**
  * 默认窗口图标
@@ -90,6 +92,12 @@ const defaultPluginIcon = path.join(appPublicPath, '/images/plugin-default-icon.
  * 插件图标根路径
  */
 const pluginIcons = path.join(programRoot, '/plugin-icons')
+FileUtils.ensureDirExists(pluginIcons)
+/**
+ * 临时目录
+ */
+const temp = path.join(programRoot, '/temp')
+FileUtils.ensureDirExists(temp)
 
 export const appPath = {
   devUrl,
@@ -110,4 +118,5 @@ export const appPath = {
   preloadsDir,
   defaultPluginIcon,
   pluginIcons,
+  temp,
 }

@@ -5,6 +5,7 @@ import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolk
 import type { PluginInstallOptions, ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
+import { pluginManager } from '@/main/plugin/plugin-manage.ts'
 
 /**
  * 核心API处理器
@@ -46,8 +47,8 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return Promise.resolve([])
   }
 
-  installPlugin(_: ApiCallerContext, options: PluginInstallOptions): Promise<ToolkitPlugin> {
-    // TODO
+  async installPlugin(_: ApiCallerContext, options: PluginInstallOptions): Promise<ToolkitPlugin> {
+    await pluginManager.installPlugin(options)
     return Promise.reject(undefined)
   }
 

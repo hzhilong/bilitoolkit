@@ -8,6 +8,7 @@ import { CommonError } from '@ybgnb/utils'
 import fs from 'fs'
 import { JSONFileSync } from 'lowdb/node'
 import { LowSync } from 'lowdb'
+import NpmUtils from '@/main/utils/npm-utils.ts'
 
 export default class DBUtils {
   /**
@@ -37,7 +38,7 @@ export default class DBUtils {
     if (env === 'host') {
       return path.resolve(path.join(appPath.dbPath, MainConstants.DB.CORE_NAME))
     } else {
-      return path.resolve(path.join(appPath.dbPath, plugin!.id))
+      return path.resolve(path.join(appPath.dbPath, NpmUtils.pkgNameToDirName(plugin!.id)))
     }
   }
 
