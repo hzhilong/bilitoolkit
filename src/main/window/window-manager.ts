@@ -44,6 +44,7 @@ export class WindowManager extends BaseWindowManager {
         } catch (e) {
           mainLogger.error(`调用API错误`, options)
           mainLogger.error(`错误信息`, e)
+          throw e
         }
       })
     })

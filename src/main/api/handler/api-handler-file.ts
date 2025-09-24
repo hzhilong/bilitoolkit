@@ -12,8 +12,6 @@ import type { ApiCallerContext, IpcToolkitFileApi } from '@/main/types/ipc-toolk
 export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileApi {
   constructor() {
     super()
-    // 创建初始目录
-    FileUtils.ensureDirExists(appPath.filePath)
   }
 
   _exists(absolutePath: string): boolean {

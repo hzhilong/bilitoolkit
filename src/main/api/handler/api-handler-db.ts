@@ -18,15 +18,15 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
   }
 
   async has(context: ApiCallerContext, id: string): Promise<boolean> {
-    return fs.existsSync(DBUtils.getDocFilePath(context, id))
+    return fs.existsSync(DBUtils.getDocFilePath(context.dbPath, id))
   }
 
   async read<T extends object>(context: ApiCallerContext, id: string): Promise<T> {
-    return DBUtils.readDocObject<T>(DBUtils.getExistsDocFilePath(context, id))
+    return DBUtils.readDocObject<T>(DBUtils.getExistsDocFilePath(context.dbPath, id))
   }
 
   async init<T extends object>(context: ApiCallerContext, id: string, defaultData: T): Promise<T> {
-    return DBUtils.initDoc(DBUtils.getDocFilePath(context, id), defaultData)
+    return DBUtils.initDoc(DBUtils.getDocFilePath(context.dbPath, id), defaultData)
   }
 
   async bulkRead<T extends object>(context: ApiCallerContext, idPrefix: string | undefined): Promise<T[]> {
@@ -39,7 +39,7 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
   }
 
   async write<T extends object>(context: ApiCallerContext, id: string, data: T): Promise<void> {
-    DBUtils.writeDoc<T>(context, id, data)
+    DBUtils.writeDoc<T>(context.dbPath, id, data)
   }
 
   async bulkWrite<T extends object>(context: ApiCallerContext, docs: { id: string; data: T }[]): Promise<void> {
@@ -47,7 +47,7 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
     try {
       for (const doc of docs) {
         const id = doc.id
-        const db = new LowSync(new JSONFileSync<object>(DBUtils.getDocFilePath(context, id)), {})
+        const db = new LowSync(new JSONFileSync<object>(DBUtils.getDocFilePath(context.dbPath, id)), {})
         if (db.data !== null) {
           // 保存更新之前的数据
           db.read()
@@ -72,7 +72,7 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
   }
 
   async delete(context: ApiCallerContext, id: string): Promise<void> {
-    fs.unlinkSync(DBUtils.getExistsDocFilePath(context, id))
+    fs.unlinkSync(DBUtils.getExistsDocFilePath(context.dbPath, id))
   }
 
   async bulkDelete(context: ApiCallerContext, idPrefix: string | undefined): Promise<string[]> {

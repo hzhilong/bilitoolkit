@@ -1,6 +1,8 @@
 import { app } from 'electron'
 import path from 'path'
 import { FileUtils } from '@/main/utils/file-utils.ts'
+import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
+import { MainConstants } from '@/main/common/main-constants.ts'
 
 /**
  * 应用相关路径数据
@@ -67,6 +69,8 @@ const logsPath = path.join(programRoot, 'logs')
  */
 const dbPath = path.join(programRoot, 'dbs')
 FileUtils.ensureDirExists(dbPath)
+const hostAppDBPath = path.join(dbPath, MainConstants.DB.CORE_NAME)
+FileUtils.ensureDirExists(hostAppDBPath)
 /**
  * 文件路径
  */
@@ -75,8 +79,9 @@ FileUtils.ensureDirExists(filePath)
 /**
  * 主应用文件路径
  */
-const hostAppFilePath =  FileUtils.getPluginRootPath('host')
+const hostAppFilePath = path.join(filePath, MainConstants.FILE.CORE_NAME)
 FileUtils.ensureDirExists(hostAppFilePath)
+FileUtils.ensureDirExists(path.join(hostAppFilePath, APP_FILE_KEYS.PLUGIN_ICON))
 /**
  * 插件目录
  */
@@ -120,6 +125,7 @@ export const appPath = {
   defaultWindowIcon,
   logsPath,
   dbPath,
+  hostAppDBPath,
   filePath,
   hostAppFilePath,
   pluginsPath,

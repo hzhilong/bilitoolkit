@@ -7,7 +7,12 @@ import type {
 } from '@/shared/types/toolkit-plugin.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
-import { getAppInstalledPlugins } from '@/main/utils/host-app-utils.ts'
+import {
+  getAppInstalledPlugins,
+  writeHostTxtFile,
+  readHostTxtFile,
+  writeHostDBDoc,
+} from '@/main/utils/host-app-utils.ts'
 import { CommonError } from '@ybgnb/utils'
 import { FileUtils } from '@/main/utils/file-utils.ts'
 import { appPath } from '@/main/common/app-path.ts'
@@ -17,6 +22,9 @@ import { mainLogger } from '@/main/common/main-logger.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 import { eventBus } from '@/main/event/event-bus.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
+import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
+import { cloneDeep } from 'lodash'
+import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 
 type PluginRegistry = {
   appVersion: string
@@ -27,7 +35,12 @@ class PluginManager {
   private readonly registry: PluginRegistry
 
   private buildRegistryPlugins(plugins: InstalledToolkitPlugin[]) {
-    return new Map<string, InstalledToolkitPlugin>(plugins.map((plugin) => [plugin.id, plugin]))
+    return new Map<string, InstalledToolkitPlugin>(
+      plugins.map((plugin) => {
+        plugin.iconBase64 = readHostTxtFile(this.getIconCachePath(plugin.id))
+        return [plugin.id, plugin]
+      }),
+    )
   }
 
   constructor() {
@@ -36,11 +49,27 @@ class PluginManager {
       appVersion: installedPlugins.appVersion,
       plugins: this.buildRegistryPlugins(installedPlugins.plugins),
     }
-    mainLogger.info(`插件已加载`, this.registry)
+    mainLogger.info(`插件已加载`, this.registry.plugins.keys().toArray())
     eventBus.on(HOST_EVENT_CHANNELS.UPDATE_APP_INSTALLED_PLUGINS, (newData: AppInstalledPlugins) => {
       this.registry.appVersion = newData.appVersion
       this.registry.plugins = this.buildRegistryPlugins(newData.plugins)
     })
+  }
+
+  getAppInstalledPlugins(): AppInstalledPlugins {
+    return {
+      appVersion: this.registry.appVersion,
+      plugins: this.registry.plugins.values().toArray(),
+    }
+  }
+
+  updateDB() {
+    const appInstalledPlugins = cloneDeep(this.getAppInstalledPlugins())
+    appInstalledPlugins.plugins = appInstalledPlugins.plugins.map((plugin) => {
+      plugin.iconBase64 = undefined
+      return plugin
+    })
+    writeHostDBDoc(APP_DB_KEYS.APP_INSTALLED_PLUGINS, appInstalledPlugins)
   }
 
   getInstalledPlugin(id: string): InstalledToolkitPlugin {
@@ -55,22 +84,35 @@ class PluginManager {
     return FileUtils.readJsonFile<PackageJSON>(path.join(pluginRootPath, 'package.json'))
   }
 
+  /**
+   * 获取图标缓存的相对路径
+   * @param pluginId
+   * @private
+   */
+  private getIconCachePath(pluginId: string) {
+    return path.join(APP_FILE_KEYS.PLUGIN_ICON, `${NpmUtils.pkgNameToDirName(pluginId)}.icon`)
+  }
+
   loadPluginFiles(plugin: PluginInstallOptions): InstalledToolkitPlugin {
-    const pluginRootPath = path.join(appPath.pluginsPath, NpmUtils.pkgNameToDirName(plugin.id))
+    const pluginDir = NpmUtils.pkgNameToDirName(plugin.id)
+    const pluginRootPath = path.join(appPath.pluginsPath, pluginDir)
     const size = FileUtils.getFolderSizeSync(pluginRootPath) / 1024
     const sizeDesc = FileUtils.formatKBSize(size)
+    const iconCachePath = this.getIconCachePath(plugin.id)
     const installed = {
       ...plugin,
       iconBase64: '',
       files: {
-        rootPath: pluginRootPath,
-        distPath: path.join(pluginRootPath, 'dist'),
-        indexPath: path.join(pluginRootPath, 'dist', 'index.html'),
+        rootPath: pluginDir,
+        distPath: path.join(pluginDir, 'dist'),
+        indexPath: path.join(pluginDir, 'dist', 'index.html'),
         size: size,
         sizeDesc: sizeDesc,
       },
     } satisfies InstalledToolkitPlugin
-    installed.iconBase64 = IconUtils.getInstalledPluginIcon(installed)
+    const icon = IconUtils.getInstalledPluginIcon(installed)
+    writeHostTxtFile(iconCachePath, icon)
+    installed.iconBase64 = icon
     return installed
   }
 
@@ -80,6 +122,7 @@ class PluginManager {
     const plugin = this.loadPluginFiles(options)
     this.registry.plugins.set(options.id, plugin)
     mainLogger.info(`插件${options.id} ${options.version} 安装成功！`)
+    this.updateDB()
     return plugin
   }
 

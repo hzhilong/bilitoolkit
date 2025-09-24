@@ -186,7 +186,7 @@ export abstract class BaseWindowManager {
     this.pluginResizeListeners.set(plugin.id, updateBounds)
     this.webContentsToWindow.set(webContentsId, window)
 
-    await view.webContents.loadURL(plugin.files.indexPath)
+    await view.webContents.loadURL(path.resolve(appPath.pluginsPath, plugin.files.indexPath))
   }
   public showPluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const contentView = context.window.contentView
