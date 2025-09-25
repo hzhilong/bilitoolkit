@@ -10,7 +10,6 @@ import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import {
   getAppInstalledPlugins,
   writeHostTxtFile,
-  readHostTxtFile,
   writeHostDBDoc,
 } from '@/main/utils/host-app-utils.ts'
 import { CommonError } from '@ybgnb/utils'
@@ -36,10 +35,7 @@ class PluginManager {
 
   private buildRegistryPlugins(plugins: InstalledToolkitPlugin[]) {
     return new Map<string, InstalledToolkitPlugin>(
-      plugins.map((plugin) => {
-        plugin.iconBase64 = readHostTxtFile(this.getIconCachePath(plugin.id))
-        return [plugin.id, plugin]
-      }),
+      plugins.map((plugin) => [plugin.id, plugin]),
     )
   }
 
@@ -64,12 +60,7 @@ class PluginManager {
   }
 
   updateDB() {
-    const appInstalledPlugins = cloneDeep(this.getAppInstalledPlugins())
-    appInstalledPlugins.plugins = appInstalledPlugins.plugins.map((plugin) => {
-      plugin.iconBase64 = undefined
-      return plugin
-    })
-    writeHostDBDoc(APP_DB_KEYS.APP_INSTALLED_PLUGINS, appInstalledPlugins)
+    writeHostDBDoc(APP_DB_KEYS.APP_INSTALLED_PLUGINS, cloneDeep(this.getAppInstalledPlugins()))
   }
 
   getInstalledPlugin(id: string): InstalledToolkitPlugin {
@@ -101,7 +92,6 @@ class PluginManager {
     const iconCachePath = this.getIconCachePath(plugin.id)
     const installed = {
       ...plugin,
-      iconBase64: '',
       files: {
         rootPath: pluginDir,
         distPath: path.join(pluginDir, 'dist'),
@@ -112,7 +102,6 @@ class PluginManager {
     } satisfies InstalledToolkitPlugin
     const icon = IconUtils.getInstalledPluginIcon(installed)
     writeHostTxtFile(iconCachePath, icon)
-    installed.iconBase64 = icon
     return installed
   }
 

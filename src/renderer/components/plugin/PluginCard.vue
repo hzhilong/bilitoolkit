@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { IconButton, useLoadingData, AppUtils } from 'bilitoolkit-ui'
-import { toRefs } from 'vue'
-import { usePluginIconSrc } from '@/renderer/composables/usePluginIcon.ts'
+import { toRef } from 'vue'
+import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.ts'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 
 const props = withDefaults(defineProps<ToolkitPlugin>(), {})
-const { iconSrc } = usePluginIconSrc(toRefs(props))
+const { base64 } = usePluginIconBase64(toRef(props))
 const { loading, loadingData } = useLoadingData()
 const installPlugin = () => {
   loadingData(async () => {
@@ -18,7 +18,7 @@ const installPlugin = () => {
 
 <template>
   <div class="plugin-card" v-loading="loading">
-    <img class="icon" :src="iconSrc" />
+    <img class="icon" :src="base64" />
     <div class="plugin-info">
       <div class="meta-info">
         <span class="name">
@@ -53,6 +53,7 @@ const installPlugin = () => {
 @use '@/renderer/assets/scss/global.scss' as *;
 
 .plugin-card {
+  @include card-tech-style;
   display: flex;
   border: 2px solid var(--el-border-color);
   border-radius: 12px;

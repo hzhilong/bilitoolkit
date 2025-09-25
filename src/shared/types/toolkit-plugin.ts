@@ -44,7 +44,6 @@ export interface PluginSearchResult {
  * 已安装的插件
  */
 export interface InstalledToolkitPlugin extends PluginInstallOptions {
-  iconBase64: string | undefined
   files: {
     // 文件根目录
     rootPath: string
@@ -59,6 +58,10 @@ export interface InstalledToolkitPlugin extends PluginInstallOptions {
   }
   // 插件加载出现错误？（需要重装）
   // loadingError?: CommonError
+}
+
+export function isInstalledToolkitPlugin(obj: ToolkitPlugin): obj is InstalledToolkitPlugin {
+  return typeof obj === 'object' && obj !== null && 'files' in obj
 }
 
 /**

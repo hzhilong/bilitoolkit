@@ -1,12 +1,13 @@
-import { type ToRefs, computed } from 'vue'
+import { type ToRefs, computed, type Ref, watch, ref } from 'vue'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
+import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
 
 const defaultIconSrc = new URL('/images/plugin-default-icon.png', import.meta.url).href
 
 // 插件图标源，目前只支持 github仓库下 public/favicon.ico
-export const usePluginIconSrc = (plugin: ToRefs<ToolkitPlugin>) => {
-  const iconSrc = computed(() => {
+export const usePluginIconURL = (plugin: ToRefs<ToolkitPlugin>) => {
+  const iconUrl = computed(() => {
     const repository = plugin.links.value.repository
     if (!repository) {
       return defaultIconSrc
@@ -19,5 +20,19 @@ export const usePluginIconSrc = (plugin: ToRefs<ToolkitPlugin>) => {
       return defaultIconSrc
     }
   })
-  return { iconSrc }
+  return { iconUrl }
+}
+
+export const usePluginIconBase64 = (plugin: Ref<ToolkitPlugin>) => {
+  const base64 = ref('')
+
+  watch(plugin, async (newVal) => {
+    const current = newVal
+    const result = await getPluginIconCache(current)
+    if (plugin.value === current) {
+      base64.value = result
+    }
+  }, { immediate: true })
+
+  return { base64 }
 }

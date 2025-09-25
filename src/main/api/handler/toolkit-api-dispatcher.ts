@@ -68,14 +68,22 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
       }
 
       // 绑定正确上下文后执行
-      mainLogger.info(`API【${options.module}.${options.name}】执行中...`, JSON.stringify(options.args))
+      mainLogger.info(`API【${options.module}.${options.name}】执行中...`)
       const result = await nested.handler.bind(nested.parent)(context, ...options.args)
-      mainLogger.info(`API【${options.module}.${options.name}】执行成功  ${result ? JSON.stringify(result) : ''}\n`)
+      if (this.printResult(options)) {
+        mainLogger.info(`API【${options.module}.${options.name}】执行成功  ${result ? JSON.stringify(result) : ''}\n`)
+      } else {
+        mainLogger.info(`API【${options.module}.${options.name}】执行成功 \n`)
+      }
       return result
     } catch (e: unknown) {
       mainLogger.error(e)
       mainLogger.error(`API ${options.module}.${options.name} 调用失败：${BaseUtils.getErrorMessage(e)}`)
       throw BaseUtils.convertToCommonError(e, 'API调用失败：')
     }
+  }
+
+  private printResult(options: PluginApiInvokeOptions) {
+    return ![`core.getPluginIcon`].includes(`${options.module}.${options.name}`)
   }
 }

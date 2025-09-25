@@ -2,11 +2,11 @@ import { appPath } from '@/main/common/app-path'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { FileUtils } from '@/main/utils/file-utils'
 import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolkit-api.ts'
-import type {
-  PluginInstallOptions,
-  ToolkitPlugin,
-  InstalledToolkitPlugin,
-  AppInstalledPlugins,
+import  {
+  type PluginInstallOptions,
+  type ToolkitPlugin,
+  type InstalledToolkitPlugin,
+  type AppInstalledPlugins, isInstalledToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
@@ -80,6 +80,9 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   }
 
   async getPluginIcon(context: ApiCallerContext, plugin: ToolkitPlugin): Promise<string> {
+    if(isInstalledToolkitPlugin(plugin)){
+      return  IconUtils.getInstalledPluginIcon(plugin)
+    }
     return await IconUtils.getPluginIcon(plugin)
   }
 }

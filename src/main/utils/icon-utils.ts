@@ -62,6 +62,7 @@ export class IconUtils {
   }
 
   static getInstalledPluginIcon(plugin: InstalledToolkitPlugin) {
+    mainLogger.debug('getInstalledPluginIcon', plugin)
     const ico = path.join(plugin.files.distPath, 'favicon.ico')
     if (existsSync(ico)) {
       return this.readIconBase64(ico, 'image/x-icon')

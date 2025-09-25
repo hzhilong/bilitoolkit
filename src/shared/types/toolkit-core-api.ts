@@ -95,7 +95,7 @@ export interface ToolkitCoreApi {
   hideAppDialogWindow(): Promise<void>
 
   /**
-   * 获取插件图标
+   * 获取插件图标（base64）
    */
   getPluginIcon(plugin: ToolkitPlugin): Promise<string>
 }

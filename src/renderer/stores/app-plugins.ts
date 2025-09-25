@@ -3,6 +3,7 @@ import { defaultAppInstalledPlugins } from '@/shared/common/app-constants'
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 import type { AppInstalledPlugins, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import { updatePluginIconCache, getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
 
 /**
  * 应用已安装的插件
@@ -14,6 +15,9 @@ export const useAppInstalledPlugins = defineStore(
 
     const init = async () => {
       Object.assign(state, await toolkitApi.core.getAppInstalledPlugins())
+      for (const plugin of state.plugins) {
+        getPluginIconCache(plugin).then()
+      }
     }
 
     const addPlugin = (installedPlugin: InstalledToolkitPlugin) => {
@@ -23,9 +27,17 @@ export const useAppInstalledPlugins = defineStore(
       } else {
         state.plugins.push(installedPlugin)
       }
+      updatePluginIconCache(installedPlugin).then()
     }
 
-    return { init, state, addPlugin }
+    const delPlugin = (installedPlugin: InstalledToolkitPlugin) => {
+      const old = state.plugins.findIndex((plugin) => plugin.id === installedPlugin.id)
+      if (old > -1) {
+        state.plugins.splice(old, 1)
+      }
+    }
+
+    return { init, state, addPlugin, delPlugin }
   },
   {
     // 自己实现配置的持久化
