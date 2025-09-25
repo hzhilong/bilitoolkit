@@ -4,8 +4,9 @@ import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.ts'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 import type { PluginCardProps, CardType } from '@/renderer/components/plugin/types.ts'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
@@ -13,6 +14,7 @@ const { base64 } = usePluginIconBase64(props.plugin)
 const { loading, loadingData } = useLoadingData()
 const { hasInstalled } = useAppInstalledPlugins()
 const isInstalled = hasInstalled(props.plugin)
+const showInfoDialog = ref(false)
 
 const displayInstallDate = computed(() => {
   if (props.type === 'market') {
@@ -58,18 +60,19 @@ const updatePlugin = () => {
       </div>
       <div class="infos-author">
         <icon-label icon="user">作者: {{ plugin.author }}</icon-label>
-        <icon-label icon="calendar-2">更新日期: {{ plugin.date }}</icon-label>
+        <icon-label icon="calendar-2">发布日期: {{ plugin.date }}</icon-label>
       </div>
       <template v-if="type === 'manage'">
         <div class="installed-infos">
-          <icon-label icon="file">{{ displayInstallSize}}</icon-label>
-          <icon-label icon="file">{{ displayInstallDate}}</icon-label>
+          <icon-label icon="file">{{ displayInstallSize }}</icon-label>
+          <icon-label icon="file">{{ displayInstallDate }}</icon-label>
         </div>
       </template>
       <div class="plugin-description">
         {{ plugin.description }}
       </div>
       <div class="options">
+        <el-button @click="showInfoDialog = true">查看</el-button>
         <el-popconfirm v-if="!isInstalled" title="确认安装吗？" @confirm="installPlugin">
           <template #reference>
             <el-button>安装</el-button>
@@ -82,6 +85,7 @@ const updatePlugin = () => {
         </el-popconfirm>
       </div>
     </div>
+    <PluginInfoDialog v-bind="plugin" v-model="showInfoDialog" />
   </div>
 </template>
 
@@ -155,10 +159,11 @@ const updatePlugin = () => {
     }
   }
 
-  .infos-author{
+  .infos-author {
   }
 
-  .infos-author,.installed-infos {
+  .infos-author,
+  .installed-infos {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -166,7 +171,7 @@ const updatePlugin = () => {
     gap: 10px;
   }
 
-  .plugin-description{
+  .plugin-description {
     font-size: 14px;
     color: var(--el-text-color-secondary);
     border-top: 1px solid var(--el-border-color-light);
@@ -174,7 +179,7 @@ const updatePlugin = () => {
     margin-top: 6px;
   }
 
-  .options{
+  .options {
     display: flex;
     align-items: center;
     justify-content: flex-end;

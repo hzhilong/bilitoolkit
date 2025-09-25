@@ -49,6 +49,7 @@
     "element-plus": "^2.11.2",
     "log4js": "^6.9.1",
     "lowdb": "^7.0.1",
+    "marked": "^16.3.0",
     "nanoid": "^5.1.5",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",
