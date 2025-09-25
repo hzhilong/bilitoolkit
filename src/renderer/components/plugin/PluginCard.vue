@@ -7,6 +7,7 @@ import type { PluginCardProps, CardType } from '@/renderer/components/plugin/typ
 import { computed, ref } from 'vue'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
+import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
@@ -15,6 +16,9 @@ const { loading, loadingData } = useLoadingData()
 const { hasInstalled } = useAppInstalledPlugins()
 const isInstalled = hasInstalled(props.plugin)
 const showInfoDialog = ref(false)
+const { hasStar, addStar, delStar } = usePluginStarsStore()
+
+const star = hasStar(props.plugin.id)
 
 const displayInstallDate = computed(() => {
   if (props.type === 'market') {
@@ -51,10 +55,18 @@ const uninstallPlugin = () => {
     AppUtils.message('插件卸载成功')
   })
 }
+const starPlugin = () => {
+  if (star.value) {
+    delStar(props.plugin.id)
+  } else {
+    addStar(props.plugin.id)
+  }
+}
 </script>
 
 <template>
   <div class="plugin-card" v-loading="loading">
+    <span v-if="isInstalled" class="badge tag-installed">已安装</span>
     <img class="plugin-icon" :src="base64" alt="" />
     <div class="plugin-infos">
       <div class="infos-header">
@@ -80,6 +92,12 @@ const uninstallPlugin = () => {
         {{ plugin.description }}
       </div>
       <div class="options">
+        <i
+          v-if="type == 'manage'"
+          class="star-btn"
+          :class="star ? 'ri-star-fill' : 'ri-star-line'"
+          @click="starPlugin"
+        ></i>
         <el-button @click="showInfoDialog = true">查看</el-button>
         <el-button @click="openPlugin">打开</el-button>
         <el-popconfirm v-if="!isInstalled" title="确认安装吗？" @confirm="installPlugin">
@@ -121,6 +139,7 @@ const uninstallPlugin = () => {
   color: var(--el-text-color-placeholder);
   text-wrap: nowrap;
   gap: 6px;
+  position: relative;
 
   ::v-deep(.icon-font) {
     font-size: 14px;
@@ -200,6 +219,37 @@ const uninstallPlugin = () => {
     border-top: 1px solid var(--el-border-color-light);
     padding-top: 4px;
     margin-top: 6px;
+
+    .star-btn {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      margin-right: auto;
+      font-size: 16px;
+      line-height: 16px;
+      padding: 4px;
+      border-radius: 50%;
+
+      &:hover {
+        cursor: pointer;
+        background-color: var(--el-color-primary-light-4);
+      }
+    }
+  }
+
+  .badge {
+    position: absolute;
+    background: var(--app-color-primary-transparent-15);
+    color: var(--app-color-primary-transparent-55);
+    right: -21px;
+    top: -5px;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+    padding: 15px 15px 0 15px;
+    transform: rotate(45deg);
+    user-select: none;
+    font-family: Arial, Helvetica, sans-serif;
   }
 }
 </style>

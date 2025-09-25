@@ -14,6 +14,7 @@ import { initBilitoolkitUi, AppUtils } from 'bilitoolkit-ui'
 import 'bilitoolkit-ui/style.css'
 import 'remixicon/fonts/remixicon.css'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
+import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
 
 async function bootstrapApp() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,6 +49,7 @@ async function bootstrapApp() {
     await useAppSettingsStore().init()
     await useAppThemeStore().init()
     await useAppInstalledPlugins().init()
+    await usePluginStarsStore().init()
     await initHostListener()
   }
 

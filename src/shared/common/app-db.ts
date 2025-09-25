@@ -11,4 +11,8 @@ export const APP_DB_KEYS = {
    * 应用已安装的插件
    */
   APP_INSTALLED_PLUGINS: 'AppInstalledPlugins',
+  /**
+   * 收藏的插件
+   */
+  PLUGIN_STARS: 'PluginStars',
 } as const

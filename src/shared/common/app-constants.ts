@@ -47,3 +47,5 @@ export const defaultAppInstalledPlugins: AppInstalledPlugins = {
   appVersion: import.meta.env.APP_VERSION,
   plugins: [],
 }
+
+export const defaultPluginStars: string[] = []
