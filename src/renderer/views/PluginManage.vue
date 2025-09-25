@@ -9,7 +9,6 @@ import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
 const { loading } = useLoadingData()
 const { state } = useAppInstalledPlugins()
 const { hasStar } = usePluginStarsStore()
-const pluginCount = computed(() => state.plugins.length)
 
 const checkboxGroup: Ref<string[]> = ref([])
 const renderPlugins = computed(() => {
@@ -26,7 +25,7 @@ const pluginCountDesc = computed(() => {
 <template>
   <PageContainer v-loading="loading">
     <div class="header">
-      <div>{{pluginCountDesc}}</div>
+      <div>{{ pluginCountDesc }}</div>
       <el-checkbox-group v-model="checkboxGroup">
         <el-checkbox-button value="已收藏"> 已收藏 </el-checkbox-button>
       </el-checkbox-group>

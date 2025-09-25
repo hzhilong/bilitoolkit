@@ -26,7 +26,7 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "dev": "chcp 65001 && vite",
+    "dev": "chcp 65001 && rimraf node_modules/.vite && vite",
     "添加本地依赖包": "yalc add bilitoolkit-api-types @ybgnb/utils bilitoolkit-ui",
     "备注": "本地依赖库在版本未更改的情况下，代码会被vite缓存，注意！！！",
     "移除本地依赖包": "yalc remove --all",
@@ -75,6 +75,7 @@
     "lodash": "^4.17.21",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
+    "rimraf": "^6.0.1",
     "sass": "^1.92.1",
     "tsx": "^4.20.5",
     "typescript": "~5.8.0",
