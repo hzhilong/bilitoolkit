@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import PluginList from '@/renderer/components/plugin/PluginList.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useLoadingData } from 'bilitoolkit-ui'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 
 const { loading } = useLoadingData()
 const { state } = useAppInstalledPlugins()
 const plugins = state.plugins
-const pluginCount = state.plugins.length
+const pluginCount = computed(() => state.plugins.length)
 </script>
 
 <template>

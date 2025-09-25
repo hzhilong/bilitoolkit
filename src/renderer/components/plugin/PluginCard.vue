@@ -43,6 +43,12 @@ const updatePlugin = () => {
     AppUtils.message('插件更新成功')
   })
 }
+const uninstallPlugin = () => {
+  loadingData(async () => {
+    await PluginUtils.uninstall(props.plugin as InstalledToolkitPlugin)
+    AppUtils.message('插件卸载成功')
+  })
+}
 </script>
 
 <template>
@@ -81,6 +87,11 @@ const updatePlugin = () => {
         <el-popconfirm v-else title="确认更新吗？" @confirm="updatePlugin">
           <template #reference>
             <el-button>更新</el-button>
+          </template>
+        </el-popconfirm>
+        <el-popconfirm v-if="isInstalled" title="确认卸载吗？" @confirm="uninstallPlugin">
+          <template #reference>
+            <el-button>卸载</el-button>
           </template>
         </el-popconfirm>
       </div>

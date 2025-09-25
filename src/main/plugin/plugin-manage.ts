@@ -24,6 +24,7 @@ import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
 import { cloneDeep } from 'lodash'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
+import { unlinkSync, rmdirSync } from 'node:fs'
 
 type PluginRegistry = {
   appVersion: string
@@ -110,9 +111,19 @@ class PluginManager {
     await NpmUtils.downloadPluginPackage(options.id, options.version)
     const plugin = this.loadPluginFiles(options)
     this.registry.plugins.set(options.id, plugin)
-    mainLogger.info(`插件${options.id} ${options.version} 安装成功！`)
     this.updateDB()
+    mainLogger.info(`插件${options.id} ${options.version} 安装成功！`)
     return plugin
+  }
+
+  async uninstallPlugin(id: string): Promise<void> {
+    const plugin = this.getInstalledPlugin(id)
+    mainLogger.info(`插件${plugin.id} ${plugin.version} 卸载中……`)
+    // 只删除插件文件，不删除数据库和其他文件
+    rmdirSync(path.join(appPath.pluginsPath, plugin.files.rootPath), { recursive: true });
+    this.registry.plugins.delete(id)
+    this.updateDB()
+    mainLogger.info(`插件${plugin.id} ${plugin.version} 卸载成功`)
   }
 
   async openPlugin(context: ApiCallerContext, plugin: ToolkitPlugin) {

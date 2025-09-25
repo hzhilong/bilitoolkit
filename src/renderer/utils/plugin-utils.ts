@@ -1,4 +1,4 @@
-import type { PluginSearchResult, ToolkitPlugin } from '@/shared/types/toolkit-plugin'
+import type { PluginSearchResult, ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin'
 import { eventBus } from '@/renderer/utils/event-bus.ts'
 import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
 import { BaseUtils } from '@ybgnb/utils'
@@ -58,5 +58,10 @@ export class PluginUtils {
     const { addPlugin } = useAppInstalledPlugins()
     addPlugin(installedPlugin)
     return installedPlugin
+  }
+  static async uninstall(plugin: InstalledToolkitPlugin) {
+    await toolkitApi.core.uninstallPlugin(plugin.id)
+    const { delPlugin } = useAppInstalledPlugins()
+    delPlugin(plugin)
   }
 }
