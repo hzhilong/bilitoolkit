@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { AppIcon } from 'bilitoolkit-ui'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
@@ -38,7 +38,6 @@ const menuItemClass = (item: MenuItem, index: number) => {
 }
 
 const handleMenuItemClick = async (event: MouseEvent, menu: MenuItem, index: number) => {
-  await PluginUtils.hideCurrPluginView()
   menuIndex.value = index
   if (menu.onclick) {
     menu.onclick()
@@ -47,6 +46,7 @@ const handleMenuItemClick = async (event: MouseEvent, menu: MenuItem, index: num
       path: menu.path,
     })
   }
+  setTimeout(async () => await PluginUtils.hideCurrPluginView(), 50)
 }
 </script>
 
@@ -59,7 +59,7 @@ const handleMenuItemClick = async (event: MouseEvent, menu: MenuItem, index: num
       :class="menuItemClass(item, index)"
       @click="handleMenuItemClick($event, item, index)"
     >
-      <AppIcon class="menu__item__icon" :icon="item.icon"/>
+      <AppIcon class="menu__item__icon" :icon="item.icon" />
       <span class="menu__item__text">{{ item.title }}</span>
     </div>
   </div>

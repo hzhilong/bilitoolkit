@@ -60,6 +60,7 @@ export class PluginUtils {
     return installedPlugin
   }
   static async uninstall(plugin: InstalledToolkitPlugin) {
+    await this.closePluginView(plugin)
     await toolkitApi.core.uninstallPlugin(plugin.id)
     const { delPlugin } = useAppInstalledPlugins()
     delPlugin(plugin)

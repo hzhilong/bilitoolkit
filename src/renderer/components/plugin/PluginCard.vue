@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends CardType">
-import { IconButton, useLoadingData, AppUtils, IconLabel } from 'bilitoolkit-ui'
+import { useLoadingData, AppUtils, IconLabel } from 'bilitoolkit-ui'
 import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.ts'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
@@ -30,7 +30,9 @@ const displayInstallSize = computed(() => {
     return `插件大小: ${(props.plugin as InstalledToolkitPlugin).files.sizeDesc}`
   }
 })
-
+const openPlugin = () => {
+  PluginUtils.openPluginView(props.plugin)
+}
 const installPlugin = () => {
   loadingData(async () => {
     await PluginUtils.install(props.plugin)
@@ -79,6 +81,7 @@ const uninstallPlugin = () => {
       </div>
       <div class="options">
         <el-button @click="showInfoDialog = true">查看</el-button>
+        <el-button @click="openPlugin">打开</el-button>
         <el-popconfirm v-if="!isInstalled" title="确认安装吗？" @confirm="installPlugin">
           <template #reference>
             <el-button>安装</el-button>
