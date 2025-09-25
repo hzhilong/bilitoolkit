@@ -1,0 +1,12 @@
+@use '@/renderer/assets/scss/global' as *;
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.list-container {
+  flex: 1;
+  overflow-y: auto;
+}

@@ -53,7 +53,7 @@ export class PluginUtils {
   static async install(plugin: ToolkitPlugin) {
     const installedPlugin = await toolkitApi.core.installPlugin({
       ...sanitizeForIPC(plugin),
-      installDate: BaseUtils.getFormattedDateTime(),
+      installDate: BaseUtils.getFormattedDate(),
     })
     const { addPlugin } = useAppInstalledPlugins()
     addPlugin(installedPlugin)

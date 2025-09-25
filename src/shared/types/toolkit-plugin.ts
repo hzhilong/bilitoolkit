@@ -55,7 +55,7 @@ export interface InstalledToolkitPlugin extends PluginInstallOptions {
     size: number
     // 插件文件总大小描述，带单位
     sizeDesc: string
-  }
+  },
   // 插件加载出现错误？（需要重装）
   // loadingError?: CommonError
 }

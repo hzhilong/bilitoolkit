@@ -1,8 +1,8 @@
 import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { defaultAppInstalledPlugins } from '@/shared/common/app-constants'
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
-import type { AppInstalledPlugins, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import { reactive, computed, type Reactive, toRef } from 'vue'
+import type { AppInstalledPlugins, InstalledToolkitPlugin, ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { updatePluginIconCache, getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
 
 /**
@@ -37,7 +37,12 @@ export const useAppInstalledPlugins = defineStore(
       }
     }
 
-    return { init, state, addPlugin, delPlugin }
+    const hasInstalled = (plugin: Reactive<ToolkitPlugin>) => {
+      const idRef = toRef(plugin, 'id')
+      return computed(() => state.plugins.some((p) => p.id === idRef.value))
+    }
+
+    return { init, state, addPlugin, delPlugin, hasInstalled }
   },
   {
     // 自己实现配置的持久化

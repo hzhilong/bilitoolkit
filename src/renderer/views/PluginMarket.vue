@@ -16,7 +16,7 @@ const refreshList = () => {
     pluginCount.value = searchResult.total
   })
 }
-onMounted(()=>{
+onMounted(() => {
   refreshList()
 })
 </script>
@@ -27,7 +27,7 @@ onMounted(()=>{
       <div>目前共有{{ pluginCount }}个插件</div>
       <el-button @click="refreshList">刷新</el-button>
     </div>
-    <plugin-list class="list-container" :plugins="plugins" />
+    <plugin-list class="list-container" :plugins="plugins" :type="'market'" />
   </PageContainer>
 </template>
 
