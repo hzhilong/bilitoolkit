@@ -56,9 +56,9 @@ const uninstallPlugin = () => {
   })
 }
 const starPlugin = () => {
-  if (star.value) {
+  if(star.value){
     delStar(props.plugin.id)
-  } else {
+  }else{
     addStar(props.plugin.id)
   }
 }
@@ -92,12 +92,7 @@ const starPlugin = () => {
         {{ plugin.description }}
       </div>
       <div class="options">
-        <i
-          v-if="type == 'manage'"
-          class="star-btn"
-          :class="star ? 'ri-star-fill' : 'ri-star-line'"
-          @click="starPlugin"
-        ></i>
+        <i v-if="type == 'manage'" class="star-btn" :class="star ? 'ri-star-fill' : 'ri-star-line'" @click="starPlugin"></i>
         <el-button @click="showInfoDialog = true">查看</el-button>
         <el-button @click="openPlugin">打开</el-button>
         <el-popconfirm v-if="!isInstalled" title="确认安装吗？" @confirm="installPlugin">
@@ -220,7 +215,7 @@ const starPlugin = () => {
     padding-top: 4px;
     margin-top: 6px;
 
-    .star-btn {
+    .star-btn{
       display: inline-block;
       width: 16px;
       height: 16px;
@@ -229,10 +224,11 @@ const starPlugin = () => {
       line-height: 16px;
       padding: 4px;
       border-radius: 50%;
+      color: var(--app-color-primary-transparent-75);
 
-      &:hover {
+      &:hover{
         cursor: pointer;
-        background-color: var(--el-color-primary-light-4);
+        background-color: var(--app-color-primary-transparent-15);
       }
     }
   }
