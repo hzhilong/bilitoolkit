@@ -2,7 +2,7 @@ import { CommonError } from '@ybgnb/utils'
 import { cloneDeep } from 'lodash'
 import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'
-import type { BiliAccount, BiliAccountInfo } from 'bilitoolkit-api-types'
+import type { BiliAccount } from 'bilitoolkit-api-types'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 
 /**
@@ -16,7 +16,7 @@ export const useBiliAccountStore = defineStore(
     const init = async () => {
       // 获取数据库配置
       const dbConfig = (await window.toolkitApi.db.init(APP_DB_KEYS.BILI_ACCOUNTS, [])) as BiliAccount[]
-      Object.assign(accounts, dbConfig)
+      Object.assign(accounts, Array.from(dbConfig))
     }
 
     // 设置变化后更新数据库
@@ -44,10 +44,10 @@ export const useBiliAccountStore = defineStore(
     }
 
     // 注销账号
-    const logoutAccount = (oldAccount: BiliAccountInfo) => {
+    const logoutAccount = (uid: number) => {
       for (let i = 0; i < accounts.length; i++) {
         const account = accounts[i]
-        if (account.mid === oldAccount.mid) {
+        if (account.mid === uid) {
           accounts.splice(i, 1)
           return
         }
