@@ -8,6 +8,7 @@ import { computed, ref } from 'vue'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
 import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
+import { rendererEnv } from '@/renderer/common/renderer-env.ts'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
@@ -37,6 +38,13 @@ const displayInstallSize = computed(() => {
 const openPlugin = () => {
   PluginUtils.openPluginView(props.plugin)
 }
+const installConfirm = computed(() => {
+  if(rendererEnv.env().APP_AUTHOR === props.plugin.author){
+    return '确认安装吗？'
+  }else{
+    return '该插件非工具姬作者开发，确认安装吗？'
+  }
+})
 const installPlugin = loadingData(async () => {
   await PluginUtils.install(props.plugin)
   AppUtils.message('插件安装成功')
@@ -94,7 +102,7 @@ const starPlugin = () => {
         ></i>
         <el-button @click="showInfoDialog = true">查看</el-button>
         <el-button v-if="isInstalled" @click="openPlugin">打开</el-button>
-        <el-popconfirm v-if="!isInstalled" title="确认安装吗？" @confirm="installPlugin">
+        <el-popconfirm v-if="!isInstalled" :title="installConfirm" @confirm="installPlugin">
           <template #reference>
             <el-button>安装</el-button>
           </template>

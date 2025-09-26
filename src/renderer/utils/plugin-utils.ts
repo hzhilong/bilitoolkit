@@ -4,6 +4,7 @@ import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
 import { BaseUtils } from '@ybgnb/utils'
 import { toolkitApi, sanitizeForIPC } from '@/renderer/api/toolkit-api.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
+import { rendererEnv } from '@/renderer/common/renderer-env.ts'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {
@@ -32,6 +33,15 @@ export class PluginUtils {
     const ps = await searchNpmPackages({
       keywords: 'bilitoolkit-plugin',
       page: page,
+    })
+    ps.objects.sort((a, b) => {
+      if (a.package.publisher.username === rendererEnv.env().APP_AUTHOR) {
+        return -1
+      }
+      if (b.package.publisher.username === rendererEnv.env().APP_AUTHOR) {
+        return 1
+      }
+      return 0
     })
     return {
       total: ps.total,

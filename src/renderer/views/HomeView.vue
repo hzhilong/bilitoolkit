@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import { useLoadingData } from 'bilitoolkit-ui'
-import AccountLoginDialog from '@/renderer/components/dialog/AccountLoginDialog.vue'
 import { ref } from 'vue'
 
 const visible = ref(false)
@@ -14,7 +13,6 @@ const test = loadingData(async () => {
 <template>
   <PageContainer v-loading="loading">
     <el-button @click="test">测试登录账号</el-button>
-    <account-login-dialog v-model="visible" />
   </PageContainer>
 </template>
 
