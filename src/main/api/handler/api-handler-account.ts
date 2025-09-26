@@ -1,8 +1,8 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { CommonError } from '@ybgnb/utils'
 import type { ApiCallerContext, IpcToolkitAccountApi } from '@/main/types/ipc-toolkit-api.ts'
-import type { AuthAccount, LoggedInAccount } from 'bilitoolkit-api-types'
 import { mainEnv } from '@/main/common/main-env.ts'
+import type { BiliAccountInfo, BiliAccount } from 'bilitoolkit-api-types'
 
 /**
  * 账号API处理器
@@ -12,14 +12,14 @@ export class AccountApiHandler extends ApiHandleStrategy implements IpcToolkitAc
     super()
   }
 
-  async chooseAccount(context: ApiCallerContext): Promise<LoggedInAccount> {
+  async chooseAccount(context: ApiCallerContext): Promise<BiliAccountInfo> {
     if (context.envType === 'host') throw new CommonError('插件环境才需要授权...')
     // TODO
     throw new CommonError('TODO')
   }
 
-  async requestAccountAuth(context: ApiCallerContext, account: LoggedInAccount): Promise<AuthAccount> {
-    console.log('============requestAccountAuth', account)
+  async requestAccountAuth(context: ApiCallerContext, uid:number): Promise<BiliAccount> {
+    console.log('============requestAccountAuth', uid)
     if (context.envType === 'host' && mainEnv.isProd()) throw new CommonError('插件环境才需要授权...')
 
     // TODO

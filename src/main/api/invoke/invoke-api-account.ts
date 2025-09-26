@@ -1,6 +1,6 @@
-import { invokeApi } from './base-invoke';
-import type { AuthAccount, LoggedInAccount, ToolkitAccountApi } from 'bilitoolkit-api-types'
+import { invokeApi } from './base-invoke'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
+import type { ToolkitAccountApi, BiliAccount } from 'bilitoolkit-api-types'
 
 export const invokeAccountApi = async <T = void>(
   name: LeafFunctionPaths<ToolkitAccountApi> & string,
@@ -14,7 +14,7 @@ export const accountApi: ToolkitAccountApi = {
   chooseAccount: function () {
     return invokeAccountApi('chooseAccount')
   },
-  requestAccountAuth(account: LoggedInAccount): Promise<AuthAccount> {
-    return invokeAccountApi('requestAccountAuth', account)
+  requestAccountAuth(uid: number): Promise<BiliAccount> {
+    return invokeAccountApi('requestAccountAuth', uid)
   },
 }

@@ -1,5 +1,5 @@
 import 'axios'
-import { AccountCookie } from '@/shared/biliapi/types/BiliAccount'
+import type { AccountCookie } from '@/shared/biliapi/types/BiliAccount'
 import type { RequestReturnType } from '@/main/biliapi/types/bili-api-request.ts'
 
 declare module 'axios' {

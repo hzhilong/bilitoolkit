@@ -1,6 +1,6 @@
 import { invokeApi } from './base-invoke'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
-import type { AppThemeState, LoggedInAccount, ToolkitEventApi } from 'bilitoolkit-api-types'
+import type { AppThemeState, ToolkitEventApi, BiliAccountInfo } from 'bilitoolkit-api-types'
 import type { EventListener, IpcEventEmiter } from '@/main/types/ipc-event.ts'
 import { HOST_EVENT_CHANNELS, type HostEventChannel } from '@/shared/types/host-event-channel.ts'
 import { ipcRenderer } from 'electron'
@@ -37,7 +37,7 @@ export const eventApi: ToolkitEventApi = {
   onUpdateAppTheme: function (listener: (theme: AppThemeState) => void): Promise<void> {
     return listenHostEvent('UPDATE_APP_THEME', listener)
   },
-  onAccountLogout: function (listener: (account: LoggedInAccount) => void): Promise<void> {
+  onAccountLogout: function (listener: (account: BiliAccountInfo) => void): Promise<void> {
     return listenHostEvent('ACCOUNT_LOGOUT', listener)
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

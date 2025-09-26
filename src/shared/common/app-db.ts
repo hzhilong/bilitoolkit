@@ -15,4 +15,8 @@ export const APP_DB_KEYS = {
    * 收藏的插件
    */
   PLUGIN_STARS: 'PluginStars',
+  /**
+   * 已登录的账号
+   */
+  BILI_ACCOUNTS: 'BiliAccounts',
 } as const
