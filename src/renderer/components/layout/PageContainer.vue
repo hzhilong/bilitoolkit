@@ -1,4 +1,5 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 <template>
   <div class="page-container">
@@ -7,7 +8,7 @@
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global' as *;
+@use '@/renderer/assets/scss/abstracts/variables' as *;
 
 .page-container {
   width: 100%;

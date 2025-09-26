@@ -1,5 +1,5 @@
-@use '../global' as *;
-@use 'base-app' as *;
+@use "../abstracts/variables" as *;
+@use "base-app" as *;
 
 body {
   background-color: #00000000;

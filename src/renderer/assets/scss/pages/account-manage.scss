@@ -1,0 +1,14 @@
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.account-list {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px 10px;
+}

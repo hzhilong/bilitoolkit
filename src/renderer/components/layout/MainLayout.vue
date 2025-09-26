@@ -45,7 +45,7 @@ toolkitApi.global.register(HOST_GLOBAL_DATA.CONTENT_BOUNDS, () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global' as *;
+@use '@/renderer/assets/scss/abstracts/variables' as *;
 
 .main-layout {
   width: 100%;

@@ -26,6 +26,11 @@ const router = createRouter({
           component: () => import('../views/PluginManage.vue'),
         },
         {
+          name: '账号管理',
+          path: '/accountManage',
+          component: () => import('../views/AccountManage.vue'),
+        },
+        {
           name: '设置',
           path: '/settings',
           component: () => import('../views/SettingsView.vue'),

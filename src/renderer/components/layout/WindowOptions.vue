@@ -26,7 +26,7 @@ const switchWindowMax = () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global' as *;
+@use '@/renderer/assets/scss/abstracts/mixins' as mixins;
 
 .window-options {
   width: fit-content;
@@ -47,15 +47,15 @@ const switchWindowMax = () => {
     $padding-base: 8px;
 
     &.icon-minimize {
-      @include pseudo-svg-icon(url('@/renderer/assets/images/icon-minimize.svg'), var(--el-text-color-primary), $padding-base);
+      @include mixins.pseudo-svg-icon(url('@/renderer/assets/images/icon-minimize.svg'), var(--el-text-color-primary), $padding-base);
     }
 
     &.icon-maximize {
-      @include pseudo-svg-icon(url('@/renderer/assets/images/icon-maximize.svg'), var(--el-text-color-primary), $padding-base);
+      @include mixins.pseudo-svg-icon(url('@/renderer/assets/images/icon-maximize.svg'), var(--el-text-color-primary), $padding-base);
     }
 
     &.icon-cancel-maximize {
-      @include pseudo-svg-icon(
+      @include mixins.pseudo-svg-icon(
         url('@/renderer/assets/images/icon-cancel-maximize.svg'),
         var(--el-text-color-primary),
         $padding-base
@@ -63,7 +63,7 @@ const switchWindowMax = () => {
     }
 
     &.icon-close {
-      @include pseudo-svg-icon(url('@/renderer/assets/images/icon-close.svg'), var(--el-text-color-primary), $padding-base);
+      @include mixins.pseudo-svg-icon(url('@/renderer/assets/images/icon-close.svg'), var(--el-text-color-primary), $padding-base);
     }
 
     &:hover {

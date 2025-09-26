@@ -24,8 +24,7 @@ const defaultIconClass = ref('equalizer-2')
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global' as *;
-
+@use '@/renderer/assets/scss/abstracts/mixins' as mixins;
 .setting-item {
   width: 100%;
   display: flex;
@@ -37,7 +36,7 @@ const defaultIconClass = ref('equalizer-2')
   gap: 10px;
   line-height: 1.4;
 
-  @include card-tech-style;
+  @include mixins.card-tech-style;
 
   &__icon {
     font-size: 20px;

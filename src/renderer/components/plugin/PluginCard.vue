@@ -116,10 +116,10 @@ const starPlugin = () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global.scss' as *;
+@use '@/renderer/assets/scss/abstracts/mixins' as mixins;
 
 .plugin-card {
-  @include card-tech-style;
+  @include mixins.card-tech-style;
   display: flex;
   flex-direction: row;
   align-items: flex-start;

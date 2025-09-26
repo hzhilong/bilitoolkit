@@ -70,6 +70,7 @@ const baseConfig = ({ mode }: ConfigEnv): UserConfig => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
+      preserveSymlinks: true, // 保持 symlink，不要解析真实路径
     },
     build: {
       // 生成 Source Map => 开发环境日志打印时输出源码路径和行号

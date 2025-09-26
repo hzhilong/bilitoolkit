@@ -25,7 +25,7 @@ const appName = import.meta.env.APP_PRODUCT_CN_NAME
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global' as *;
+@use '@/renderer/assets/scss/abstracts/mixins' as mixins;
 
 .sidebar {
   width: 100%;
@@ -47,7 +47,7 @@ const appName = import.meta.env.APP_PRODUCT_CN_NAME
     -webkit-app-region: drag;
 
     &__logo {
-      @include app-logo-style(var(--el-color-primary-light-1));
+      @include mixins.app-logo-style(var(--el-color-primary-light-1));
       width: 28px;
       height: 28px;
       margin-right: 2px;

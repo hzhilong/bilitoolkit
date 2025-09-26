@@ -66,8 +66,6 @@ const handleMenuItemClick = async (event: MouseEvent, menu: MenuItem, index: num
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global' as *;
-
 .menu {
   $menus-padding-x: 10px;
   $menus-padding-y: 10px;

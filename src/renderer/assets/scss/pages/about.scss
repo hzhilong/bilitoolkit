@@ -1,7 +1,7 @@
-@use '@/renderer/assets/scss/global' as *;
+@use '@/renderer/assets/scss/abstracts/mixins' as mixins;
 
 .page-container{
-  @include tech-angled-bg(var(--app-color-primary-transparent-5), var(--app-color-primary-transparent-5), 80%, 10%);
+  @include mixins.tech-angled-bg(var(--app-color-primary-transparent-5), var(--app-color-primary-transparent-5), 80%, 10%);
   padding: 0;
 }
 
@@ -19,7 +19,7 @@
     width: 80px;
     height: 80px;
     transition: 0.3s ease;
-    @include app-logo-style(var(--el-color-primary));
+    @include mixins.app-logo-style(var(--el-color-primary));
     background-size: cover;
     cursor: pointer;
 

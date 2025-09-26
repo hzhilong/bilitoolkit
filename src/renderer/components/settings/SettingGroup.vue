@@ -14,8 +14,6 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global' as *;
-
 .setting-group {
   border-radius: 8px;
   max-width: 800px;

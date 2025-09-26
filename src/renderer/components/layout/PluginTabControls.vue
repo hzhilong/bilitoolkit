@@ -178,7 +178,8 @@ const autoScrollToCurr = (plugin: ToolkitPlugin) => {
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global' as *;
+@use '@/renderer/assets/scss/abstracts/variables' as *;
+@use '@/renderer/assets/scss/abstracts/mixins' as mixins;
 
 .tab-controls {
   flex: 1;
@@ -258,7 +259,7 @@ const autoScrollToCurr = (plugin: ToolkitPlugin) => {
         cursor: pointer;
         position: relative;
         border-radius: 50%;
-        @include pseudo-svg-icon(url('@/renderer/assets/images/icon-close.svg'), var(--el-text-color-secondary), 4px);
+        @include mixins.pseudo-svg-icon(url('@/renderer/assets/images/icon-close.svg'), var(--el-text-color-secondary), 4px);
         transition: all 0.3s ease-in-out;
         flex-shrink: 0;
         flex-grow: 0;

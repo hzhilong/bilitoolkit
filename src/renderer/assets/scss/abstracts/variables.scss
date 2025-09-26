@@ -1,0 +1,16 @@
+@forward "bilitoolkit-ui/variables.scss";
+
+/* 留出一点空间显示阴影 */
+$body-padding: 4px;
+/* 软件窗口圆角 */
+$app-border-radius: 10px;
+/* 应用标题栏的高度 */
+$top-bar-height: 40px;
+/* 侧边栏宽度 */
+$sidebar-width: 166px;
+/* 主内容边框宽度 */
+$main-content-border-width-rb: 6px;
+/* 主内容圆角 */
+$main-content-border-radius: 0px;
+$main-content-border-color: var(--el-color-primary-light-7);
+$main-content-border-color-hover: var(--el-color-primary);

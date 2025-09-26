@@ -12,7 +12,7 @@ import PluginTabControls from '@/renderer/components/layout/PluginTabControls.vu
 </template>
 
 <style scoped lang="scss">
-@use '@/renderer/assets/scss/global' as *;
+@use '@/renderer/assets/scss/abstracts/variables' as *;
 
 .top-bar {
   width: 100%;
