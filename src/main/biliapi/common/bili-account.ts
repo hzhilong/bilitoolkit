@@ -12,7 +12,7 @@ let accounts = new Map<number, BiliAccount>()
 const refreshData = () => {
   const dbData = readHostDBDoc(APP_DB_KEYS.BILI_ACCOUNTS)
   if (dbData) {
-    accounts = new Map<number, BiliAccount>((dbData as BiliAccount[]).map((account) => [account.uid, account]))
+    accounts = new Map<number, BiliAccount>((dbData as BiliAccount[]).map((account) => [account.mid, account]))
   } else {
     accounts.clear()
   }

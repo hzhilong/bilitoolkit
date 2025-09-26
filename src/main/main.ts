@@ -21,7 +21,7 @@ if (os.release().startsWith('6.1')) {
 if (process.platform === 'win32') app.setAppUserModelId(app.getName())
 
 // 创建窗口 https://www.electronjs.org/zh/docs/latest/api/browser-window
-const createWindow = () => {
+const createWindow = async () => {
   mainWindow = windowManager.createWindow(
     {
       width: 1000,
@@ -36,7 +36,7 @@ const createWindow = () => {
   )
 
   // 初始化主窗口相关的 IPC 事件监听和处理
-  windowManager.initMainWindow(mainWindow)
+  await windowManager.initMainWindow(mainWindow)
 
   if (appPath.devUrl) {
     // 开发
@@ -50,7 +50,7 @@ const createWindow = () => {
 // 这段程序将会在 Electron 结束初始化和创建浏览器窗口的时候调用
 // 部分 API 在 ready 事件触发后才能使用。
 app.whenReady().then(() => {
-  createWindow()
+  createWindow().then()
 })
 
 // 除了 macOS 外，当所有窗口都被关闭的时候退出程序。 因此, 通常对应用程序和它们的菜单栏来说应该时刻保持激活状态,

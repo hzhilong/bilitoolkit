@@ -33,16 +33,16 @@ export class BiliApiDispatcher extends ApiDispatcher<ToolkitBiliApi, BiliApiHand
   public async handle(event: IpcMainInvokeEvent, options: PluginApiInvokeOptions, _: ApiCallerContext) {
     const module = options.name.slice(0, options.name.indexOf('.')) as keyof ToolkitBiliApi
     const methodName = options.name.slice(module.length + 1)
-    mainLogger.info(`调用BiliAPI：${module}.${methodName} `, options.args || '')
+    mainLogger.info(`调用 BiliApi：${module}.${methodName} `, JSON.stringify(options || ''))
     const strategy = this.strategies[module]
     if (!strategy) {
-      throw new CommonError(`暂未支持BiliAPI模块[${module}]`)
+      throw new CommonError(`暂未支持 BiliApi 模块[${module}]`)
     }
 
     // 获取嵌套方法和执行上下文
     const nested = this.getNestedProperty(strategy, methodName)
     if (!nested || typeof nested.handler !== 'function') {
-      throw new CommonError(`BiliAPI模块[${module}]不存在${methodName}方法`)
+      throw new CommonError(`BiliApi 模块[${module}]不存在${methodName}方法`)
     }
 
     // 判断是否需要解析当前操作的账号并注入方法
@@ -54,7 +54,7 @@ export class BiliApiDispatcher extends ApiDispatcher<ToolkitBiliApi, BiliApiHand
 
     // 绑定正确上下文后执行
     const result = await nested.handler.bind(nested.parent)(...options.args)
-    mainLogger.info(`BiliAPI ${module}.${methodName} 执行成功`, result || '')
+    mainLogger.info(`BiliApi ${module}.${methodName} 执行成功`, JSON.stringify(result || ''))
     return result
   }
 }

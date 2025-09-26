@@ -34,7 +34,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     this.register('global', new GlobalApiHandler())
     this.register('account', new AccountApiHandler())
     this.register('core', new CoreApiHandler())
-    this.register('biliApi', new BiliApiDispatcher())
+    this.register('bili', new BiliApiDispatcher())
   }
 
   /**
@@ -44,6 +44,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
    * @param context 上下文
    */
   public async handle(event: IpcMainInvokeEvent, options: PluginApiInvokeOptions, context: ApiCallerContext) {
+    mainLogger.info(`=========================================================`)
     mainLogger.info(`调用API：`, JSON.stringify(options))
     if (!options) {
       throw new CommonError('API调用失败：缺少调用参数')
@@ -80,7 +81,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
       return result
     } catch (e: unknown) {
       mainLogger.error(e)
-      mainLogger.error(`API ${options.module}.${options.name} 调用失败：${BaseUtils.getErrorMessage(e)}`)
+      mainLogger.error(`API ${options.module}.${options.name} 调用失败：${BaseUtils.getErrorMessage(e)}\n`)
       throw BaseUtils.convertToCommonError(e, 'API调用失败：')
     }
   }

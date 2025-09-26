@@ -4,8 +4,8 @@ import type {
   BiliUserApi,
   LoginQRCode,
   LoginResultOfQRCode,
-  BiliAccountId,
-  BiliAccountInfo,
+  BiliAccountCookie,
+  BiliAccount,
 } from 'bilitoolkit-api-types'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
 
@@ -24,8 +24,8 @@ const user: BiliUserApi = {
   loginByQRCode(qrcode_key: string): Promise<LoginResultOfQRCode> {
     return invokeBiliApi('user.loginByQRCode', qrcode_key)
   },
-  getMyInfo(accountId: BiliAccountId): Promise<BiliAccountInfo> {
-    return invokeBiliApi('user.getMyInfo', accountId)
+  getMyInfo(accountCookie: BiliAccountCookie): Promise<BiliAccount> {
+    return invokeBiliApi('user.getMyInfo', accountCookie)
   },
 }
 

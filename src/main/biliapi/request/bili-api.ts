@@ -47,7 +47,7 @@ const createBiliApi = (): BiliApi => {
         config.url = `${config.url}?${wbiSign(config.params)}`
         config.params = undefined
       }
-      mainLogger.debug(`API 请求 [${config.method} ${config.url}]`, config.params || '')
+      mainLogger.debug(`BiliAPI 请求 [${config.method} ${config.url}]`, config.params || '')
       return config
     },
     function (error) {
@@ -59,7 +59,7 @@ const createBiliApi = (): BiliApi => {
   axiosInstance.interceptors.response.use(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (response: AxiosResponse<BiliApiResponse<any>>) => {
-      mainLogger.debug(`API 响应 [${response.config.method} ${response.config.url}]`, response.data)
+      mainLogger.debug(`BiliAPI 响应 [${response.config.method} ${response.config.url}]`, JSON.stringify(response.data))
       if (response.config.parseBizError === false) {
         // 不需要自动解析业务异常
         return response
@@ -121,14 +121,14 @@ const createBiliApi = (): BiliApi => {
     } catch (error: unknown) {
       if (error instanceof BiliApiHttpError) {
         // HTTP 错误
-        mainLogger.log(`调用接口[${url}]出错[${error.status}]`, error.message)
+        mainLogger.log(`请求接口[${url}]出错[${error.status}]`, error.message)
         throw error
       } else if (error instanceof BiliApiBusinessError) {
         // 业务逻辑错误
-        mainLogger.debug(`调用接口[${url}]失败`, error)
+        mainLogger.debug(`请求接口[${url}]失败`, error)
         throw error
       } else {
-        mainLogger.log(`调用接口[${url}]时出现未知错误`, error)
+        mainLogger.log(`请求接口[${url}]时出现未知错误`, error)
         throw error
       }
     }

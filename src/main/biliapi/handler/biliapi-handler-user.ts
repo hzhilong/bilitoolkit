@@ -13,7 +13,6 @@ import {
 import type { IpcBiliUserApi } from '@/main/biliapi/types/ipc-toolkit-bili-api.ts'
 import type { AxiosResponse } from 'axios'
 import { BiliCookieUtils } from '@/main/biliapi/utils/bili-cookie-utils.ts'
-import { pick } from 'lodash'
 
 export class UserApiHandler extends ApiHandleStrategy implements IpcBiliUserApi {
   async getLoginQRCode(): Promise<LoginQRCode> {
@@ -56,8 +55,11 @@ export class UserApiHandler extends ApiHandleStrategy implements IpcBiliUserApi 
     }
   }
 
-  async getMyInfo(account: BiliAccount): Promise<BiliAccountInfo> {
-    const accountCookie: BiliAccountCookie = pick(account, ['cookies', 'bili_jct'])
-    return await biliApi.get<BiliAccountInfo>('https://api.bilibili.com/x/space/myinfo', {}, { accountCookie })
+  async getMyInfo(accountCookie: BiliAccountCookie): Promise<BiliAccount> {
+    const info = await biliApi.get<BiliAccountInfo>('https://api.bilibili.com/x/space/myinfo', {}, { accountCookie })
+    return {
+      ...info,
+      ...accountCookie,
+    }
   }
 }

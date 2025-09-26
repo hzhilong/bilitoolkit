@@ -15,6 +15,7 @@ import 'bilitoolkit-ui/style.css'
 import 'remixicon/fonts/remixicon.css'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
+import { useBiliAccountStore } from '@/renderer/stores/bili-accounts.ts'
 
 async function bootstrapApp() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,6 +44,7 @@ async function bootstrapApp() {
     logger.log('对话框环境初始化')
     import('@/renderer/assets/scss/app/dialog-app.scss')
     await initHostDialogListener()
+    await useBiliAccountStore().init()
   } else {
     logger.log('宿主环境初始化')
     import('@/renderer/assets/scss/app/host-app.scss')
@@ -50,6 +52,7 @@ async function bootstrapApp() {
     await useAppThemeStore().init()
     await useAppInstalledPlugins().init()
     await usePluginStarsStore().init()
+    await useBiliAccountStore().init()
     await initHostListener()
   }
 

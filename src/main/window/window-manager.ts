@@ -34,7 +34,7 @@ export class WindowManager extends BaseWindowManager {
    * 初始化主进程相关的设置
    * @param mainWindow 主窗口
    */
-  public initMainWindow(mainWindow: BrowserWindow) {
+  public async initMainWindow(mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow
     // 初始化插件API监听
     ipcMain.handle(IPC_CHANNELS.PLUGIN_APIS, async (event: IpcMainInvokeEvent, options: PluginApiInvokeOptions) => {
@@ -50,11 +50,11 @@ export class WindowManager extends BaseWindowManager {
       })
     })
     // 在开发环境和生产环境均可通过快捷键打开devTools
-    globalShortcut.register('CommandOrControl+Shift+i', function () {
+    globalShortcut.register('CommandOrControl+Shift+i', function() {
       showDevTools()
     })
     // 初始化 biliApi 模块
-    biliApi.initMixinKey().then()
+    await biliApi.initMixinKey()
   }
 }
 

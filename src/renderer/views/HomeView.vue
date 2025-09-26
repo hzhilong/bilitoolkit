@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
-import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
+import { useLoadingData } from 'bilitoolkit-ui'
+import AccountLoginDialog from '@/renderer/components/dialog/AccountLoginDialog.vue'
+import { ref } from 'vue'
 
-const test2 = async () => {
-  console.log(await PluginUtils.searchPlugins())
-}
+const visible = ref(false)
+const { loading, loadingData } = useLoadingData()
+const test = loadingData(async () => {
+  visible.value = true
+})
 </script>
 
 <template>
-  <PageContainer>
-    <el-button @click="test2()">测试1</el-button>
+  <PageContainer v-loading="loading">
+    <el-button @click="test">测试登录账号</el-button>
+    <account-login-dialog v-model="visible" />
   </PageContainer>
 </template>
 

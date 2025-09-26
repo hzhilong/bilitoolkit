@@ -37,24 +37,18 @@ const displayInstallSize = computed(() => {
 const openPlugin = () => {
   PluginUtils.openPluginView(props.plugin)
 }
-const installPlugin = () => {
-  loadingData(async () => {
-    await PluginUtils.install(props.plugin)
-    AppUtils.message('插件安装成功')
-  })
-}
-const updatePlugin = () => {
-  loadingData(async () => {
-    await PluginUtils.install(props.plugin)
-    AppUtils.message('插件更新成功')
-  })
-}
-const uninstallPlugin = () => {
-  loadingData(async () => {
-    await PluginUtils.uninstall(props.plugin as InstalledToolkitPlugin)
-    AppUtils.message('插件卸载成功')
-  })
-}
+const installPlugin = loadingData(async () => {
+  await PluginUtils.install(props.plugin)
+  AppUtils.message('插件安装成功')
+})
+const updatePlugin = loadingData(async () => {
+  await PluginUtils.install(props.plugin)
+  AppUtils.message('插件更新成功')
+})
+const uninstallPlugin = loadingData(async () => {
+  await PluginUtils.uninstall(props.plugin as InstalledToolkitPlugin)
+  AppUtils.message('插件卸载成功')
+})
 const starPlugin = () => {
   if (star.value) {
     delStar(props.plugin.id)

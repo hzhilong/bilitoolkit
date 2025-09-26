@@ -2,11 +2,9 @@
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import PluginList from '@/renderer/components/plugin/PluginList.vue'
 import { ref, computed, type Ref } from 'vue'
-import { useLoadingData } from 'bilitoolkit-ui'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
 
-const { loading } = useLoadingData()
 const { state } = useAppInstalledPlugins()
 const { hasStar } = usePluginStarsStore()
 
@@ -23,7 +21,7 @@ const pluginCountDesc = computed(() => {
 </script>
 
 <template>
-  <PageContainer v-loading="loading">
+  <PageContainer>
     <div class="header">
       <div>{{ pluginCountDesc }}</div>
       <el-checkbox-group v-model="checkboxGroup">

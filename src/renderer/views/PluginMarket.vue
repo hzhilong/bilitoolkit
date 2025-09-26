@@ -9,13 +9,11 @@ import { useLoadingData } from 'bilitoolkit-ui'
 const { loading, loadingData } = useLoadingData()
 const plugins = ref<ToolkitPlugin[]>([])
 const pluginCount = ref(0)
-const refreshList = () => {
-  loadingData(async () => {
-    const searchResult = await PluginUtils.searchPlugins()
-    plugins.value = searchResult.plugins
-    pluginCount.value = searchResult.total
-  })
-}
+const refreshList = loadingData(async () => {
+  const searchResult = await PluginUtils.searchPlugins()
+  plugins.value = searchResult.plugins
+  pluginCount.value = searchResult.total
+})
 onMounted(() => {
   refreshList()
 })
