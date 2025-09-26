@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/node22/tsconfig.json",
-  "include": ["./src/main/**/*.ts", "./src/shared/**/*.d.ts", "./src/shared/**/*.ts"],
+  "include": ["./src/main/**/*.ts", "./src/main/**/*.d.ts", "./src/shared/**/*.d.ts", "./src/shared/**/*.ts"],
   "exclude": [
     "./node_modules",
     ".yalc",

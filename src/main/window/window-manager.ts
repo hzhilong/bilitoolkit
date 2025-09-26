@@ -6,6 +6,7 @@ import { ToolkitApiDispatcher } from '@/main/api/handler/toolkit-api-dispatcher.
 import { BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import { showDevTools } from '@/main/utils/dev-tools.ts'
 import { mainLogger } from '@/main/common/main-logger.ts'
+import { biliApi } from '@/main/biliapi/request/bili-api.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -52,6 +53,8 @@ export class WindowManager extends BaseWindowManager {
     globalShortcut.register('CommandOrControl+Shift+i', function () {
       showDevTools()
     })
+    // 初始化 biliApi 模块
+    biliApi.initMixinKey().then()
   }
 }
 

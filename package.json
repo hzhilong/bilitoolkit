@@ -50,6 +50,7 @@
     "log4js": "^6.9.1",
     "lowdb": "^7.0.1",
     "marked": "^16.3.0",
+    "md5": "^2.3.0",
     "nanoid": "^5.1.5",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",
@@ -61,6 +62,7 @@
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
     "@types/lodash": "^4.17.16",
+    "@types/md5": "^2.3.5",
     "@types/node": "^22.16.5",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitejs/plugin-vue-jsx": "^5.0.1",
