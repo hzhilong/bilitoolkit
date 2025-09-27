@@ -5,7 +5,7 @@ import { reactive, ref } from 'vue'
 import type { AccountSelectDialogProps } from '@/renderer/components/dialog/types.ts'
 import { BiliAccountCard } from 'bilitoolkit-ui'
 import { useBiliAccountStore } from '@/renderer/stores/bili-accounts.ts'
-import type { BiliAccountInfo } from 'bilitoolkit-api-types'
+import type { BiliAccount } from 'bilitoolkit-api-types'
 
 const visible = defineModel<boolean>({ required: true })
 const props = withDefaults(defineProps<AccountSelectDialogProps>(), {})
@@ -30,7 +30,7 @@ const handleCancel = () => {
   options.onCancel?.()
 }
 
-const handleSelect = (account: BiliAccountInfo) => {
+const handleSelect = (account: BiliAccount) => {
   visible.value = false
   options.onSelected(account)
 }

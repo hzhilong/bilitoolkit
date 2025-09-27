@@ -1,4 +1,4 @@
-import type { BiliAccountInfo } from 'bilitoolkit-api-types'
+import type { BiliAccount } from 'bilitoolkit-api-types'
 
 /**
  * 账号选择弹窗
@@ -6,7 +6,7 @@ import type { BiliAccountInfo } from 'bilitoolkit-api-types'
 export interface AccountSelectDialogProps {
   title: string
   onCancel?: () => void
-  onSelected: (account: BiliAccountInfo) => void
+  onSelected: (account: BiliAccount) => void
 }
 
 export type AccountSelectDialogExposed = {

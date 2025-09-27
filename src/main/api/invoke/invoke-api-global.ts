@@ -6,6 +6,7 @@ import type { ToolkitGlobalDataApi } from 'bilitoolkit-api-types'
 import { ipcRenderer } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
 import { type IpcRequestBody, toIpcResponseBody } from '@/main/types/ipc-request.ts'
+
 type IpcRendererEvent = Electron.IpcRendererEvent
 
 export const invokeGlobalApi = async <T = void>(
@@ -14,6 +15,10 @@ export const invokeGlobalApi = async <T = void>(
   ...args: any[]
 ): Promise<T> => {
   return await invokeApi<ToolkitGlobalDataApi, T>('global', name, ...args)
+}
+
+export const getFormatedGlobalDataName = (envType: ApiCallerEnvType, name: string) => {
+  return `${envType}-${name}`
 }
 
 /**
@@ -25,7 +30,7 @@ export const registerGlobalData = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getFn: (...args: any[]) => Promise<BizResult<any>>,
 ) => {
-  const formatedName = `${envType}-${name}`
+  const formatedName = getFormatedGlobalDataName(envType, name)
   // 监听主进程的请求
   ipcRenderer.on(IPC_CHANNELS.REQUEST_DATA, async (event: IpcRendererEvent, requestBody: IpcRequestBody) => {
     if (formatedName === requestBody.name) {

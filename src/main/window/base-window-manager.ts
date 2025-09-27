@@ -12,6 +12,7 @@ import { getGlobalData } from '@/main/api/handler/api-handler-global.ts'
 import { defaultsDeep } from 'lodash'
 import DBUtils from '@/main/utils/db-utils.ts'
 import { FileUtils } from '@/main/utils/file-utils.ts'
+import { injectingPluginMetadata } from '@/main/preloads/plugin-meta.ts'
 
 type Rectangle = Electron.Rectangle
 
@@ -164,6 +165,8 @@ export abstract class BaseWindowManager {
       webPreferences: {
         transparent: true,
         session: ses,
+        // 将插件元数据传递到渲染器进程预加载脚本中
+        additionalArguments: injectingPluginMetadata(plugin),
       },
     })
     const updateBounds = async () => {

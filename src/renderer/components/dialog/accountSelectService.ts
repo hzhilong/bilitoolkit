@@ -1,6 +1,6 @@
 import AccountSelectDialog from '@/renderer/components/dialog/AccountSelectDialog.vue'
 import { createVNode, nextTick, render, type VNode } from 'vue'
-import type { BiliAccountInfo } from 'bilitoolkit-api-types'
+import type { BiliAccount } from 'bilitoolkit-api-types'
 import type { AccountSelectDialogProps, AccountSelectDialogExposed } from '@/renderer/components/dialog/types.ts'
 
 let instance: VNode | undefined = undefined
@@ -11,7 +11,7 @@ let exposed: AccountSelectDialogExposed | undefined | null = undefined
  * APP 全局选择账号对话框
  */
 export const AppAccountSelectDialog = {
-  show(options: Omit<AccountSelectDialogProps, 'onSelected' | 'onCancel'>): Promise<BiliAccountInfo> {
+  show(options: Omit<AccountSelectDialogProps, 'onSelected' | 'onCancel'>): Promise<BiliAccount> {
     return new Promise(async (resolve, reject) => {
       if (!instance) {
         // 创建容器
@@ -30,7 +30,7 @@ export const AppAccountSelectDialog = {
 
       exposed?.show({
         title: options.title,
-        onSelected: (account: BiliAccountInfo) => {
+        onSelected: (account: BiliAccount) => {
           resolve(account)
         },
         onCancel: () => {

@@ -3,6 +3,10 @@
 
 import { contextBridge } from 'electron'
 import { exposeToolkitApi } from '@/main/api/invoke/invoke-api'
+import { loadPluginMetadata } from '@/main/preloads/plugin-meta.ts'
+
+// 读取主进程注入的数据
+loadPluginMetadata()
 
 /**
  * 公用的preload.ts
