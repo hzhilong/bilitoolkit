@@ -10,12 +10,13 @@ body {
       top: $body-padding !important;
       left: $body-padding !important;
       border-radius: $app-border-radius !important;
-      height: calc(100% - 1 * $body-padding) !important;
-      width: calc(100% - 1 * $body-padding) !important;
+      height: calc(100% - 2 * $body-padding) !important;
+      width: calc(100% - 2 * $body-padding) !important;
     }
   }
 
-  #app{
-    background-color: #00000000;
+  #app {
+    box-shadow: unset;
+    background-color: transparent;
   }
 }

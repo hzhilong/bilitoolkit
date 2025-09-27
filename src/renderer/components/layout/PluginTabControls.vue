@@ -5,7 +5,7 @@ import { PluginUtils } from '@/renderer/utils/plugin-utils'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin';
 import { cloneDeep } from 'lodash'
 import { nextTick, ref } from 'vue'
-
+// TODO 插件图标
 const plugins = ref<ToolkitPlugin[]>([])
 const activePluginId = ref('')
 

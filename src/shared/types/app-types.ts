@@ -1,5 +1,4 @@
 // APP 类型
-import type { AppDialogType } from '@/shared/types/app-dialog.ts'
 
 export const APP_TYPE = {
   HOST_APP: 'HOST_APP',
@@ -14,5 +13,4 @@ export type WindowApp =
     }
   | {
       type: 'dialogApp'
-      dialogType: AppDialogType
     }

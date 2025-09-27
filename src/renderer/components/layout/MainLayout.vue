@@ -66,7 +66,7 @@ toolkitApi.global.register(HOST_GLOBAL_DATA.CONTENT_BOUNDS, () => {
     align-items: start;
     position: relative;
 
-    /* 内容区域边框背景（mask设置，不应该内容区域的不透明背景叠加效果） */
+    /* 内容区域边框背景（mask设置，内容区域的不透明背景叠加效果） */
     &:before {
       content: '';
       position: absolute;
@@ -84,7 +84,7 @@ toolkitApi.global.register(HOST_GLOBAL_DATA.CONTENT_BOUNDS, () => {
       pointer-events: none;
     }
 
-    /* 内容区域圆角以外的背景（mask设置，不应该内容区域的不透明背景叠加效果） */
+    /* 内容区域圆角以外的背景（mask设置，内容区域的不透明背景叠加效果） */
     &:after {
       content: '';
       position: absolute;

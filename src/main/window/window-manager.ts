@@ -7,6 +7,7 @@ import { BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import { showDevTools } from '@/main/utils/dev-tools.ts'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { biliApi } from '@/main/biliapi/request/bili-api.ts'
+import { appPath } from '@/main/common/app-path.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -55,6 +56,15 @@ export class WindowManager extends BaseWindowManager {
     })
     // 初始化 biliApi 模块
     await biliApi.initMixinKey()
+    // 初始化对话框视图
+    await this.initAppDialogView()
+    if (appPath.devUrl) {
+      // 开发
+      mainWindow.loadURL(appPath.devUrl).then(() => {})
+    } else {
+      // 生产
+      mainWindow.loadFile(appPath.appURL).then(() => {})
+    }
   }
 }
 

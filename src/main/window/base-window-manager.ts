@@ -12,6 +12,7 @@ import DBUtils from '@/main/utils/db-utils.ts'
 import { FileUtils } from '@/main/utils/file-utils.ts'
 import { injectingPluginMetadata } from '@/main/preloads/plugin-meta.ts'
 import { _getGlobalData } from '@/main/api/handler/api-handler-global.ts'
+import type { AppDialogType } from '@/shared/types/app-dialog.ts'
 
 type Rectangle = Electron.Rectangle
 
@@ -27,9 +28,11 @@ export abstract class BaseWindowManager {
   // 存储 所有插件WebContents 到 WebContentsView 的映射
   public readonly webContentsToViewMap
   public readonly pluginToViewMap
-  private readonly pluginResizeListeners
-  // app对话框窗口
-  public appDialogWindow: BrowserWindow | undefined = undefined
+  private readonly pluginResizeListeners: Map<string, (event?: Electron.Event, isAlwaysOnTop?: boolean) => void>
+  // app对话框视图
+  public appDialogWebContents: WebContents | undefined
+  public appDialogWebContentsView: WebContentsView | undefined
+  public appDialogResizeListener: (() => Promise<void>) | undefined
 
   protected constructor() {
     this.webContentsToPluginMap = new Map<number, ToolkitPlugin>()
@@ -184,6 +187,7 @@ export abstract class BaseWindowManager {
         additionalArguments: injectingPluginMetadata(plugin),
       },
     })
+    // 更新视图边界
     const updateBounds = async () => {
       const bounds = (await _getGlobalData(
         context.window.webContents,
@@ -194,7 +198,7 @@ export abstract class BaseWindowManager {
       view.setBounds(bounds)
     }
     // 防抖处理，确保连续 resize 时最终状态也被更新
-    const updateBoundsOnFinish = debounce(updateBounds, 100);
+    const updateBoundsOnFinish = debounce(updateBounds, 100)
     const updateBoundsListener = async () => {
       await updateBounds()
       updateBoundsOnFinish()
@@ -209,9 +213,9 @@ export abstract class BaseWindowManager {
     this.pluginResizeListeners.set(plugin.id, updateBoundsListener)
     this.webContentsToWindow.set(webContentsId, window)
 
-    if(path.isAbsolute(plugin.files.indexPath)){
+    if (path.isAbsolute(plugin.files.indexPath)) {
       await view.webContents.loadURL(plugin.files.indexPath)
-    }else{
+    } else {
       await view.webContents.loadURL(path.resolve(appPath.pluginsPath, plugin.files.indexPath))
     }
   }
@@ -239,14 +243,82 @@ export abstract class BaseWindowManager {
     this.webContentsToViewMap.delete(view.webContents.id)
     this.webContentsToWindow.delete(view.webContents.id)
     this.pluginToViewMap.delete(plugin.id)
-    this.pluginResizeListeners.delete(plugin.id)
+    if (this.pluginResizeListeners.has(plugin.id)) {
+      context.window.removeListener('resize', this.pluginResizeListeners.get(plugin.id)!)
+      this.pluginResizeListeners.delete(plugin.id)
+    }
     context.window.contentView.removeChildView(view)
     if (!view.webContents.isDestroyed()) {
       view.webContents.close()
     }
   }
-  public initDialogView() {}
-  public showDialogView() {}
-  public hideDialogView() {}
-  public closeDialogView() {}
+  public async initAppDialogView() {
+    if (this.appDialogWebContents) return
+    const window = this.mainWindow!
+
+    const ses = session.fromPartition(`<dialog-app>`)
+    const preload = path.join(appPath.preloadsDir, `dialog-app-preload.cjs`)
+
+    ses.registerPreloadScript({
+      filePath: preload,
+      type: 'frame',
+    })
+
+    this.appDialogWebContentsView = new WebContentsView({
+      webPreferences: {
+        transparent: true,
+        session: ses,
+      },
+    })
+    this.appDialogWebContents = this.appDialogWebContentsView.webContents
+    // 更新视图边界
+    const updateBounds = async () => {
+      const [w, h] = window.getContentSize()
+      this.appDialogWebContentsView!.setBounds({ x: 0, y: 0, width: w, height: h })
+    }
+    // 防抖处理，确保连续 resize 时最终状态也被更新
+    const updateBoundsOnFinish = debounce(updateBounds, 100)
+    this.appDialogResizeListener = async () => {
+      await updateBounds()
+      updateBoundsOnFinish()
+    }
+    window.addListener('resize', this.appDialogResizeListener)
+    await this.appDialogResizeListener()
+
+    const webContentsId = this.appDialogWebContents.id
+    this.webContentsToViewMap.set(webContentsId, this.appDialogWebContentsView)
+    this.webContentsToWindow.set(webContentsId, window!)
+    if (appPath.devUrl) {
+      // 开发
+      await this.appDialogWebContents.loadURL(appPath.devUrl)
+    } else {
+      // 生产
+      await this.appDialogWebContents.loadFile(appPath.appURL)
+    }
+  }
+
+  public viewIsShowing(view: WebContentsView) {
+    const contentView = this.mainWindow!.contentView
+    if (contentView.children && contentView.children.length > 0) {
+      return contentView.children.some((c) => c === view)
+    }
+    return false
+  }
+
+  public showAppDialogView(context: ApiCallerContext, dialogType: AppDialogType) {
+    if (!this.appDialogWebContentsView) {
+      throw new CommonError('内部错误，创建对话框视图失败')
+    }
+    context.window.contentView.addChildView(this.appDialogWebContentsView)
+    return this.appDialogWebContentsView
+  }
+  public hideAppDialogView(context: ApiCallerContext) {
+    if (!this.appDialogWebContentsView) {
+      throw new CommonError('内部错误，对话框视图未创建')
+    }
+    context.window.contentView.removeChildView(this.appDialogWebContentsView)
+  }
+  public closeAppDialogView() {
+
+  }
 }

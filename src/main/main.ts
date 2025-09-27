@@ -40,13 +40,6 @@ const createWindow = async () => {
   // 初始化主窗口相关的 IPC 事件监听和处理
   await windowManager.initMainWindow(mainWindow)
 
-  if (appPath.devUrl) {
-    // 开发
-    mainWindow.loadURL(appPath.devUrl).then(() => {})
-  } else {
-    // 生产
-    mainWindow.loadFile(appPath.appURL).then(() => {})
-  }
 }
 
 // 这段程序将会在 Electron 结束初始化和创建浏览器窗口的时候调用

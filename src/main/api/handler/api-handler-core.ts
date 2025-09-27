@@ -12,6 +12,7 @@ import {
 } from '@/shared/types/toolkit-plugin.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { pluginManager } from '@/main/plugin/plugin-manage.ts'
+import { windowManager } from '@/main/window/window-manager.ts'
 
 /**
  * 核心API处理器
@@ -73,7 +74,7 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   }
 
   async hideAppDialogWindow(context: ApiCallerContext): Promise<void> {
-    // TODO
+    return windowManager.hideAppDialogView(context)
   }
 
   testPlugin(context: ApiCallerContext, options: PluginTestOptions): Promise<InstalledToolkitPlugin> {

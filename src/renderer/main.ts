@@ -43,6 +43,7 @@ async function bootstrapApp() {
   if (_windowApp?.type === 'dialogApp') {
     logger.log('对话框环境初始化')
     import('@/renderer/assets/scss/app/dialog-app.scss')
+    await useAppThemeStore().init()
     await useBiliAccountStore().init()
     await initDialogAppListener()
   } else {

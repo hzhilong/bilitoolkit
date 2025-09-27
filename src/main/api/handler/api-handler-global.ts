@@ -109,11 +109,6 @@ export class GlobalApiHandler extends ApiHandleStrategy implements IpcToolkitGlo
     return this.getGlobalData(context, 'host', name, timeout, ...args)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private __getHostData(context: ApiCallerContext, name: string, timeout: boolean = true, ...args: any[]) {
-    return this.getGlobalData(context, 'host', name, timeout, ...args)
-  }
-
   getPluginData(
     context: ApiCallerContext,
     pluginId: string,
