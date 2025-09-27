@@ -1,10 +1,16 @@
-import type { PluginSearchResult, ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin'
+import type {
+  PluginSearchResult,
+  ToolkitPlugin,
+  InstalledToolkitPlugin,
+  PluginTestOptions,
+} from '@/shared/types/toolkit-plugin'
 import { eventBus } from '@/renderer/utils/event-bus.ts'
 import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
 import { BaseUtils } from '@ybgnb/utils'
 import { toolkitApi, sanitizeForIPC } from '@/renderer/api/toolkit-api.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 import { rendererEnv } from '@/renderer/common/renderer-env.ts'
+import { PluginMetaUtils } from '@/shared/utils/plugin-meta-utils.ts'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {
@@ -19,14 +25,10 @@ export class PluginUtils {
     eventBus.emit('hideCurrPluginView')
   }
 
-  private static parsePluginName(id: string, keywords: string[]) {
-    const prefix = 'bilitoolkit-plugin:'
-    for (const keyword of keywords) {
-      if (keyword.startsWith(prefix) && keyword.length > prefix.length) {
-        return keyword.substring(prefix.length)
-      }
-    }
-    return id
+  static async testPlugin(options: PluginTestOptions) {
+    const plugin = await toolkitApi.core.testPlugin(options)
+    eventBus.emit('openPluginView', { plugin: plugin })
+    return plugin
   }
 
   static async searchPlugins(page = 1) {
@@ -49,7 +51,7 @@ export class PluginUtils {
       plugins: ps.objects.map((p) => {
         return {
           id: p.package.name,
-          name: this.parsePluginName(p.package.name, p.package.keywords),
+          name: PluginMetaUtils.parsePluginName(p.package.name, p.package.keywords),
           author: p.package.publisher.username,
           description: p.package.description,
           version: p.package.version,

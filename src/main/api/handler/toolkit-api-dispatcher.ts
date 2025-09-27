@@ -32,7 +32,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     this.register('system', new SystemApiHandler())
     this.register('event', new EventApiHandler())
     this.register('global', new GlobalApiHandler(wm))
-    this.register('account', new AccountApiHandler())
+    this.register('account', new AccountApiHandler(wm))
     this.register('core', new CoreApiHandler())
     this.register('bili', new BiliApiDispatcher())
   }

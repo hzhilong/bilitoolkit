@@ -9,6 +9,7 @@ import { type Ref, ref } from 'vue'
 import { useAppSettingsStore } from '@/renderer/stores/app-settings.ts'
 import { DevToolsType } from '@/shared/types/app-settings.ts'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
+import TestPluginDialog from '@/renderer/components/dialog/TestPluginDialog.vue'
 
 const appSettings = useAppSettingsStore().appSettings
 
@@ -27,6 +28,7 @@ const initSettingDesc = (desc: Ref<string>, init: () => Promise<string>) => {
 initSettingDesc(logsDesc, toolkitApi.core.getLogsFolderSize)
 initSettingDesc(dbsDesc, toolkitApi.core.getDBsFolderSize)
 initSettingDesc(filesDesc, toolkitApi.core.getFilesFolderSize)
+const testPluginDialogVisible = ref<boolean>(false)
 </script>
 
 <template>
@@ -55,8 +57,12 @@ initSettingDesc(filesDesc, toolkitApi.core.getFilesFolderSize)
             <el-option v-for="item in Object.values(DevToolsType)" :key="item" :label="item" :value="item"></el-option>
           </el-select>
         </SettingItem>
+        <SettingItem title="调试插件" desc="在工具姬里调试插件">
+          <el-button type="primary" @click="testPluginDialogVisible = true">打开</el-button>
+        </SettingItem>
       </SettingGroup>
     </div>
+    <TestPluginDialog v-model="testPluginDialogVisible"></TestPluginDialog>
   </PageContainer>
 </template>
 

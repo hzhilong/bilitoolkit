@@ -1,11 +1,25 @@
-import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
+import type { ApiCallerContext, PluginApiCallerContext, HostApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
+import type { ApiCallerIdentity } from '@/shared/types/toolkit-core-api.ts'
+
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
 /**
  * API 处理策略
  */
-export class ApiHandleStrategy {}
+export abstract class ApiHandleStrategy {
+  /**
+   * 转成精简的API调用上下文
+   * @param context
+   * @protected
+   */
+  protected toApiCallerIdentity(context: PluginApiCallerContext | HostApiCallerContext): ApiCallerIdentity {
+    if (context.envType === 'plugin') {
+      return { envType: 'plugin', plugin: context.plugin }
+    }
+    return { envType: 'host' }
+  }
+}
 
 /**
  * 哔哩API 处理策略
@@ -15,7 +29,7 @@ export abstract class BiliApiHandleStrategy extends ApiHandleStrategy {}
 /**
  * API调度器
  */
-export abstract class ApiDispatcher<A, S extends ApiHandleStrategy = ApiHandleStrategy> {
+export abstract class ApiDispatcher<A, S extends ApiHandleStrategy = ApiHandleStrategy> extends ApiHandleStrategy{
   // 处理策略
   protected readonly strategies: Partial<Record<keyof A, S>> = {}
 

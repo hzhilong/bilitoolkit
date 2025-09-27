@@ -209,10 +209,7 @@ export class FileUtils {
     if (!this.isFile(filePath)) {
       throw new CommonError('文件不存在')
     }
-    const packagePath = path.join(filePath, 'package.json')
-    const packageJsonRaw = fs.readFileSync(packagePath, 'utf-8')
-    return JSON.parse(packageJsonRaw) as T
+    const jsonRaw = fs.readFileSync(path.resolve(filePath), 'utf-8')
+    return JSON.parse(jsonRaw) as T
   }
-
-
 }

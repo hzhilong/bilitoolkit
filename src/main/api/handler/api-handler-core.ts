@@ -8,8 +8,8 @@ import {
   type InstalledToolkitPlugin,
   type AppInstalledPlugins,
   isInstalledToolkitPlugin,
+  type PluginTestOptions
 } from '@/shared/types/toolkit-plugin.ts'
-import { windowManager } from '@/main/window/window-manager.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { pluginManager } from '@/main/plugin/plugin-manage.ts'
 
@@ -65,18 +65,19 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   }
 
   async closePlugin(context: ApiCallerContext, plugin: ToolkitPlugin): Promise<void> {
-    windowManager.closePluginView(context, plugin)
+    return await pluginManager.closePlugin(context, plugin)
   }
 
   async hideCurrPlugin(context: ApiCallerContext): Promise<void> {
-    const contentView = context.window.contentView
-    if (contentView.children && contentView.children.length > 0) {
-      contentView.removeChildView(contentView.children[0])
-    }
+    return await pluginManager.hideCurrPlugin(context)
   }
 
   async hideAppDialogWindow(context: ApiCallerContext): Promise<void> {
     // TODO
+  }
+
+  testPlugin(context: ApiCallerContext, options: PluginTestOptions): Promise<InstalledToolkitPlugin> {
+    return pluginManager.testPlugin(context, options)
   }
 
   async getPluginIcon(context: ApiCallerContext, plugin: ToolkitPlugin): Promise<string> {

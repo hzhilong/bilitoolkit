@@ -8,8 +8,8 @@ import { logger } from '@/renderer/common/renderer-logger.ts'
 import { useAppSettingsStore } from '@/renderer/stores/app-settings.ts'
 import { useAppThemeStore } from '@/renderer/stores/app-theme.ts'
 import DialogApp from '@/renderer/DialogApp.vue'
-import { initHostDialogListener } from '@/renderer/api/dialog-init.ts'
-import { initHostListener } from '@/renderer/api/host-init.ts'
+import { initDialogAppListener } from '@/renderer/init/dialog-init.ts'
+import { initHostAppListener } from '@/renderer/init/host-init.ts'
 import { initBilitoolkitUi, AppUtils } from 'bilitoolkit-ui'
 import 'bilitoolkit-ui/style.css'
 import 'remixicon/fonts/remixicon.css'
@@ -43,8 +43,8 @@ async function bootstrapApp() {
   if (_windowApp?.type === 'dialogApp') {
     logger.log('对话框环境初始化')
     import('@/renderer/assets/scss/app/dialog-app.scss')
-    await initHostDialogListener()
     await useBiliAccountStore().init()
+    await initDialogAppListener()
   } else {
     logger.log('宿主环境初始化')
     import('@/renderer/assets/scss/app/host-app.scss')
@@ -53,7 +53,7 @@ async function bootstrapApp() {
     await useAppInstalledPlugins().init()
     await usePluginStarsStore().init()
     await useBiliAccountStore().init()
-    await initHostListener()
+    await initHostAppListener()
   }
 
   app.use(ui)

@@ -6,6 +6,7 @@ import type {
   ToolkitPlugin,
   InstalledToolkitPlugin,
   AppInstalledPlugins,
+  PluginTestOptions,
 } from '@/shared/types/toolkit-plugin.ts'
 
 export const invokeCoreApi = async <T = void>(
@@ -58,6 +59,9 @@ export const coreApi: ToolkitCoreApi = {
   },
   hideAppDialogWindow: function (): Promise<void> {
     return invokeCoreApi('hideAppDialogWindow')
+  },
+  testPlugin(options: PluginTestOptions): Promise<InstalledToolkitPlugin> {
+    return invokeCoreApi('testPlugin', options)
   },
   getPluginIcon(plugin: ToolkitPlugin): Promise<string> {
     return invokeCoreApi('getPluginIcon', plugin)

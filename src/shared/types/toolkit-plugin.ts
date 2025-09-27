@@ -55,7 +55,7 @@ export interface InstalledToolkitPlugin extends PluginInstallOptions {
     size: number
     // 插件文件总大小描述，带单位
     sizeDesc: string
-  },
+  }
   // 插件加载出现错误？（需要重装）
   // loadingError?: CommonError
 }
@@ -70,4 +70,11 @@ export function isInstalledToolkitPlugin(obj: ToolkitPlugin): obj is InstalledTo
 export interface AppInstalledPlugins {
   appVersion: string
   plugins: Array<InstalledToolkitPlugin>
+}
+
+/**
+ * 插件测试选项
+ */
+export interface PluginTestOptions {
+  rootPath: string
 }

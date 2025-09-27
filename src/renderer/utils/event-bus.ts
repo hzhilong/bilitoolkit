@@ -1,4 +1,4 @@
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin';
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
 import mitt from 'mitt'
 
 type Events = {

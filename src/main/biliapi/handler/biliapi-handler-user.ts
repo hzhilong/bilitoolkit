@@ -1,5 +1,5 @@
 import { biliApi } from '@/main/biliapi/request/bili-api'
-import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
+import { BiliApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { BaseUtils } from '@ybgnb/utils'
 import {
   BiliApiBusinessError,
@@ -14,7 +14,7 @@ import type { IpcBiliUserApi } from '@/main/biliapi/types/ipc-toolkit-bili-api.t
 import type { AxiosResponse } from 'axios'
 import { BiliCookieUtils } from '@/main/biliapi/utils/bili-cookie-utils.ts'
 
-export class UserApiHandler extends ApiHandleStrategy implements IpcBiliUserApi {
+export class UserApiHandler extends BiliApiHandleStrategy implements IpcBiliUserApi {
   async getLoginQRCode(): Promise<LoginQRCode> {
     return await biliApi.get<LoginQRCode>(
       'https://passport.bilibili.com/x/passport-login/web/qrcode/generate',

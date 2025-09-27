@@ -4,6 +4,7 @@ import type {
   ToolkitPlugin,
   InstalledToolkitPlugin,
   AppInstalledPlugins,
+  PluginTestOptions
 } from '@/shared/types/toolkit-plugin.ts'
 
 /**
@@ -20,6 +21,9 @@ export interface ToolkitApiWithCore extends ToolkitApi {
  * 哔哩工具姬 API的模块分类
  */
 export type ToolkitApiModule = keyof ToolkitApiWithCore
+
+// 通用的“精简上下文”（宿主环境的全局数据或者事件监听时会回调）
+export type ApiCallerIdentity = { envType: 'plugin'; plugin: ToolkitPlugin } | { envType: 'host' }
 
 /**
  * 软件核心的API
@@ -89,6 +93,11 @@ export interface ToolkitCoreApi {
    * 隐藏当前插件View
    */
   hideCurrPlugin(): Promise<void>
+
+  /**
+   * 测试插件
+   */
+  testPlugin(options: PluginTestOptions): Promise<InstalledToolkitPlugin>
   /**
    * 隐藏应用对话框窗口
    */

@@ -85,7 +85,7 @@ export class GlobalApiHandler extends ApiHandleStrategy implements IpcToolkitGlo
     this.windowManage = wm
   }
 
-  async getGlobalData(...fnArgs: HostArgs | PluginArgs): Promise<unknown> {
+  async getGlobalData(context: ApiCallerContext, ...fnArgs: HostArgs | PluginArgs): Promise<unknown> {
     let targetWebContents: WebContents,
       targetPluginId: string,
       targetDataName: string,
@@ -95,6 +95,8 @@ export class GlobalApiHandler extends ApiHandleStrategy implements IpcToolkitGlo
     if (fnArgs[0] === 'host') {
       ;[, targetDataName, timeout, ...args] = fnArgs
       targetWebContents = this.windowManage.getHostWebContents()
+      // 回调给宿主环境时追加调用者的上下文
+      args = [this.toApiCallerIdentity(context), ...args]
     } else {
       ;[, targetPluginId, targetDataName, timeout, ...args] = fnArgs
       targetWebContents = this.windowManage.getPluginWebContents(targetPluginId)
@@ -104,12 +106,12 @@ export class GlobalApiHandler extends ApiHandleStrategy implements IpcToolkitGlo
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getData(context: ApiCallerContext, name: string, timeout: boolean, ...args: any[]): Promise<unknown> {
-    return this.getGlobalData('host', name, timeout, ...args)
+    return this.getGlobalData(context, 'host', name, timeout, ...args)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private __getHostData(context: ApiCallerContext, name: string, timeout: boolean = true, ...args: any[]) {
-    return this.getGlobalData('host', name, timeout, ...args)
+    return this.getGlobalData(context, 'host', name, timeout, ...args)
   }
 
   getPluginData(
@@ -120,6 +122,6 @@ export class GlobalApiHandler extends ApiHandleStrategy implements IpcToolkitGlo
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
   ): Promise<unknown> {
-    return this.getGlobalData('plugin', pluginId, name, timeout, ...args)
+    return this.getGlobalData(context, 'plugin', pluginId, name, timeout, ...args)
   }
 }

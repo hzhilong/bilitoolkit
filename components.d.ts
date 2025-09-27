@@ -13,6 +13,7 @@ declare module 'vue' {
     ElCheckboxGroup: typeof import('element-plus/es')['ElCheckboxGroup']
     ElColorPicker: typeof import('element-plus/es')['ElColorPicker']
     ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElInput: typeof import('element-plus/es')['ElInput']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPopconfirm: typeof import('element-plus/es')['ElPopconfirm']
     ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
