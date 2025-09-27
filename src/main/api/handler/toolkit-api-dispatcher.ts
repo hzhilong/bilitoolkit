@@ -31,7 +31,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     this.register('file', new FileApiHandler())
     this.register('system', new SystemApiHandler())
     this.register('event', new EventApiHandler())
-    this.register('global', new GlobalApiHandler())
+    this.register('global', new GlobalApiHandler(wm))
     this.register('account', new AccountApiHandler())
     this.register('core', new CoreApiHandler())
     this.register('bili', new BiliApiDispatcher())

@@ -17,23 +17,18 @@ export const invokeGlobalApi = async <T = void>(
   return await invokeApi<ToolkitGlobalDataApi, T>('global', name, ...args)
 }
 
-export const getFormatedGlobalDataName = (envType: ApiCallerEnvType, name: string) => {
-  return `${envType}-${name}`
-}
-
 /**
  * 注册全局数据
  */
 export const registerGlobalData = (
   envType: ApiCallerEnvType,
-  name: string,
+  dataName: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getFn: (...args: any[]) => Promise<BizResult<any>>,
 ) => {
-  const formatedName = getFormatedGlobalDataName(envType, name)
   // 监听主进程的请求
   ipcRenderer.on(IPC_CHANNELS.REQUEST_DATA, async (event: IpcRendererEvent, requestBody: IpcRequestBody) => {
-    if (formatedName === requestBody.name) {
+    if (dataName === requestBody.name) {
       // 回传给主进程
       if (requestBody.args) {
         event.sender.send(

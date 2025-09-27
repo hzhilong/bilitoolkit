@@ -1,5 +1,4 @@
-import type { WebContents } from 'electron'
-import { BrowserWindow, session, WebContentsView } from 'electron'
+import { type WebContents, webContents, BrowserWindow, session, WebContentsView } from 'electron'
 import type { CreateWindowOptions } from '@/main/types/create-window.ts'
 import type { ApiCallerContext, HostApiCallerContext, PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { isToolkitPlugin, type ToolkitPlugin, type InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
@@ -8,11 +7,11 @@ import path from 'path'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
-import { getGlobalData } from '@/main/api/handler/api-handler-global.ts'
-import { defaultsDeep } from 'lodash'
+import { defaultsDeep, debounce } from 'lodash'
 import DBUtils from '@/main/utils/db-utils.ts'
 import { FileUtils } from '@/main/utils/file-utils.ts'
 import { injectingPluginMetadata } from '@/main/preloads/plugin-meta.ts'
+import { _getGlobalData } from '@/main/api/handler/api-handler-global.ts'
 
 type Rectangle = Electron.Rectangle
 
@@ -50,6 +49,22 @@ export abstract class BaseWindowManager {
     const plugin = this.webContentsToPluginMap.get(sender.id)
     if (!plugin) throw new CommonError('内部错误，关联的插件为空')
     return plugin
+  }
+
+  public getPluginWebContents(pluginId: string): WebContents {
+    let wc: WebContents | undefined = undefined
+    for (const [webContentsId, plugin] of this.webContentsToPluginMap) {
+      if (plugin.id === pluginId) {
+        wc = webContents.fromId(webContentsId)
+      }
+    }
+    if (!wc) throw new CommonError(`目标插件[${pluginId}]未打开`)
+    return wc
+  }
+
+  public getHostWebContents(): WebContents {
+    // 后续扩展多窗口需修改
+    return this.mainWindow!.webContents
   }
 
   protected getMappingView(sender: WebContents | ToolkitPlugin): WebContentsView {
@@ -170,23 +185,28 @@ export abstract class BaseWindowManager {
       },
     })
     const updateBounds = async () => {
-      const bounds = (await getGlobalData(
-        context,
-        'host',
+      const bounds = (await _getGlobalData(
+        context.window.webContents,
         HOST_GLOBAL_DATA.CONTENT_BOUNDS,
         false,
         undefined,
       )) as Rectangle
       view.setBounds(bounds)
     }
-    window.addListener('resize', updateBounds)
-    await updateBounds()
+    // 防抖处理，确保连续 resize 时最终状态也被更新
+    const updateBoundsOnFinish = debounce(updateBounds, 100);
+    const updateBoundsListener = async () => {
+      await updateBounds()
+      updateBoundsOnFinish()
+    }
+    window.addListener('resize', updateBoundsListener)
+    await updateBoundsListener()
 
     const webContentsId = view.webContents.id
     this.webContentsToPluginMap.set(webContentsId, plugin)
     this.webContentsToViewMap.set(webContentsId, view)
     this.pluginToViewMap.set(plugin.id, view)
-    this.pluginResizeListeners.set(plugin.id, updateBounds)
+    this.pluginResizeListeners.set(plugin.id, updateBoundsListener)
     this.webContentsToWindow.set(webContentsId, window)
 
     await view.webContents.loadURL(path.resolve(appPath.pluginsPath, plugin.files.indexPath))
