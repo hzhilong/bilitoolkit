@@ -1,7 +1,6 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { CommonError } from '@ybgnb/utils'
 import type { ApiCallerContext, IpcToolkitAccountApi } from '@/main/types/ipc-toolkit-api.ts'
-import { mainEnv } from '@/main/common/main-env.ts'
 import type { BiliAccountInfo, BiliAccount } from 'bilitoolkit-api-types'
 import type { BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
@@ -40,10 +39,24 @@ export class AccountApiHandler extends ApiHandleStrategy implements IpcToolkitAc
   }
 
   async requestAccountAuth(context: ApiCallerContext, uid: number): Promise<BiliAccount> {
-    console.log('============requestAccountAuth', uid)
-    if (context.envType === 'host' && mainEnv.isProd()) throw new CommonError('插件环境才需要授权...')
-
-    // TODO
-    throw new CommonError('TODO')
+    if (context.envType === 'host') throw new CommonError('插件环境才需要授权...')
+    return new Promise((resolve, reject) => {
+      const dialog = this.windowManage.showAppDialogView(context, 'request-cookie-authorization')
+      setTimeout(async () => {
+        await _getGlobalData(
+          dialog.webContents,
+          HOST_GLOBAL_DATA.REQUEST_COOKIE_AUTHORIZATION,
+          false,
+          this.toApiCallerIdentity(context),
+          uid
+        )
+          .then((account) => {
+            resolve(account as BiliAccount)
+          })
+          .catch((e) => {
+            reject(e)
+          })
+      }, 10)
+    })
   }
 }
