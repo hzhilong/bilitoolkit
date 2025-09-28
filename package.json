@@ -59,6 +59,7 @@
     "pinia-plugin-persistedstate": "^4.5.0",
     "qrcode": "^1.5.4",
     "remixicon": "^4.6.0",
+    "update-electron-app": "^3.1.1",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"
   },
