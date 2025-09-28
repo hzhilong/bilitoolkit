@@ -81,6 +81,9 @@ FileUtils.ensureDirExists(filePath)
  */
 const hostAppFilePath = path.join(filePath, MainConstants.FILE.CORE_NAME)
 FileUtils.ensureDirExists(hostAppFilePath)
+/**
+ * 插件图标根路径
+ */
 FileUtils.ensureDirExists(path.join(hostAppFilePath, APP_FILE_KEYS.PLUGIN_ICON))
 /**
  * 插件目录
@@ -100,11 +103,7 @@ const preloadsDir = path.join(appPublicPath, 'preloads')
  * 默认的插件图标路径
  */
 const defaultPluginIcon = path.join(appPublicPath, 'images/plugin-default-icon.png')
-/**
- * 插件图标根路径
- */
-const pluginIcons = path.join(programRoot, 'plugin-icons')
-FileUtils.ensureDirExists(pluginIcons)
+
 /**
  * 临时目录
  */
@@ -131,6 +130,5 @@ export const appPath = {
   pluginsPath,
   preloadsDir,
   defaultPluginIcon,
-  pluginIcons,
   temp,
 }

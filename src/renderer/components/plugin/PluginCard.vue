@@ -67,7 +67,7 @@ const starPlugin = () => {
 </script>
 
 <template>
-  <div class="plugin-card" v-loading="loading">
+  <div class="plugin-card" v-loading="loading" :class="type === 'no-options' ? 'not-tech-style' : ''">
     <span v-if="type !== 'no-options' && isInstalled" class="badge tag-installed">已安装</span>
     <img class="plugin-icon" :src="base64" alt="" />
     <div class="plugin-infos">
@@ -147,6 +147,15 @@ const starPlugin = () => {
     font-size: 14px;
     line-height: 14px;
     color: var(--el-color-primary-light-4);
+  }
+
+  &.not-tech-style {
+    &:hover {
+      box-shadow: var(--el-box-shadow);
+    }
+    &::before {
+      content: unset;
+    }
   }
 
   .plugin-icon {

@@ -85,7 +85,7 @@ defineExpose({ show, hide })
   margin: 10px 0;
   padding: 10px;
   text-align: center;
-  border-radius: 8px;
-  border: 1px dashed var(--el-color-primary);
+  border: 2px solid var(--el-border-color);
+  border-radius: 12px;
 }
 </style>

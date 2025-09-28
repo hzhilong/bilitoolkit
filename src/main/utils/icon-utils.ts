@@ -5,6 +5,8 @@ import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs'
 import { GithubUtils } from '@/main/utils/github-utils.ts'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
+import NpmUtils from '@/main/utils/npm-utils.ts'
+import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
 
 let defaultPluginIcon: string | undefined = undefined
 
@@ -23,8 +25,13 @@ export class IconUtils {
     return defaultPluginIcon
   }
 
-  static getPluginIconFilePath(plugin: ToolkitPlugin) {
-    return path.join(appPath.pluginIcons, plugin.id + '.icon')
+  /**
+   * 获取插件图标缓存的相对路径
+   * @param pluginId
+   * @private
+   */
+  static getPluginIconCachePath(pluginId: string) {
+    return path.join(appPath.hostAppFilePath, APP_FILE_KEYS.PLUGIN_ICON, `${NpmUtils.pkgNameToDirName(pluginId)}.icon`)
   }
 
   static convertIconFile(filePath: string, mediaType: MediaType) {
@@ -33,12 +40,12 @@ export class IconUtils {
     return base64
   }
 
-  static async getPluginIcon(plugin: ToolkitPlugin) {
-    mainLogger.debug('getPluginIcon', plugin)
+  static async downloadPluginIcon(plugin: ToolkitPlugin) {
+    mainLogger.debug('下载插件图标', plugin)
     if (!plugin.links.repository) {
       return this.getDefaultPluginIcon()
     }
-    const saveTo = this.getPluginIconFilePath(plugin)
+    const saveTo = this.getPluginIconCachePath(plugin.id)
     if (existsSync(saveTo)) {
       return readFileSync(saveTo, 'utf8')
     }
@@ -53,7 +60,7 @@ export class IconUtils {
         return this.convertIconFile(saveTo, 'image/png')
       }
     } catch (error: unknown) {
-      mainLogger.error('获取插件图标失败', plugin, error)
+      mainLogger.error('下载插件图标失败', plugin, error)
       if (existsSync(saveTo)) {
         unlinkSync(saveTo)
       }

@@ -12,7 +12,7 @@
   flex-wrap: wrap;
   gap: 20px 10px;
   overflow-y: auto;
-  justify-content: space-around;
+  justify-content: flex-start;
 
   ::v-deep(.bili-account-card) {
     width: 40%;

@@ -1,4 +1,4 @@
-import { computed, watch, ref, type Reactive, isReactive, isRef } from 'vue'
+import { computed, watch, ref, type Reactive } from 'vue'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
 import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
@@ -25,23 +25,15 @@ export const usePluginIconURL = (plugin: Reactive<ToolkitPlugin>) => {
 
 export const usePluginIconBase64 = (plugin: Reactive<ToolkitPlugin> | ToolkitPlugin) => {
   const base64 = ref('')
-  if (isReactive(plugin) || isRef(plugin)) {
-    watch(
-      plugin,
-      async (newVal) => {
-        const current = newVal
-        const result = await getPluginIconCache(current)
-        if (plugin === current) {
-          base64.value = result
-        }
-      },
-      { immediate: true },
-    )
-  } else {
-    getPluginIconCache(plugin).then((data) => {
-      base64.value = data
-    })
-  }
+  watch(
+    () => plugin.id,
+    async () => {
+      const result = await getPluginIconCache(plugin)
+      console.log('获取图标完成')
+      base64.value = result
+    },
+    { immediate: true },
+  )
 
   return { base64 }
 }

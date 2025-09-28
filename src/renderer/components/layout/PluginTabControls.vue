@@ -2,10 +2,12 @@
 import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { eventBus } from '@/renderer/utils/event-bus'
 import { PluginUtils } from '@/renderer/utils/plugin-utils'
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin';
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
 import { cloneDeep } from 'lodash'
-import { nextTick, ref } from 'vue'
-// TODO 插件图标
+import { nextTick, ref, reactive, watch, toRaw } from 'vue'
+import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
+import { AppUtils } from 'bilitoolkit-ui'
+
 const plugins = ref<ToolkitPlugin[]>([])
 const activePluginId = ref('')
 
@@ -146,6 +148,31 @@ const autoScrollToCurr = (plugin: ToolkitPlugin) => {
     scroll(offsetParentRight + 1)
   }
 }
+
+const base64Map = reactive(new Map<string, ReturnType<typeof ref<string>>>())
+
+watch(
+  plugins,
+  (list) => {
+    console.log('==== watch')
+    list.forEach((p) => {
+      const id = p.id
+      if (!base64Map.has(id)) {
+        const b = ref('')
+        base64Map.set(id, b)
+        console.log('==== 获取图标')
+        getPluginIconCache(toRaw(p))
+          .then((v) => (b.value = v))
+          .catch(AppUtils.handleError)
+      }
+    })
+  },
+  { immediate: true, deep: true },
+)
+
+const getBase64Icon = (id: string) => {
+  return base64Map.get(id)?.value ?? ''
+}
 </script>
 
 <template>
@@ -162,6 +189,7 @@ const autoScrollToCurr = (plugin: ToolkitPlugin) => {
         :class="plugin.id === activePluginId ? 'active' : ''"
         @click="switchPlugin(plugin)"
       >
+        <img class="plugin-icon" :src="getBase64Icon(plugin.id)" alt="" />
         <div class="plugin-name txt-ellipsis">{{ plugin.name }}</div>
         <div class="plugin-close-btn" @click.stop="closePlugin(plugin)"></div>
       </div>
@@ -183,7 +211,7 @@ const autoScrollToCurr = (plugin: ToolkitPlugin) => {
 
 .tab-controls {
   flex: 1;
-  height: calc(100% - 10px);
+  height: calc(100% - 12px);
   margin-top: auto;
   display: flex;
   align-items: end;
@@ -223,7 +251,7 @@ const autoScrollToCurr = (plugin: ToolkitPlugin) => {
       max-width: 200px;
       position: relative;
       height: 100%;
-      padding-left: 8px;
+      padding-left: 6px;
       box-sizing: border-box;
       justify-content: space-between;
       align-items: center;
@@ -245,6 +273,14 @@ const autoScrollToCurr = (plugin: ToolkitPlugin) => {
         background: var(--app-bg-color-overlay-hover);
       }
 
+      .plugin-icon{
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        margin-right: 2px;
+        transition: all 0.3s ease-in-out;
+      }
+
       .plugin-name {
         font-size: 16px;
         transition: all 0.3s ease-in-out;
@@ -259,18 +295,27 @@ const autoScrollToCurr = (plugin: ToolkitPlugin) => {
         cursor: pointer;
         position: relative;
         border-radius: 50%;
-        @include mixins.pseudo-svg-icon(url('@/renderer/assets/images/icon-close.svg'), var(--el-text-color-secondary), 4px);
+        @include mixins.pseudo-svg-icon(
+          url('@/renderer/assets/images/icon-close.svg'),
+          var(--el-text-color-secondary),
+          4px
+        );
         transition: all 0.3s ease-in-out;
         flex-shrink: 0;
         flex-grow: 0;
 
         &:hover {
-          background: var(--app-color-primary-transparent-55);
+          background: var(--app-color-primary-transparent-25);
         }
       }
 
       &:hover {
         cursor: pointer;
+
+        .plugin-icon{
+          width: 16px;
+          height: 16px;
+        }
 
         .plugin-name {
           font-size: 14px;

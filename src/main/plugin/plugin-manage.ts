@@ -8,7 +8,7 @@ import type {
 } from '@/shared/types/toolkit-plugin.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
-import { getAppInstalledPlugins, writeHostTxtFile, writeHostDBDoc } from '@/main/utils/host-app-utils.ts'
+import { getAppInstalledPlugins, writeHostDBDoc } from '@/main/utils/host-app-utils.ts'
 import { CommonError, BaseUtils } from '@ybgnb/utils'
 import { FileUtils } from '@/main/utils/file-utils.ts'
 import { appPath } from '@/main/common/app-path.ts'
@@ -18,10 +18,9 @@ import { mainLogger } from '@/main/common/main-logger.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 import { eventBus } from '@/main/event/event-bus.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
-import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
 import { cloneDeep } from 'lodash'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
-import { rmdirSync } from 'node:fs'
+import { rmdirSync, writeFileSync } from 'node:fs'
 import { PluginMetaUtils } from '@/shared/utils/plugin-meta-utils.ts'
 
 type PluginRegistry = {
@@ -72,21 +71,11 @@ class PluginManager {
     return FileUtils.readJsonFile<PackageJSON>(path.join(pluginRootPath, 'package.json'))
   }
 
-  /**
-   * 获取图标缓存的相对路径
-   * @param pluginId
-   * @private
-   */
-  private getIconCachePath(pluginId: string) {
-    return path.join(APP_FILE_KEYS.PLUGIN_ICON, `${NpmUtils.pkgNameToDirName(pluginId)}.icon`)
-  }
-
   loadPluginFiles(plugin: PluginInstallOptions, cacheIcon: boolean = true): InstalledToolkitPlugin {
     const pluginDir = NpmUtils.pkgNameToDirName(plugin.id)
     const pluginRootPath = path.join(appPath.pluginsPath, pluginDir)
     const size = FileUtils.getFolderSizeSync(pluginRootPath) / 1024
     const sizeDesc = FileUtils.formatKBSize(size)
-    const iconCachePath = this.getIconCachePath(plugin.id)
     const installed = {
       ...plugin,
       files: {
@@ -97,9 +86,10 @@ class PluginManager {
         sizeDesc: sizeDesc,
       },
     } satisfies InstalledToolkitPlugin
-    const icon = IconUtils.getInstalledPluginIcon(installed)
     if (cacheIcon) {
-      writeHostTxtFile(iconCachePath, icon)
+      const icon = IconUtils.getInstalledPluginIcon(installed)
+      const iconCachePath = IconUtils.getPluginIconCachePath(plugin.id)
+      writeFileSync(iconCachePath, icon, 'utf8')
     }
     return installed
   }
@@ -163,7 +153,6 @@ class PluginManager {
         sizeDesc: 'test',
       },
     }
-    IconUtils.getInstalledPluginIcon(plugin)
     this.registry.plugins.set(plugin.id, plugin)
     mainLogger.info(`插件${plugin.id} ${plugin.version} 加载成功！`)
     return plugin

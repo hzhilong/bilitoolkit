@@ -31,6 +31,7 @@ const props = defineProps<PluginListProps<T>>()
 
   .plugin-card {
     width: 46%;
+    max-width: 400px;
     flex-grow: 0;
     flex-shrink: 0;
   }

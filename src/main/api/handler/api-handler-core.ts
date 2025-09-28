@@ -85,6 +85,6 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     if (isInstalledToolkitPlugin(plugin)) {
       return IconUtils.getInstalledPluginIcon(plugin)
     }
-    return await IconUtils.getPluginIcon(plugin)
+    return await IconUtils.downloadPluginIcon(plugin)
   }
 }
