@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<AccountSelectDialogProps>(), {})
 const options: AccountSelectDialogProps = reactive(cloneDeep(props))
 
 // 显示
-const show = (newOptions?: AccountSelectDialogProps) => {
+const show = (newOptions?: Partial<AccountSelectDialogProps>) => {
   Object.assign(options, newOptions)
   visible.value = true
 }

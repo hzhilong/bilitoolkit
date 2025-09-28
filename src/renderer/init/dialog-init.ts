@@ -7,8 +7,8 @@ import { AppAccountSelectDialog } from '@/renderer/components/dialog/accountSele
 import { cloneDeep, omit } from 'lodash'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import type { ApiCallerIdentity } from '@/shared/types/toolkit-core-api.ts'
-import { AppUtils } from 'bilitoolkit-ui'
 import { useBiliAccountStore } from '@/renderer/stores/bili-accounts.ts'
+import { AppAccountAuthDialog } from '@/renderer/components/dialog/accountAuthService.ts'
 
 export const initDialogAppListener = async () => {
   await window.toolkitApi.global.register(HOST_GLOBAL_DATA.CHOOSE_ACCOUNT, async (context: ApiCallerIdentity) => {
@@ -46,14 +46,11 @@ export const initDialogAppListener = async () => {
           if (!findAccount) {
             throw new CommonError(`未找到账号(uid:${uid})，可能已登出`)
           }
-          // TODO 美化
-          await AppUtils.confirm(
-            `插件【${context.plugin.name}】<br>请求授权账号【${findAccount.name}】的cookie`,
-            undefined,
-            {
-              dangerouslyUseHTMLString: true,
-            },
-          )
+          await AppAccountAuthDialog.show({
+            plugin: context.plugin,
+            account: findAccount,
+            title: `插件【${context.plugin.name}】请求授权`,
+          })
           return cloneDeep(findAccount)
         } catch (err: unknown) {
           throw BaseUtils.convertToCommonError(err, '授权失败')

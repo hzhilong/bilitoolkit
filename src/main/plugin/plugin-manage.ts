@@ -147,7 +147,7 @@ class PluginManager {
     const plugin: InstalledToolkitPlugin = {
       id: packageJSON.name,
       name: PluginMetaUtils.parsePluginName(packageJSON.name, packageJSON.keywords),
-      author: JSON.stringify(packageJSON.author),
+      author: packageJSON.author ? String(packageJSON.author) : '',
       description: packageJSON.description ?? '',
       version: packageJSON.version,
       date: BaseUtils.getFormattedDate(),

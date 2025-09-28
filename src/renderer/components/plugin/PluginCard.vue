@@ -22,26 +22,26 @@ const { hasStar, addStar, delStar } = usePluginStarsStore()
 const star = hasStar(props.plugin.id)
 
 const displayInstallDate = computed(() => {
-  if (props.type === 'market') {
-    return ``
-  } else {
+  if (props.type === 'manage') {
     return `安装日期: ${(props.plugin as InstalledToolkitPlugin).installDate}`
+  } else {
+    return ``
   }
 })
 const displayInstallSize = computed(() => {
-  if (props.type === 'market') {
-    return ``
-  } else {
+  if (props.type === 'manage') {
     return `插件大小: ${(props.plugin as InstalledToolkitPlugin).files.sizeDesc}`
+  } else {
+    return ``
   }
 })
 const openPlugin = () => {
   PluginUtils.openPluginView(props.plugin)
 }
 const installConfirm = computed(() => {
-  if(rendererEnv.env().APP_AUTHOR === props.plugin.author){
+  if (rendererEnv.env().APP_AUTHOR === props.plugin.author) {
     return '确认安装吗？'
-  }else{
+  } else {
     return '该插件非工具姬作者开发，确认安装吗？'
   }
 })
@@ -68,7 +68,7 @@ const starPlugin = () => {
 
 <template>
   <div class="plugin-card" v-loading="loading">
-    <span v-if="isInstalled" class="badge tag-installed">已安装</span>
+    <span v-if="type !== 'no-options' && isInstalled" class="badge tag-installed">已安装</span>
     <img class="plugin-icon" :src="base64" alt="" />
     <div class="plugin-infos">
       <div class="infos-header">
@@ -93,7 +93,7 @@ const starPlugin = () => {
       <div class="plugin-description">
         {{ plugin.description }}
       </div>
-      <div class="options">
+      <div class="options" v-if="type !== 'no-options'">
         <i
           v-if="type == 'manage'"
           class="star-btn"
