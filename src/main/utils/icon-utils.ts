@@ -69,11 +69,18 @@ export class IconUtils {
   }
 
   static getInstalledPluginIcon(plugin: InstalledToolkitPlugin) {
-    const ico = path.join(appPath.pluginsPath, plugin.files.distPath, 'favicon.ico')
+    let pluginDist;
+    if (path.isAbsolute(plugin.files.distPath)) {
+      pluginDist = plugin.files.distPath
+    } else {
+      pluginDist = path.resolve(appPath.pluginsPath, plugin.files.distPath)
+    }
+
+    const ico = path.join(pluginDist, 'favicon.ico')
     if (existsSync(ico)) {
       return this.readIconBase64(ico, 'image/x-icon')
     }
-    const png = path.join(appPath.pluginsPath, plugin.files.distPath, 'favicon.png')
+    const png = path.join(pluginDist, 'favicon.png')
     if (existsSync(png)) {
       return this.readIconBase64(png, 'image/png')
     }

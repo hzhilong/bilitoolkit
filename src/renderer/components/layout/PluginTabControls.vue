@@ -275,14 +275,14 @@ const getBase64Icon = (id: string) => {
 
       .plugin-icon{
         display: inline-block;
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
         margin-right: 2px;
         transition: all 0.3s ease-in-out;
       }
 
       .plugin-name {
-        font-size: 16px;
+        font-size: 14px;
         transition: all 0.3s ease-in-out;
       }
 
@@ -318,7 +318,7 @@ const getBase64Icon = (id: string) => {
         }
 
         .plugin-name {
-          font-size: 14px;
+          font-size: 13px;
         }
 
         .plugin-close-btn {
