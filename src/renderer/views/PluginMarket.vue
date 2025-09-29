@@ -10,7 +10,7 @@ const { loading, loadingData } = useLoadingData()
 const plugins = ref<ToolkitPlugin[]>([])
 const pluginCount = ref(0)
 const refreshList = loadingData(async () => {
-  const searchResult = await PluginUtils.searchPlugins()
+  const searchResult = await PluginUtils.searchNpmPlugins()
   plugins.value = searchResult.plugins
   pluginCount.value = searchResult.total
 })

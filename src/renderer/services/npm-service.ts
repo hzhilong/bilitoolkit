@@ -6,6 +6,7 @@ import { logger } from '@/renderer/common/renderer-logger.ts'
 
 export async function searchNpmPackages(params: NpmSearchParams): Promise<NpmSearchResult> {
   try {
+    // API： https://github.com/npm/registry/blob/main/docs/REGISTRY-API.md
     const response = await axios.get('https://registry.npmjs.org/-/v1/search', {
       params: {
         text: `keywords:${params.keywords}`, // 使用 scope: 前缀来精确搜索

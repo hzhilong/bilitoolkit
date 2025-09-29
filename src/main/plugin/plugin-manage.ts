@@ -63,7 +63,7 @@ class PluginManager {
       const repo = parseGithubRepo(mainEnv.env.APP_GITHUB_REPO)
       return await GithubUtils.getRawJson<ToolkitPlugin[]>(repo, 'public/recommended-plugins.json')
     } catch (error: unknown) {
-      mainLogger.error('获取推荐的插件失败', error)
+      mainLogger.error('获取推荐的插件失败', BaseUtils.getErrorMessage(error))
       return FileUtils.readJsonFile<ToolkitPlugin[]>(path.join(appPath.appPublicPath, 'recommended-plugins.json'))
     }
   }

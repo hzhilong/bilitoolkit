@@ -3,6 +3,7 @@ import type {
   PluginSearchResult,
   PluginTestOptions,
   ToolkitPlugin,
+  ToolkitPluginWithNpmInfo,
 } from '@/shared/types/toolkit-plugin'
 import { eventBus } from '@/renderer/utils/event-bus.ts'
 import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
@@ -11,6 +12,7 @@ import { sanitizeForIPC, toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 import { PluginMetaUtils } from '@/shared/utils/plugin-meta-utils.ts'
 import { appEnv } from '@/shared/common/app-env.ts'
+import type { NpmPackage } from '@/shared/types/npm-types.ts'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {
@@ -31,20 +33,38 @@ export class PluginUtils {
     return plugin
   }
 
-  static async searchPlugins(page = 1) {
+  private static isSameAuthor(npmPackage: NpmPackage) {
+    return npmPackage.package.publisher.username === appEnv.env.APP_AUTHOR
+  }
+
+  /**
+   * 排序npm上的插件（推荐插件>同作者>其他）
+   * @param plugins
+   */
+  static async sortNpmPlugins(plugins: NpmPackage[]): Promise<NpmPackage[]> {
+    // 获取推荐的插件
+    const recommendedPlugins = Array.from(await toolkitApi.core.getRecommendedPlugins())
+    // 排序 map
+    const orderMap = new Map<string, number>()
+    // 按照顺序设置从小到大的负值
+    recommendedPlugins.forEach((recommended, index) => {
+      orderMap.set(recommended.id, index - recommendedPlugins.length)
+    })
+
+    return [...plugins].sort((a, b) => {
+      const indexA = orderMap.get(a.package.name) ?? (this.isSameAuthor(a) ? 0 : a.downloads.monthly)
+      const indexB = orderMap.get(b.package.name) ?? (this.isSameAuthor(b) ? 0 : b.downloads.monthly)
+
+      return indexA - indexB
+    })
+  }
+
+  static async searchNpmPlugins(page = 1) {
     const ps = await searchNpmPackages({
       keywords: 'bilitoolkit-plugin',
       page: page,
     })
-    ps.objects.sort((a, b) => {
-      if (a.package.publisher.username === appEnv.env.APP_AUTHOR) {
-        return -1
-      }
-      if (b.package.publisher.username === appEnv.env.APP_AUTHOR) {
-        return 1
-      }
-      return 0
-    })
+    ps.objects = await this.sortNpmPlugins(ps.objects)
     return {
       total: ps.total,
       time: ps.time,
@@ -57,7 +77,12 @@ export class PluginUtils {
           version: p.package.version,
           date: BaseUtils.getFormattedDate(new Date(p.package.date)),
           links: p.package.links,
-        } satisfies ToolkitPlugin
+          downloads: {
+            weekly: p.downloads.weekly,
+            monthly: p.downloads.monthly,
+          },
+          searchScore: p.searchScore,
+        } satisfies ToolkitPluginWithNpmInfo
       }),
     } satisfies PluginSearchResult
   }

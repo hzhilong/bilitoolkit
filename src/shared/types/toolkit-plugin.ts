@@ -22,6 +22,14 @@ export interface ToolkitPlugin {
   }
 }
 
+export interface ToolkitPluginWithNpmInfo extends ToolkitPlugin {
+  downloads: {
+    monthly: number
+    weekly: number
+  }
+  searchScore: number
+}
+
 /**
  * 插件安装选项
  */
@@ -37,7 +45,7 @@ export function isToolkitPlugin(obj: any): obj is ToolkitPlugin {
 export interface PluginSearchResult {
   total: number
   time: string
-  plugins: Array<ToolkitPlugin>
+  plugins: Array<ToolkitPluginWithNpmInfo>
 }
 
 /**

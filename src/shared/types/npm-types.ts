@@ -37,24 +37,29 @@ export interface NpmPackage {
     }>
   }
   score: {
-    /** 最终综合评分，0~1 */
+    /** 最终综合评分 */
     final: number
     /** 分项评分详情 */
     detail: {
-      /** 质量评分，0~1 */
+      /** 质量评分 */
       quality: number
-      /** 流行度评分，0~1 */
+      /** 流行度评分 */
       popularity: number
-      /** 维护情况评分，0~1 */
+      /** 维护情况评分 */
       maintenance: number
     }
   }
   /** 搜索得分，用于排序 */
   searchScore: number
+  /** 下载量 */
+  downloads: {
+    monthly: number
+    weekly: number
+  }
 }
 
-export interface NpmSearchParams{
-  keywords: string,
+export interface NpmSearchParams {
+  keywords: string
   page?: number
 }
 
@@ -63,4 +68,3 @@ export interface NpmSearchResult {
   time: string
   objects: Array<NpmPackage>
 }
-
