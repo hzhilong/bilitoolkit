@@ -9,7 +9,7 @@
     @close="visible = false"
   >
     <div class="content-container">
-      <el-input v-model="rootPath" style="width: 100%" placeholder="请输入开发环境的插件项目路径(已构建)" />
+      <el-input v-model="rootPath" style="width: 100%" placeholder="请输入已构建的项目路径或者访问地址" />
     </div>
     <template #footer>
       <div class="dialog-footer">
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { PluginUtils } from '@/renderer/utils/plugin-utils'
+import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 import { ref } from 'vue'
 import { AppUtils } from 'bilitoolkit-ui'
 

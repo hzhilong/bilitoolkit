@@ -1,4 +1,4 @@
-export class PluginMetaUtils {
+export class PluginParseUtils {
   public static parsePluginName(id: string, keywords: string[] | undefined): string {
     if (!keywords) {
       return id
@@ -11,4 +11,10 @@ export class PluginMetaUtils {
     }
     return id
   }
+
+  static isHttpUrl(path: string){
+    return /^https?:\/\//i.test(path)
+  }
+
+
 }

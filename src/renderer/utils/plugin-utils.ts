@@ -10,7 +10,7 @@ import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
 import { BaseUtils } from '@ybgnb/utils'
 import { sanitizeForIPC, toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
-import { PluginMetaUtils } from '@/shared/utils/plugin-meta-utils.ts'
+import { PluginParseUtils } from '@/shared/utils/plugin-parse-utils.ts'
 import { appEnv } from '@/shared/common/app-env.ts'
 import type { NpmPackage } from '@/shared/types/npm-types.ts'
 
@@ -71,7 +71,7 @@ export class PluginUtils {
       plugins: ps.objects.map((p) => {
         return {
           id: p.package.name,
-          name: PluginMetaUtils.parsePluginName(p.package.name, p.package.keywords),
+          name: PluginParseUtils.parsePluginName(p.package.name, p.package.keywords),
           author: p.package.publisher.username,
           description: p.package.description,
           version: p.package.version,

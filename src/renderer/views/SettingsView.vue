@@ -9,7 +9,7 @@ import { type Ref, ref } from 'vue'
 import { useAppSettingsStore } from '@/renderer/stores/app-settings.ts'
 import { DevToolsType } from '@/shared/types/app-settings.ts'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
-import TestPluginDialog from '@/renderer/components/dialog/TestPluginDialog.vue'
+import TestPluginDialog from '@/renderer/components/plugin/TestPluginDialog.vue'
 
 const appSettings = useAppSettingsStore().appSettings
 

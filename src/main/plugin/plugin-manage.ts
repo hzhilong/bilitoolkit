@@ -21,7 +21,7 @@ import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { cloneDeep } from 'lodash'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 import { rmdirSync, writeFileSync } from 'node:fs'
-import { PluginMetaUtils } from '@/shared/utils/plugin-meta-utils.ts'
+import { PluginParseUtils } from '@/shared/utils/plugin-parse-utils.ts'
 import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
 import { GithubUtils } from '@/main/utils/github-utils.ts'
 import { mainEnv } from '@/main/common/main-env.ts'
@@ -146,25 +146,50 @@ class PluginManager {
 
   async testPlugin(context: ApiCallerContext, options: PluginTestOptions) {
     mainLogger.info(`插件${options.rootPath} 测试中……`)
-    const packageJSON = this.readPackageJSON(options.rootPath)
-    const plugin: InstalledToolkitPlugin = {
-      id: packageJSON.name,
-      name: PluginMetaUtils.parsePluginName(packageJSON.name, packageJSON.keywords),
-      author: packageJSON.author ? String(packageJSON.author) : '',
-      description: packageJSON.description ?? '',
-      version: packageJSON.version,
-      date: BaseUtils.getFormattedDate(),
-      links: {
-        npm: '',
-      },
-      installDate: BaseUtils.getFormattedDate(),
-      files: {
-        rootPath: options.rootPath,
-        distPath: path.join(options.rootPath, 'dist'),
-        indexPath: path.join(options.rootPath, 'dist', 'index.html'),
-        size: 0,
-        sizeDesc: 'test',
-      },
+    let plugin: InstalledToolkitPlugin
+    if(/^https?:\/\//i.test(options.rootPath)) {
+      // 本地服务器
+      plugin = {
+        id: `测试-${this.registry.plugins.size+1}`,
+        name: '测试',
+        author: 'author',
+        description: 'test',
+        version: '0.0.1',
+        date: BaseUtils.getFormattedDate(),
+        links: {
+          npm: '',
+        },
+        installDate: BaseUtils.getFormattedDate(),
+        files: {
+          rootPath: options.rootPath,
+          distPath: options.rootPath,
+          indexPath: options.rootPath,
+          size: 0,
+          sizeDesc: 'test',
+        },
+      }
+    }else{
+      // 本地构建文件
+      const packageJSON = this.readPackageJSON(options.rootPath)
+      plugin = {
+        id: packageJSON.name,
+        name: PluginParseUtils.parsePluginName(packageJSON.name, packageJSON.keywords),
+        author: packageJSON.author ? String(packageJSON.author) : '',
+        description: packageJSON.description ?? '',
+        version: packageJSON.version,
+        date: BaseUtils.getFormattedDate(),
+        links: {
+          npm: '',
+        },
+        installDate: BaseUtils.getFormattedDate(),
+        files: {
+          rootPath: options.rootPath,
+          distPath: path.join(options.rootPath, 'dist'),
+          indexPath: path.join(options.rootPath, 'dist', 'index.html'),
+          size: 0,
+          sizeDesc: 'test',
+        },
+      }
     }
     this.registry.plugins.set(plugin.id, plugin)
     mainLogger.info(`插件${plugin.id} ${plugin.version} 加载成功！`)

@@ -13,6 +13,7 @@ import { FileUtils } from '@/main/utils/file-utils.ts'
 import { injectingPluginMetadata } from '@/main/preloads/plugin-meta.ts'
 import { _getGlobalData } from '@/main/api/handler/api-handler-global.ts'
 import type { AppDialogType } from '@/shared/types/app-dialog.ts'
+import { PluginParseUtils } from '@/shared/utils/plugin-parse-utils.ts'
 
 type Rectangle = Electron.Rectangle
 
@@ -214,8 +215,13 @@ export abstract class BaseWindowManager {
     this.webContentsToWindow.set(webContentsId, window)
 
     if (path.isAbsolute(plugin.files.indexPath)) {
+      // 测试环境：绝对路径
+      await view.webContents.loadURL(plugin.files.indexPath)
+    } else if (PluginParseUtils.isHttpUrl(plugin.files.indexPath)) {
+      // 测试环境：开发服务器URL
       await view.webContents.loadURL(plugin.files.indexPath)
     } else {
+      // 生产环境
       await view.webContents.loadURL(path.resolve(appPath.pluginsPath, plugin.files.indexPath))
     }
   }
@@ -318,7 +324,5 @@ export abstract class BaseWindowManager {
     }
     context.window.contentView.removeChildView(this.appDialogWebContentsView)
   }
-  public closeAppDialogView() {
-
-  }
+  public closeAppDialogView() {}
 }
