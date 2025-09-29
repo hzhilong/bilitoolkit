@@ -1,15 +1,15 @@
 import NpmUtils from '@/main/utils/npm-utils.ts'
 import type {
-  PluginInstallOptions,
-  ToolkitPlugin,
-  InstalledToolkitPlugin,
   AppInstalledPlugins,
+  InstalledToolkitPlugin,
+  PluginInstallOptions,
   PluginTestOptions,
+  ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { getAppInstalledPlugins, writeHostDBDoc } from '@/main/utils/host-app-utils.ts'
-import { CommonError, BaseUtils } from '@ybgnb/utils'
+import { BaseUtils, CommonError } from '@ybgnb/utils'
 import { FileUtils } from '@/main/utils/file-utils.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import type { PackageJSON } from '@npm/types'
@@ -22,6 +22,9 @@ import { cloneDeep } from 'lodash'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 import { rmdirSync, writeFileSync } from 'node:fs'
 import { PluginMetaUtils } from '@/shared/utils/plugin-meta-utils.ts'
+import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
+import { GithubUtils } from '@/main/utils/github-utils.ts'
+import { mainEnv } from '@/main/common/main-env.ts'
 
 type PluginRegistry = {
   appVersion: string
@@ -52,6 +55,16 @@ class PluginManager {
     return {
       appVersion: this.registry.appVersion,
       plugins: this.registry.plugins.values().toArray(),
+    }
+  }
+
+  async getRecommendedPlugins(): Promise<ToolkitPlugin[]> {
+    try {
+      const repo = parseGithubRepo(mainEnv.env.APP_GITHUB_REPO)
+      return await GithubUtils.getRawJson<ToolkitPlugin[]>(repo, 'public/recommended-plugins.json')
+    } catch (error: unknown) {
+      mainLogger.error('获取推荐的插件失败', error)
+      return FileUtils.readJsonFile<ToolkitPlugin[]>(path.join(appPath.appPublicPath, 'recommended-plugins.json'))
     }
   }
 

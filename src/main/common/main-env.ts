@@ -1,13 +1,10 @@
+import { appEnv } from '@/shared/common/app-env.ts'
+
 /**
  * 主进程环境变量
  */
 export const mainEnv = {
-  isDev() {
-    return process.env.NODE_ENV === 'development'
-  },
-  isProd() {
-    return process.env.NODE_ENV === 'production'
-  },
+  ...appEnv,
   isLinux(): boolean {
     return process.platform === 'linux'
   },

@@ -29,6 +29,7 @@ const baseConfig = ({ mode }: ConfigEnv): UserConfig => {
     APP_VERSION: packageJson.version,
     APP_AUTHOR: packageJson.author,
     APP_PRODUCT_URL: packageJson.repository.url,
+    APP_GITHUB_REPO: packageJson.repository.url,
     APP_TITLE: getAppTitle(mode),
   })
   console.log('========================================================')

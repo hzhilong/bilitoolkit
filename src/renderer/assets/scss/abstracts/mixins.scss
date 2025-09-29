@@ -1,1 +1,12 @@
 @forward "bilitoolkit-ui/mixins.scss";
+
+/*app logo*/
+@mixin app-logo-style($color:var(--app-color-logo)) {
+  display: inline-block;
+  mask: url('@/renderer/assets/images/logo.svg') no-repeat center / contain;
+  -webkit-mask: url('@/renderer/assets/images/logo.svg') no-repeat center / contain;
+  //color: #FFFFFF;
+  background: $color;
+  border-radius: 10px;
+  user-select: none;
+}

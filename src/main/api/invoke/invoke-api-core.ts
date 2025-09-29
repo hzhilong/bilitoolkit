@@ -48,6 +48,9 @@ export const coreApi: ToolkitCoreApi = {
   getAppInstalledPlugins(): Promise<AppInstalledPlugins> {
     return invokeCoreApi('getAppInstalledPlugins')
   },
+  getRecommendedPlugins(): Promise<ToolkitPlugin[]> {
+    return invokeCoreApi('getRecommendedPlugins')
+  },
   installPlugin(options: PluginInstallOptions): Promise<InstalledToolkitPlugin> {
     return invokeCoreApi('installPlugin', options)
   },

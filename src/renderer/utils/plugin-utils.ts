@@ -1,16 +1,16 @@
 import type {
-  PluginSearchResult,
-  ToolkitPlugin,
   InstalledToolkitPlugin,
+  PluginSearchResult,
   PluginTestOptions,
+  ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin'
 import { eventBus } from '@/renderer/utils/event-bus.ts'
 import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
 import { BaseUtils } from '@ybgnb/utils'
-import { toolkitApi, sanitizeForIPC } from '@/renderer/api/toolkit-api.ts'
+import { sanitizeForIPC, toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
-import { rendererEnv } from '@/renderer/common/renderer-env.ts'
 import { PluginMetaUtils } from '@/shared/utils/plugin-meta-utils.ts'
+import { appEnv } from '@/shared/common/app-env.ts'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {
@@ -37,10 +37,10 @@ export class PluginUtils {
       page: page,
     })
     ps.objects.sort((a, b) => {
-      if (a.package.publisher.username === rendererEnv.env().APP_AUTHOR) {
+      if (a.package.publisher.username === appEnv.env.APP_AUTHOR) {
         return -1
       }
-      if (b.package.publisher.username === rendererEnv.env().APP_AUTHOR) {
+      if (b.package.publisher.username === appEnv.env.APP_AUTHOR) {
         return 1
       }
       return 0

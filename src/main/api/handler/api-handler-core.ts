@@ -3,12 +3,12 @@ import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { FileUtils } from '@/main/utils/file-utils'
 import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolkit-api.ts'
 import {
-  type PluginInstallOptions,
-  type ToolkitPlugin,
-  type InstalledToolkitPlugin,
   type AppInstalledPlugins,
+  type InstalledToolkitPlugin,
   isInstalledToolkitPlugin,
-  type PluginTestOptions
+  type PluginInstallOptions,
+  type PluginTestOptions,
+  type ToolkitPlugin
 } from '@/shared/types/toolkit-plugin.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { pluginManager } from '@/main/plugin/plugin-manage.ts'
@@ -51,6 +51,10 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
 
   async getAppInstalledPlugins(_: ApiCallerContext): Promise<AppInstalledPlugins> {
     return pluginManager.getAppInstalledPlugins()
+  }
+
+  getRecommendedPlugins(_: ApiCallerContext): Promise<ToolkitPlugin[]> {
+    return pluginManager.getRecommendedPlugins()
   }
 
   async installPlugin(_: ApiCallerContext, options: PluginInstallOptions): Promise<InstalledToolkitPlugin> {

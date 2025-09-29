@@ -16,12 +16,12 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hzhilong/BiliToolkit"
+    "url": "https://github.com/hzhilong/bilitoolkit"
   },
   "bugs": {
-    "url": "https://github.com/hzhilong/BiliToolkit/issues"
+    "url": "https://github.com/hzhilong/bilitoolkit/issues"
   },
-  "homepage": "https://github.com/hzhilong/BiliToolkit#readme",
+  "homepage": "https://github.com/hzhilong/bilitoolkit#readme",
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },

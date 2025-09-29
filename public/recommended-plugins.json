@@ -1,0 +1,27 @@
+{
+  "appVersion": "0.0.1",
+  "plugins": [
+    {
+      "id": "bilitoolkit-plugin-example",
+      "name": "插件示例",
+      "author": "hzhilong",
+      "description": "哔哩工具姬 插件示例",
+      "version": "0.0.4",
+      "date": "2025-09-28",
+      "links": {
+        "homepage": "https://github.com/hzhilong/bilitoolkit-plugin-example#readme",
+        "repository": "git+https://github.com/hzhilong/bilitoolkit-plugin-example.git",
+        "bugs": "https://github.com/hzhilong/bilitoolkit-plugin-example/issues",
+        "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-example"
+      },
+      "installDate": "2025-09-28",
+      "files": {
+        "rootPath": "bilitoolkit-plugin-example",
+        "distPath": "bilitoolkit-plugin-example\\dist",
+        "indexPath": "bilitoolkit-plugin-example\\dist\\index.html",
+        "size": 2371.134765625,
+        "sizeDesc": "2.32 MB"
+      }
+    }
+  ]
+}

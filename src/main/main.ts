@@ -9,7 +9,7 @@ import { mainEnv } from '@/main/common/main-env.ts'
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 app.commandLine.appendSwitch('disable-web-security')
-if(mainEnv.isDev()) app.commandLine.appendSwitch('disable-http-cache')
+if (mainEnv.isDev) app.commandLine.appendSwitch('disable-http-cache')
 
 // 主窗口
 let mainWindow: BrowserWindow | null = null
@@ -39,13 +39,12 @@ const createWindow = async () => {
 
   // 初始化主窗口相关的 IPC 事件监听和处理
   await windowManager.initMainWindow(mainWindow)
-
 }
 
 // 这段程序将会在 Electron 结束初始化和创建浏览器窗口的时候调用
 // 部分 API 在 ready 事件触发后才能使用。
 app.whenReady().then(() => {
-  if(mainEnv.isDev()){
+  if (mainEnv.isDev) {
     // 进一步确保请求不走缓存
     session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
       details.requestHeaders['Pragma'] = 'no-cache'

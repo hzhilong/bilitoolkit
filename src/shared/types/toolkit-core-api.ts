@@ -1,10 +1,10 @@
 import type { ToolkitApi } from 'bilitoolkit-api-types'
 import type {
-  PluginInstallOptions,
-  ToolkitPlugin,
-  InstalledToolkitPlugin,
   AppInstalledPlugins,
-  PluginTestOptions
+  InstalledToolkitPlugin,
+  PluginInstallOptions,
+  PluginTestOptions,
+  ToolkitPlugin
 } from '@/shared/types/toolkit-plugin.ts'
 
 /**
@@ -68,6 +68,11 @@ export interface ToolkitCoreApi {
    * 获取已安装的插件
    */
   getAppInstalledPlugins(): Promise<AppInstalledPlugins>
+
+  /**
+   * 获取推荐的插件
+   */
+  getRecommendedPlugins(): Promise<ToolkitPlugin[]>
 
   /**
    * 安装插件

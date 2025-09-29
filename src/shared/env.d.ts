@@ -8,6 +8,7 @@ export interface ImportMetaEnv {
   readonly APP_TITLE: string
   readonly APP_LOG_LEVEL: string
   readonly APP_VERSION: string
+  readonly APP_GITHUB_REPO: string
   readonly BASE_URL: string
   readonly PROD: boolean
   readonly DEV: boolean

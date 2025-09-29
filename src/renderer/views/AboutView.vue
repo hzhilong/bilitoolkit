@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { rendererEnv } from '@/renderer/common/renderer-env'
 import { useAppThemeStore } from '@/renderer/stores/app-theme'
-import {ThemeUtils} from '@/renderer/utils/theme-utils'
-import type { AppThemeMode } from 'bilitoolkit-api-types';
+import { ThemeUtils } from '@/renderer/utils/theme-utils'
+import type { AppThemeMode } from 'bilitoolkit-api-types'
 import type { Ref } from 'vue'
 import { computed } from 'vue'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
+import { appEnv } from '@/shared/common/app-env.ts'
 
-const env = rendererEnv.env()
+const env = appEnv.env
 const appVersion = env.PROD ? env.APP_VERSION : `${env.APP_VERSION} ${env.MODE}`
 
 const state = useAppThemeStore().state
@@ -45,10 +45,7 @@ const newThemeMode: Ref<AppThemeMode> = computed(() => {
         </div>
         <div class="about__info-list__item">
           <span class="about__info-list__item__title">开源：</span>
-          <span
-            class="about__info-list__item__desc url"
-          >{{ env.APP_PRODUCT_URL }}</span
-          >
+          <span class="about__info-list__item__desc url">{{ env.APP_PRODUCT_URL }}</span>
         </div>
       </div>
     </div>

@@ -1,14 +1,14 @@
 <script setup lang="ts" generic="T extends CardType">
-import { useLoadingData, AppUtils, IconLabel } from 'bilitoolkit-ui'
+import { AppUtils, IconLabel, useLoadingData } from 'bilitoolkit-ui'
 import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.ts'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
-import type { PluginCardProps, CardType } from '@/renderer/components/plugin/types.ts'
+import type { CardType, PluginCardProps } from '@/renderer/components/plugin/types.ts'
 import { computed, ref } from 'vue'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
 import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
-import { rendererEnv } from '@/renderer/common/renderer-env.ts'
+import { appEnv } from '@/shared/common/app-env.ts'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
@@ -39,7 +39,7 @@ const openPlugin = () => {
   PluginUtils.openPluginView(props.plugin)
 }
 const installConfirm = computed(() => {
-  if (rendererEnv.env().APP_AUTHOR === props.plugin.author) {
+  if (appEnv.env.APP_AUTHOR === props.plugin.author) {
     return '确认安装吗？'
   } else {
     return '该插件非工具姬作者开发，确认安装吗？'
