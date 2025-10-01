@@ -15,7 +15,7 @@
 - [bilitoolkit-api-types](https://github.com/hzhilong/bilitoolkit-api-types) 系统 API 定义
 - [bilitoolkit-ui](https://github.com/hzhilong/bilitoolkit-ui) 项目 UI 库
 - [bilitoolkit-plugin-example](https://github.com/hzhilong/bilitoolkit-plugin-example) 插件示例
-- [bilitoolkit-plugin-backup](https://github.com/hzhilong/backup) 从[bilibili-backup](https://github.com/hzhilong/bilibili-backup)移植过来的插件
+- [bilitoolkit-plugin-backup](https://github.com/hzhilong/bilitoolkit-plugin-backup) 从[bilibili-backup](https://github.com/hzhilong/bilibili-backup)移植过来的插件
 
 ## 现版本截图
 
