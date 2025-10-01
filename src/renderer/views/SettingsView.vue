@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { toolkitApi } from '@/renderer/api/toolkit-api'
-import SettingGroup from '@/renderer/components/settings/SettingGroup.vue'
-import SettingItem from '@/renderer/components/settings/SettingItem.vue'
 import UpdateThemeColorButton from '@/renderer/components/settings/UpdateThemeColorButton.vue'
 import UpdateThemeModeButton from '@/renderer/components/settings/UpdateThemeModeButton.vue'
 import { BaseUtils } from '@ybgnb/utils'
@@ -10,6 +8,7 @@ import { useAppSettingsStore } from '@/renderer/stores/app-settings.ts'
 import { DevToolsType } from '@/shared/types/app-settings.ts'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import TestPluginDialog from '@/renderer/components/plugin/TestPluginDialog.vue'
+import { SettingGroup, SettingItem } from 'bilitoolkit-ui'
 
 const appSettings = useAppSettingsStore().appSettings
 
