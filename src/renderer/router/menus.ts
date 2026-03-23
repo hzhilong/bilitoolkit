@@ -38,7 +38,6 @@ export const appMenus: MenuItem[] = [
     title: '退出',
     icon: 'shut-down',
     path: '/exit',
-    onclick: () => {
-    },
+    onclick: () => {},
   },
 ]

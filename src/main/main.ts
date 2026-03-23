@@ -1,7 +1,7 @@
 // https://www.electronjs.org/zh/docs/latest/tutorial/quick-start
 // app 控制应用程序的事件生命周期（相当于应用程序）
 // BrowserWindow 创建并控制浏览器窗口（相当于打开桌面弹框）
-import { app, BrowserWindow, session } from 'electron'
+import { app, BrowserWindow, ipcMain, session } from 'electron'
 import * as os from 'node:os'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { appPath } from '@/main/common/app-path.ts'
@@ -10,6 +10,9 @@ import { mainEnv } from '@/main/common/main-env.ts'
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 app.commandLine.appendSwitch('disable-web-security')
 if (mainEnv.isDev) app.commandLine.appendSwitch('disable-http-cache')
+
+// 设置全局最大监听器数
+ipcMain.setMaxListeners(0)
 
 // 主窗口
 let mainWindow: BrowserWindow | null = null
