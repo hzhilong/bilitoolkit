@@ -1,4 +1,4 @@
-import { invokeApi } from './base-invoke'
+import { invokeModuleApi } from './base-invoke'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
 import type { AppThemeState, ToolkitEventApi, BiliAccountInfo } from 'bilitoolkit-api-types'
 import type { EventListener, IpcEventEmiter } from '@/main/types/ipc-event.ts'
@@ -12,7 +12,7 @@ export const invokeEventApi = async <T = void>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...args: any[]
 ): Promise<T> => {
-  return await invokeApi<ToolkitEventApi, T>('event', name, ...args)
+  return await invokeModuleApi<ToolkitEventApi, T>('event', name, ...args)
 }
 
 /**

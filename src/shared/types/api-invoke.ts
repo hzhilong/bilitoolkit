@@ -19,3 +19,11 @@ export interface PluginApiInvokeOptions {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   args: any[]
 }
+
+/**
+ * 所有层级的 value 类型
+ */
+export type DeepValue<T> =
+  T extends object
+    ? T | { [K in keyof T]: DeepValue<T[K]> }[keyof T]
+    : T

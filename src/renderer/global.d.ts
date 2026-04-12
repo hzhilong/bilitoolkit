@@ -1,4 +1,3 @@
-
 // 对vue进行类型补充说明
 import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
 
@@ -15,6 +14,8 @@ declare module '@vue/runtime-core' {
 declare global {
   export interface Window {
     _windowApp: WindowApp | undefined
+    __toolkitApi: ToolkitApiWithCore
+    __toolkitInvoke: (apiPath: string, ...args: unknown[]) => unknown
     toolkitApi: ToolkitApiWithCore
   }
 }

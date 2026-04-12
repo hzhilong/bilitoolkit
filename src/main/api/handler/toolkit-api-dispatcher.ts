@@ -76,7 +76,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
       if (this.printResult(options)) {
         mainLogger.info(`API【${options.module}.${options.name}】执行成功  ${result ? JSON.stringify(result) : ''}\n`)
       } else {
-        mainLogger.info(`API【${options.module}.${options.name}】执行成功 \n`)
+        mainLogger.info(`API【${options.module}.${options.name}】执行成功`)
       }
       return result
     } catch (e: unknown) {

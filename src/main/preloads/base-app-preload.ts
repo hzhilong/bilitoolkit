@@ -3,7 +3,7 @@
 
 import { contextBridge } from 'electron'
 import { type WindowApp } from '@/shared/types/app-types.ts'
-import { exposeHostToolkitApi } from '@/main/api/invoke/invoke-api.ts'
+import { baseToolkitInvoke, exposeHostToolkitApi } from '@/main/api/invoke/invoke-api.ts'
 import { EXPOSE_KEYS } from '@/shared/types/expose-keys.ts'
 
 // 初始化宿主app的api暴露
@@ -12,5 +12,6 @@ export const initApp = (windowApp: WindowApp) => {
   contextBridge.exposeInMainWorld(EXPOSE_KEYS._windowApp, windowApp)
 
   // 暴露相关API给渲染进程（宿主环境）
-  contextBridge.exposeInMainWorld(EXPOSE_KEYS.toolkitApi, exposeHostToolkitApi)
+  contextBridge.exposeInMainWorld(EXPOSE_KEYS.__toolkitInvoke, baseToolkitInvoke)
+  contextBridge.exposeInMainWorld(EXPOSE_KEYS.__toolkitApi, exposeHostToolkitApi)
 }

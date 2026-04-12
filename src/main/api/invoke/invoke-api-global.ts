@@ -1,4 +1,4 @@
-import { createApiProxy, invokeApi } from './base-invoke'
+import { createApiProxy, invokeModuleApi } from './base-invoke'
 import { BizResult } from '@ybgnb/utils'
 import { cloneDeep } from 'lodash'
 import type { ApiCallerEnvType, LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
@@ -14,7 +14,7 @@ export const invokeGlobalApi = async <T = void>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...args: any[]
 ): Promise<T> => {
-  return await invokeApi<ToolkitGlobalDataApi, T>('global', name, ...args)
+  return await invokeModuleApi<ToolkitGlobalDataApi, T>('global', name, ...args)
 }
 
 /**

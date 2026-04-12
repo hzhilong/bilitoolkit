@@ -2,8 +2,9 @@
 // 它拥有与Chrome扩展一样的沙盒。
 
 import { contextBridge } from 'electron'
-import { exposeToolkitApi } from '@/main/api/invoke/invoke-api'
+import { baseToolkitInvoke, exposeToolkitApi } from '@/main/api/invoke/invoke-api'
 import { loadPluginMetadata } from '@/main/preloads/plugin-meta.ts'
+import { EXPOSE_KEYS } from '@/shared/types/expose-keys.ts'
 
 // 读取主进程注入的数据
 loadPluginMetadata()
@@ -12,4 +13,5 @@ loadPluginMetadata()
  * 公用的preload.ts
  */
 // 初始化preload脚本，暴露IPC相关API给渲染进程
-contextBridge.exposeInMainWorld('toolkitApi', exposeToolkitApi)
+contextBridge.exposeInMainWorld(EXPOSE_KEYS.__toolkitInvoke, baseToolkitInvoke)
+contextBridge.exposeInMainWorld(EXPOSE_KEYS.__toolkitApi, exposeToolkitApi)

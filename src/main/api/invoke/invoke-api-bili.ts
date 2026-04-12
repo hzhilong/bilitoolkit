@@ -1,4 +1,4 @@
-import { invokeApi } from './base-invoke'
+import { invokeModuleApi } from './base-invoke'
 import type {
   ToolkitBiliApi,
   BiliUserApi,
@@ -14,7 +14,7 @@ export const invokeBiliApi = async <T = void>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...args: any[]
 ): Promise<T> => {
-  return await invokeApi<ToolkitBiliApi, T>('bili', name, ...args)
+  return await invokeModuleApi<ToolkitBiliApi, T>('bili', name, ...args)
 }
 
 const user: BiliUserApi = {
