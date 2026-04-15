@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { cloneDeep } from 'lodash'
 import { reactive } from 'vue'
-import type { AccountAuthDialogProps } from '@/renderer/components/dialog/types.ts'
-import { BiliAccountCard } from 'bilitoolkit-ui'
 import PluginCard from '@/renderer/components/plugin/PluginCard.vue'
+import type { UserAuthDialogProps } from '@/renderer/components/dialog/types.ts'
 
 const visible = defineModel<boolean>({ required: true })
-const props = withDefaults(defineProps<AccountAuthDialogProps>(), {})
-const options: AccountAuthDialogProps = reactive(cloneDeep(props))
+const props = withDefaults(defineProps<UserAuthDialogProps>(), {})
+const options: UserAuthDialogProps = reactive(cloneDeep(props))
 
 // 显示
-const show = (newOptions?: Partial<AccountAuthDialogProps>) => {
+const show = (newOptions?: Partial<UserAuthDialogProps>) => {
   Object.assign(options, newOptions)
   visible.value = true
 }
@@ -44,7 +43,7 @@ defineExpose({ show, hide })
   >
     <div class="content-container">
       <div class="header"></div>
-      <bili-account-card class="account-card" :account="account" />
+      <bili-user-card class="user-card" :user="user" />
       <div class="arrow">⬇</div>
       <plugin-card class="plugin-card" :plugin="plugin" type="no-options" />
       <div class="detail">
@@ -69,7 +68,7 @@ defineExpose({ show, hide })
   justify-content: end;
 }
 
-.account-card {
+.user-card {
   width: 100%;
 }
 .arrow {

@@ -1,14 +1,11 @@
-import { toolkitApi } from '@/renderer/api/toolkit-api'
-import { AppConstants, defaultAppThemeState } from '@/shared/common/app-constants'
 import type { AppThemeMode, AppThemeState } from 'bilitoolkit-api-types'
 import { cloneDeep } from 'lodash'
 import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
-
-// 默认备选的颜色
-const DEFAULT_PRIMARY_COLORS = AppConstants.THEME.DEFAULT_PRIMARY_COLORS
+import { toolkitApi } from 'bilitoolkit-ui'
+import { APP_THEME_STATE, defaultAppThemeState } from 'bilitoolkit-ui/common'
 
 /**
  * 应用主题状态 Store
@@ -53,8 +50,8 @@ export const useAppThemeStore = defineStore(
      * 切换主题颜色
      */
     const switchThemeColor = () => {
-      state.currPrimaryColorIndex = (state.currPrimaryColorIndex + 1) % DEFAULT_PRIMARY_COLORS.length
-      const newColor = DEFAULT_PRIMARY_COLORS[state.currPrimaryColorIndex]
+      state.primaryColorIndex = (state.primaryColorIndex + 1) % APP_THEME_STATE.primaryColors.length
+      const newColor = APP_THEME_STATE.primaryColors[state.primaryColorIndex]
       return setPrimaryColor(newColor)
     }
     /**

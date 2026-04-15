@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { useAppThemeStore } from '@/renderer/stores/app-theme'
-import { ThemeUtils } from '@/renderer/utils/theme-utils'
-import { AppConstants } from '@/shared/common/app-constants'
 import { ref } from 'vue'
-import { CountdownDialog } from 'bilitoolkit-ui'
+import { CountdownDialog, updatePrimaryColor as updatePrimary } from 'bilitoolkit-ui'
+import { APP_THEME_STATE } from 'bilitoolkit-ui/common'
 
 // 保存的主题状态
 const appThemeStore = useAppThemeStore()
 const themeState = appThemeStore.state
 
 // 预设的颜色
-const predefineColors = ref(AppConstants.THEME.DEFAULT_PRIMARY_COLORS)
+const predefineColors = ref([...APP_THEME_STATE.primaryColors])
 // 新的主题色
 const selectedPrimaryColor = ref(themeState.primaryColor)
 // 旧的主题色
@@ -23,13 +22,13 @@ const updatePrimaryColor = () => {
   if (!selectedPrimaryColor.value) return
   // 尝试更新主题
   oldPrimaryColor = themeState.primaryColor
-  ThemeUtils.updatePrimaryColor(selectedPrimaryColor.value)
+  updatePrimary(selectedPrimaryColor.value)
   // 倒计时提示是否保存
   countdownVisible.value = true
 }
 const restoreTheme = () => {
   selectedPrimaryColor.value = oldPrimaryColor
-  ThemeUtils.updatePrimaryColor(oldPrimaryColor)
+  updatePrimary(oldPrimaryColor)
 }
 </script>
 

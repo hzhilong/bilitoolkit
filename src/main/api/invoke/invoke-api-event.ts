@@ -1,10 +1,11 @@
 import { invokeModuleApi } from './base-invoke'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
-import type { AppThemeState, ToolkitEventApi, BiliAccountInfo } from 'bilitoolkit-api-types'
 import type { EventListener, IpcEventEmiter } from '@/main/types/ipc-event.ts'
 import { HOST_EVENT_CHANNELS, type HostEventChannel } from '@/shared/types/host-event-channel.ts'
 import { ipcRenderer } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
+import type { AppThemeState, ToolkitEventApi } from 'bilitoolkit-api-types'
+import type { UserCard } from '@ybgnb/bili-api'
 type IpcRendererEvent = Electron.IpcRendererEvent
 
 export const invokeEventApi = async <T = void>(
@@ -37,8 +38,8 @@ export const eventApi: ToolkitEventApi = {
   onUpdateAppTheme: function (listener: (theme: AppThemeState) => void): Promise<void> {
     return listenHostEvent('UPDATE_APP_THEME', listener)
   },
-  onAccountLogout: function (listener: (account: BiliAccountInfo) => void): Promise<void> {
-    return listenHostEvent('ACCOUNT_LOGOUT', listener)
+  onUserLogout: function (listener: (user: UserCard) => void): Promise<void> {
+    return listenHostEvent('USER_LOGOUT', listener)
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   on: function (eventName: string, listener: (...data: any[]) => void): Promise<void> {

@@ -21,15 +21,15 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
     return fs.existsSync(DBUtils.getDocFilePath(context.dbPath, id))
   }
 
-  async read<T extends object>(context: ApiCallerContext, id: string): Promise<T> {
+  async read<T extends object>(context: ApiCallerContext, id: string): Promise<T | null> {
     return DBUtils.readDocObject<T>(DBUtils.getExistsDocFilePath(context.dbPath, id))
   }
 
-  async init<T extends object>(context: ApiCallerContext, id: string, defaultData: T): Promise<T> {
+  async init<T extends object>(context: ApiCallerContext, id: string, defaultData?: T): Promise<T | null> {
     return DBUtils.initDoc(DBUtils.getDocFilePath(context.dbPath, id), defaultData)
   }
 
-  async bulkRead<T extends object>(context: ApiCallerContext, idPrefix: string | undefined): Promise<T[]> {
+  async bulkRead<T extends object>(context: ApiCallerContext, idPrefix: string | undefined): Promise<Array<T | null>> {
     const paths = FileUtils.getFilesByPrefixAndSuffix(context.dbPath, idPrefix)
     const dataArr = []
     for (const docPath of paths) {

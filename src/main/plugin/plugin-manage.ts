@@ -21,10 +21,10 @@ import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { cloneDeep } from 'lodash'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 import { rmdirSync, writeFileSync } from 'node:fs'
-import { PluginParseUtils } from '@/shared/utils/plugin-parse-utils.ts'
 import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
 import { GithubUtils } from '@/main/utils/github-utils.ts'
 import { mainEnv } from '@/main/common/main-env.ts'
+import { parsePluginName } from '@/shared/utils/plugin-parse.ts'
 
 type PluginRegistry = {
   appVersion: string
@@ -60,7 +60,7 @@ class PluginManager {
 
   async getRecommendedPlugins(): Promise<ToolkitPlugin[]> {
     try {
-      const repo = parseGithubRepo(mainEnv.env.APP_GITHUB_REPO)
+      const repo = parseGithubRepo(mainEnv.env.APP_REPO_URL)
       return await GithubUtils.getRawJson<ToolkitPlugin[]>(repo, 'public/recommended-plugins.json')
     } catch (error: unknown) {
       mainLogger.error('获取推荐的插件失败', BaseUtils.getErrorMessage(error))
@@ -147,10 +147,10 @@ class PluginManager {
   async testPlugin(context: ApiCallerContext, options: PluginTestOptions) {
     mainLogger.info(`插件${options.rootPath} 测试中……`)
     let plugin: InstalledToolkitPlugin
-    if(/^https?:\/\//i.test(options.rootPath)) {
+    if (/^https?:\/\//i.test(options.rootPath)) {
       // 本地服务器
       plugin = {
-        id: `测试-${this.registry.plugins.size+1}`,
+        id: `测试-${this.registry.plugins.size + 1}`,
         name: '测试',
         author: 'author',
         description: 'test',
@@ -168,12 +168,12 @@ class PluginManager {
           sizeDesc: 'test',
         },
       }
-    }else{
+    } else {
       // 本地构建文件
       const packageJSON = this.readPackageJSON(options.rootPath)
       plugin = {
         id: packageJSON.name,
-        name: PluginParseUtils.parsePluginName(packageJSON.name, packageJSON.keywords),
+        name: parsePluginName(packageJSON.name, packageJSON.keywords),
         author: packageJSON.author ? String(packageJSON.author) : '',
         description: packageJSON.description ?? '',
         version: packageJSON.version,

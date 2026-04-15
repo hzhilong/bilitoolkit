@@ -1,29 +1,29 @@
-import type { BiliAccount, BiliAccountInfo } from 'bilitoolkit-api-types'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { UserInfo } from '@ybgnb/bili-api'
 
 /**
  * 账号选择弹窗
  */
-export interface AccountSelectDialogProps {
+export interface UserSelectDialogProps {
   title: string
   onCancel?: () => void
-  onSelected: (account: BiliAccount) => void
+  onSelected: (user: UserInfo) => void
 }
 
-export type AccountSelectDialogExposed = {
-  show: (options?: Partial<AccountSelectDialogProps>) => void
+export type UserSelectDialogExposed = {
+  show: (options?: Partial<UserSelectDialogProps>) => void
   hide: () => void
 }
 
-export interface AccountAuthDialogProps {
+export interface UserAuthDialogProps {
   title: string
   plugin: ToolkitPlugin
-  account: BiliAccountInfo
+  user: UserInfo
   onCancel?: () => void
   onConfirm: () => void
 }
 
-export type AccountAuthDialogExposed = {
-  show: (options?: Partial<AccountAuthDialogProps>) => void
+export type UserAuthDialogExposed = {
+  show: (options?: Partial<UserAuthDialogProps>) => void
   hide: () => void
 }

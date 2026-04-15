@@ -1,6 +1,9 @@
-export const APP_DIALOG_TYPES = {
-  ACCOUNT_SELECT: 'account-select',
-  REQUEST_COOKIE_AUTHORIZATION: 'request-cookie-authorization',
+export const AppDialogTypeMap = {
+  // 切换用户
+  switch_user: 'switch_user',
 } as const
 
-export type AppDialogType = (typeof APP_DIALOG_TYPES)[keyof typeof APP_DIALOG_TYPES]
+/**
+ * 应用对话框类型
+ */
+export type AppDialogType = (typeof AppDialogTypeMap)[keyof typeof AppDialogTypeMap]

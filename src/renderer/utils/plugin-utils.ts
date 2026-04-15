@@ -8,11 +8,12 @@ import type {
 import { eventBus } from '@/renderer/utils/event-bus.ts'
 import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
 import { BaseUtils } from '@ybgnb/utils'
-import { sanitizeForIPC, toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
-import { PluginParseUtils } from '@/shared/utils/plugin-parse-utils.ts'
 import { appEnv } from '@/shared/common/app-env.ts'
 import type { NpmPackage } from '@/shared/types/npm-types.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { toIPC } from 'bilitoolkit-ui'
+import { parsePluginName } from '@/shared/utils/plugin-parse.ts'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {
@@ -71,7 +72,7 @@ export class PluginUtils {
       plugins: ps.objects.map((p) => {
         return {
           id: p.package.name,
-          name: PluginParseUtils.parsePluginName(p.package.name, p.package.keywords),
+          name: parsePluginName(p.package.name, p.package.keywords),
           author: p.package.publisher.username,
           description: p.package.description,
           version: p.package.version,
@@ -89,7 +90,7 @@ export class PluginUtils {
 
   static async install(plugin: ToolkitPlugin) {
     const installedPlugin = await toolkitApi.core.installPlugin({
-      ...sanitizeForIPC(plugin),
+      ...toIPC(plugin),
       installDate: BaseUtils.getFormattedDate(),
     })
     const { addPlugin } = useAppInstalledPlugins()

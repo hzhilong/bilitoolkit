@@ -5,8 +5,7 @@ import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
 import { ToolkitApiDispatcher } from '@/main/api/handler/toolkit-api-dispatcher.ts'
 import { BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import { showDevTools } from '@/main/utils/dev-tools.ts'
-import { mainLogger } from '@/main/common/main-logger.ts'
-import { biliApi } from '@/main/biliapi/request/bili-api.ts'
+import { isLogApiResult, mainLogger } from '@/main/common/main-logger.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { updateElectronApp } from 'update-electron-app'
 
@@ -40,23 +39,12 @@ export class WindowManager extends BaseWindowManager {
     this.mainWindow = mainWindow
     // 初始化插件API监听
     ipcMain.handle(IPC_CHANNELS.PLUGIN_APIS, async (event: IpcMainInvokeEvent, options: PluginApiInvokeOptions) => {
-      return await execBiz(async () => {
-        try {
-          const apiCallerContext = this.getApiCallerContext(event)
-          return await this.apiDispatcher.handle(event, options, apiCallerContext)
-        } catch (e) {
-          mainLogger.error(`调用API错误`, options)
-          mainLogger.error(`错误信息`, e)
-          throw e
-        }
-      })
+      return await this.handlePluginApiInvoke(options, event)
     })
     // 在开发环境和生产环境均可通过快捷键打开devTools
     globalShortcut.register('CommandOrControl+Shift+i', function () {
       showDevTools()
     })
-    // 初始化 biliApi 模块
-    await biliApi.initMixinKey()
     // 初始化对话框视图
     await this.initAppDialogView()
     updateElectronApp()
@@ -67,6 +55,30 @@ export class WindowManager extends BaseWindowManager {
       // 生产
       mainWindow.loadFile(appPath.appURL).then(() => {})
     }
+  }
+
+  /**
+   * 处理插件 API 调用
+   */
+  private async handlePluginApiInvoke(options: PluginApiInvokeOptions, event: Electron.IpcMainInvokeEvent) {
+    return await execBiz(async () => {
+      const logPrefix = `【${options.module}.${options.name}】`
+      try {
+        mainLogger.info(`=========================================================`)
+        mainLogger.info(`${logPrefix} 执行中`, JSON.stringify(options?.args))
+        const apiCallerContext = this.getApiCallerContext(event)
+        const result = await this.apiDispatcher.handle(event, options, apiCallerContext)
+        if (isLogApiResult(result)) {
+          mainLogger.info(`${logPrefix} 执行成功 ${result ? JSON.stringify(result) : ''}`)
+        } else {
+          mainLogger.info(`${logPrefix} 执行成功`)
+        }
+        return result
+      } catch (e) {
+        mainLogger.error(`${logPrefix} 执行错误}`, e)
+        throw e
+      }
+    })
   }
 }
 

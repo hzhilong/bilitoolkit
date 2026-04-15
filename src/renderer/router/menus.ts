@@ -22,7 +22,7 @@ export const appMenus: MenuItem[] = [
   {
     title: '账号管理',
     icon: 'user-settings',
-    path: '/accountManage',
+    path: '/userManage',
   },
   {
     title: '设置',

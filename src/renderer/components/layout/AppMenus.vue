@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { AppIcon } from 'bilitoolkit-ui'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'

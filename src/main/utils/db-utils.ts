@@ -100,9 +100,10 @@ export default class DBUtils {
    * 读取文档内容对象
    * @param docPath 文档路径
    */
-  static readDocObject<T extends object>(docPath: string): T {
+  static readDocObject<T extends object>(docPath: string): T | null {
     const db = new JSONFileSync<object>(docPath)
-    if (db === null) throw new CommonError(`文档[${path.basename(docPath)}]为空`)
+    //    if (db === null) throw new CommonError(`文档[${path.basename(docPath)}]为空`)
+    if (db === null) return null
     return db.read() as T
   }
 
@@ -123,15 +124,15 @@ export default class DBUtils {
    * @param filePath 文档路径
    * @param defaultData 默认数据
    */
-  static initDoc<T extends object>(filePath: string, defaultData: T): T {
+  static initDoc<T extends object>(filePath: string, defaultData?: T): T | null {
     if (fs.existsSync(filePath)) {
       // 文档存在，直接读取
       return DBUtils.readDocObject<T>(filePath)
     } else {
       // 文档不存在，初始化
-      fs.writeFileSync(filePath, '')
+      fs.writeFileSync(filePath, defaultData !== undefined ? '' : 'null')
       const db = new LowSync(new JSONFileSync<object>(filePath), {})
-      db.data = defaultData
+      db.data = defaultData !== undefined ? defaultData : 'null'
       db.write()
       return db.data as T
     }

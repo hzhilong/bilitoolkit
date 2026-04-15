@@ -27,8 +27,8 @@ const router = createRouter({
         },
         {
           name: '账号管理',
-          path: '/accountManage',
-          component: () => import('../views/AccountManage.vue'),
+          path: '/userManage',
+          component: () => import('../views/UserManage.vue'),
         },
         {
           name: '设置',

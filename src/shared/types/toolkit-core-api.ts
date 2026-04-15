@@ -4,8 +4,9 @@ import type {
   InstalledToolkitPlugin,
   PluginInstallOptions,
   PluginTestOptions,
-  ToolkitPlugin
+  ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.ts'
+import type { UserCookie } from '@ybgnb/bili-api'
 
 /**
  * 哔哩工具姬API（包含核心API）
@@ -62,7 +63,7 @@ export interface ToolkitCoreApi {
   /**
    * 账号变更，通知主进程的哔哩账号管理模块变更
    */
-  updatedLoggedInAccounts(): Promise<void>
+  notifyLoggedInUsersChange(): Promise<void>
 
   /**
    * 获取已安装的插件
@@ -112,4 +113,14 @@ export interface ToolkitCoreApi {
    * 获取插件图标（base64）
    */
   getPluginIcon(plugin: ToolkitPlugin): Promise<string>
+
+  /**
+   * 获取当前登录的用户 cookie
+   */
+  getCurrUserCookie(): Promise<UserCookie>
+
+  /**
+   * 退出当前账号 （主要是用了触发其他插件的 onUserLogout 事件监听）
+   */
+  logoutCurrUser(): Promise<void>
 }

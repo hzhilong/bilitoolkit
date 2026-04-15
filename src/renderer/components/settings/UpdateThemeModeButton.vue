@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { useAppThemeStore } from '@/renderer/stores/app-theme'
-import {ThemeUtils} from '@/renderer/utils/theme-utils'
 
 const state = useAppThemeStore().state
 
-const toggleTheme = () => {
-  ThemeUtils.toggleThemeMode(state.themeMode)
-}
+const toggleTheme = () => {}
 </script>
 
 <template>

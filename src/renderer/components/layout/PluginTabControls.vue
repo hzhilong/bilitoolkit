@@ -6,7 +6,7 @@ import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
 import { cloneDeep } from 'lodash'
 import { nextTick, ref, reactive, watch, toRaw } from 'vue'
 import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
-import { AppUtils } from 'bilitoolkit-ui'
+import { handleError } from 'bilitoolkit-ui'
 
 const plugins = ref<ToolkitPlugin[]>([])
 const activePluginId = ref('')
@@ -93,7 +93,7 @@ const waitScrollComplete = async () => {
       resolve(null)
       return
     }
-    const { scrollLeft, clientWidth, scrollWidth } = pluginTabsRef.value
+    const { scrollLeft } = pluginTabsRef.value
     if (lastScrollLeft == scrollLeft) {
       resolve(null)
       return
@@ -163,7 +163,7 @@ watch(
         console.log('==== 获取图标')
         getPluginIconCache(toRaw(p))
           .then((v) => (b.value = v))
-          .catch(AppUtils.handleError)
+          .catch(handleError)
       }
     })
   },
@@ -190,7 +190,7 @@ const getBase64Icon = (id: string) => {
         @click="switchPlugin(plugin)"
       >
         <img class="plugin-icon" :src="getBase64Icon(plugin.id)" alt="" />
-        <div class="plugin-name txt-ellipsis">{{ plugin.name }}</div>
+        <div class="plugin-name txt-ellipsis-right">{{ plugin.name }}</div>
         <div class="plugin-close-btn" @click.stop="closePlugin(plugin)"></div>
       </div>
     </div>
@@ -273,7 +273,7 @@ const getBase64Icon = (id: string) => {
         background: var(--app-bg-color-overlay-hover);
       }
 
-      .plugin-icon{
+      .plugin-icon {
         display: inline-block;
         width: 18px;
         height: 18px;
@@ -312,7 +312,7 @@ const getBase64Icon = (id: string) => {
       &:hover {
         cursor: pointer;
 
-        .plugin-icon{
+        .plugin-icon {
           width: 16px;
           height: 16px;
         }

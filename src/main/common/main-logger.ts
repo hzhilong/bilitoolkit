@@ -2,6 +2,7 @@ import { appPath } from '@/main/common/app-path.ts'
 import { mainEnv } from '@/main/common/main-env.ts'
 import log4js from 'log4js'
 import path from 'path'
+import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
 
 // 日志路径
 export const LOG_DIR = appPath.logsPath
@@ -55,3 +56,11 @@ log4js.configure({
  * 主进程Logger
  */
 export const mainLogger = log4js.getLogger()
+
+/**
+ * 是否打印 api 调用结果
+ * @param options
+ */
+export const isLogApiResult = (options: PluginApiInvokeOptions) => {
+  return options && ![`core.getPluginIcon`].includes(`${options.module}.${options.name}`)
+}

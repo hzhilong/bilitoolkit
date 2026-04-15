@@ -1,4 +1,3 @@
-import { appPath } from '@/main/common/app-path'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { FileUtils } from '@/main/utils/file-utils'
 import { CommonError } from '@ybgnb/utils'

@@ -7,11 +7,7 @@ export const HOST_GLOBAL_DATA = {
    */
   CONTENT_BOUNDS: 'CONTENT_BOUNDS',
   /**
-   * 选择账号（不给cookie）
+   * 切换账号
    */
-  CHOOSE_ACCOUNT: 'CHOOSE_ACCOUNT',
-  /**
-   * 弹窗让用户授权账号cookie给插件
-   */
-  REQUEST_COOKIE_AUTHORIZATION: 'REQUEST_COOKIE_AUTHORIZATION',
+  SWITCH_USER: 'SWITCH_USER',
 } as const

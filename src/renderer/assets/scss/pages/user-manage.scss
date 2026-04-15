@@ -5,7 +5,7 @@
   justify-content: start;
 }
 
-.account-list {
+.user-list {
   padding: 10px;
   display: flex;
   flex-direction: row;
@@ -14,22 +14,22 @@
   overflow-y: auto;
   justify-content: flex-start;
 
-  ::v-deep(.bili-account-card) {
+  ::v-deep(.bili-user-card) {
     width: 40%;
   }
 }
 @media (min-width: 1010px) and (max-width: 1426px) {
-  .account-list {
+  .user-list {
 
-    ::v-deep(.bili-account-card) {
+    ::v-deep(.bili-user-card) {
       width: 30%;
     }
   }
 }
 @media (min-width: 1426px) and (max-width: 1600px) {
-  .account-list {
+  .user-list {
 
-    ::v-deep(.bili-account-card) {
+    ::v-deep(.bili-user-card) {
       width: 21%;
     }
   }

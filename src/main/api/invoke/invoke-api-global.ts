@@ -1,4 +1,4 @@
-import { createApiProxy, invokeModuleApi } from './base-invoke'
+import { invokeModuleApi } from './base-invoke'
 import { BizResult } from '@ybgnb/utils'
 import { cloneDeep } from 'lodash'
 import type { ApiCallerEnvType, LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
@@ -44,10 +44,19 @@ export const registerGlobalData = (
 
 // 全局对象API
 export const globalApi = (envType: ApiCallerEnvType) => {
-  return createApiProxy<ToolkitGlobalDataApi>('global', [], {
+  const globalApi: ToolkitGlobalDataApi = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getData(name: string, timeout: boolean, ...args: any[]): Promise<unknown> {
+      return invokeGlobalApi('getData', name, timeout, ...args)
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getPluginData(pluginId: string, name: string, timeout: boolean, ...args: any[]): Promise<unknown> {
+      return invokeGlobalApi('getPluginData', pluginId, name, timeout, ...args)
+    },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async register(name: string, getFn: (...args: any[]) => Promise<BizResult<any>>): Promise<void> {
       return registerGlobalData(envType, name, getFn)
     },
-  })
+  }
+  return globalApi
 }

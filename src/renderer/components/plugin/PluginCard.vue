@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends CardType">
-import { AppUtils, IconLabel, useLoadingData } from 'bilitoolkit-ui'
+import { IconLabel, showToast, useLoadingData } from 'bilitoolkit-ui'
 import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.ts'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
@@ -47,15 +47,15 @@ const installConfirm = computed(() => {
 })
 const installPlugin = loadingData(async () => {
   await PluginUtils.install(props.plugin)
-  AppUtils.message('插件安装成功')
+  showToast('插件安装成功')
 })
 const updatePlugin = loadingData(async () => {
   await PluginUtils.install(props.plugin)
-  AppUtils.message('插件更新成功')
+  showToast('插件更新成功')
 })
 const uninstallPlugin = loadingData(async () => {
   await PluginUtils.uninstall(props.plugin as InstalledToolkitPlugin)
-  AppUtils.message('插件卸载成功')
+  showToast('插件卸载成功')
 })
 const starPlugin = () => {
   if (star.value) {

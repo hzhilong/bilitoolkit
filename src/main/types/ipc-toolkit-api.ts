@@ -3,7 +3,7 @@ import type { WebContents } from 'electron'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import type { ToolkitCoreApi } from '@/shared/types/toolkit-core-api.ts'
 import type {
-  ToolkitAccountApi,
+  ToolkitBiliApi,
   ToolkitDBApi,
   ToolkitEventApi,
   ToolkitFileApi,
@@ -94,11 +94,11 @@ export type LeafFunctionPaths<T> = DeepFunctionPaths<{
 
 // =========================自动生成 添加了API调用的上下文 参数的接口=========================
 /**
- * 账号相关的API（添加API调用的上下文参数）
+ * bili相关的API（添加API调用的上下文参数）
  */
-export type GeneratedIpcToolkitAccountApi = AddApiCallerContext<ToolkitAccountApi>
+export type GeneratedIpcToolkitBiliApi = AddApiCallerContext<ToolkitBiliApi>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IpcToolkitAccountApi extends GeneratedIpcToolkitAccountApi {}
+export interface IpcToolkitBiliApi extends GeneratedIpcToolkitBiliApi {}
 
 /**
  * 核心API（添加API调用的上下文参数）

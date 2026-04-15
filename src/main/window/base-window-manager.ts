@@ -13,7 +13,7 @@ import { FileUtils } from '@/main/utils/file-utils.ts'
 import { injectingPluginMetadata } from '@/main/preloads/plugin-meta.ts'
 import { _getGlobalData } from '@/main/api/handler/api-handler-global.ts'
 import type { AppDialogType } from '@/shared/types/app-dialog.ts'
-import { PluginParseUtils } from '@/shared/utils/plugin-parse-utils.ts'
+import { isHttpUrl } from '@/shared/utils/url.ts'
 
 type Rectangle = Electron.Rectangle
 
@@ -217,7 +217,7 @@ export abstract class BaseWindowManager {
     if (path.isAbsolute(plugin.files.indexPath)) {
       // 测试环境：绝对路径
       await view.webContents.loadURL(plugin.files.indexPath)
-    } else if (PluginParseUtils.isHttpUrl(plugin.files.indexPath)) {
+    } else if (isHttpUrl(plugin.files.indexPath)) {
       // 测试环境：开发服务器URL
       await view.webContents.loadURL(plugin.files.indexPath)
     } else {
@@ -311,7 +311,7 @@ export abstract class BaseWindowManager {
     return false
   }
 
-  public showAppDialogView(context: ApiCallerContext, dialogType: AppDialogType) {
+  public showAppDialogView(context: ApiCallerContext, _dialogType: AppDialogType) {
     if (!this.appDialogWebContentsView) {
       throw new CommonError('内部错误，创建对话框视图失败')
     }

@@ -1,4 +1,4 @@
-import { defaultAppSettings, defaultAppThemeState, defaultAppInstalledPlugins } from '@/shared/common/app-constants'
+import { defaultAppSettings, defaultAppInstalledPlugins } from '@/shared/common/app-constants'
 import { defaultsDeep } from 'lodash'
 import path from 'path'
 import type { AppSettings } from '@/shared/types/app-settings.ts'
@@ -9,18 +9,19 @@ import type { AppInstalledPlugins } from '@/shared/types/toolkit-plugin.ts'
 import { writeFileSync } from 'node:fs'
 import { appPath } from '@/main/common/app-path.ts'
 import fs from 'fs'
+import { defaultAppThemeState } from 'bilitoolkit-ui/common'
 
 /**
  * 读取host环境的文档
  * @param docName 文档名称
  */
-export const readHostDBDoc = <T extends object>(docName: string): T | undefined => {
+export const readHostDBDoc = <T extends object>(docName: string): T | null => {
   const filePath = path.resolve(appPath.hostAppDBPath, docName.endsWith('.json') ? docName : `${docName}.json`)
   try {
     return DBUtils.readDocObject<T>(filePath)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
-    return undefined
+    return null
   }
 }
 

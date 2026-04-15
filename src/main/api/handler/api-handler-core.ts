@@ -8,11 +8,13 @@ import {
   isInstalledToolkitPlugin,
   type PluginInstallOptions,
   type PluginTestOptions,
-  type ToolkitPlugin
+  type ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { pluginManager } from '@/main/plugin/plugin-manage.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
+import type { UserCookie } from '@ybgnb/bili-api'
+import { CommonError } from '@ybgnb/utils'
 
 /**
  * 核心API处理器
@@ -45,7 +47,7 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return FileUtils.formatKBSize(FileUtils.getFolderSizeSync(appPath.filePath) / 1024)
   }
 
-  async updatedLoggedInAccounts(_: ApiCallerContext): Promise<void> {
+  async notifyLoggedInUsersChange(_: ApiCallerContext): Promise<void> {
     // TODO
   }
 
@@ -90,5 +92,13 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
       return IconUtils.getInstalledPluginIcon(plugin)
     }
     return await IconUtils.downloadPluginIcon(plugin)
+  }
+
+  getCurrUserCookie(_context: ApiCallerContext): Promise<UserCookie> {
+    throw new CommonError('')
+  }
+
+  logoutCurrUser(_context: ApiCallerContext): Promise<void> {
+    throw new CommonError('')
   }
 }

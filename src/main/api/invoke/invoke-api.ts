@@ -1,8 +1,8 @@
 import { eventApi } from './invoke-api-event'
 import { globalApi } from '@/main/api/invoke/invoke-api-global.ts'
 import type { ToolkitApi } from 'bilitoolkit-api-types'
-import type { ToolkitApiWithCore, ToolkitCoreApi } from '@/shared/types/toolkit-core-api.ts'
-import { baseInvokeApi, createApiProxy } from '@/main/api/invoke/base-invoke.ts'
+import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
+import { baseInvokeApi } from '@/main/api/invoke/base-invoke.ts'
 
 export const baseToolkitInvoke = baseInvokeApi
 
@@ -27,5 +27,4 @@ export const exposeToolkitApi = {
 export const exposeHostToolkitApi = {
   ...commonToolkitApi,
   global: globalApi('host'),
-  core: createApiProxy<ToolkitCoreApi>('core'),
 } satisfies Partial<ToolkitApiWithCore>

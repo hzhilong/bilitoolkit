@@ -1,31 +1,52 @@
 <script setup lang="ts">
-import { watch } from 'vue'
-import type { BiliAccount } from 'bilitoolkit-api-types'
-import { useLoginQRCode } from '@/renderer/composables/user/useLoginQRCode.ts'
-import { useBiliAccountStore } from '@/renderer/stores/bili-accounts.ts'
+import { ref, watch } from 'vue'
+import { useUserStore } from '@/renderer/stores/user.ts'
+import type { UserInfo } from '@ybgnb/bili-api'
+import { biliClient } from '@/renderer/api/bili-client.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 
 const visible = defineModel<boolean>({ required: true })
 
 const emit = defineEmits<{
   (e: 'cancel'): void
-  (e: 'loginSuccess', account: BiliAccount): void
+  (e: 'loginSuccess', user: UserInfo): void
 }>()
 
-const { qrCodeImg, loginResult, onLoginSuccess, refreshQRCode, cancelLogin } = useLoginQRCode()
+const qrCodeImg = ref('')
+const loginResult = ref('')
+const abortController = new AbortController()
 
 const handleCancel = () => {
   visible.value = false
-  cancelLogin()
+  abortController.abort('取消登录')
   emit('cancel')
 }
-onLoginSuccess((account: BiliAccount) => {
-  useBiliAccountStore().loginAccount(account)
+
+const startLogin = async () => {
+  const requestContext = await biliClient.user.loginWithQRCode(
+    {
+      async cookieProvider(): Promise<string> {
+        return (await toolkitApi.core.getCurrUserCookie()).cookie
+      },
+      async onQRCodeReceived(qrcodeUrl: string): Promise<void> {
+        qrCodeImg.value = qrcodeUrl
+      },
+      onStatusChange(msg: string): void {
+        loginResult.value = msg
+      },
+    },
+    {
+      signal: abortController.signal,
+    },
+  )
+  useUserStore().loginUser(requestContext.userInfo)
   visible.value = false
-  emit('loginSuccess', account)
-})
+  emit('loginSuccess', requestContext.userInfo)
+}
+
 watch(visible, (newValue) => {
   if (newValue) {
-    refreshQRCode()
+    startLogin()
   }
 })
 </script>
@@ -41,10 +62,7 @@ watch(visible, (newValue) => {
     @close="handleCancel"
   >
     <div class="content-container">
-      <div class="hint">
-        请扫描二维码登录
-        <el-button @click="refreshQRCode">刷新</el-button>
-      </div>
+      <div class="hint">请扫描二维码登录</div>
 
       <div class="qrcode-container">
         <div>获取二维码中，请稍候...</div>

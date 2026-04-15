@@ -23,14 +23,14 @@
 <script setup lang="ts">
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 import { ref } from 'vue'
-import { AppUtils } from 'bilitoolkit-ui'
+import { showError } from 'bilitoolkit-ui'
 
 const visible = defineModel<boolean>({ required: true })
 const rootPath = ref('')
 
 const testPlugin = () => {
   if (!rootPath.value) {
-    AppUtils.showErrorMessage('目录不能为空')
+    showError('目录不能为空')
     return
   }
   PluginUtils.testPlugin({

@@ -1,0 +1,40 @@
+import { CommonError } from '@ybgnb/utils'
+import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
+import { readHostDBDoc } from '@/main/utils/host-app-utils.ts'
+import type { UserInfo } from '@ybgnb/bili-api'
+
+class UserManager {
+  private users = new Map<number, UserInfo>()
+
+  refreshFromDB(): void {
+    const raw = readHostDBDoc(APP_DB_KEYS.BILI_USERS)
+    if (!raw) {
+      this.users.clear()
+      return
+    }
+    if (!Array.isArray(raw) || !raw.every((item) => typeof item?.mid === 'number')) {
+      console.error('user 数据库读取错误')
+      // TODO　刷新数据库
+      this.users.clear()
+      return
+    }
+    const newMap = new Map<number, UserInfo>()
+    for (const item of raw as UserInfo[]) {
+      newMap.set(item.mid, item)
+    }
+    this.users = newMap
+  }
+
+  getBiliUser(uid: number): UserInfo | undefined {
+    return this.users.get(uid)
+  }
+
+  // 可选：需要抛异常时提供显式方法
+  getBiliUserOrThrow(uid: number): UserInfo {
+    const user = this.users.get(uid)
+    if (!user) throw new CommonError('账号不存在，可能已经登出')
+    return user
+  }
+}
+
+export const userManager = new UserManager()

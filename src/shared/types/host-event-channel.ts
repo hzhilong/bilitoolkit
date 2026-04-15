@@ -6,7 +6,7 @@ export const HOST_EVENT_CHANNELS = {
   // 更新主题
   UPDATE_APP_THEME: 'UPDATE_APP_THEME',
   // 账号退出
-  ACCOUNT_LOGOUT: 'ACCOUNT_LOGOUT',
+  USER_LOGOUT: 'USER_LOGOUT',
   // 窗口显示
   WINDOW_SHOWN: 'WINDOW_SHOWN',
   // 请求显示信息

@@ -1,5 +1,6 @@
-import { toolkitApi, sanitizeForIPC } from '@/renderer/api/toolkit-api.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import { toIPC } from 'bilitoolkit-ui'
 
 const cache = new Map<string, string>()
 const loadingCache = new Map<string, Promise<string>>()
@@ -17,7 +18,7 @@ export const getPluginIconCache = (plugin: ToolkitPlugin): Promise<string> => {
   }
 
   const promise = toolkitApi.core
-    .getPluginIcon(sanitizeForIPC(plugin))
+    .getPluginIcon(toIPC(plugin))
     .then((base64) => {
       cache.set(id, base64)
       return base64
