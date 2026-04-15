@@ -47,6 +47,7 @@ export class WindowManager extends BaseWindowManager {
     })
     // 初始化对话框视图
     await this.initAppDialogView()
+    // 应用更新检测
     updateElectronApp()
     if (appPath.devUrl) {
       // 开发
@@ -62,16 +63,22 @@ export class WindowManager extends BaseWindowManager {
    */
   private async handlePluginApiInvoke(options: PluginApiInvokeOptions, event: Electron.IpcMainInvokeEvent) {
     return await execBiz(async () => {
-      const logPrefix = `【${options.module}.${options.name}】`
+      let logPrefix = `[${options.module}.${options.name}]`
       try {
-        mainLogger.info(`=========================================================`)
-        mainLogger.info(`${logPrefix} 执行中`, JSON.stringify(options?.args))
         const apiCallerContext = this.getApiCallerContext(event)
+        logPrefix = `[${apiCallerContext.envType}] ${apiCallerContext.envType === 'plugin' ? `${apiCallerContext.plugin.id} ` : ''}${logPrefix}`
+        const isDialog = apiCallerContext.envType === 'host' && apiCallerContext.isDialogWebContents
+        if (!isDialog) {
+          mainLogger.info(`=========================================================`)
+          mainLogger.info(`${logPrefix} 执行中`, JSON.stringify(options?.args))
+        }
         const result = await this.apiDispatcher.handle(event, options, apiCallerContext)
-        if (isLogApiResult(result)) {
-          mainLogger.info(`${logPrefix} 执行成功 ${result ? JSON.stringify(result) : ''}`)
-        } else {
-          mainLogger.info(`${logPrefix} 执行成功`)
+        if (!isDialog) {
+          if (isLogApiResult(result)) {
+            mainLogger.info(`${logPrefix} 执行成功 ${result ? JSON.stringify(result) : ''}`)
+          } else {
+            mainLogger.info(`${logPrefix} 执行成功`)
+          }
         }
         return result
       } catch (e) {

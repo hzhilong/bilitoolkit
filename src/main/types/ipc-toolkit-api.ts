@@ -1,5 +1,5 @@
-import { BrowserWindow, WebContentsView } from 'electron'
 import type { WebContents } from 'electron'
+import { BrowserWindow, WebContentsView } from 'electron'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import type { ToolkitCoreApi } from '@/shared/types/toolkit-core-api.ts'
 import type {
@@ -9,7 +9,7 @@ import type {
   ToolkitFileApi,
   ToolkitGlobalDataApi,
   ToolkitSystemApi,
-  ToolkitWindowApi,
+  ToolkitWindowApi
 } from 'bilitoolkit-api-types'
 
 /**
@@ -32,6 +32,8 @@ export type HostApiCallerContext = CommonApiCallerContext & {
   envType: 'host'
   // 所属的WebContents
   webContents: WebContents
+  // 是否为对话框的 webContents 环境
+  isDialogWebContents: boolean
 }
 
 export type PluginApiCallerContext = CommonApiCallerContext & {

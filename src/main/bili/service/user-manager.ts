@@ -1,6 +1,6 @@
 import { CommonError } from '@ybgnb/utils'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
-import { readHostDBDoc } from '@/main/utils/host-app-utils.ts'
+import { readHostDBDoc, writeHostDBDoc } from '@/main/utils/host-app-utils.ts'
 import type { UserInfo } from '@ybgnb/bili-api'
 
 class UserManager {
@@ -13,8 +13,8 @@ class UserManager {
       return
     }
     if (!Array.isArray(raw) || !raw.every((item) => typeof item?.mid === 'number')) {
-      console.error('user 数据库读取错误')
-      // TODO　刷新数据库
+      console.error('user 数据库读取错误，正在重置')
+      writeHostDBDoc(APP_DB_KEYS.BILI_USERS, [])
       this.users.clear()
       return
     }

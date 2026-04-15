@@ -15,6 +15,7 @@ import { pluginManager } from '@/main/plugin/plugin-manage.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import type { UserCookie } from '@ybgnb/bili-api'
 import { CommonError } from '@ybgnb/utils'
+import { userManager } from '@/main/bili/service/user-manager.ts'
 
 /**
  * 核心API处理器
@@ -47,12 +48,12 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return FileUtils.formatKBSize(FileUtils.getFolderSizeSync(appPath.filePath) / 1024)
   }
 
-  async notifyLoggedInUsersChange(_: ApiCallerContext): Promise<void> {
-    // TODO
+  async syncBiliUserState(_: ApiCallerContext): Promise<void> {
+    userManager.refreshFromDB()
   }
 
-  async getAppInstalledPlugins(_: ApiCallerContext): Promise<AppInstalledPlugins> {
-    return pluginManager.getAppInstalledPlugins()
+  async getInstalledPlugins(_: ApiCallerContext): Promise<AppInstalledPlugins> {
+    return pluginManager.getInstalledPlugins()
   }
 
   getRecommendedPlugins(_: ApiCallerContext): Promise<ToolkitPlugin[]> {

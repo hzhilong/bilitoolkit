@@ -63,12 +63,12 @@ export interface ToolkitCoreApi {
   /**
    * 账号变更，通知主进程的哔哩账号管理模块变更
    */
-  notifyLoggedInUsersChange(): Promise<void>
+  syncBiliUserState(): Promise<void>
 
   /**
    * 获取已安装的插件
    */
-  getAppInstalledPlugins(): Promise<AppInstalledPlugins>
+  getInstalledPlugins(): Promise<AppInstalledPlugins>
 
   /**
    * 获取推荐的插件

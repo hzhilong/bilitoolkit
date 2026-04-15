@@ -51,7 +51,7 @@ class PluginManager {
     })
   }
 
-  getAppInstalledPlugins(): AppInstalledPlugins {
+  getInstalledPlugins(): AppInstalledPlugins {
     return {
       appVersion: this.registry.appVersion,
       plugins: this.registry.plugins.values().toArray(),
@@ -69,7 +69,7 @@ class PluginManager {
   }
 
   updateDB() {
-    writeHostDBDoc(APP_DB_KEYS.APP_INSTALLED_PLUGINS, cloneDeep(this.getAppInstalledPlugins()))
+    writeHostDBDoc(APP_DB_KEYS.APP_INSTALLED_PLUGINS, cloneDeep(this.getInstalledPlugins()))
   }
 
   getInstalledPlugin(id: string): InstalledToolkitPlugin {

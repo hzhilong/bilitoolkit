@@ -101,6 +101,7 @@ export abstract class BaseWindowManager {
         webContents: sender,
         dbPath: DBUtils.getPluginDBPath('host'),
         filePath: FileUtils.getPluginRootPath('host'),
+        isDialogWebContents: this.appDialogWebContents?.id === sender.id,
       } satisfies HostApiCallerContext
     } else {
       // 插件环境调用API
@@ -258,6 +259,7 @@ export abstract class BaseWindowManager {
       view.webContents.close()
     }
   }
+
   public async initAppDialogView() {
     if (this.appDialogWebContents) return
     const window = this.mainWindow!

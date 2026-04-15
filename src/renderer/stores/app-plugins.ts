@@ -14,7 +14,7 @@ export const useAppInstalledPlugins = defineStore(
     const state = reactive<AppInstalledPlugins>(defaultAppInstalledPlugins)
 
     const init = async () => {
-      Object.assign(state, await toolkitApi.core.getAppInstalledPlugins())
+      Object.assign(state, await toolkitApi.core.getInstalledPlugins())
       for (const plugin of state.plugins) {
         getPluginIconCache(plugin).then()
       }

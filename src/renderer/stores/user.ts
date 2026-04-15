@@ -26,7 +26,7 @@ export const useUserStore = defineStore(
       async (newVal, _oldVal) => {
         // 写入配置
         await window.toolkitApi.db.write(APP_DB_KEYS.BILI_USERS, cloneDeep(newVal))
-        await window.toolkitApi.core.notifyLoggedInUsersChange()
+        await window.toolkitApi.core.syncBiliUserState()
       },
       { deep: true },
     )
