@@ -7,13 +7,13 @@ import type {
 } from '@/shared/types/toolkit-plugin'
 import { eventBus } from '@/renderer/utils/event-bus.ts'
 import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
-import { BaseUtils } from '@ybgnb/utils'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 import { appEnv } from '@/shared/common/app-env.ts'
 import type { NpmPackage } from '@/shared/types/npm-types.ts'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import { toIPC } from 'bilitoolkit-ui'
 import { parsePluginName } from '@/shared/utils/plugin-parse.ts'
+import { toIPC } from 'bilitoolkit-api-runtime'
+import { getFormattedDate } from '@ybgnb/utils'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {
@@ -76,7 +76,7 @@ export class PluginUtils {
           author: p.package.publisher.username,
           description: p.package.description,
           version: p.package.version,
-          date: BaseUtils.getFormattedDate(new Date(p.package.date)),
+          date: getFormattedDate(new Date(p.package.date)),
           links: p.package.links,
           downloads: {
             weekly: p.downloads.weekly,
@@ -91,7 +91,7 @@ export class PluginUtils {
   static async install(plugin: ToolkitPlugin) {
     const installedPlugin = await toolkitApi.core.installPlugin({
       ...toIPC(plugin),
-      installDate: BaseUtils.getFormattedDate(),
+      installDate: getFormattedDate(),
     })
     const { addPlugin } = useAppInstalledPlugins()
     addPlugin(installedPlugin)

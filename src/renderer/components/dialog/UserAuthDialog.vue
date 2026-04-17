@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { reactive } from 'vue'
 import PluginCard from '@/renderer/components/plugin/PluginCard.vue'
 import type { UserAuthDialogProps } from '@/renderer/components/dialog/types.ts'

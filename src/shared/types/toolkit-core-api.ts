@@ -4,7 +4,7 @@ import type {
   InstalledToolkitPlugin,
   PluginInstallOptions,
   PluginTestOptions,
-  ToolkitPlugin,
+  ToolkitPlugin
 } from '@/shared/types/toolkit-plugin.ts'
 import type { UserCookie } from '@ybgnb/bili-api'
 
@@ -115,7 +115,7 @@ export interface ToolkitCoreApi {
   getPluginIcon(plugin: ToolkitPlugin): Promise<string>
 
   /**
-   * 获取当前登录的用户 cookie
+   * 获取用户 cookie
    */
   getCurrUserCookie(): Promise<UserCookie>
 

@@ -9,7 +9,7 @@ import type {
 import { windowManager } from '@/main/window/window-manager.ts'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { getAppInstalledPlugins, writeHostDBDoc } from '@/main/utils/host-app-utils.ts'
-import { BaseUtils, CommonError } from '@ybgnb/utils'
+import { CommonError, parseGithubRepo, getErrorMessage, getFormattedDate } from '@ybgnb/utils'
 import { FileUtils } from '@/main/utils/file-utils.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import type { PackageJSON } from '@npm/types'
@@ -18,10 +18,9 @@ import { mainLogger } from '@/main/common/main-logger.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 import { eventBus } from '@/main/event/event-bus.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 import { rmdirSync, writeFileSync } from 'node:fs'
-import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
 import { GithubUtils } from '@/main/utils/github-utils.ts'
 import { mainEnv } from '@/main/common/main-env.ts'
 import { parsePluginName } from '@/shared/utils/plugin-parse.ts'
@@ -63,7 +62,7 @@ class PluginManager {
       const repo = parseGithubRepo(mainEnv.env.APP_REPO_URL)
       return await GithubUtils.getRawJson<ToolkitPlugin[]>(repo, 'public/recommended-plugins.json')
     } catch (error: unknown) {
-      mainLogger.error('获取推荐的插件失败', BaseUtils.getErrorMessage(error))
+      mainLogger.error('获取推荐的插件失败', getErrorMessage(error))
       return FileUtils.readJsonFile<ToolkitPlugin[]>(path.join(appPath.appPublicPath, 'recommended-plugins.json'))
     }
   }
@@ -155,11 +154,11 @@ class PluginManager {
         author: 'author',
         description: 'test',
         version: '0.0.1',
-        date: BaseUtils.getFormattedDate(),
+        date: getFormattedDate(),
         links: {
           npm: '',
         },
-        installDate: BaseUtils.getFormattedDate(),
+        installDate: getFormattedDate(),
         files: {
           rootPath: options.rootPath,
           distPath: options.rootPath,
@@ -177,11 +176,11 @@ class PluginManager {
         author: packageJSON.author ? String(packageJSON.author) : '',
         description: packageJSON.description ?? '',
         version: packageJSON.version,
-        date: BaseUtils.getFormattedDate(),
+        date: getFormattedDate(),
         links: {
           npm: '',
         },
-        installDate: BaseUtils.getFormattedDate(),
+        installDate: getFormattedDate(),
         files: {
           rootPath: options.rootPath,
           distPath: path.join(options.rootPath, 'dist'),

@@ -1,4 +1,4 @@
-import { toolkitApi as baseApi } from 'bilitoolkit-ui'
 import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
+import { setupToolkitApi } from 'bilitoolkit-api-runtime'
 
-export const toolkitApi = baseApi as ToolkitApiWithCore
+export const toolkitApi = setupToolkitApi() as ToolkitApiWithCore

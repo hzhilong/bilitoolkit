@@ -12,6 +12,7 @@ import { GlobalApiHandler } from '@/main/api/handler/api-handler-global.ts'
 import { BiliApiHandler } from '@/main/api/handler/api-handler-bili.ts'
 import { CoreApiHandler } from '@/main/api/handler/api-handler-core.ts'
 import { BaseWindowManager } from '@/main/window/base-window-manager.ts'
+import { UserApiHandler } from '@/main/api/handler/api-handler-user.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -31,6 +32,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     this.register('event', new EventApiHandler())
     this.register('global', new GlobalApiHandler(wm))
     this.register('bili', new BiliApiHandler(wm))
+    this.register('user', new UserApiHandler(wm))
     this.register('core', new CoreApiHandler())
   }
 

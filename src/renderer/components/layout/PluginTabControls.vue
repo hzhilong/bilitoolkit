@@ -3,7 +3,7 @@ import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { eventBus } from '@/renderer/utils/event-bus'
 import { PluginUtils } from '@/renderer/utils/plugin-utils'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { nextTick, ref, reactive, watch, toRaw } from 'vue'
 import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
 import { handleError } from 'bilitoolkit-ui'
@@ -154,13 +154,11 @@ const base64Map = reactive(new Map<string, ReturnType<typeof ref<string>>>())
 watch(
   plugins,
   (list) => {
-    console.log('==== watch')
     list.forEach((p) => {
       const id = p.id
       if (!base64Map.has(id)) {
         const b = ref('')
         base64Map.set(id, b)
-        console.log('==== 获取图标')
         getPluginIconCache(toRaw(p))
           .then((v) => (b.value = v))
           .catch(handleError)

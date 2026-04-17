@@ -1,5 +1,5 @@
 import { CommonError } from '@ybgnb/utils'
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
@@ -15,7 +15,6 @@ export const useUserStore = defineStore(
 
     const init = async () => {
       // 获取数据库配置
-      console.log('获取数据库配置')
       const dbConfig = (await window.toolkitApi.db.init(APP_DB_KEYS.BILI_USERS, [])) as UserInfo[]
       Object.assign(users, Array.from(dbConfig))
     }

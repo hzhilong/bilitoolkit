@@ -1,8 +1,8 @@
 import { createWriteStream } from 'fs'
 import { get } from 'https'
 import { mainLogger } from '@/main/common/main-logger.ts'
-import type { GithubRepository } from '@/shared/utils/github-parse.ts'
 import axios from 'axios'
+import type { GithubRepository } from '@ybgnb/utils'
 
 export class GithubUtils {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -2,13 +2,13 @@
 import { toolkitApi } from '@/renderer/api/toolkit-api'
 import UpdateThemeColorButton from '@/renderer/components/settings/UpdateThemeColorButton.vue'
 import UpdateThemeModeButton from '@/renderer/components/settings/UpdateThemeModeButton.vue'
-import { BaseUtils } from '@ybgnb/utils'
 import { type Ref, ref } from 'vue'
 import { useAppSettingsStore } from '@/renderer/stores/app-settings.ts'
 import { DevToolsType } from '@/shared/types/app-settings.ts'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import TestPluginDialog from '@/renderer/components/plugin/TestPluginDialog.vue'
 import { SettingGroup, SettingItem } from 'bilitoolkit-ui'
+import { getErrorMessage } from '@ybgnb/utils'
 
 const appSettings = useAppSettingsStore().appSettings
 
@@ -21,7 +21,7 @@ const initSettingDesc = (desc: Ref<string>, init: () => Promise<string>) => {
       desc.value = `总大小：${folderSize}`
     })
     .catch((error) => {
-      desc.value = `总大小：获取失败，${BaseUtils.getErrorMessage(error)}`
+      desc.value = `总大小：获取失败，${getErrorMessage(error)}`
     })
 }
 initSettingDesc(logsDesc, toolkitApi.core.getLogsFolderSize)

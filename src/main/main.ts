@@ -6,7 +6,6 @@ import * as os from 'node:os'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { mainEnv } from '@/main/common/main-env.ts'
-
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 app.commandLine.appendSwitch('disable-web-security')
 if (mainEnv.isDev) app.commandLine.appendSwitch('disable-http-cache')

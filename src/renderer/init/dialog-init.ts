@@ -1,6 +1,6 @@
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
 import { CommonError, execBiz } from '@ybgnb/utils'
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import type { ApiCallerIdentity } from '@/shared/types/toolkit-core-api.ts'
 import { AppUserAuthDialog } from '@/renderer/components/dialog/userAuthService.ts'

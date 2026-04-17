@@ -1,8 +1,8 @@
 // 假设搜索框绑定到 searchText
 import axios from 'axios'
 import type { NpmSearchParams, NpmSearchResult } from '@/shared/types/npm-types.ts'
-import { BaseUtils, CommonError } from '@ybgnb/utils'
 import { logger } from '@/renderer/common/renderer-logger.ts'
+import { CommonError, getErrorMessage } from '@ybgnb/utils'
 
 export async function searchNpmPackages(params: NpmSearchParams): Promise<NpmSearchResult> {
   try {
@@ -17,6 +17,6 @@ export async function searchNpmPackages(params: NpmSearchParams): Promise<NpmSea
     return response.data
   } catch (error) {
     logger.error('搜索 npm 包失败:', error)
-    throw new CommonError('搜索 npm 包失败：' + BaseUtils.getErrorMessage(error))
+    throw new CommonError('搜索 npm 包失败：' + getErrorMessage(error))
   }
 }

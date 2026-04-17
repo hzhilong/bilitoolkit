@@ -1,5 +1,5 @@
 import { toolkitApi } from '@/renderer/api/toolkit-api'
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'
 import type { AppSettings } from '@/shared/types/app-settings.ts'
@@ -16,10 +16,7 @@ export const useAppSettingsStore = defineStore(
 
     const init = async () => {
       // 获取数据库配置
-      const dbConfig = (await window.toolkitApi.db.init(
-        APP_DB_KEYS.APP_SETTINGS,
-        defaultAppSettings,
-      )) as AppSettings
+      const dbConfig = (await window.toolkitApi.db.init(APP_DB_KEYS.APP_SETTINGS, defaultAppSettings)) as AppSettings
       Object.assign(appSettings, dbConfig)
     }
 

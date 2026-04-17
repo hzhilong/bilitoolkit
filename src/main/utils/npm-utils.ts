@@ -4,7 +4,7 @@ import { appPath } from '@/main/common/app-path.ts'
 import { writeFileSync, unlinkSync } from 'node:fs'
 import * as tar from 'tar'
 import { FileUtils } from '@/main/utils/file-utils.ts'
-import { BaseUtils } from '@ybgnb/utils'
+import { convertToCommonError } from '@ybgnb/utils'
 
 export default class NpmUtils {
   static pkgNameToDirName(pkgName: string) {
@@ -49,7 +49,7 @@ export default class NpmUtils {
       unlinkSync(tempFile)
       return tarTo
     } catch (error: unknown) {
-      throw BaseUtils.convertToCommonError(error, `下载插件包[${pkgName}-${version}]时出错`)
+      throw convertToCommonError(error, `下载插件包[${pkgName}-${version}]时出错`)
     }
   }
 }

@@ -1,5 +1,5 @@
 import { defaultAppSettings, defaultAppInstalledPlugins } from '@/shared/common/app-constants'
-import { defaultsDeep } from 'lodash'
+import { defaultsDeep } from 'lodash-es'
 import path from 'path'
 import type { AppSettings } from '@/shared/types/app-settings.ts'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'

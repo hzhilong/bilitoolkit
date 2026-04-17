@@ -1,7 +1,7 @@
 import { computed, watch, ref, type Reactive } from 'vue'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
 import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
+import { parseGithubRepo } from '@ybgnb/utils'
 
 const defaultIconSrc = new URL('/images/plugin-default-icon.png', import.meta.url).href
 

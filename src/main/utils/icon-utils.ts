@@ -4,9 +4,9 @@ import path from 'path'
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs'
 import { GithubUtils } from '@/main/utils/github-utils.ts'
 import { mainLogger } from '@/main/common/main-logger.ts'
-import { parseGithubRepo } from '@/shared/utils/github-parse.ts'
 import NpmUtils from '@/main/utils/npm-utils.ts'
 import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
+import { parseGithubRepo } from '@ybgnb/utils'
 
 let defaultPluginIcon: string | undefined = undefined
 
@@ -69,7 +69,7 @@ export class IconUtils {
   }
 
   static getInstalledPluginIcon(plugin: InstalledToolkitPlugin) {
-    let pluginDist;
+    let pluginDist
     if (path.isAbsolute(plugin.files.distPath)) {
       pluginDist = plugin.files.distPath
     } else {

@@ -9,7 +9,8 @@ import type {
   ToolkitFileApi,
   ToolkitGlobalDataApi,
   ToolkitSystemApi,
-  ToolkitWindowApi
+  ToolkitWindowApi,
+  ToolkitUserApi,
 } from 'bilitoolkit-api-types'
 
 /**
@@ -96,7 +97,14 @@ export type LeafFunctionPaths<T> = DeepFunctionPaths<{
 
 // =========================自动生成 添加了API调用的上下文 参数的接口=========================
 /**
- * bili相关的API（添加API调用的上下文参数）
+ * user 相关的API（添加API调用的上下文参数）
+ */
+export type GeneratedIpcToolkitUserApi = AddApiCallerContext<ToolkitUserApi>
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IpcToolkitUserApi extends GeneratedIpcToolkitUserApi {}
+
+/**
+ * bili-api 相关的API（添加API调用的上下文参数）
  */
 export type GeneratedIpcToolkitBiliApi = AddApiCallerContext<ToolkitBiliApi>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

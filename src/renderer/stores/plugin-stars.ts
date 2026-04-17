@@ -1,5 +1,5 @@
 import { toolkitApi } from '@/renderer/api/toolkit-api'
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { reactive, watch, computed } from 'vue'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'

@@ -15,7 +15,7 @@ import { pluginManager } from '@/main/plugin/plugin-manage.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import type { UserCookie } from '@ybgnb/bili-api'
 import { CommonError } from '@ybgnb/utils'
-import { userManager } from '@/main/bili/service/user-manager.ts'
+import { userManager } from '@/main/service/user-manager.ts'
 
 /**
  * 核心API处理器

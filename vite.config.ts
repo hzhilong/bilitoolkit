@@ -8,6 +8,9 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { loadEnvConfig } from '@ybgnb/vite-env/node'
+import { builtinModules } from 'node:module'
+import { merge, cloneDeep } from 'lodash-es'
+import path from 'path'
 
 /**
  * 基础的 vite 配置
@@ -89,7 +92,29 @@ export default defineConfig((env: ConfigEnv) => {
       electron({
         main: {
           entry: 'src/main/main.ts',
-          vite: electronVite,
+          vite: merge(cloneDeep(electronVite), {
+            build: {
+              rollupOptions: {
+                external: (id: string) => {
+                  // 排除所有内置模块
+                  if (builtinModules.includes(id) || id.startsWith('node:')) return true
+
+                  // 在 ESM 模式下，绝对不能 external 一个绝对路径 (Windows 下会报 e: 协议错)
+                  // 排除非路径、非项目路径别名开始的依赖
+                  if (
+                    !id.startsWith('.') &&
+                    !id.startsWith('/') &&
+                    !id.startsWith('src/') &&
+                    !id.startsWith('@/') &&
+                    !path.isAbsolute(id)
+                  )
+                    return true
+
+                  return false
+                },
+              },
+            },
+          }),
         },
         preload: {
           input: 'src/main/preloads/preload.ts',

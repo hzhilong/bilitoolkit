@@ -1,11 +1,11 @@
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { FileUtils } from '@/main/utils/file-utils'
-import { AbortedError, CommonError } from '@ybgnb/utils'
 import { exec } from 'child_process'
 import fs from 'fs'
 import iconv from 'iconv-lite'
 import path from 'node:path'
 import * as url from 'node:url'
+import { AbortError, CommonError } from '@ybgnb/utils'
 
 const cmdEncoding = 'binary'
 const cmdResultEncoding = 'cp936'
@@ -52,7 +52,7 @@ export class Win32Utils {
     return new Promise((resolve, reject) => {
       // 前置检查：如果 signal 已终止，直接拒绝
       if (options?.signal?.aborted) {
-        reject(new AbortedError())
+        reject(new AbortError())
         return
       }
 
@@ -78,7 +78,7 @@ export class Win32Utils {
       // 定义 abort 处理函数
       const abortHandler = () => {
         child.kill('SIGTERM') // 终止进程
-        reject(new AbortedError())
+        reject(new AbortError())
       }
       // 注册 abort 监听
       if (options?.signal) {

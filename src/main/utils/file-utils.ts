@@ -1,7 +1,6 @@
 import { mainEnv } from '@/main/common/main-env'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { Win32Utils } from '@/main/utils/win32-utils'
-import { BaseUtils, CommonError } from '@ybgnb/utils'
 import { shell } from 'electron'
 import fs from 'fs'
 import path from 'path'
@@ -10,6 +9,7 @@ import type { ApiCallerEnvType } from '@/main/types/ipc-toolkit-api.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { MainConstants } from '@/main/common/main-constants.ts'
 import NpmUtils from '@/main/utils/npm-utils.ts'
+import { CommonError, convertToCommonError } from '@ybgnb/utils'
 
 export class FileUtils {
   /**
@@ -105,7 +105,7 @@ export class FileUtils {
       mainLogger.info(`已成功删除 ${directory} 下的所有文件和目录`)
     } catch (error) {
       mainLogger.error('删除文件时出错：', error)
-      throw BaseUtils.convertToCommonError(error, '删除文件时出错：')
+      throw convertToCommonError(error, '删除文件时出错：')
     }
   }
 

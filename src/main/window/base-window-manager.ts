@@ -2,18 +2,17 @@ import { type WebContents, webContents, BrowserWindow, session, WebContentsView 
 import type { CreateWindowOptions } from '@/main/types/create-window.ts'
 import type { ApiCallerContext, HostApiCallerContext, PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { isToolkitPlugin, type ToolkitPlugin, type InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { CommonError } from '@ybgnb/utils'
+import { CommonError, isHttpUrl } from '@ybgnb/utils'
 import path from 'path'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
-import { defaultsDeep, debounce } from 'lodash'
+import { defaultsDeep, debounce } from 'lodash-es'
 import DBUtils from '@/main/utils/db-utils.ts'
 import { FileUtils } from '@/main/utils/file-utils.ts'
 import { injectingPluginMetadata } from '@/main/preloads/plugin-meta.ts'
 import { _getGlobalData } from '@/main/api/handler/api-handler-global.ts'
 import type { AppDialogType } from '@/shared/types/app-dialog.ts'
-import { isHttpUrl } from '@/shared/utils/url.ts'
 
 type Rectangle = Electron.Rectangle
 

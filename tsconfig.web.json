@@ -38,7 +38,7 @@
     // 包含哪些内置的API声明文件
     "lib": [
       "DOM",
-      "ES2020"
+      "ESNext"
     ]
     // https://www.typescriptlang.org/tsconfig/#verbatimModuleSyntax
     // 想关闭import显示类型，但vue好像推荐打开
