@@ -22,7 +22,6 @@
     // 使用 .ts 和 .tsx 扩展名
     "allowImportingTsExtensions": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "baseUrl": "./",
     "paths": {
       "@/*": [
         "./src/*"

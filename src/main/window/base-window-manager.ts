@@ -1,4 +1,4 @@
-import { type WebContents, webContents, BrowserWindow, session, WebContentsView } from 'electron'
+import { type WebContents, webContents, BrowserWindow, WebContentsView } from 'electron'
 import type { CreateWindowOptions } from '@/main/types/create-window.ts'
 import type { ApiCallerContext, HostApiCallerContext, PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { isToolkitPlugin, type ToolkitPlugin, type InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
@@ -13,6 +13,7 @@ import { FileUtils } from '@/main/utils/file-utils.ts'
 import { injectingPluginMetadata } from '@/main/preloads/plugin-meta.ts'
 import { _getGlobalData } from '@/main/api/handler/api-handler-global.ts'
 import type { AppDialogType } from '@/shared/types/app-dialog.ts'
+import { getSessionPartition } from '@/main/utils/session.ts'
 
 type Rectangle = Electron.Rectangle
 
@@ -129,6 +130,7 @@ export abstract class BaseWindowManager {
         webPreferences: {
           sandbox: true,
           webSecurity: false, // 禁用同源策略
+          session: getSessionPartition('host'),
           // 集成网页和 Node.js，也就是在渲染进程中，可以调用 Node.js 方法
           // contextIsolation: false,
           // nodeIntegration: true,
@@ -173,7 +175,7 @@ export abstract class BaseWindowManager {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (ignoredError) {}
 
-    const ses = session.fromPartition('<' + plugin.id + '>')
+    const ses = getSessionPartition('plugin', plugin)
     const preload = path.join(appPath.preloadsDir, `plugin-preload.cjs`)
     ses.registerPreloadScript({
       filePath: preload,
@@ -263,7 +265,7 @@ export abstract class BaseWindowManager {
     if (this.appDialogWebContents) return
     const window = this.mainWindow!
 
-    const ses = session.fromPartition(`<dialog-app>`)
+    const ses = getSessionPartition('host-dialog')
     const preload = path.join(appPath.preloadsDir, `dialog-app-preload.cjs`)
 
     ses.registerPreloadScript({

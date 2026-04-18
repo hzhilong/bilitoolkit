@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash-es'
 import { reactive } from 'vue'
 import PluginCard from '@/renderer/components/plugin/PluginCard.vue'
 import type { UserAuthDialogProps } from '@/renderer/components/dialog/types.ts'
+import { BiliUserCard } from 'bilitoolkit-ui'
 
 const visible = defineModel<boolean>({ required: true })
 const props = withDefaults(defineProps<UserAuthDialogProps>(), {})

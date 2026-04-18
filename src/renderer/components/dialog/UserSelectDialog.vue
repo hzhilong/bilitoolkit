@@ -4,7 +4,8 @@ import { cloneDeep } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import type { UserSelectDialogProps } from '@/renderer/components/dialog/types.ts'
 import { useUserStore } from '@/renderer/stores/user.ts'
-import type { UserInfo } from '@ybgnb/bili-api'
+import type { UserInfoWithCookie } from '@ybgnb/bili-api'
+import { BiliUserCard } from 'bilitoolkit-ui'
 
 const visible = defineModel<boolean>({ required: true })
 const props = withDefaults(defineProps<UserSelectDialogProps>(), {})
@@ -29,7 +30,7 @@ const handleCancel = () => {
   options.onCancel?.()
 }
 
-const handleSelect = (user: UserInfo) => {
+const handleSelect = (user: UserInfoWithCookie) => {
   visible.value = false
   options.onSelected(user)
 }
@@ -51,7 +52,7 @@ defineExpose({ show, hide })
       <div class="header">
         <el-button type="primary" @click="userDialogVisible = true">登录新账号</el-button>
       </div>
-      <div class="user-list">
+      <div class="user-list" v-if="users && users.length > 0">
         <BiliUserCard
           class="user-card"
           v-for="user in users"
@@ -60,6 +61,7 @@ defineExpose({ show, hide })
           @click="handleSelect(user)"
         ></BiliUserCard>
       </div>
+      <el-empty v-if="!users || users.length === 0" description="当前未登录用户" />
     </div>
     <template #footer></template>
     <UserLoginDialog v-model="userDialogVisible" />
@@ -81,7 +83,6 @@ defineExpose({ show, hide })
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px 10px;
   box-sizing: border-box;
 
   .user-card {

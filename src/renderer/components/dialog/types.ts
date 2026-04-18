@@ -1,5 +1,5 @@
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import type { UserInfo } from '@ybgnb/bili-api'
+import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 
 /**
  * 账号选择弹窗
@@ -7,7 +7,7 @@ import type { UserInfo } from '@ybgnb/bili-api'
 export interface UserSelectDialogProps {
   title: string
   onCancel?: () => void
-  onSelected: (user: UserInfo) => void
+  onSelected: (user: UserInfoWithCookie) => void
 }
 
 export type UserSelectDialogExposed = {
@@ -18,7 +18,7 @@ export type UserSelectDialogExposed = {
 export interface UserAuthDialogProps {
   title: string
   plugin: ToolkitPlugin
-  user: UserInfo
+  user: UserInfoWithCookie
   onCancel?: () => void
   onConfirm: () => void
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends CardType">
-import { IconLabel, showToast, useLoadingData } from 'bilitoolkit-ui'
+import { IconLabel, showToast, useLoadingData, AppTooltip } from 'bilitoolkit-ui'
 import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.ts'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
@@ -90,9 +90,7 @@ const starPlugin = () => {
           <icon-label icon="file">{{ displayInstallDate }}</icon-label>
         </div>
       </template>
-      <div class="plugin-description">
-        {{ plugin.description }}
-      </div>
+      <AppTooltip class="plugin-description" :content="plugin.description" :lines="2"> </AppTooltip>
       <div class="options" v-if="type !== 'no-options'">
         <i
           v-if="type == 'manage'"
@@ -168,6 +166,8 @@ const starPlugin = () => {
 
   .plugin-infos {
     flex: 1;
+    width: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -221,6 +221,8 @@ const starPlugin = () => {
     border-top: 1px solid var(--el-border-color-light);
     padding-top: 4px;
     margin-top: 6px;
+    text-wrap: auto;
+    height: calc(1.5em * 2);
   }
 
   .options {

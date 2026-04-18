@@ -4,7 +4,7 @@ import type {
   InstalledToolkitPlugin,
   PluginInstallOptions,
   PluginTestOptions,
-  ToolkitPlugin
+  ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.ts'
 
 /**
@@ -60,11 +60,6 @@ export interface ToolkitCoreApi {
   getFilesFolderSize(): Promise<string>
 
   /**
-   * 账号变更，通知主进程的哔哩账号管理模块变更
-   */
-  syncBiliUserState(): Promise<void>
-
-  /**
    * 获取已安装的插件
    */
   getInstalledPlugins(): Promise<AppInstalledPlugins>
@@ -114,12 +109,7 @@ export interface ToolkitCoreApi {
   getPluginIcon(plugin: ToolkitPlugin): Promise<string>
 
   /**
-   * 获取用户 cookie
+   * 账号变更，通知主进程的哔哩账号管理模块变更
    */
-  getCurrUserCookie(): Promise<string[]>
-
-  /**
-   * 退出当前账号 （主要是用了触发其他插件的 onUserLogout 事件监听）
-   */
-  logoutCurrUser(): Promise<void>
+  syncBiliUserState(): Promise<void>
 }

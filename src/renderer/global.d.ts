@@ -1,5 +1,6 @@
 // 对vue进行类型补充说明
 import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
+import type { WindowApp } from '@/shared/types/app-types.ts'
 
 declare module 'vue' {
   // interface ComponentCustomOptions {}

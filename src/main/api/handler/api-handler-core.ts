@@ -13,9 +13,9 @@ import {
 import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { pluginManager } from '@/main/plugin/plugin-manage.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
-import { CommonError } from '@ybgnb/utils'
 import { userManager } from '@/main/service/user-manager.ts'
-import { getUserCookies } from '@/main/utils/session.ts'
+import { emit } from '@/main/api/handler/api-handler-event.ts'
+import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 
 /**
  * 核心API处理器
@@ -46,10 +46,6 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
 
   async getFilesFolderSize(_: ApiCallerContext): Promise<string> {
     return FileUtils.formatKBSize(FileUtils.getFolderSizeSync(appPath.filePath) / 1024)
-  }
-
-  async syncBiliUserState(_: ApiCallerContext): Promise<void> {
-    userManager.refreshFromDB()
   }
 
   async getInstalledPlugins(_: ApiCallerContext): Promise<AppInstalledPlugins> {
@@ -95,11 +91,8 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return await IconUtils.downloadPluginIcon(plugin)
   }
 
-  getCurrUserCookie(_context: ApiCallerContext): Promise<string[]> {
-    return getUserCookies(_context.webContents.session)
-  }
-
-  logoutCurrUser(_context: ApiCallerContext): Promise<void> {
-    throw new CommonError('')
+  async syncBiliUserState(_: ApiCallerContext): Promise<void> {
+    userManager.refreshFromDB()
+    emit(HOST_EVENT_CHANNELS.USER_UPDATE)
   }
 }

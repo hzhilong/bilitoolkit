@@ -5,7 +5,6 @@ import type { UserInfo } from '@ybgnb/bili-api'
 import { biliClient } from '@/renderer/api/bili-client.ts'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import QRCode from 'qrcode'
-import { handleError } from 'bilitoolkit-ui'
 
 const visible = defineModel<boolean>({ required: true })
 
@@ -16,7 +15,7 @@ const emit = defineEmits<{
 
 const qrCodeImg = ref('')
 const loginResult = ref('')
-const abortController = new AbortController()
+let abortController = new AbortController()
 
 const handleCancel = () => {
   visible.value = false
@@ -25,10 +24,10 @@ const handleCancel = () => {
 }
 
 const startLogin = async () => {
-  await biliClient.user.loginWithQRCode(
+  const context = await biliClient.user.loginWithQRCode(
     {
       async cookieProvider(): Promise<string[]> {
-        return await toolkitApi.core.getCurrUserCookie()
+        return await toolkitApi.user.getCurrUserCookie()
       },
       async onQRCodeReceived(qrcodeUrl: string): Promise<void> {
         qrCodeImg.value = await QRCode.toDataURL(qrcodeUrl)
@@ -46,14 +45,20 @@ const startLogin = async () => {
   // 官方接口两个都是粉丝数...
   userInfo.follower = stat.follower
   userInfo.following = stat.following
-  useUserStore().loginUser(userInfo)
+  await useUserStore().loginUser({
+    ...userInfo,
+    userCookie: context.userCookie,
+  })
   visible.value = false
   emit('loginSuccess', userInfo)
 }
 
 watch(visible, (newValue) => {
   if (newValue) {
-    startLogin().catch(handleError)
+    if (abortController.signal.aborted) {
+      abortController = new AbortController()
+    }
+    startLogin()
   }
 })
 </script>

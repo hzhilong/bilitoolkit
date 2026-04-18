@@ -9,7 +9,6 @@
   ],
   "compilerOptions": {
     "noEmit": true,
-    "baseUrl": "./",
     // 指定增量编译信息的存储路径，提升后续编译速度（集中在 node_modules/.tmp 避免污染项目目录）
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "module": "ESNext",

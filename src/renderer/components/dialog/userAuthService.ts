@@ -1,6 +1,7 @@
 import { createVNode, nextTick, render, type VNode } from 'vue'
 import UserAuthDialog from '@/renderer/components/dialog/UserAuthDialog.vue'
 import type { UserAuthDialogExposed, UserAuthDialogProps } from '@/renderer/components/dialog/types.ts'
+import { AbortError } from '@ybgnb/utils'
 
 let instance: VNode | undefined = undefined
 let container: HTMLElement | null = null
@@ -34,7 +35,7 @@ export const AppUserAuthDialog = {
           resolve()
         },
         onCancel: () => {
-          reject('用户已取消')
+          reject(new AbortError())
         },
       })
     })

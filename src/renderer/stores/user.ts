@@ -1,9 +1,11 @@
 import { CommonError } from '@ybgnb/utils'
-import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
-import { reactive, watch } from 'vue'
+import { reactive } from 'vue'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
-import type { UserInfo } from '@ybgnb/bili-api'
+import type { UserInfoWithCookie } from '@ybgnb/bili-api'
+import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
+import { toIPC } from 'bilitoolkit-api-runtime'
+import { toolkitApi } from 'bilitoolkit-ui'
 
 /**
  * 哔哩账号状态 Store
@@ -11,44 +13,51 @@ import type { UserInfo } from '@ybgnb/bili-api'
 export const useUserStore = defineStore(
   'BiliToolkit-BiliUsers',
   () => {
-    const users = reactive<UserInfo[]>([])
+    const users = reactive<UserInfoWithCookie[]>([])
 
-    const init = async () => {
+    const refreshData = async () => {
       // 获取数据库配置
-      const dbConfig = (await window.toolkitApi.db.init(APP_DB_KEYS.BILI_USERS, [])) as UserInfo[]
-      Object.assign(users, Array.from(dbConfig))
+      const list = (await window.toolkitApi.db.init(APP_DB_KEYS.BILI_USERS, [])) as UserInfoWithCookie[]
+      users.splice(0, users.length, ...list)
     }
 
-    // 设置变化后更新数据库
-    watch(
-      () => users,
-      async (newVal, _oldVal) => {
-        // 写入配置
-        await window.toolkitApi.db.write(APP_DB_KEYS.BILI_USERS, cloneDeep(newVal))
-        await window.toolkitApi.core.syncBiliUserState()
-      },
-      { deep: true },
-    )
+    // 变化后更新数据库和同步主进程
+    const updateDBAndSync = async () => {
+      // 写入配置
+      await window.toolkitApi.db.write(APP_DB_KEYS.BILI_USERS, toIPC(users))
+      await window.toolkitApi.core.syncBiliUserState()
+    }
+
+    const init = async () => {
+      await refreshData()
+      await window.toolkitApi.event.on(HOST_EVENT_CHANNELS.USER_UPDATE, async () => {
+        await refreshData()
+      })
+    }
 
     // 登录新账号
-    const loginUser = (newUser: UserInfo) => {
+    const loginUser = async (newUser: UserInfoWithCookie) => {
       for (const user of users) {
         if (user.mid === newUser.mid) {
           // 更新账号
           Object.assign(user, newUser)
+          await updateDBAndSync()
           return
         }
       }
       // 添加账号
       users.push(newUser)
+      await updateDBAndSync()
     }
 
     // 注销账号
-    const logoutUser = (uid: number) => {
+    const logoutUser = async (uid: number) => {
       for (let i = 0; i < users.length; i++) {
         const user = users[i]
         if (user.mid === uid) {
           users.splice(i, 1)
+          await updateDBAndSync()
+          await toolkitApi.event.emit(HOST_EVENT_CHANNELS.USER_LOGOUT, toIPC(user))
           return
         }
       }
