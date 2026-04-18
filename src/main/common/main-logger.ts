@@ -49,6 +49,18 @@ log4js.configure({
       // 开发模式启用调用堆栈，打印行号
       enableCallStack: mainEnv.isDev,
     },
+    onlyConsole: {
+      appenders: ['console'],
+      level: import.meta.env.APP_LOG_LEVEL || 'info',
+      // 开发模式启用调用堆栈，打印行号
+      enableCallStack: mainEnv.isDev,
+    },
+    onlyFile: {
+      appenders: ['all', 'errorFilter'],
+      level: import.meta.env.APP_LOG_LEVEL || 'info',
+      // 开发模式启用调用堆栈，打印行号
+      enableCallStack: mainEnv.isDev,
+    },
   },
 })
 
@@ -56,6 +68,8 @@ log4js.configure({
  * 主进程Logger
  */
 export const mainLogger = log4js.getLogger()
+export const mainConsoleLogger = log4js.getLogger('onlyConsole')
+export const mainFileLogger = log4js.getLogger('onlyFile')
 
 /**
  * 是否打印 api 调用结果

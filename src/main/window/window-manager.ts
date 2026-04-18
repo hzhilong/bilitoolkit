@@ -5,7 +5,7 @@ import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
 import { ToolkitApiDispatcher } from '@/main/api/handler/toolkit-api-dispatcher.ts'
 import { BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import { showDevTools } from '@/main/utils/dev-tools.ts'
-import { isLogApiResult, mainLogger } from '@/main/common/main-logger.ts'
+import { isLogApiResult, mainLogger, mainConsoleLogger, mainFileLogger } from '@/main/common/main-logger.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { updateElectronApp } from 'update-electron-app'
 
@@ -70,15 +70,11 @@ export class WindowManager extends BaseWindowManager {
         const isDialog = apiCallerContext.envType === 'host' && apiCallerContext.isDialogWebContents
         if (!isDialog) {
           mainLogger.info(`=========================================================`)
-          mainLogger.info(`${logPrefix} 执行中`, JSON.stringify(options?.args))
+          handleLogger(logPrefix, '执行中', 'arg', options?.args)
         }
         const result = await this.apiDispatcher.handle(event, options, apiCallerContext)
         if (!isDialog) {
-          if (isLogApiResult(result)) {
-            mainLogger.info(`${logPrefix} 执行成功 ${result ? JSON.stringify(result) : ''}`)
-          } else {
-            mainLogger.info(`${logPrefix} 执行成功`)
-          }
+          handleLogger(logPrefix, '执行成功', 'rep', isLogApiResult(result) ? result : null)
         }
         return result
       } catch (e) {
@@ -86,6 +82,33 @@ export class WindowManager extends BaseWindowManager {
         throw e
       }
     })
+  }
+}
+
+// 格式化大小
+function formatSize(bytes: number) {
+  if (bytes === 0) return '0 B'
+  const units = ['B', 'KB', 'MB', 'GB', 'TB']
+  const k = 1000
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  const size = bytes / Math.pow(k, i)
+  return `${size.toFixed(1)} ${units[i]}`
+}
+
+// 处理日志打印
+function handleLogger(logPrefix: string, status: string, dataName: 'arg' | 'rep', data: unknown) {
+  if (data == null || data === '') {
+    mainLogger.info(`${logPrefix} ${status}`)
+    return
+  }
+  const jsonData = JSON.stringify(data)
+  const argSize = jsonData.length ?? 0
+  if (argSize > 100) {
+    // 参数过长时，不在控制台打印具体参数
+    mainConsoleLogger.info(`${logPrefix} ${status} ${dataName} size: ${formatSize(argSize)}`)
+    mainFileLogger.info(`${logPrefix} ${status}`, jsonData)
+  } else {
+    mainLogger.info(`${logPrefix} ${status}`, jsonData)
   }
 }
 

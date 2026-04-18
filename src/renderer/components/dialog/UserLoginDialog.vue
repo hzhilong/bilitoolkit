@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useUserStore } from '@/renderer/stores/user.ts'
-import type { UserInfo, UserCookie } from '@ybgnb/bili-api'
+import type { UserInfo } from '@ybgnb/bili-api'
 import { biliClient } from '@/renderer/api/bili-client.ts'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import QRCode from 'qrcode'
+import { handleError } from 'bilitoolkit-ui'
 
 const visible = defineModel<boolean>({ required: true })
 
@@ -23,14 +25,13 @@ const handleCancel = () => {
 }
 
 const startLogin = async () => {
-  console.log('startLogin')
   await biliClient.user.loginWithQRCode(
     {
-      async cookieProvider(): Promise<UserCookie> {
+      async cookieProvider(): Promise<string[]> {
         return await toolkitApi.core.getCurrUserCookie()
       },
       async onQRCodeReceived(qrcodeUrl: string): Promise<void> {
-        qrCodeImg.value = qrcodeUrl
+        qrCodeImg.value = await QRCode.toDataURL(qrcodeUrl)
       },
       onStatusChange(msg: string): void {
         loginResult.value = msg
@@ -41,15 +42,18 @@ const startLogin = async () => {
     },
   )
   const userInfo = await biliClient.user.getMyInfo()
+  const stat = await biliClient.relation.getStat(userInfo.mid)
+  // 官方接口两个都是粉丝数...
+  userInfo.follower = stat.follower
+  userInfo.following = stat.following
   useUserStore().loginUser(userInfo)
   visible.value = false
   emit('loginSuccess', userInfo)
 }
 
 watch(visible, (newValue) => {
-  console.log('watch', newValue)
   if (newValue) {
-    startLogin()
+    startLogin().catch(handleError)
   }
 })
 </script>

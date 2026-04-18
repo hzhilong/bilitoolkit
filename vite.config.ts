@@ -106,6 +106,8 @@ export default defineConfig((env: ConfigEnv) => {
                     !id.startsWith('/') &&
                     !id.startsWith('src/') &&
                     !id.startsWith('@/') &&
+                    !id.startsWith('bilitoolkit-') &&
+                    !id.startsWith('@ybgnb') &&
                     !path.isAbsolute(id)
                   )
                     return true

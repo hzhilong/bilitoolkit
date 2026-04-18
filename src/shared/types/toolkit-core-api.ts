@@ -6,7 +6,6 @@ import type {
   PluginTestOptions,
   ToolkitPlugin
 } from '@/shared/types/toolkit-plugin.ts'
-import type { UserCookie } from '@ybgnb/bili-api'
 
 /**
  * 哔哩工具姬API（包含核心API）
@@ -117,7 +116,7 @@ export interface ToolkitCoreApi {
   /**
    * 获取用户 cookie
    */
-  getCurrUserCookie(): Promise<UserCookie>
+  getCurrUserCookie(): Promise<string[]>
 
   /**
    * 退出当前账号 （主要是用了触发其他插件的 onUserLogout 事件监听）

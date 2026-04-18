@@ -13,9 +13,9 @@ import {
 import { IconUtils } from '@/main/utils/icon-utils.ts'
 import { pluginManager } from '@/main/plugin/plugin-manage.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
-import type { UserCookie } from '@ybgnb/bili-api'
 import { CommonError } from '@ybgnb/utils'
 import { userManager } from '@/main/service/user-manager.ts'
+import { getUserCookies } from '@/main/utils/session.ts'
 
 /**
  * 核心API处理器
@@ -95,8 +95,8 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return await IconUtils.downloadPluginIcon(plugin)
   }
 
-  getCurrUserCookie(_context: ApiCallerContext): Promise<UserCookie> {
-    throw new CommonError('')
+  getCurrUserCookie(_context: ApiCallerContext): Promise<string[]> {
+    return getUserCookies(_context.webContents.session)
   }
 
   logoutCurrUser(_context: ApiCallerContext): Promise<void> {

@@ -6,6 +6,12 @@ import * as os from 'node:os'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { mainEnv } from '@/main/common/main-env.ts'
+
+if (mainEnv.isDev) {
+  // Source Map 支持库 => 开发环境打印日志时输出源码路径和行号
+  ;(await import('source-map-support')).install()
+}
+
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 app.commandLine.appendSwitch('disable-web-security')
 if (mainEnv.isDev) app.commandLine.appendSwitch('disable-http-cache')
