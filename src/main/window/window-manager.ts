@@ -8,6 +8,7 @@ import { showDevTools } from '@/main/utils/dev-tools.ts'
 import { isLogApiResult, mainLogger, mainConsoleLogger, mainFileLogger } from '@/main/common/main-logger.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { updateElectronApp } from 'update-electron-app'
+import { BiliApiBusinessError } from '@ybgnb/bili-api'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -78,7 +79,11 @@ export class WindowManager extends BaseWindowManager {
         }
         return result
       } catch (e) {
-        mainLogger.error(`${logPrefix} 执行错误}`, e)
+        if (e instanceof BiliApiBusinessError) {
+          mainLogger.error(`${logPrefix} 执行错误`, e.message)
+        } else {
+          mainLogger.error(`${logPrefix} 执行错误`, e)
+        }
         throw e
       }
     })

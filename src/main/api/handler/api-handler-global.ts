@@ -1,5 +1,5 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { IdUtils } from '@/main/utils/id-utils'
+import { generateId } from '@/main/utils/id-utils'
 import { CommonError } from '@ybgnb/utils'
 import type { WebContents } from 'electron'
 import { ipcMain } from 'electron'
@@ -25,7 +25,7 @@ export const _getGlobalData = (
 ) => {
   return new Promise((resolve, reject) => {
     // 生成唯一请求 ID
-    const requestId = IdUtils.generateId()
+    const requestId = generateId()
     // 监听响应事件，匹配请求 ID
     let isFinish = false
     const responseListener: ResponseListener = (event: IpcMainEvent, rep: IpcResponseBody) => {
