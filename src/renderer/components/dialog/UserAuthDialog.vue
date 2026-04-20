@@ -48,7 +48,7 @@ defineExpose({ show, hide })
       <div class="arrow">⬇</div>
       <plugin-card class="plugin-card" :plugin="plugin" type="no-options" />
       <div class="detail">
-        <div>此插件请求获得账号cookies</div>
+        <div>此插件请求获得账号cookie</div>
         <div>授权后插件可完全操控你的账号</div>
         <div>请在信任该插件作者的情况下确认操作</div>
       </div>

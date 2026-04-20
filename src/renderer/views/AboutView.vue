@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAppThemeStore } from '@/renderer/stores/app-theme'
-import type { AppThemeMode } from 'bilitoolkit-api-types'
+import type { AppThemeMode } from 'bilitoolkit-types'
 import type { Ref } from 'vue'
 import { computed } from 'vue'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'

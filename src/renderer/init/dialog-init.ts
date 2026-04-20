@@ -6,7 +6,7 @@ import { AppUserAuthDialog } from '@/renderer/components/dialog/userAuthService.
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 import { AppUserSelectDialog } from '@/renderer/components/dialog/userSelectService.ts'
 import { appEnv } from '@/shared/common/app-env.ts'
-import { toIPC } from 'bilitoolkit-api-runtime'
+import { toIPC } from 'bilitoolkit-runtime'
 
 /**
  * 对话框APP初始化监听器

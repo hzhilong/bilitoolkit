@@ -3,7 +3,7 @@ import { defaultsDeep } from 'lodash-es'
 import path from 'path'
 import type { AppSettings } from '@/shared/types/app-settings.ts'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
-import type { AppThemeState } from 'bilitoolkit-api-types'
+import type { AppThemeState } from 'bilitoolkit-types'
 import DBUtils from '@/main/utils/db-utils.ts'
 import type { AppInstalledPlugins } from '@/shared/types/toolkit-plugin.ts'
 import { writeFileSync } from 'node:fs'
@@ -19,7 +19,6 @@ export const readHostDBDoc = <T extends object>(docName: string): T | null => {
   const filePath = path.resolve(appPath.hostAppDBPath, docName.endsWith('.json') ? docName : `${docName}.json`)
   try {
     return DBUtils.readDocObject<T>(filePath)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
     return null
   }

@@ -20,7 +20,11 @@ export interface ToolkitPlugin {
     repository?: string
     bugs?: string
   }
+  type: PluginType
 }
+
+// 插件任务类型
+export type PluginType = 'ui' | 'task'
 
 export interface ToolkitPluginWithNpmInfo extends ToolkitPlugin {
   downloads: {

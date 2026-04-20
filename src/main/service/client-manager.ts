@@ -1,6 +1,6 @@
 import { CommonError } from '@ybgnb/utils'
 import { BiliClient, type ConsoleMethod } from '@ybgnb/bili-api'
-import type { BiliApiClientConfig } from 'bilitoolkit-api-types'
+import type { BiliApiClientConfig } from 'bilitoolkit-types'
 import { generateId } from '@/main/utils/id-utils.ts'
 import { omit } from 'lodash-es'
 import { getLogLevel } from '@/shared/common/bili-api-log.ts'

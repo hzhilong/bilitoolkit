@@ -11,7 +11,7 @@ import {
   type ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.ts'
 import { IconUtils } from '@/main/utils/icon-utils.ts'
-import { pluginManager } from '@/main/plugin/plugin-manage.ts'
+import { pluginManager } from '@/main/service/plugin-manage.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { userManager } from '@/main/service/user-manager.ts'
 import { emit } from '@/main/api/handler/api-handler-event.ts'

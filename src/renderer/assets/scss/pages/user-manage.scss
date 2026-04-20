@@ -3,14 +3,15 @@
   display: flex;
   align-items: center;
   justify-content: start;
+  margin-bottom: .5em;
 }
 
 .user-list {
-  padding: 10px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 20px 10px;
+  padding: 10px 0;
   overflow-y: auto;
   justify-content: flex-start;
 

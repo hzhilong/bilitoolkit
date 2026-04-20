@@ -4,7 +4,7 @@ import { FileUtils } from '@/main/utils/file-utils'
 import { CommonError } from '@ybgnb/utils'
 import { nativeTheme, shell } from 'electron'
 import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-toolkit-api.ts'
-import type { AppLog, AppThemeState } from 'bilitoolkit-api-types'
+import type { AppLog, AppThemeState } from 'bilitoolkit-types'
 import { getAppThemeState } from '@/main/utils/host-app-utils.ts'
 
 /**

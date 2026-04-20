@@ -9,6 +9,7 @@ import { isLogApiResult, mainLogger, mainConsoleLogger, mainFileLogger } from '@
 import { appPath } from '@/main/common/app-path.ts'
 import { updateElectronApp } from 'update-electron-app'
 import { BiliApiBusinessError } from '@ybgnb/bili-api'
+import { appEnv } from '@/shared/common/app-env.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -49,7 +50,9 @@ export class WindowManager extends BaseWindowManager {
     // 初始化对话框视图
     await this.initAppDialogView()
     // 应用更新检测
-    updateElectronApp()
+    if (appEnv.isProd) {
+      updateElectronApp()
+    }
     if (appPath.devUrl) {
       // 开发
       mainWindow.loadURL(appPath.devUrl).then(() => {})

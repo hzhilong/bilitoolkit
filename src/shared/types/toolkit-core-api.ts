@@ -1,4 +1,4 @@
-import type { ToolkitApi } from 'bilitoolkit-api-types'
+import type { ToolkitApi } from 'bilitoolkit-types'
 import type {
   AppInstalledPlugins,
   InstalledToolkitPlugin,

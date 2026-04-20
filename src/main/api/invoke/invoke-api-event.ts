@@ -4,7 +4,7 @@ import type { EventListener, IpcEventEmiter } from '@/main/types/ipc-event.ts'
 import { HOST_EVENT_CHANNELS, type HostEventChannel } from '@/shared/types/host-event-channel.ts'
 import { ipcRenderer } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
-import type { AppThemeState, ToolkitEventApi } from 'bilitoolkit-api-types'
+import type { AppThemeState, ToolkitEventApi } from 'bilitoolkit-types'
 import type { UserCard } from '@ybgnb/bili-api'
 type IpcRendererEvent = Electron.IpcRendererEvent
 

@@ -78,8 +78,7 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
     for (const absolutePath of absolutePaths) {
       try {
         fs.unlinkSync(absolutePath)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (__: unknown) {}
+      } catch {}
     }
   }
 }

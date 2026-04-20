@@ -11,7 +11,7 @@ import type {
   ToolkitSystemApi,
   ToolkitWindowApi,
   ToolkitUserApi,
-} from 'bilitoolkit-api-types'
+} from 'bilitoolkit-types'
 
 /**
  * API调用环境：宿主环境|插件环境

@@ -140,6 +140,7 @@ const starPlugin = () => {
   text-wrap: nowrap;
   gap: 6px;
   position: relative;
+  transition: transform 0.3s ease;
 
   ::v-deep(.icon-font) {
     font-size: 14px;
@@ -149,6 +150,7 @@ const starPlugin = () => {
 
   &.not-tech-style {
     &:hover {
+      transform: translateY(-1px);
       box-shadow: var(--el-box-shadow);
     }
     &::before {

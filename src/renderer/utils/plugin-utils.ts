@@ -11,8 +11,8 @@ import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 import { appEnv } from '@/shared/common/app-env.ts'
 import type { NpmPackage } from '@/shared/types/npm-types.ts'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import { parsePluginName } from '@/shared/utils/plugin-parse.ts'
-import { toIPC } from 'bilitoolkit-api-runtime'
+import { parsePluginKeywords } from '@/shared/utils/plugin-parse.ts'
+import { toIPC } from 'bilitoolkit-runtime'
 import { getFormattedDate } from '@ybgnb/utils'
 
 export class PluginUtils {
@@ -71,8 +71,8 @@ export class PluginUtils {
       time: ps.time,
       plugins: ps.objects.map((p) => {
         return {
+          ...parsePluginKeywords(p.package.name, p.package.keywords),
           id: p.package.name,
-          name: parsePluginName(p.package.name, p.package.keywords),
           author: p.package.publisher.username,
           description: p.package.description,
           version: p.package.version,

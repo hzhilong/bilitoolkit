@@ -23,7 +23,7 @@ import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
 import { rmdirSync, writeFileSync } from 'node:fs'
 import { GithubUtils } from '@/main/utils/github-utils.ts'
 import { mainEnv } from '@/main/common/main-env.ts'
-import { parsePluginName } from '@/shared/utils/plugin-parse.ts'
+import { parsePluginKeywords } from '@/shared/utils/plugin-parse.ts'
 
 type PluginRegistry = {
   appVersion: string
@@ -151,6 +151,7 @@ class PluginManager {
       plugin = {
         id: `测试-${this.registry.plugins.size + 1}`,
         name: '测试',
+        type: 'ui',
         author: 'author',
         description: 'test',
         version: '0.0.1',
@@ -172,7 +173,7 @@ class PluginManager {
       const packageJSON = this.readPackageJSON(options.rootPath)
       plugin = {
         id: packageJSON.name,
-        name: parsePluginName(packageJSON.name, packageJSON.keywords),
+        ...parsePluginKeywords(packageJSON.name, packageJSON.keywords),
         author: packageJSON.author ? String(packageJSON.author) : '',
         description: packageJSON.description ?? '',
         version: packageJSON.version,

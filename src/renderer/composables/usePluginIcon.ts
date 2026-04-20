@@ -15,8 +15,7 @@ export const usePluginIconURL = (plugin: Reactive<ToolkitPlugin>) => {
     try {
       const { owner, repo, branch } = parseGithubRepo(repository)
       return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/public/favicon.ico`
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_ignored) {
+    } catch {
       return defaultIconSrc
     }
   })

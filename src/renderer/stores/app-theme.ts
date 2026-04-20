@@ -1,4 +1,4 @@
-import type { AppThemeMode, AppThemeState } from 'bilitoolkit-api-types'
+import type { AppThemeMode, AppThemeState } from 'bilitoolkit-types'
 import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'

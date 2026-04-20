@@ -82,6 +82,7 @@ defineExpose({ show, hide })
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  row-gap: 16px;
   justify-content: center;
   box-sizing: border-box;
 
