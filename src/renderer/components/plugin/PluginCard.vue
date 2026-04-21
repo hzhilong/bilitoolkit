@@ -98,21 +98,21 @@ const starPlugin = () => {
           :class="star ? 'ri-star-fill' : 'ri-star-line'"
           @click="starPlugin"
         ></i>
-        <el-button @click="showInfoDialog = true">查看</el-button>
-        <el-button v-if="isInstalled" @click="openPlugin">打开</el-button>
+        <el-button @click="showInfoDialog = true" size="small">查看</el-button>
+        <el-button v-if="isInstalled" @click="openPlugin" size="small">打开</el-button>
         <el-popconfirm v-if="!isInstalled" :title="installConfirm" @confirm="installPlugin">
           <template #reference>
-            <el-button>安装</el-button>
+            <el-button size="small">安装</el-button>
           </template>
         </el-popconfirm>
         <el-popconfirm v-else title="确认更新吗？" @confirm="updatePlugin">
           <template #reference>
-            <el-button>更新</el-button>
+            <el-button size="small">更新</el-button>
           </template>
         </el-popconfirm>
         <el-popconfirm v-if="isInstalled" title="确认卸载吗？" @confirm="uninstallPlugin">
           <template #reference>
-            <el-button>卸载</el-button>
+            <el-button size="small">卸载</el-button>
           </template>
         </el-popconfirm>
       </div>

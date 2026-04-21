@@ -95,9 +95,9 @@ export interface ToolkitCoreApi {
   hideCurrPlugin(): Promise<void>
 
   /**
-   * 测试插件
+   * 加载测试插件
    */
-  testPlugin(options: PluginTestOptions): Promise<InstalledToolkitPlugin>
+  loadTestPlugin(options: PluginTestOptions): Promise<InstalledToolkitPlugin>
   /**
    * 隐藏应用对话框窗口
    */

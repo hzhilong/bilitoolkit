@@ -1,11 +1,11 @@
 import { mainLogger } from '@/main/common/main-logger'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { FileUtils } from '@/main/utils/file-utils'
+import { FileUtils } from '@/main/utils/file.ts'
 import fs from 'fs'
 import { LowSync } from 'lowdb'
 import { JSONFileSync } from 'lowdb/node'
 import type { ApiCallerContext, IpcToolkitDBApi } from '@/main/types/ipc-toolkit-api.ts'
-import DBUtils from '@/main/utils/db-utils.ts'
+import DBUtils from '@/main/utils/db.ts'
 
 /**
  * 数据库API处理器

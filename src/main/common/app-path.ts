@@ -1,6 +1,6 @@
 import { app } from 'electron'
 import path from 'path'
-import { FileUtils } from '@/main/utils/file-utils.ts'
+import { FileUtils } from '@/main/utils/file.ts'
 import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
 import { MainConstants } from '@/main/common/main-constants.ts'
 

@@ -2,9 +2,9 @@ import type { ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolk
 import { appPath } from '@/main/common/app-path.ts'
 import path from 'path'
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs'
-import { GithubUtils } from '@/main/utils/github-utils.ts'
+import { GithubUtils } from '@/main/utils/github.ts'
 import { mainLogger } from '@/main/common/main-logger.ts'
-import NpmUtils from '@/main/utils/npm-utils.ts'
+import NpmUtils from '@/main/utils/npm.ts'
 import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
 import { parseGithubRepo } from '@ybgnb/utils'
 

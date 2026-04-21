@@ -1,5 +1,5 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { generateId } from '@/main/utils/id-utils'
+import { generateId } from '@/main/utils/id.ts'
 import { CommonError } from '@ybgnb/utils'
 import type { WebContents } from 'electron'
 import { ipcMain } from 'electron'

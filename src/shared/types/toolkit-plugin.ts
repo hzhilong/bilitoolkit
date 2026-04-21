@@ -38,7 +38,18 @@ export interface ToolkitPluginWithNpmInfo extends ToolkitPlugin {
  * 插件安装选项
  */
 export interface PluginInstallOptions extends ToolkitPlugin {
+  // 安装日期
   installDate: string
+}
+
+/**
+ * 插件下载选项
+ */
+export interface PluginDownloadOptions extends PluginInstallOptions {
+  // 插件根目录
+  rootDirPath: string
+  // 插件目录名
+  pluginDirName: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,6 +79,8 @@ export interface InstalledToolkitPlugin extends PluginInstallOptions {
     // 插件文件总大小描述，带单位
     sizeDesc: string
   }
+  // 是否为测试插件
+  isTest?: boolean
   // 插件加载出现错误？（需要重装）
   // loadingError?: CommonError
 }
@@ -88,5 +101,6 @@ export interface AppInstalledPlugins {
  * 插件测试选项
  */
 export interface PluginTestOptions {
-  rootPath: string
+  /** 插件地址，开发服务器访问地址 / 本地已打包的开发项目根目录 */
+  pluginPath: string
 }

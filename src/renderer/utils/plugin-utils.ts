@@ -28,8 +28,8 @@ export class PluginUtils {
     eventBus.emit('hideCurrPluginView')
   }
 
-  static async testPlugin(options: PluginTestOptions) {
-    const plugin = await toolkitApi.core.testPlugin(options)
+  static async loadTestPlugin(options: PluginTestOptions) {
+    const plugin = await toolkitApi.core.loadTestPlugin(options)
     eventBus.emit('openPluginView', { plugin: plugin })
     return plugin
   }

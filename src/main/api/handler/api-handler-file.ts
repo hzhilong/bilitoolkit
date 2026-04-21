@@ -1,5 +1,5 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { FileUtils } from '@/main/utils/file-utils'
+import { FileUtils } from '@/main/utils/file.ts'
 import { CommonError } from '@ybgnb/utils'
 import fs from 'fs'
 import path from 'path'

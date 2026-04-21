@@ -1,6 +1,6 @@
 import { mainEnv } from '@/main/common/main-env'
 import { mainLogger } from '@/main/common/main-logger.ts'
-import { Win32Utils } from '@/main/utils/win32-utils'
+import { Win32Utils } from '@/main/utils/win32.ts'
 import { shell } from 'electron'
 import fs from 'fs'
 import path from 'path'
@@ -8,7 +8,7 @@ import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import type { ApiCallerEnvType } from '@/main/types/ipc-toolkit-api.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { MainConstants } from '@/main/common/main-constants.ts'
-import NpmUtils from '@/main/utils/npm-utils.ts'
+import NpmUtils from '@/main/utils/npm.ts'
 import { CommonError, convertToCommonError } from '@ybgnb/utils'
 
 export class FileUtils {

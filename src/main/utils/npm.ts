@@ -3,8 +3,9 @@ import path from 'path'
 import { appPath } from '@/main/common/app-path.ts'
 import { writeFileSync, unlinkSync } from 'node:fs'
 import * as tar from 'tar'
-import { FileUtils } from '@/main/utils/file-utils.ts'
+import { FileUtils } from '@/main/utils/file.ts'
 import { convertToCommonError } from '@ybgnb/utils'
+import type { PluginDownloadOptions } from '@/shared/types/toolkit-plugin.ts'
 
 export default class NpmUtils {
   static pkgNameToDirName(pkgName: string) {
@@ -13,14 +14,11 @@ export default class NpmUtils {
 
   /**
    * 下载 npm 包并解压到指定目录并返回
-   * @param pkgName
-   * @param version
    */
-  static async downloadPluginPackage(pkgName: string, version: string = 'latest') {
+  static async downloadPluginPackage(options: PluginDownloadOptions, version: string = 'latest') {
     try {
-      const dirName = this.pkgNameToDirName(pkgName)
       // 获取 package info
-      const registryUrl = `https://registry.npmjs.org/${pkgName}`
+      const registryUrl = `https://registry.npmjs.org/${options.id}`
       const { data: pkgInfo } = await axios.get(registryUrl)
 
       // 获取指定版本
@@ -32,10 +30,10 @@ export default class NpmUtils {
       const tarballBuffer = Buffer.from(response.data)
 
       // 临时保存 tarball
-      const tempFile = path.join(appPath.temp, `${dirName}-${ver}.tgz`)
+      const tempFile = path.join(appPath.temp, `${options.pluginDirName}-${ver}.tgz`)
       writeFileSync(tempFile, tarballBuffer)
 
-      const tarTo = path.join(appPath.pluginsPath, `${dirName}`)
+      const tarTo = path.join(appPath.pluginsPath, `${options.pluginDirName}`)
       FileUtils.ensureDirExists(tarTo)
 
       // 解压
@@ -49,7 +47,7 @@ export default class NpmUtils {
       unlinkSync(tempFile)
       return tarTo
     } catch (error: unknown) {
-      throw convertToCommonError(error, `下载插件包[${pkgName}-${version}]时出错`)
+      throw convertToCommonError(error, `下载插件包[${options.id}-${version}]时出错`)
     }
   }
 }

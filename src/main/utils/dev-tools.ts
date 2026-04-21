@@ -1,7 +1,7 @@
 import { DevToolsType } from '@/shared/types/app-settings'
 import { WebContentsView } from 'electron'
 import { windowManager } from '@/main/window/window-manager.ts'
-import { getAppSettings } from '@/main/utils/host-app-utils.ts'
+import { getAppSettings } from '@/main/utils/host-app.ts'
 import { CommonError } from '@ybgnb/utils'
 
 // 打开开发者工具

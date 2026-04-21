@@ -1,5 +1,5 @@
 import { mainLogger } from '@/main/common/main-logger.ts'
-import { FileUtils } from '@/main/utils/file-utils'
+import { FileUtils } from '@/main/utils/file.ts'
 import { exec } from 'child_process'
 import fs from 'fs'
 import iconv from 'iconv-lite'

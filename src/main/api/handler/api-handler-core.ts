@@ -1,6 +1,6 @@
 import { appPath } from '@/main/common/app-path'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { FileUtils } from '@/main/utils/file-utils'
+import { FileUtils } from '@/main/utils/file.ts'
 import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolkit-api.ts'
 import {
   type AppInstalledPlugins,
@@ -10,12 +10,13 @@ import {
   type PluginTestOptions,
   type ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.ts'
-import { IconUtils } from '@/main/utils/icon-utils.ts'
-import { pluginManager } from '@/main/service/plugin-manage.ts'
+import { IconUtils } from '@/main/utils/icon.ts'
+import { pluginManager } from '@/main/plugin/plugin-manage.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { userManager } from '@/main/service/user-manager.ts'
 import { emit } from '@/main/api/handler/api-handler-event.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
+import { getRecommendedPlugins } from '@/main/plugin/load.ts'
 
 /**
  * 核心API处理器
@@ -53,7 +54,7 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   }
 
   getRecommendedPlugins(_: ApiCallerContext): Promise<ToolkitPlugin[]> {
-    return pluginManager.getRecommendedPlugins()
+    return getRecommendedPlugins()
   }
 
   async installPlugin(_: ApiCallerContext, options: PluginInstallOptions): Promise<InstalledToolkitPlugin> {
@@ -80,8 +81,8 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return windowManager.hideAppDialogView(context)
   }
 
-  testPlugin(context: ApiCallerContext, options: PluginTestOptions): Promise<InstalledToolkitPlugin> {
-    return pluginManager.testPlugin(context, options)
+  loadTestPlugin(context: ApiCallerContext, options: PluginTestOptions): Promise<InstalledToolkitPlugin> {
+    return pluginManager.loadTestPlugin(context, options)
   }
 
   async getPluginIcon(context: ApiCallerContext, plugin: ToolkitPlugin): Promise<string> {

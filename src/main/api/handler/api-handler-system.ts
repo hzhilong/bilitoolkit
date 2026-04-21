@@ -1,11 +1,11 @@
 import { mainLogger } from '@/main/common/main-logger'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { FileUtils } from '@/main/utils/file-utils'
+import { FileUtils } from '@/main/utils/file.ts'
 import { CommonError } from '@ybgnb/utils'
 import { nativeTheme, shell } from 'electron'
 import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-toolkit-api.ts'
 import type { AppLog, AppThemeState } from 'bilitoolkit-types'
-import { getAppThemeState } from '@/main/utils/host-app-utils.ts'
+import { getAppThemeState } from '@/main/utils/host-app.ts'
 
 /**
  * 系统相关API处理器

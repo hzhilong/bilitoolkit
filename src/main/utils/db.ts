@@ -3,12 +3,12 @@ import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import path from 'path'
 import { appPath } from '@/main/common/app-path.ts'
 import { MainConstants } from '@/main/common/main-constants.ts'
-import { FileUtils } from '@/main/utils/file-utils.ts'
+import { FileUtils } from '@/main/utils/file.ts'
 import { CommonError } from '@ybgnb/utils'
 import fs from 'fs'
 import { JSONFileSync } from 'lowdb/node'
 import { LowSync } from 'lowdb'
-import NpmUtils from '@/main/utils/npm-utils.ts'
+import NpmUtils from '@/main/utils/npm.ts'
 
 export default class DBUtils {
   /**

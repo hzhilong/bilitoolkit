@@ -8,8 +8,8 @@ import { mainLogger } from '@/main/common/main-logger.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
 import { defaultsDeep, debounce } from 'lodash-es'
-import DBUtils from '@/main/utils/db-utils.ts'
-import { FileUtils } from '@/main/utils/file-utils.ts'
+import DBUtils from '@/main/utils/db.ts'
+import { FileUtils } from '@/main/utils/file.ts'
 import { injectingPluginMetadata } from '@/main/preloads/plugin-meta.ts'
 import { _getGlobalData } from '@/main/api/handler/api-handler-global.ts'
 import type { AppDialogType } from '@/shared/types/app-dialog.ts'
@@ -36,7 +36,7 @@ export abstract class BaseWindowManager {
   public appDialogResizeListener: (() => Promise<void>) | undefined
 
   protected constructor() {
-    this.webContentsToPluginMap = new Map<number, ToolkitPlugin>()
+    this.webContentsToPluginMap = new Map<number, InstalledToolkitPlugin>()
     this.webContentsToViewMap = new Map<number, WebContentsView>()
     this.webContentsToWindow = new Map<number, BrowserWindow>()
     this.pluginToViewMap = new Map<string, WebContentsView>()
@@ -204,7 +204,7 @@ export abstract class BaseWindowManager {
     const updateBoundsOnFinish = debounce(updateBounds, 100)
     const updateBoundsListener = async () => {
       await updateBounds()
-      updateBoundsOnFinish()
+      await updateBoundsOnFinish()
     }
     window.addListener('resize', updateBoundsListener)
     await updateBoundsListener()
@@ -247,6 +247,7 @@ export abstract class BaseWindowManager {
     if (!view) {
       throw new CommonError('该插件未创建视图，关闭失败')
     }
+    this.webContentsToPluginMap.get(view.webContents.id)
     this.webContentsToPluginMap.delete(view.webContents.id)
     this.webContentsToViewMap.delete(view.webContents.id)
     this.webContentsToWindow.delete(view.webContents.id)

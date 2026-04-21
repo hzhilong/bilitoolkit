@@ -33,8 +33,8 @@ const testPlugin = () => {
     showError('目录不能为空')
     return
   }
-  PluginUtils.testPlugin({
-    rootPath: rootPath.value,
+  PluginUtils.loadTestPlugin({
+    pluginPath: rootPath.value,
   })
   visible.value = false
 }
