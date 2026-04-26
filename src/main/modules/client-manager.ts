@@ -22,7 +22,7 @@ class BiliClientManager {
     const client = new BiliClient({
       ...config,
       logLevel: getLogLevel(),
-      logging: {
+      logger: {
         debug: (...data: Parameters<ConsoleMethod>) => {
           mainFileLogger.debug(...data)
         },

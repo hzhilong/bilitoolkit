@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import MainLayout from '@/renderer/components/layout/MainLayout.vue'
+import { useAppTabStore } from '@/renderer/stores/app-tab.ts'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,11 @@ const router = createRouter({
           component: () => import('../views/UserManage.vue'),
         },
         {
+          name: '任务管理',
+          path: '/taskManage',
+          component: () => import('../views/task/TaskManageView.vue'),
+        },
+        {
           name: '设置',
           path: '/settings',
           component: () => import('../views/SettingsView.vue'),
@@ -40,8 +46,18 @@ const router = createRouter({
           path: '/about',
           component: () => import('../views/AboutView.vue'),
         },
+        {
+          name: '任务插件',
+          path: '/task-plugin',
+          component: () => import('../views/task/TaskPluginView.vue'),
+        },
       ],
     },
   ],
 })
+router.afterEach((to) => {
+  // 将当前路由的完整路径加入 visitedViews
+  useAppTabStore().addTab(to.fullPath)
+})
+
 export default router

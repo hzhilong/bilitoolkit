@@ -13,6 +13,15 @@ export const MainConstants = {
     CORE_NAME: `${import.meta.env.APP_NPM_NAME}-core`,
   },
   // 全局数据
-  GLOBAL: {
-  },
-} as const;
+  GLOBAL: {},
+} as const
+
+/**
+ * 宿主环境专用的api模块
+ */
+export const HOST_API_MODULES = ['core', 'task']
+
+/**
+ * 需要忽略记录日志的模块路径
+ */
+export const IGNORE_LOGGING_PATHS = ['task.getTaskExecutionLogs', 'task.getTaskList', 'task.getTaskExecutionsByPage']

@@ -41,6 +41,12 @@ log4js.configure({
       level: 'ERROR',
       appender: 'error',
     },
+    task: {
+      type: 'dateFile',
+      filename: path.join(LOG_DIR, 'task-logs.log'),
+      compress: true,
+      layout: { type: 'pattern', pattern: `${patternStart} - %m%` },
+    },
   },
   categories: {
     default: {
@@ -61,6 +67,12 @@ log4js.configure({
       // 开发模式启用调用堆栈，打印行号
       enableCallStack: mainEnv.isDev,
     },
+    task: {
+      appenders: ['task', 'console', 'errorFilter'],
+      level: import.meta.env.APP_LOG_LEVEL || 'info',
+      // 开发模式启用调用堆栈，打印行号
+      enableCallStack: mainEnv.isDev,
+    },
   },
 })
 
@@ -70,6 +82,7 @@ log4js.configure({
 export const mainLogger = log4js.getLogger()
 export const mainConsoleLogger = log4js.getLogger('onlyConsole')
 export const mainFileLogger = log4js.getLogger('onlyFile')
+export const mainTaskLogger = log4js.getLogger('task')
 
 /**
  * 是否打印 api 调用结果

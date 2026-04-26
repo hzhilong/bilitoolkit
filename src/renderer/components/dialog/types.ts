@@ -6,8 +6,10 @@ import type { UserInfoWithCookie } from '@ybgnb/bili-api'
  */
 export interface UserSelectDialogProps {
   title: string
+  emptyMessage?: string
   onCancel?: () => void
   onSelected: (user: UserInfoWithCookie) => void
+  disableUserList?: UserInfoWithCookie[]
 }
 
 export type UserSelectDialogExposed = {

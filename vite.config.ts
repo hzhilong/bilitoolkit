@@ -28,10 +28,20 @@ const baseConfig = (configEnv: ConfigEnv): UserConfig => {
       vueDevTools(),
       // 按需引入组件 https://github.com/unplugin/unplugin-vue-components
       AutoImport({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [
+          ElementPlusResolver({
+            // 开发环境禁用样式自动引入（应用会因为vite构建动态组件而频繁重启）
+            importStyle: configEnv.mode === 'development' ? false : 'css',
+          }),
+        ],
       }),
       Components({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [
+          ElementPlusResolver({
+            // 开发环境禁用样式自动引入（应用会因为vite构建动态组件而频繁重启）
+            importStyle: configEnv.mode === 'development' ? false : 'css',
+          }),
+        ],
       }),
     ],
     // 定义全局常量替换（适用于一些常量，在js使用）

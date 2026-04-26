@@ -6,15 +6,20 @@ import type {
   PluginTestOptions,
   ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.ts'
+import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.ts'
 
 /**
  * 哔哩工具姬API（包含核心API）
  */
 export interface ToolkitApiWithCore extends ToolkitApi {
   /**
-   * 软件核心相关API（插件模块不能调用）
+   * 软件核心相关API
    */
   core: ToolkitCoreApi
+  /**
+   * 任务相关API
+   */
+  task: ToolkitTaskApi
 }
 
 /**

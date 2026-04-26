@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import UserLoginDialog from '@/renderer/components/dialog/UserLoginDialog.vue'
 import { cloneDeep } from 'lodash-es'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watchEffect, onMounted } from 'vue'
 import type { UserSelectDialogProps } from '@/renderer/components/dialog/types.ts'
 import { useUserStore } from '@/renderer/stores/user.ts'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
@@ -10,10 +10,13 @@ import { BiliUserCard } from 'bilitoolkit-ui'
 const visible = defineModel<boolean>({ required: true })
 const props = withDefaults(defineProps<UserSelectDialogProps>(), {})
 const options: UserSelectDialogProps = reactive(cloneDeep(props))
+const users = ref<UserInfoWithCookie[]>()
+const emptyMessage = ref<string>('当前未登录用户')
 
 // 显示
 const show = (newOptions?: Partial<UserSelectDialogProps>) => {
   Object.assign(options, newOptions)
+  emptyMessage.value = newOptions?.emptyMessage ?? '当前未登录用户'
   visible.value = true
 }
 // 隐藏
@@ -23,7 +26,16 @@ const hide = () => {
 
 const userDialogVisible = ref(false)
 const userStore = useUserStore()
-const users = userStore.users
+
+watchEffect(() => {
+  users.value = options.disableUserList
+    ? userStore.users.filter((user) => !options.disableUserList?.some((u) => u.mid === user.mid))
+    : userStore.users
+})
+
+onMounted(() => {
+  users.value = userStore.users
+})
 
 const handleCancel = () => {
   visible.value = false
@@ -61,7 +73,7 @@ defineExpose({ show, hide })
           @click="handleSelect(user)"
         ></BiliUserCard>
       </div>
-      <el-empty v-if="!users || users.length === 0" description="当前未登录用户" />
+      <el-empty v-if="!users || users.length === 0" :description="emptyMessage" />
     </div>
     <template #footer></template>
     <UserLoginDialog v-model="userDialogVisible" />
@@ -76,7 +88,7 @@ defineExpose({ show, hide })
 }
 
 .user-list {
-  max-height: 300px;
+  max-height: 400px;
   overflow: auto;
   padding: 10px;
   display: flex;

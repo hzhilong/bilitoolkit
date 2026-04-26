@@ -31,6 +31,8 @@ export const AppUserSelectDialog = {
 
       exposed?.show({
         title: options.title,
+        emptyMessage: options.emptyMessage,
+        disableUserList: options.disableUserList ?? [],
         onSelected: (user: UserInfoWithCookie) => {
           resolve(user)
         },

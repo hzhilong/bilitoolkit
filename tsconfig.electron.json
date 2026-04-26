@@ -5,7 +5,8 @@
     "./node_modules",
     ".yalc",
     "yalc.lock",
-    "./src/**/__tests__/*"
+    "./src/**/__tests__/*",
+    "./public"
   ],
   "compilerOptions": {
     "noEmit": true,

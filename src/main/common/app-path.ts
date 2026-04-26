@@ -21,7 +21,7 @@ import { MainConstants } from '@/main/common/main-constants.ts'
 /**
  * 开发环境 url
  */
-const devUrl = process.env.VITE_DEV_SERVER_URL || ''
+const devUrl = process.env.VITE_DEV_SERVER_URL ?? ''
 /**
  * 获取应用根目录  开发：项目路径 / 生产： 启用了asar：返回app.asar所在目录 / 未启用asar：安装后的app目录
  */
@@ -42,6 +42,7 @@ const appRendererDist = path.join(appRootPath, 'dist')
  * Electron代码打包的目录（主进程）
  */
 const appMainDist = path.join(appRootPath, 'dist-electron')
+
 /**
  * 静态资源目录 开发环境直接取根目录下的 public
  */
@@ -105,6 +106,12 @@ const preloadsDir = path.join(appPublicPath, 'preloads')
 const defaultPluginIcon = path.join(appPublicPath, 'images/plugin-default-icon.png')
 
 /**
+ * workers目录
+ */
+const workersDir = path.join(appPublicPath, 'workers')
+FileUtils.ensureDirExists(workersDir)
+
+/**
  * 临时目录
  */
 const temp = path.join(programRoot, 'temp')
@@ -131,4 +138,5 @@ export const appPath = {
   preloadsDir,
   defaultPluginIcon,
   temp,
+  workersDir,
 }

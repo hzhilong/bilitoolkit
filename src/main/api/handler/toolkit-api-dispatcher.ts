@@ -13,6 +13,8 @@ import { BiliApiHandler } from '@/main/api/handler/api-handler-bili.ts'
 import { CoreApiHandler } from '@/main/api/handler/api-handler-core.ts'
 import { BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import { UserApiHandler } from '@/main/api/handler/api-handler-user.ts'
+import { TaskApiHandler } from '@/main/api/handler/api-handler-task.ts'
+import { HOST_API_MODULES } from '@/main/common/main-constants.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -34,6 +36,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     this.register('bili', new BiliApiHandler(wm))
     this.register('user', new UserApiHandler(wm))
     this.register('core', new CoreApiHandler())
+    this.register('task', new TaskApiHandler())
   }
 
   /**
@@ -42,12 +45,12 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
    * @param options 插件API调用选项
    * @param context 上下文
    */
-  public async handle(event: IpcMainInvokeEvent, options: PluginApiInvokeOptions, context: ApiCallerContext) {
+  public async handle(event: IpcMainInvokeEvent | null, options: PluginApiInvokeOptions, context: ApiCallerContext) {
     if (!options) {
       throw new CommonError('缺少调用参数')
     }
     // 非宿主环境不允许调用核心API
-    if (options.module === 'core' && context.envType !== 'host') {
+    if (HOST_API_MODULES.includes(options.module) && context.envType !== 'host') {
       throw new CommonError('非法调用')
     }
     try {
@@ -56,7 +59,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
         throw new CommonError(`暂未支持API模块[${options.module}]`)
       }
 
-      if (strategy instanceof ApiDispatcher) {
+      if (event && strategy instanceof ApiDispatcher) {
         // 嵌套调度器
         return await strategy.handle(event, options, context)
       }

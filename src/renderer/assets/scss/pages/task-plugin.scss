@@ -1,0 +1,36 @@
+.plugin-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 6px;
+  }
+
+  &__name {
+    font-weight: bold;
+    font-size: 1.2rem;
+    line-height: 2em;
+    color: var(--el-text-color-primary);
+  }
+
+  &__id, &__version {
+    font-size: 0.9rem;
+    color: var(--el-text-color-secondary);
+    margin-right: 6px;
+  }
+
+  &__desc {
+    font-size: 1rem;
+    color: var(--el-text-color-regular);
+  }
+}
+

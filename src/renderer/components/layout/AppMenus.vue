@@ -27,8 +27,10 @@ watch(
   () => router.currentRoute.value.path,
   async () => {
     const currPath = router.currentRoute.value.path
-    const findIndex = props.menus.findIndex((menu) => currPath.startsWith(menu.path))
-    menuIndex.value = findIndex > -1 ? findIndex : 0
+    if (!currPath.includes('/task-plugin')) {
+      const findIndex = props.menus.findIndex((menu) => currPath.startsWith(menu.path))
+      menuIndex.value = findIndex > -1 ? findIndex : 0
+    }
   },
   { immediate: true },
 )

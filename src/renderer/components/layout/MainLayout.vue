@@ -5,6 +5,9 @@ import TopBar from '@/renderer/components/layout/TopBar.vue'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
 import { CommonError, execBiz } from '@ybgnb/utils'
+import { RouterView } from 'vue-router'
+import { useAppTabStore } from '@/renderer/stores/app-tab.ts'
+import { storeToRefs } from 'pinia'
 
 const mainContentRef = ref<HTMLElement>()
 
@@ -22,6 +25,8 @@ toolkitApi.global.register(HOST_GLOBAL_DATA.CONTENT_BOUNDS, () => {
     }
   })
 })
+
+const { visitedViews } = storeToRefs(useAppTabStore())
 </script>
 
 <template>
@@ -33,9 +38,9 @@ toolkitApi.global.register(HOST_GLOBAL_DATA.CONTENT_BOUNDS, () => {
       <TopBar class="top-bar" />
       <div class="main-content-border">
         <div ref="mainContentRef" class="main-content">
-          <router-view v-slot="{ Component }">
+          <router-view v-slot="{ Component, route }">
             <keep-alive>
-              <component :is="Component" />
+              <component :is="Component" :key="route.fullPath" v-if="visitedViews.has(route.fullPath)" />
             </keep-alive>
           </router-view>
         </div>

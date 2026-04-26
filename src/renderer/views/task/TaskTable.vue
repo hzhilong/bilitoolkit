@@ -1,0 +1,181 @@
+<template>
+  <div class="tasks">
+    <div class="tasks__header">
+      <span class="tasks__header__label">任务列表：</span>
+      <el-button @click="refreshTableData">刷新</el-button>
+      <el-button v-if="pluginId" @click="openModal('add')">新建</el-button>
+    </div>
+    <el-table class="tasks__table" :data="tableData" style="width: 100%" v-loading="loading">
+      <el-table-column prop="id" label="ID" min-width="60" width="60" />
+      <el-table-column v-if="!pluginId" prop="pluginId" label="插件信息" min-width="200">
+        <template #default="{ row }: { row: TaskWithPlugin }">
+          <AppTooltip :content="row.pluginId">
+            {{ row.pluginId }}
+          </AppTooltip>
+          <div>
+            <el-link v-if="row.plugin" type="primary" @click="PluginUtils.openPluginView(row.plugin)">{{
+              row.plugin?.name
+            }}</el-link>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createdAt" label="创建时间" min-width="86">
+        <template #default="{ row }: { row: TaskWithPlugin }">
+          {{ new Date(row.createdAt).toLocaleString() }}
+        </template>
+      </el-table-column>
+      <el-table-column label="调度规则" min-width="120">
+        <template #default="{ row }: { row: TaskWithPlugin }">
+          <div v-if="row.schedule">
+            <span v-if="row.schedule.type === 'cron'"> Cron: {{ row.schedule.value }} </span>
+            <span v-else-if="row.schedule.type === 'interval'"> 间隔: {{ row.schedule.value }} s</span>
+          </div>
+          <span v-else>-</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="enabled" label="状态" min-width="76">
+        <template #default="{ row }: { row: TaskWithPlugin }">
+          <el-tag :type="row.enabled ? 'success' : 'danger'" disable-transitions>
+            {{ row.enabled ? '启用' : '禁用' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" min-width="160">
+        <template #default="{ row }: { row: TaskWithPlugin }">
+          <el-button link type="primary" size="small" @click="openModal('update', row)">编辑</el-button>
+          <el-popconfirm title="确认删除吗？" @confirm="handleDelete(row.id)">
+            <template #reference>
+              <el-button link type="primary" size="small" style="margin-left: 4px">删除</el-button>
+            </template>
+          </el-popconfirm>
+          <el-popconfirm title="确认手动执行吗？" @confirm="handleExecute(row)">
+            <template #reference>
+              <el-button link type="primary" size="small" style="margin-left: 4px">执行</el-button>
+            </template>
+          </el-popconfirm>
+          <el-button link type="primary" size="small" style="margin-left: 4px" @click="openModal('execution', row)"
+            >执行记录</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+    <template v-if="currRowPlugin">
+      <TaskModal
+        type="add"
+        :plugin="currRowPlugin"
+        v-model="addModalVisible"
+        :title="`添加[${currRowPlugin.name}]任务`"
+        @submit="handleModalSubmit"
+      />
+      <TaskModal
+        type="update"
+        :plugin="currRowPlugin"
+        :task="currRowTask"
+        v-model="updateModalVisible"
+        :title="`修改[${currRowPlugin.name}]任务`"
+        @submit="handleModalSubmit"
+      />
+    </template>
+    <TaskExecutionsModal
+      v-if="currRowTask"
+      :task-id="currRowTask.id"
+      v-model="executionModalVisible"
+    ></TaskExecutionsModal>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { TaskPluginInfo, TaskWithPlugin, Task } from '@/shared/types/task.ts'
+import { ref, watch } from 'vue'
+import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { AppTooltip, useAutoRefreshData, showToast } from 'bilitoolkit-ui'
+import TaskModal from '@/renderer/views/task/TaskModal.vue'
+import type { TaskSubmitPayload } from '@/renderer/views/task/TaskModal.types.ts'
+import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
+import TaskExecutionsModal from '@/renderer/views/task/execution/TaskExecutionsModal.vue'
+
+interface TaskTableProps {
+  pluginId?: string
+}
+
+const props = defineProps<TaskTableProps>()
+const tableData = ref<TaskWithPlugin[]>([])
+const plugin = ref<TaskPluginInfo>()
+const currRowPlugin = ref<TaskPluginInfo>()
+const currRowTask = ref<Task>()
+
+const { refreshTableData, loading, reset } = useAutoRefreshData(async () => {
+  if (props.pluginId) {
+    tableData.value = await toolkitApi.task.getTaskList(props.pluginId)
+  } else {
+    tableData.value = await toolkitApi.task.getTaskListWithPlugin()
+  }
+})
+const refreshTable = () => {
+  tableData.value = []
+  reset()
+  refreshTableData()
+}
+
+watch(
+  () => props.pluginId,
+  async () => {
+    if (props.pluginId) {
+      plugin.value = await toolkitApi.task.getTaskPluginInfo(props.pluginId)
+    }
+    refreshTable()
+  },
+  { immediate: true },
+)
+
+const addModalVisible = ref(false)
+const updateModalVisible = ref(false)
+const executionModalVisible = ref(false)
+
+const openModal = (type: 'add' | 'update' | 'execution', currTask?: TaskWithPlugin) => {
+  currRowTask.value = currTask
+  currRowPlugin.value = props.pluginId ? plugin.value : currTask?.plugin
+  if (type === 'add') {
+    addModalVisible.value = true
+  } else if (type === 'update') {
+    updateModalVisible.value = true
+  } else if (type === 'execution') {
+    executionModalVisible.value = true
+  }
+}
+
+const handleModalSubmit = async (payload: TaskSubmitPayload) => {
+  if (payload.type === 'add') {
+    await toolkitApi.task.createTask(payload.data)
+  } else if (payload.type === 'update') {
+    await toolkitApi.task.updateTask(payload.data)
+  }
+  await refreshTableData()
+}
+const handleDelete = async (id: number) => {
+  await toolkitApi.task.deleteTask(id)
+  refreshTableData()
+}
+
+const handleExecute = async (task: TaskWithPlugin) => {
+  await toolkitApi.task.executeTask(task)
+  showToast('正在执行')
+}
+</script>
+
+<style scoped lang="scss">
+.tasks {
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    &__label {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-right: auto;
+    }
+  }
+}
+</style>

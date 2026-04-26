@@ -6,6 +6,7 @@ import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
 import type { ApiCallerContext, IpcToolkitEventApi } from '@/main/types/ipc-toolkit-api.ts'
 import { webContents } from 'electron'
 import { eventBus } from '@/main/event/event-bus.ts'
+import { windowManager } from '@/main/window/window-manager.ts'
 
 /**
  * 发射事件
@@ -28,6 +29,23 @@ export const emit = (
   for (const wc of all) {
     wc.send(IPC_CHANNELS.TOOLKIT_EVENT, emitter)
   }
+}
+
+export const emitHost = (
+  channel: HostEventChannel | string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ...data: any[]
+) => {
+  const emitter: IpcEventEmiter = {
+    channel: channel,
+    payload: data,
+  }
+
+  // 发送给主进程的内部监听器
+  eventBus.emit(channel, ...data)
+
+  // 发送给渲染进程
+  windowManager.getHostWebContents().send(IPC_CHANNELS.TOOLKIT_EVENT, emitter)
 }
 
 /**

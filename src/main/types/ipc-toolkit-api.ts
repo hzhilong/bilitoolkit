@@ -12,6 +12,7 @@ import type {
   ToolkitWindowApi,
   ToolkitUserApi,
 } from 'bilitoolkit-types'
+import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.ts'
 
 /**
  * API调用环境：宿主环境|插件环境
@@ -37,18 +38,29 @@ export type HostApiCallerContext = CommonApiCallerContext & {
   isDialogWebContents: boolean
 }
 
-export type PluginApiCallerContext = CommonApiCallerContext & {
-  // 插件环境
-  envType: 'plugin'
-  // 插件信息
-  plugin: ToolkitPlugin
-  // 所属的WebContents
-  webContents: WebContents
-  // 所属的插件WebContentsView
-  webContentsView: WebContentsView
-  // 所属宿主WebContents
-  hostWebContents: WebContents
-}
+export type PluginApiCallerContext = CommonApiCallerContext &
+  (
+    | {
+        // 插件环境
+        envType: 'plugin'
+        // 插件信息
+        plugin: ToolkitPlugin
+        // 所属的WebContents
+        webContents: WebContents
+        // 所属的插件WebContentsView
+        webContentsView: WebContentsView
+        // 所属宿主WebContents
+        hostWebContents: WebContents
+      }
+    | {
+        // 插件环境
+        envType: 'task-plugin'
+        // 插件信息
+        plugin: ToolkitPlugin
+        // 所属的WebContents
+        webContents: WebContents
+      }
+  )
 
 /**
  * API调用的上下文
@@ -116,6 +128,13 @@ export interface IpcToolkitBiliApi extends GeneratedIpcToolkitBiliApi {}
 export type GeneratedIpcToolkitCoreApi = AddApiCallerContext<ToolkitCoreApi>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IpcToolkitCoreApi extends GeneratedIpcToolkitCoreApi {}
+
+/**
+ * 任务API（添加API调用的上下文参数）
+ */
+export type GeneratedIpcToolkitTaskApi = AddApiCallerContext<ToolkitTaskApi>
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IpcToolkitTaskApi extends GeneratedIpcToolkitTaskApi {}
 
 /**
  * 自动生成 数据库API（添加API调用的上下文参数）

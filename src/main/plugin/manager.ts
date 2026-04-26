@@ -10,12 +10,12 @@ import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { getAppInstalledPlugins, writeHostDBDoc } from '@/main/utils/host-app.ts'
 import { CommonError } from '@ybgnb/utils'
 import { mainLogger } from '@/main/common/main-logger.ts'
-import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
-import { eventBus } from '@/main/event/event-bus.ts'
 import { cloneDeep } from 'lodash-es'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
-import { loadTestPlugin, loadInstalledPlugin, removeTestPlugin } from '@/main/plugin/load.ts'
+import { loadTestPlugin, loadInstalledPlugin } from '@/main/plugin/loader.ts'
 import { downloadPlugin, removePluginFile } from '@/main/plugin/install.ts'
+import fs from 'fs'
+import path from 'path'
 
 type PluginRegistry = {
   appVersion: string
@@ -36,10 +36,6 @@ class PluginManager {
       plugins: this.buildRegistryPlugins(installedPlugins.plugins),
     }
     mainLogger.info(`插件已加载`, this.registry.plugins.keys().toArray())
-    eventBus.on(HOST_EVENT_CHANNELS.UPDATE_APP_INSTALLED_PLUGINS, (newData: AppInstalledPlugins) => {
-      this.registry.appVersion = newData.appVersion
-      this.registry.plugins = this.buildRegistryPlugins(newData.plugins)
-    })
   }
 
   getInstalledPlugins(): AppInstalledPlugins {
@@ -93,6 +89,10 @@ class PluginManager {
 
   async openPlugin(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const installedPlugin = this.getInstalledPlugin(plugin.id)
+    const indexPath = installedPlugin.files.indexPath
+    if (path.isAbsolute(indexPath) && !fs.existsSync(indexPath)) {
+      throw new Error('插件文件不存在，请重新安装')
+    }
     await windowManager.createPluginView(context, installedPlugin)
     windowManager.showPluginView(context, plugin)
   }
@@ -100,9 +100,8 @@ class PluginManager {
   async closePlugin(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const installedPlugin = this.getInstalledPlugin(plugin.id)
     if (installedPlugin.isTest) {
-      // 移除测试的插件
-      removeTestPlugin(installedPlugin)
-      this.unregisterPlugin(plugin.id, false)
+      //      removeTestPlugin(installedPlugin)
+      //      this.unregisterPlugin(plugin.id)
     }
     windowManager.closePluginView(context, plugin)
   }
@@ -117,7 +116,7 @@ class PluginManager {
   async loadTestPlugin(context: ApiCallerContext, options: PluginTestOptions) {
     mainLogger.info(`测试插件${options.pluginPath} 加载中……`)
     const plugin = loadTestPlugin(options)
-    this.registerPlugin(plugin, false)
+    this.registerPlugin(plugin)
     mainLogger.info(`插件${plugin.id} ${plugin.version} 加载成功！`)
     return plugin
   }

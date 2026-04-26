@@ -11,12 +11,12 @@ import {
   type ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.ts'
 import { IconUtils } from '@/main/utils/icon.ts'
-import { pluginManager } from '@/main/plugin/plugin-manage.ts'
+import { pluginManager } from '@/main/plugin/manager.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
-import { userManager } from '@/main/service/user-manager.ts'
+import { userManager } from '@/main/modules/user-manager.ts'
 import { emit } from '@/main/api/handler/api-handler-event.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
-import { getRecommendedPlugins } from '@/main/plugin/load.ts'
+import { getRecommendedPlugins } from '@/main/plugin/loader.ts'
 
 /**
  * 核心API处理器

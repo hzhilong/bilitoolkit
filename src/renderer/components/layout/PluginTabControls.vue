@@ -7,6 +7,11 @@ import { cloneDeep } from 'lodash-es'
 import { nextTick, ref, reactive, watch, toRaw } from 'vue'
 import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
 import { handleError } from 'bilitoolkit-ui'
+import { useRouter } from 'vue-router'
+import { useAppTabStore } from '@/renderer/stores/app-tab.ts'
+
+const router = useRouter()
+const { removeTab } = useAppTabStore()
 
 const plugins = ref<ToolkitPlugin[]>([])
 const activePluginId = ref('')
@@ -20,17 +25,34 @@ const setPluginRef = (plugin: ToolkitPlugin, el: any, index: number) => {
     pluginTabRefs.value[index] = el
   }
 }
+const getTaskPluginUrl = (pluginId: string) => {
+  return `/task-plugin?id=${pluginId}`
+}
+
+async function handleOpenPluginView(plugin: ToolkitPlugin) {
+  if (plugin.type === 'ui') {
+    await toolkitApi.core.openPlugin(cloneDeep(plugin))
+  } else {
+    await toolkitApi.core.hideCurrPlugin()
+    await router.push({
+      path: '/task-plugin',
+      query: {
+        id: plugin.id,
+      },
+    })
+  }
+}
 
 eventBus.on('openPluginView', async ({ plugin }) => {
   try {
     for (const openedPlugin of plugins.value) {
       if (openedPlugin.id === plugin.id) {
         activePluginId.value = openedPlugin.id
-        await toolkitApi.core.openPlugin(cloneDeep(plugin))
+        await handleOpenPluginView(plugin)
         return
       }
     }
-    await toolkitApi.core.openPlugin(cloneDeep(plugin))
+    await handleOpenPluginView(plugin)
     plugins.value.push(plugin)
     activePluginId.value = plugin.id
   } finally {
@@ -44,7 +66,11 @@ eventBus.on('closePluginView', async ({ plugin }) => {
   for (let i = 0; i < plugins.value.length; i++) {
     const openedPlugin = plugins.value[i]
     if (openedPlugin.id === plugin.id) {
-      await toolkitApi.core.closePlugin(cloneDeep(plugin))
+      if (openedPlugin.type === 'ui') {
+        await toolkitApi.core.closePlugin(cloneDeep(plugin))
+      } else {
+        removeTab(getTaskPluginUrl(openedPlugin.id))
+      }
       plugins.value.splice(i, 1)
 
       if (plugin.id === activePluginId.value) {
@@ -52,7 +78,7 @@ eventBus.on('closePluginView', async ({ plugin }) => {
         const next = plugins.value[i - 1] ?? plugins.value[i + 1]
         if (next) {
           activePluginId.value = next.id
-          await toolkitApi.core.openPlugin(cloneDeep(next))
+          await handleOpenPluginView(cloneDeep(next))
           await nextTick(async () => {
             await updateScrollState()
             autoScrollToCurr(next)

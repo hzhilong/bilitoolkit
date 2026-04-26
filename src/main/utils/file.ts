@@ -16,24 +16,28 @@ export class FileUtils {
    * 获取文件根目录
    * @param env     调用环境
    */
-  static getPluginRootPath(env: 'host'): string
+  static getFileRootPath(env: 'host'): string
   /**
    * 获取文件根目录
    * @param env     调用环境
    * @param plugin  关联的插件
    */
-  static getPluginRootPath(env: 'plugin', plugin: ToolkitPlugin): string
+  static getFileRootPath(env: 'plugin', plugin: ToolkitPlugin): string
   /**
    * 获取文件根目录
    * @param env     调用环境
    * @param plugin  关联的插件
    */
-  static getPluginRootPath(env: ApiCallerEnvType, plugin?: ToolkitPlugin): string {
+  static getFileRootPath(env: ApiCallerEnvType, plugin?: ToolkitPlugin): string {
     if (env === 'host') {
       return path.resolve(path.join(appPath.filePath, MainConstants.FILE.CORE_NAME))
     } else {
       return path.resolve(path.join(appPath.filePath, NpmUtils.pkgNameToDirName(plugin!.id)))
     }
+  }
+
+  static getPluginFileRootPath(pluginId: string): string {
+    return path.resolve(path.join(appPath.filePath, NpmUtils.pkgNameToDirName(pluginId)))
   }
 
   /**

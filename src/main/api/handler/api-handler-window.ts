@@ -2,7 +2,6 @@ import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { BrowserWindow } from 'electron'
 import type { ApiCallerContext, IpcToolkitWindowApi } from '@/main/types/ipc-toolkit-api.ts'
 import type { BaseWindowManager } from '@/main/window/base-window-manager.ts'
-
 /**
  * 窗口API处理器
  */

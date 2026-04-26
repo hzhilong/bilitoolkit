@@ -16,8 +16,14 @@ import 'remixicon/fonts/remixicon.css'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
 import { useUserStore } from '@/renderer/stores/user.ts'
+import { appEnv } from '@/shared/common/app-env.ts'
 
 async function bootstrapApp() {
+  if (appEnv.isDev) {
+    // 开发环境全量引入样式，禁用样式自动引入（应用会因为vite构建动态组件而频繁重启）
+    import('element-plus/dist/index.css')
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let app: any
   const _windowApp = window._windowApp

@@ -25,6 +25,11 @@ export const appMenus: MenuItem[] = [
     path: '/userManage',
   },
   {
+    title: '任务管理',
+    icon: 'task',
+    path: '/taskManage',
+  },
+  {
     title: '设置',
     icon: 'settings-3',
     path: '/settings',

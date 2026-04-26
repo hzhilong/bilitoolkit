@@ -30,6 +30,8 @@ export class PluginUtils {
 
   static async loadTestPlugin(options: PluginTestOptions) {
     const plugin = await toolkitApi.core.loadTestPlugin(options)
+    console.log('loadTestPlugin', plugin)
+    useAppInstalledPlugins().addPlugin(plugin)
     eventBus.emit('openPluginView', { plugin: plugin })
     return plugin
   }
@@ -93,14 +95,12 @@ export class PluginUtils {
       ...toIPC(plugin),
       installDate: getFormattedDate(),
     })
-    const { addPlugin } = useAppInstalledPlugins()
-    addPlugin(installedPlugin)
+    useAppInstalledPlugins().addPlugin(installedPlugin)
     return installedPlugin
   }
   static async uninstall(plugin: InstalledToolkitPlugin) {
     await this.closePluginView(plugin)
     await toolkitApi.core.uninstallPlugin(plugin.id)
-    const { delPlugin } = useAppInstalledPlugins()
-    delPlugin(plugin)
+    useAppInstalledPlugins().delPlugin(plugin)
   }
 }

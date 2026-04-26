@@ -1,0 +1,93 @@
+<template>
+  <div class="table-page">
+    <div class="table-page__header">
+      <span class="table-page__header__label">任务执行日志列表：</span>
+      <el-button @click="refreshTableData">刷新</el-button>
+    </div>
+    <div ref="tableWrapperRef" class="table-page__table">
+      <el-table height="66vh" :data="tableData" style="width: 100%" v-loading="loading">
+        <el-table-column prop="executionId" label="执行ID" min-width="86"></el-table-column>
+        <el-table-column prop="createdAt" label="日志时间" min-width="86">
+          <template #default="{ row }: { row: TaskExecution }">
+            {{ new Date(row.createdAt).toLocaleString() }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="日志级别" min-width="80" width="80">
+          <template #default="{ row }: { row: TaskExecutionLog }">
+            <el-tag v-if="row.level === 'info'" type="info" disable-transitions>info</el-tag>
+            <el-tag v-if="row.level === 'debug'" type="primary" disable-transitions>debug</el-tag>
+            <el-tag v-if="row.level === 'error'" type="danger" disable-transitions>error</el-tag>
+            <el-tag v-if="row.level === 'warn'" type="warning" disable-transitions>warn</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="message" label="执行结果" min-width="100"></el-table-column>
+      </el-table>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { TaskExecution, TaskExecutionLog } from '@/shared/types/task.ts'
+import { ref, watch } from 'vue'
+import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { useAutoRefreshData } from 'bilitoolkit-ui'
+
+interface TaskExecutionLogTableProps {
+  taskExecutionId: number
+}
+
+const props = defineProps<TaskExecutionLogTableProps>()
+
+const tableData = ref<TaskExecutionLog[]>([])
+const { refreshTableData, loading, reset } = useAutoRefreshData(async () => {
+  tableData.value = await toolkitApi.task.getTaskExecutionLogs(props.taskExecutionId)
+})
+
+function refreshTable() {
+  tableData.value = []
+  reset()
+  refreshTableData()
+}
+
+watch(
+  () => props.taskExecutionId,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      refreshTable()
+    }
+  },
+  { immediate: true },
+)
+defineExpose({ refreshTable })
+</script>
+
+<style scoped lang="scss">
+.table-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  flex: 1;
+  min-height: 0;
+  padding: 10px;
+  box-sizing: border-box;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+
+    &__label {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-right: auto;
+    }
+  }
+
+  &__page {
+    margin-top: 10px;
+  }
+}
+</style>

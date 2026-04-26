@@ -2,7 +2,7 @@ import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import type { ApiCallerContext, IpcToolkitBiliApi } from '@/main/types/ipc-toolkit-api.ts'
 import { type BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import type { BiliApiClientConfig, BiliApiMethod } from 'bilitoolkit-types'
-import { biliClientManager } from '@/main/service/client-manager.ts'
+import { biliClientManager } from '@/main/modules/client-manager.ts'
 import { dynamicCall } from '@/main/utils/function.ts'
 
 /**

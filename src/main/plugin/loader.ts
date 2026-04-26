@@ -18,6 +18,8 @@ import { GithubUtils } from '@/main/utils/github.ts'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import DBUtils from '@/main/utils/db.ts'
+import type { TaskPluginInfo } from '@/shared/types/task'
+import { loadTaskPluginMeta } from '@/main/plugin/task/loader.ts'
 
 /**
  * 读取插件的 package.json
@@ -32,7 +34,10 @@ export function readPluginPackage(pluginRootPath: string) {
  * @param options   插件下载选项
  * @param cacheIcon 是否缓存图标
  */
-export function loadInstalledPlugin(options: PluginDownloadOptions, cacheIcon: boolean = true): InstalledToolkitPlugin {
+export function loadInstalledPlugin(
+  options: PluginDownloadOptions,
+  cacheIcon: boolean = true,
+): InstalledToolkitPlugin | TaskPluginInfo {
   const size = FileUtils.getFolderSizeSync(options.rootDirPath) / 1024
   const sizeDesc = FileUtils.formatKBSize(size)
   const installed = {
@@ -40,7 +45,7 @@ export function loadInstalledPlugin(options: PluginDownloadOptions, cacheIcon: b
     files: {
       rootPath: options.rootDirPath,
       distPath: path.join(options.rootDirPath, 'dist'),
-      indexPath: path.join(options.rootDirPath, 'dist', 'index.html'),
+      indexPath: path.join(options.rootDirPath, 'dist', options.type === 'ui' ? 'index.html' : 'index.js'),
       size: size,
       sizeDesc: sizeDesc,
     },
@@ -49,6 +54,9 @@ export function loadInstalledPlugin(options: PluginDownloadOptions, cacheIcon: b
     const icon = IconUtils.getInstalledPluginIcon(installed)
     const iconCachePath = IconUtils.getPluginIconCachePath(options.id)
     writeFileSync(iconCachePath, icon, 'utf8')
+  }
+  if (installed.type === 'task') {
+    Object.assign(installed as TaskPluginInfo, loadTaskPluginMeta(installed))
   }
   return installed
 }
@@ -99,31 +107,21 @@ function loadTestUIPluginByUrl(devUrl: string): InstalledToolkitPlugin {
  * 加载测试插件（本地项目）
  * @param rootPath  本地已打包的开发项目根目录
  */
-function loadTestPluginByFile(rootPath: string) {
-  const packageJSON = readPluginPackage(rootPath)
-  const { name, type } = parsePluginKeywords(packageJSON.name, packageJSON.keywords)
+function loadTestPluginByFile(rootPath: string): InstalledToolkitPlugin | TaskPluginInfo {
+  const pkg = readPluginPackage(rootPath)
+  const { name, type } = parsePluginKeywords(pkg.name, pkg.keywords)
+  const distPath = path.join(rootPath, 'dist')
+  const indexName = type === 'ui' ? 'index.html' : 'index.js'
+  const indexPath = path.join(distPath, indexName)
 
-  if (type === 'task') {
-    // TODO 支持测试任务插件
-    throw new Error('暂不支持测试任务插件')
-  } else {
-    return loadTestUIPluginByFile(rootPath, packageJSON, name)
-  }
-}
-
-/**
- * 加载 ui 测试插件（本地项目）
- */
-function loadTestUIPluginByFile(rootPath: string, pkg: PackageJSON, name: string): InstalledToolkitPlugin {
-  const indexPath = path.join(rootPath, 'dist', 'index.html')
   if (!fs.existsSync(indexPath)) {
-    throw new Error('项目未打包，不存在文件/dist/index.html')
+    throw new Error(`项目未打包，不存在文件/dist/${indexName}`)
   }
 
-  return {
+  const plugin = {
     id: pkg.name,
     name: name,
-    type: 'ui',
+    type: type,
     author: pkg.author ? String(pkg.author) : '',
     description: pkg.description ?? '',
     version: pkg.version,
@@ -134,21 +132,26 @@ function loadTestUIPluginByFile(rootPath: string, pkg: PackageJSON, name: string
     installDate: getFormattedDate(),
     files: {
       rootPath: rootPath,
-      distPath: path.join(rootPath, 'dist'),
+      distPath: distPath,
       indexPath: indexPath,
       size: 0,
       sizeDesc: 'test',
     },
     isTest: true,
   }
+
+  if (plugin.type === 'task') {
+    Object.assign(plugin as TaskPluginInfo, loadTaskPluginMeta(plugin))
+  }
+  return plugin
 }
 
 /**
  * 移除测试的插件
  */
 export function removeTestPlugin(plugin: InstalledToolkitPlugin) {
-  FileUtils.deleteFilesInDirectory(DBUtils.getPluginDBPath('plugin', plugin))
-  FileUtils.deleteFilesInDirectory(FileUtils.getPluginRootPath('plugin', plugin))
+  FileUtils.deleteFilesInDirectory(DBUtils.getDBPath('plugin', plugin))
+  FileUtils.deleteFilesInDirectory(FileUtils.getFileRootPath('plugin', plugin))
 }
 
 /**

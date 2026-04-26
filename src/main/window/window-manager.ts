@@ -10,6 +10,9 @@ import { appPath } from '@/main/common/app-path.ts'
 import { updateElectronApp } from 'update-electron-app'
 import { BiliApiBusinessError } from '@ybgnb/bili-api'
 import { appEnv } from '@/shared/common/app-env.ts'
+import { initDatabase } from '@/main/db/init.ts'
+import { taskService } from '@/main/service/task.service.ts'
+import { IGNORE_LOGGING_PATHS } from '@/main/common/main-constants.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -26,7 +29,7 @@ type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
  */
 export class WindowManager extends BaseWindowManager {
   // API处理器
-  private readonly apiDispatcher: ToolkitApiDispatcher
+  readonly apiDispatcher: ToolkitApiDispatcher
 
   constructor() {
     super()
@@ -47,6 +50,8 @@ export class WindowManager extends BaseWindowManager {
     globalShortcut.register('CommandOrControl+Shift+i', function () {
       showDevTools()
     })
+    // 初始化数据库
+    await initDatabase()
     // 初始化对话框视图
     await this.initAppDialogView()
     // 应用更新检测
@@ -60,6 +65,11 @@ export class WindowManager extends BaseWindowManager {
       // 生产
       mainWindow.loadFile(appPath.appURL).then(() => {})
     }
+    // 监听主窗口的 close 事件
+    mainWindow.on('close', async () => {
+      // 取消所有任务
+      await taskService.abortAllTaskExecution()
+    })
   }
 
   /**
@@ -73,12 +83,11 @@ export class WindowManager extends BaseWindowManager {
         logPrefix = `[${apiCallerContext.envType}] ${apiCallerContext.envType === 'plugin' ? `${apiCallerContext.plugin.id} ` : ''}${logPrefix}`
         const isDialog = apiCallerContext.envType === 'host' && apiCallerContext.isDialogWebContents
         if (!isDialog) {
-          mainLogger.info(`=========================================================`)
-          handleLogger(logPrefix, '执行中', 'arg', options?.args)
+          handleLogger(options, logPrefix, '执行中', 'arg', options?.args)
         }
         const result = await this.apiDispatcher.handle(event, options, apiCallerContext)
         if (!isDialog) {
-          handleLogger(logPrefix, '执行成功', 'rep', isLogApiResult(result) ? result : null)
+          handleLogger(options, logPrefix, '执行成功', 'rep', isLogApiResult(result) ? result : null)
         }
         return result
       } catch (e) {
@@ -104,7 +113,14 @@ function formatSize(bytes: number) {
 }
 
 // 处理日志打印
-function handleLogger(logPrefix: string, status: string, dataName: 'arg' | 'rep', data: unknown) {
+function handleLogger(
+  options: Omit<PluginApiInvokeOptions, 'args'>,
+  logPrefix: string,
+  status: string,
+  dataName: 'arg' | 'rep',
+  data: unknown,
+) {
+  if (IGNORE_LOGGING_PATHS.includes(`${options.module}.${options.name}`)) return
   if (data == null || data === '') {
     mainLogger.info(`${logPrefix} ${status}`)
     return

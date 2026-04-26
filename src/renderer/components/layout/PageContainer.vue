@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="page-container">
@@ -20,7 +19,7 @@
   box-sizing: border-box;
   color: var(--el-text-color-regular);
   border-radius: $main-content-border-radius;
-  overflow: hidden;
+  overflow-y: auto;
 
   > :only-child {
     border-radius: $main-content-border-radius;

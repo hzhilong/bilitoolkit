@@ -99,8 +99,8 @@ export abstract class BaseWindowManager {
         envType: 'host',
         window: window,
         webContents: sender,
-        dbPath: DBUtils.getPluginDBPath('host'),
-        filePath: FileUtils.getPluginRootPath('host'),
+        dbPath: DBUtils.getDBPath('host'),
+        filePath: FileUtils.getFileRootPath('host'),
         isDialogWebContents: this.appDialogWebContents?.id === sender.id,
       } satisfies HostApiCallerContext
     } else {
@@ -113,8 +113,8 @@ export abstract class BaseWindowManager {
         webContents: sender,
         webContentsView: this.getMappingView(sender),
         hostWebContents: window.webContents,
-        dbPath: DBUtils.getPluginDBPath('plugin', plugin),
-        filePath: FileUtils.getPluginRootPath('plugin', plugin),
+        dbPath: DBUtils.getDBPath('plugin', plugin),
+        filePath: FileUtils.getFileRootPath('plugin', plugin),
       } satisfies PluginApiCallerContext
     }
   }
@@ -157,8 +157,8 @@ export abstract class BaseWindowManager {
   }
   public closeWindow(context: ApiCallerContext) {
     const window = context.window
-    this.webContentsToWindow.delete(window.webContents.id)
     window.close()
+    this.webContentsToWindow.delete(window.webContents.id)
   }
   public async createPluginView(context: ApiCallerContext, plugin: InstalledToolkitPlugin) {
     if (!this.isHost(context.webContents)) {
