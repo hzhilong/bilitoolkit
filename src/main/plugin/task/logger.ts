@@ -6,8 +6,8 @@ import { emit } from '@/main/api/handler/api-handler-event.ts'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 import type { TaskLogger } from 'bilitoolkit-types'
 import * as util from 'node:util'
-import { taskExecutionLogRepo } from '@/main/db/repository/task-execution-log.ts'
 import type { NewTaskExecutionLog } from '@/main/db/schema.ts'
+import { taskRepo } from '@/main/db/repository/task.ts'
 
 function formatLogMessage(...data: Parameters<ConsoleMethod>): string {
   return data
@@ -31,7 +31,7 @@ export function buildLogger(taskExecution: TaskExecution) {
       // 传递给渲染进程显示
       emit(null, HOST_EVENT_CHANNELS.TASK_PLUGIN_LOGGER, log, ...data)
       // 持久化
-      taskExecutionLogRepo.add(log).then()
+      taskRepo.addLog(log).then()
     }
   }
   return logger as TaskLogger

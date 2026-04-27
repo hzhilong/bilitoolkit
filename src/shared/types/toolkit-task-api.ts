@@ -4,7 +4,8 @@ import type {
   TaskExecution,
   TaskExecutionFilters,
   TaskExecutionLog,
-  TaskWithPlugin
+  TaskWithPlugin,
+  TaskDispatchResult,
 } from '@/shared/types/task.ts'
 import type { PageResult } from '@/shared/types/page.ts'
 import type { TaskUpdate } from '@/main/db/schema.ts'
@@ -46,7 +47,7 @@ export interface ToolkitTaskApi {
   /**
    * 更新任务
    */
-  updateTask(data: Pick<Task, 'id'> & TaskUpdate): Promise<void>
+  updateTask(data: Pick<Task, 'id'> & TaskUpdate): Promise<Task>
 
   /**
    * 删除任务
@@ -56,10 +57,10 @@ export interface ToolkitTaskApi {
   /**
    * 执行任务
    */
-  executeTask(task: Task): Promise<TaskExecution>
+  executeTask(task: Task): Promise<TaskDispatchResult>
 
   /**
    * 取消任务执行
    */
-  abortTaskExecution(taskExecutionId: number | TaskExecution, reason?: string): Promise<void>
+  abortTaskExecution(taskExecutionId: number | TaskExecution): Promise<boolean>
 }

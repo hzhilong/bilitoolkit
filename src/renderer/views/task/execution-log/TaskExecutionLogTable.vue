@@ -8,7 +8,7 @@
       <el-table height="66vh" :data="tableData" style="width: 100%" v-loading="loading">
         <el-table-column prop="executionId" label="执行ID" width="100"></el-table-column>
         <el-table-column prop="createdAt" label="日志时间" width="146">
-          <template #default="{ row }: { row: TaskExecution }">
+          <template #default="{ row }: { row: TaskExecutionLog }">
             {{ new Date(row.createdAt).toLocaleString() }}
           </template>
         </el-table-column>
@@ -20,14 +20,14 @@
             <el-tag v-if="row.level === 'warn'" type="warning" disable-transitions>warn</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="message" label="执行结果" min-width="120"></el-table-column>
+        <el-table-column prop="message" label="日志内容" min-width="120"></el-table-column>
       </el-table>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { TaskExecution, TaskExecutionLog } from '@/shared/types/task.ts'
+import type { TaskExecutionLog } from '@/shared/types/task.ts'
 import { ref, watch } from 'vue'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import { useLoadingData } from 'bilitoolkit-ui'

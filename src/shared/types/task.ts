@@ -4,6 +4,7 @@ import type { TaskSchedule, TaskResult, TaskConfigField, TaskConfigSchema, TaskL
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import type { MaxLengthArray } from '@ybgnb/utils'
 import type { PageParams } from '@/shared/types/page.ts'
+import type { TaskUpdate } from '@/main/db/schema.ts'
 
 /**
  * 任务插件信息
@@ -35,6 +36,8 @@ export interface Task {
   schedule?: TaskSchedule
   /** 创建时间 */
   createdAt: number
+  /** 最后一次运行时间 */
+  lastRunAt?: number
   /** 是否启用 */
   enabled: boolean
 }
@@ -46,7 +49,30 @@ export interface TaskWithPlugin extends Task {
 /**
  * 任务状态
  */
-export type TaskExecutionStatus = 'pending' | 'running' | 'success' | 'error' | 'aborted'
+export type TaskExecutionStatus = 'running' | 'success' | 'error' | 'canceled'
+
+/** 任务主键 */
+export type TaskId = number
+
+/** 任务执行记录主键 */
+export type TaskExecutionId = number
+
+/**
+ * 任务触发来源名称映射
+ */
+export const TaskTriggerMap = {
+  manual: '手动执行',
+  schedule: '调度触发',
+  bootstrap: '启动补跑',
+} as const
+
+/**
+ * 任务触发来源
+ * - manual：手动执行
+ * - schedule：调度触发
+ * - bootstrap：应用启动后的补跑
+ */
+export type TaskTrigger = keyof typeof TaskTriggerMap
 
 /**
  * 任务执行记录
@@ -56,14 +82,14 @@ export interface TaskExecution {
   id: number
   /** 任务 id */
   taskId: number
+  /** 触发来源 */
+  trigger: TaskTrigger
   /** 执行状态 */
   status: TaskExecutionStatus
-  /** 创建时间 */
-  createdAt: number
   /** 启动时间 */
-  runAt?: number
+  startedAt: number
   /** 结束时间 */
-  endAt?: number
+  endedAt?: number
   /** 执行结果 */
   result?: TaskResult
 }
@@ -71,15 +97,11 @@ export interface TaskExecution {
 /**
  * 任务执行记录过滤条件
  */
-export type TaskExecutionFilters = PageParams<
-  Partial<Omit<TaskExecution, 'result' | 'createdAt' | 'runAt' | 'endAt'>>
-> & {
-  /** 创建时间 */
-  createdAt?: MaxLengthArray<number, 2>
+export type TaskExecutionFilters = PageParams<Partial<Omit<TaskExecution, 'result' | 'startedAt' | 'endedAt'>>> & {
   /** 启动时间 */
-  runAt?: MaxLengthArray<number, 2>
+  startedAt?: MaxLengthArray<number, 2>
   /** 结束时间 */
-  endAt?: MaxLengthArray<number, 2>
+  endedAt?: MaxLengthArray<number, 2>
 }
 
 /**
@@ -96,4 +118,47 @@ export interface TaskExecutionLog {
   level: TaskLogLevel
   /** 日志信息 */
   message: string
+}
+
+/**
+ * 创建任务的输入
+ */
+export type CreateTaskInput = Omit<Task, 'id' | 'createdAt'>
+
+/**
+ * 创建任务时的选项
+ */
+export interface CreateTaskOptions {
+  /** 创建后是否立即执行一次 */
+  runImmediately?: boolean
+}
+
+/**
+ * 更新任务的输入
+ */
+export type UpdateTaskInput = Pick<Task, 'id'> & TaskUpdate
+
+/**
+ * 更新任务时的选项
+ */
+export interface UpdateTaskOptions {
+  /** 更新后是否尝试立即补跑一次。一般仅在“从禁用改为启用”时才考虑开启 */
+  runImmediately?: boolean
+}
+
+/**
+ * 任务派发结果
+ */
+export interface TaskDispatchResult {
+  /** 是否接受了这次请求 */
+  accepted: boolean
+
+  /** 如果同一 task 正在运行，本次是否被折叠为 pending */
+  queued: boolean
+
+  /** 执行记录（已真正开始时才有） */
+  execution?: TaskExecution
+
+  /** 原因说明 */
+  reason?: string
 }

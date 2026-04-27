@@ -11,8 +11,8 @@ import { updateElectronApp } from 'update-electron-app'
 import { BiliApiBusinessError } from '@ybgnb/bili-api'
 import { appEnv } from '@/shared/common/app-env.ts'
 import { initDatabase } from '@/main/db/init.ts'
-import { taskService } from '@/main/service/task.service.ts'
 import { IGNORE_LOGGING_PATHS } from '@/main/common/main-constants.ts'
+import { taskRuntime } from '@/main/plugin/task/runtime.ts'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -46,6 +46,12 @@ export class WindowManager extends BaseWindowManager {
     ipcMain.handle(IPC_CHANNELS.PLUGIN_APIS, async (event: IpcMainInvokeEvent, options: PluginApiInvokeOptions) => {
       return await this.handlePluginApiInvoke(options, event)
     })
+    // 设置菜单
+    Menu.setApplicationMenu(null)
+    // 应用更新检测
+    if (appEnv.isProd) {
+      updateElectronApp()
+    }
     // 在开发环境和生产环境均可通过快捷键打开devTools
     globalShortcut.register('CommandOrControl+Shift+i', function () {
       showDevTools()
@@ -54,11 +60,8 @@ export class WindowManager extends BaseWindowManager {
     await initDatabase()
     // 初始化对话框视图
     await this.initAppDialogView()
-    // 应用更新检测
-    if (appEnv.isProd) {
-      updateElectronApp()
-    }
-    Menu.setApplicationMenu(null)
+    // 初始化任务调度
+    void taskRuntime.bootstrap()
     if (appPath.devUrl) {
       // 开发
       mainWindow.loadURL(appPath.devUrl).then(() => {})
@@ -69,9 +72,9 @@ export class WindowManager extends BaseWindowManager {
     // 监听主窗口的 close 事件
     mainWindow.on('close', async () => {
       // 取消所有任务
-      await taskService.abortAllTaskExecution()
+      await taskRuntime.cancelAll()
     })
-    mainWindow.webContents.setWindowOpenHandler((details: HandlerDetails) => {
+    mainWindow.webContents.setWindowOpenHandler((_: HandlerDetails) => {
       return {
         action: 'allow',
         overrideBrowserWindowOptions: {

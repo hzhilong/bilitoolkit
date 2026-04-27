@@ -24,11 +24,11 @@
           {{ new Date(row.createdAt).toLocaleString() }}
         </template>
       </el-table-column>
-      <el-table-column label="调度规则" min-width="120">
+      <el-table-column label="调度规则" min-width="80">
         <template #default="{ row }: { row: TaskWithPlugin }">
           <div v-if="row.schedule">
-            <span v-if="row.schedule.type === 'cron'"> Cron: {{ row.schedule.value }} </span>
-            <span v-else-if="row.schedule.type === 'interval'"> 间隔: {{ row.schedule.value }} s</span>
+            <span v-if="row.schedule.type === 'cron'"> {{ row.schedule.value }} </span>
+            <span v-else-if="row.schedule.type === 'interval'"> {{ row.schedule.value }} s</span>
           </div>
           <span v-else>-</span>
         </template>
@@ -38,6 +38,11 @@
           <el-tag :type="row.enabled ? 'success' : 'danger'" disable-transitions>
             {{ row.enabled ? '启用' : '禁用' }}
           </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="lastRunAt" label="最后运行" min-width="86">
+        <template #default="{ row }: { row: TaskWithPlugin }">
+          {{ row.lastRunAt ? new Date(row.lastRunAt).toLocaleString() : '' }}
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="160">
@@ -88,7 +93,7 @@
 import type { TaskPluginInfo, TaskWithPlugin, Task } from '@/shared/types/task.ts'
 import { ref, watch } from 'vue'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import { AppTooltip, useAutoRefreshData, showToast } from 'bilitoolkit-ui'
+import { AppTooltip, useAutoRefreshData, showToast, showError } from 'bilitoolkit-ui'
 import TaskModal from '@/renderer/views/task/TaskModal.vue'
 import type { TaskSubmitPayload } from '@/renderer/views/task/TaskModal.types.ts'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
@@ -162,8 +167,12 @@ const handleDelete = async (id: number) => {
 }
 
 const handleExecute = async (task: TaskWithPlugin) => {
-  await toolkitApi.task.executeTask(task)
-  showToast('正在执行')
+  const result = await toolkitApi.task.executeTask(task)
+  if (!result.accepted) {
+    showError(result.reason ?? '任务被拒绝执行')
+  } else {
+    showToast('任务成功启动，正在执行')
+  }
 }
 </script>
 

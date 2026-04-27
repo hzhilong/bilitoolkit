@@ -7,28 +7,27 @@
     <div ref="tableWrapperRef" class="table-page__table">
       <el-table height="66vh" :data="tableData" style="width: 100%" v-loading="loading">
         <el-table-column prop="id" label="ID" min-width="50" width="50" />
-        <el-table-column prop="createdAt" label="创建时间" min-width="86">
+        <el-table-column prop="createdAt" label="启动时间" min-width="86">
           <template #default="{ row }: { row: TaskExecution }">
-            {{ new Date(row.createdAt).toLocaleString() }}
+            {{ new Date(row.startedAt).toLocaleString() }}
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" min-width="80" width="80">
           <template #default="{ row }: { row: TaskExecution }">
-            <el-tag v-if="row.status === 'pending'" type="info" disable-transitions>等待执行</el-tag>
             <el-tag v-if="row.status === 'running'" type="primary" disable-transitions>执行中</el-tag>
             <el-tag v-if="row.status === 'success'" type="success" disable-transitions>执行成功</el-tag>
             <el-tag v-if="row.status === 'error'" type="danger" disable-transitions>执行失败</el-tag>
-            <el-tag v-if="row.status === 'aborted'" type="warning" disable-transitions>取消执行</el-tag>
+            <el-tag v-if="row.status === 'canceled'" type="warning" disable-transitions>取消执行</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="runAt" label="启动时间" min-width="86">
+        <el-table-column prop="startedAt" label="启动时间" min-width="86">
           <template #default="{ row }: { row: TaskExecution }">
-            {{ row.runAt ? new Date(row.runAt).toLocaleString() : '' }}
+            {{ row.startedAt ? new Date(row.startedAt).toLocaleString() : '' }}
           </template>
         </el-table-column>
-        <el-table-column prop="endAt" label="结束时间" min-width="86">
+        <el-table-column prop="endedAt" label="结束时间" min-width="86">
           <template #default="{ row }: { row: TaskExecution }">
-            {{ row.endAt ? new Date(row.endAt).toLocaleString() : '' }}
+            {{ row.endedAt ? new Date(row.endedAt).toLocaleString() : '' }}
           </template>
         </el-table-column>
         <el-table-column prop="result" label="执行结果" min-width="100">
