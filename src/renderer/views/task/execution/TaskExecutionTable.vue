@@ -42,17 +42,17 @@
         </el-table-column>
         <el-table-column label="操作" min-width="100">
           <template #default="{ row }: { row: TaskExecution }">
-            <el-button v-if="row.result" link type="primary" size="small" @click="handleShowResult(row.result)"
-              >结果</el-button
-            >
-            <el-button link type="primary" size="small" style="margin-left: 4px" @click="handleShowLog(row)"
-              >日志</el-button
-            >
-            <el-popconfirm v-if="row.status === 'running'" title="确认取消执行吗？">
-              <template #reference>
-                <el-button link type="primary" size="small" style="margin-left: 4px">取消</el-button>
-              </template>
-            </el-popconfirm>
+            <div class="table-row-options">
+              <el-button v-if="row.result" link type="primary" size="small" @click="handleShowResult(row.result)"
+                >结果</el-button
+              >
+              <el-button link type="primary" size="small" @click="handleShowLog(row)">日志</el-button>
+              <el-popconfirm v-if="row.status === 'running'" title="确认取消执行吗？" @confirm="handleAbort(row)">
+                <template #reference>
+                  <el-button link type="primary" size="small">取消</el-button>
+                </template>
+              </el-popconfirm>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -141,6 +141,10 @@ const handleCurrentChange = () => {
 
 const currRowExecutionId = ref<number>()
 const logModalVisible = ref(false)
+const handleAbort = async (taskExecution: TaskExecution) => {
+  await toolkitApi.task.abortTaskExecution(taskExecution)
+  await refreshTableData()
+}
 const handleShowLog = (taskExecution: TaskExecution) => {
   currRowExecutionId.value = taskExecution.id
   logModalVisible.value = true

@@ -13,7 +13,7 @@ export const parsePluginKeywords = (id: string, keywords: string[] | undefined):
   }
   let name: string = ''
   let type: string = 'ui'
-  // TODO 初版规则，后续移除
+  // 初版规则，后续移除
   let nameV1: string = ''
   const nameV1Prefix = 'bilitoolkit-plugin:'
 

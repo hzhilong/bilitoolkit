@@ -42,20 +42,20 @@
       </el-table-column>
       <el-table-column label="操作" min-width="160">
         <template #default="{ row }: { row: TaskWithPlugin }">
-          <el-button link type="primary" size="small" @click="openModal('update', row)">编辑</el-button>
-          <el-popconfirm title="确认删除吗？" @confirm="handleDelete(row.id)">
-            <template #reference>
-              <el-button link type="primary" size="small" style="margin-left: 4px">删除</el-button>
-            </template>
-          </el-popconfirm>
-          <el-popconfirm title="确认手动执行吗？" @confirm="handleExecute(row)">
-            <template #reference>
-              <el-button link type="primary" size="small" style="margin-left: 4px">执行</el-button>
-            </template>
-          </el-popconfirm>
-          <el-button link type="primary" size="small" style="margin-left: 4px" @click="openModal('execution', row)"
-            >执行记录</el-button
-          >
+          <div class="table-row-options">
+            <el-button link type="primary" size="small" @click="openModal('update', row)">编辑</el-button>
+            <el-popconfirm title="确认删除吗？" @confirm="handleDelete(row.id)">
+              <template #reference>
+                <el-button link type="primary" size="small">删除</el-button>
+              </template>
+            </el-popconfirm>
+            <el-popconfirm title="确认手动执行吗？" @confirm="handleExecute(row)">
+              <template #reference>
+                <el-button link type="primary" size="small">执行</el-button>
+              </template>
+            </el-popconfirm>
+            <el-button link type="primary" size="small" @click="openModal('execution', row)">执行记录</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -93,6 +93,7 @@ import TaskModal from '@/renderer/views/task/TaskModal.vue'
 import type { TaskSubmitPayload } from '@/renderer/views/task/TaskModal.types.ts'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 import TaskExecutionsModal from '@/renderer/views/task/execution/TaskExecutionsModal.vue'
+import { appEnv } from '@/shared/common/app-env.ts'
 
 interface TaskTableProps {
   pluginId?: string
@@ -104,13 +105,16 @@ const plugin = ref<TaskPluginInfo>()
 const currRowPlugin = ref<TaskPluginInfo>()
 const currRowTask = ref<Task>()
 
-const { refreshTableData, loading, reset } = useAutoRefreshData(async () => {
-  if (props.pluginId) {
-    tableData.value = await toolkitApi.task.getTaskList(props.pluginId)
-  } else {
-    tableData.value = await toolkitApi.task.getTaskListWithPlugin()
-  }
-})
+const { refreshTableData, loading, reset } = useAutoRefreshData(
+  async () => {
+    if (props.pluginId) {
+      tableData.value = await toolkitApi.task.getTaskList(props.pluginId)
+    } else {
+      tableData.value = await toolkitApi.task.getTaskListWithPlugin()
+    }
+  },
+  appEnv.isDev ? 999999 : 3000,
+)
 const refreshTable = () => {
   tableData.value = []
   reset()
@@ -170,6 +174,7 @@ const handleExecute = async (task: TaskWithPlugin) => {
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+    margin-bottom: 10px;
 
     &__label {
       font-size: 1.1em;

@@ -6,13 +6,13 @@
     </div>
     <div ref="tableWrapperRef" class="table-page__table">
       <el-table height="66vh" :data="tableData" style="width: 100%" v-loading="loading">
-        <el-table-column prop="executionId" label="执行ID" min-width="86"></el-table-column>
-        <el-table-column prop="createdAt" label="日志时间" min-width="86">
+        <el-table-column prop="executionId" label="执行ID" width="100"></el-table-column>
+        <el-table-column prop="createdAt" label="日志时间" width="146">
           <template #default="{ row }: { row: TaskExecution }">
             {{ new Date(row.createdAt).toLocaleString() }}
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="日志级别" min-width="80" width="80">
+        <el-table-column prop="status" label="日志级别" width="90">
           <template #default="{ row }: { row: TaskExecutionLog }">
             <el-tag v-if="row.level === 'info'" type="info" disable-transitions>info</el-tag>
             <el-tag v-if="row.level === 'debug'" type="primary" disable-transitions>debug</el-tag>
@@ -20,7 +20,7 @@
             <el-tag v-if="row.level === 'warn'" type="warning" disable-transitions>warn</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="message" label="执行结果" min-width="100"></el-table-column>
+        <el-table-column prop="message" label="执行结果" min-width="120"></el-table-column>
       </el-table>
     </div>
   </div>
@@ -30,7 +30,7 @@
 import type { TaskExecution, TaskExecutionLog } from '@/shared/types/task.ts'
 import { ref, watch } from 'vue'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import { useAutoRefreshData } from 'bilitoolkit-ui'
+import { useLoadingData } from 'bilitoolkit-ui'
 
 interface TaskExecutionLogTableProps {
   taskExecutionId: number
@@ -39,13 +39,14 @@ interface TaskExecutionLogTableProps {
 const props = defineProps<TaskExecutionLogTableProps>()
 
 const tableData = ref<TaskExecutionLog[]>([])
-const { refreshTableData, loading, reset } = useAutoRefreshData(async () => {
+const { loading, loadingData } = useLoadingData()
+
+const refreshTableData = loadingData(async () => {
   tableData.value = await toolkitApi.task.getTaskExecutionLogs(props.taskExecutionId)
 })
 
 function refreshTable() {
   tableData.value = []
-  reset()
   refreshTableData()
 }
 
