@@ -20,13 +20,13 @@ const hide = () => {
 }
 
 const handleCancel = () => {
-  visible.value = false
   options.onCancel?.()
+  visible.value = false
 }
 
 const handleConfirm = () => {
-  visible.value = false
   options.onConfirm()
+  visible.value = false
 }
 
 defineExpose({ show, hide })

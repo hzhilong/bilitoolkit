@@ -10,7 +10,7 @@
       <template #label>
         <span class="form-label">
           {{ field.label }}
-          <el-tooltip v-if="field.description" :content="field.description" placement="top">
+          <el-tooltip v-if="field.description" :content="field.description" effect="light" placement="top">
             <el-icon class="description-icon"><QuestionFilled /></el-icon>
           </el-tooltip>
         </span>

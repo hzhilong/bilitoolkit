@@ -3,9 +3,10 @@ import type { ApiCallerContext, IpcToolkitUserApi } from '@/main/types/ipc-toolk
 import { type BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
 import { _getGlobalData } from '@/main/api/handler/api-handler-global.ts'
-import type { UserInfoWithCookie } from '@ybgnb/bili-api'
+import type { UserInfoWithCookie, UserCookie } from '@ybgnb/bili-api'
 import { sleep } from '@ybgnb/utils'
 import { setUserCookies, delUserCookies, getUserCookies } from '@/main/utils/session.ts'
+import { userService } from '@/main/service/user.service.ts'
 
 /**
  * user API处理器
@@ -39,5 +40,12 @@ export class UserApiHandler extends ApiHandleStrategy implements IpcToolkitUserA
 
   async delCurrUserCookie(context: ApiCallerContext): Promise<void> {
     await delUserCookies(context.webContents.session)
+  }
+
+  async switchCurrUser(context: ApiCallerContext, user: UserInfoWithCookie): Promise<void> {
+    await setUserCookies(context.webContents.session, user.userCookie.cookie)
+  }
+  async getMyInfoByCookie(context: ApiCallerContext, userCookie: UserCookie): Promise<UserInfoWithCookie> {
+    return userService.getMyInfoByCookie(userCookie)
   }
 }

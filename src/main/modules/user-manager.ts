@@ -37,4 +37,5 @@ class UserManager {
   }
 }
 
+// 暂时废弃
 export const userManager = new UserManager()

@@ -1,6 +1,11 @@
 import type { MenuItem } from '@/renderer/components/layout/AppMenus.vue'
 
 /**
+ * 忽略当前菜单状态的路由路径前缀
+ */
+export const IGNORE_MENU_PATH_PREFIXES = ['/task-plugin', '/bili-space']
+
+/**
  * 应用菜单
  */
 export const appMenus: MenuItem[] = [

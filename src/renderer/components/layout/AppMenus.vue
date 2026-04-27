@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
 import { AppIcon } from 'bilitoolkit-ui'
+import { IGNORE_MENU_PATH_PREFIXES } from '@/renderer/router/menus.ts'
 
 /**
  * 应用菜单
@@ -27,7 +28,7 @@ watch(
   () => router.currentRoute.value.path,
   async () => {
     const currPath = router.currentRoute.value.path
-    if (!currPath.includes('/task-plugin')) {
+    if (!IGNORE_MENU_PATH_PREFIXES.includes(currPath)) {
       const findIndex = props.menus.findIndex((menu) => currPath.startsWith(menu.path))
       menuIndex.value = findIndex > -1 ? findIndex : 0
     }

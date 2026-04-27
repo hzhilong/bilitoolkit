@@ -1,4 +1,4 @@
-import { BrowserWindow, globalShortcut, ipcMain } from 'electron'
+import { BrowserWindow, globalShortcut, ipcMain, type HandlerDetails, Menu } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
 import { execBiz } from '@ybgnb/utils'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
@@ -58,6 +58,7 @@ export class WindowManager extends BaseWindowManager {
     if (appEnv.isProd) {
       updateElectronApp()
     }
+    Menu.setApplicationMenu(null)
     if (appPath.devUrl) {
       // 开发
       mainWindow.loadURL(appPath.devUrl).then(() => {})
@@ -69,6 +70,15 @@ export class WindowManager extends BaseWindowManager {
     mainWindow.on('close', async () => {
       // 取消所有任务
       await taskService.abortAllTaskExecution()
+    })
+    mainWindow.webContents.setWindowOpenHandler((details: HandlerDetails) => {
+      return {
+        action: 'allow',
+        overrideBrowserWindowOptions: {
+          menu: null,
+          icon: appPath.defaultWindowIcon,
+        },
+      }
     })
   }
 

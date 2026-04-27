@@ -38,13 +38,13 @@ onMounted(() => {
 })
 
 const handleCancel = () => {
-  visible.value = false
   options.onCancel?.()
+  visible.value = false
 }
 
 const handleSelect = (user: UserInfoWithCookie) => {
-  visible.value = false
   options.onSelected(user)
+  visible.value = false
 }
 
 defineExpose({ show, hide })

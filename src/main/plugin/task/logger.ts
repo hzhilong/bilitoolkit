@@ -29,7 +29,7 @@ export function buildLogger(taskExecution: TaskExecution) {
         message: formatLogMessage(...data),
       }
       // 传递给渲染进程显示
-      emit(HOST_EVENT_CHANNELS.TASK_PLUGIN_LOGGER, log, ...data)
+      emit(null, HOST_EVENT_CHANNELS.TASK_PLUGIN_LOGGER, log, ...data)
       // 持久化
       taskExecutionLogRepo.add(log).then()
     }

@@ -12,6 +12,7 @@ import { windowManager } from '@/main/window/window-manager.ts'
  * 发射事件
  */
 export const emit = (
+  currWebContentsId: number | null,
   channel: HostEventChannel | string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...data: any[]
@@ -27,7 +28,10 @@ export const emit = (
   // 发送给渲染进程
   const all = webContents.getAllWebContents()
   for (const wc of all) {
-    wc.send(IPC_CHANNELS.TOOLKIT_EVENT, emitter)
+    if (wc.id !== currWebContentsId) {
+      // 相同渲染环境不转发
+      wc.send(IPC_CHANNELS.TOOLKIT_EVENT, emitter)
+    }
   }
 }
 
@@ -61,6 +65,6 @@ export class EventApiHandler extends ApiHandleStrategy implements Pick<IpcToolki
     if (context.envType !== 'host' && eventName in HOST_EVENT_CHANNELS) {
       throw new CommonError(`内部错误，插件不能注册[${eventName}]事件`)
     }
-    emit(eventName, ...data)
+    emit(context.webContents.id, eventName, ...data)
   }
 }

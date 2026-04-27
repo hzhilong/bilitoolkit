@@ -4,9 +4,10 @@ import type {
   InstalledToolkitPlugin,
   PluginInstallOptions,
   PluginTestOptions,
-  ToolkitPlugin,
+  ToolkitPlugin
 } from '@/shared/types/toolkit-plugin.ts'
 import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.ts'
+import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 
 /**
  * 哔哩工具姬API（包含核心API）
@@ -114,7 +115,17 @@ export interface ToolkitCoreApi {
   getPluginIcon(plugin: ToolkitPlugin): Promise<string>
 
   /**
-   * 账号变更，通知主进程的哔哩账号管理模块变更
+   * 同步用户列表
    */
-  syncBiliUserState(): Promise<void>
+  syncUserList(users: UserInfoWithCookie[]): Promise<UserListSyncResult>
+}
+
+/**
+ * 用户列表刷新结果
+ */
+export interface UserListSyncResult {
+  // 已更新的信息
+  updatedList: UserInfoWithCookie[]
+  // 已失效的信息
+  expiredList: UserInfoWithCookie[]
 }

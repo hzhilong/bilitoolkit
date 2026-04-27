@@ -18,9 +18,9 @@ const loginResult = ref('')
 let abortController = new AbortController()
 
 const handleCancel = () => {
-  visible.value = false
   abortController.abort('取消登录')
   emit('cancel')
+  visible.value = false
 }
 
 const startLogin = async () => {
@@ -49,8 +49,8 @@ const startLogin = async () => {
     ...userInfo,
     userCookie: context.userCookie,
   })
-  visible.value = false
   emit('loginSuccess', userInfo)
+  visible.value = false
 }
 
 watch(visible, (newValue) => {

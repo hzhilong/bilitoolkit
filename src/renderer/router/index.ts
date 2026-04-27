@@ -51,6 +51,11 @@ const router = createRouter({
           path: '/task-plugin',
           component: () => import('../views/task/TaskPluginView.vue'),
         },
+        {
+          name: 'bilibili',
+          path: '/bili-space',
+          component: () => import('../views/BiliView.vue'),
+        },
       ],
     },
   ],

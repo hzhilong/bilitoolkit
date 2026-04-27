@@ -25,13 +25,16 @@ export const useUserStore = defineStore(
     const updateDBAndSync = async () => {
       // 写入配置
       await window.toolkitApi.db.write(APP_DB_KEYS.BILI_USERS, toIPC(users))
-      await window.toolkitApi.core.syncBiliUserState()
+      await window.toolkitApi.event.emit(HOST_EVENT_CHANNELS.USER_UPDATE, window._windowApp)
     }
 
     const init = async () => {
       await refreshData()
-      await window.toolkitApi.event.on(HOST_EVENT_CHANNELS.USER_UPDATE, async () => {
-        await refreshData()
+      await window.toolkitApi.event.on(HOST_EVENT_CHANNELS.USER_UPDATE, async (windowApp) => {
+        if (windowApp !== window._windowApp) {
+          // 非同环境触发
+          await refreshData()
+        }
       })
     }
 
@@ -72,7 +75,12 @@ export const useUserStore = defineStore(
       throw new CommonError(`找不到uid=${uid}的用户，可能已登出`)
     }
 
-    return { init, users, loginUser, logoutUser, findUser }
+    const setUsers = async (list: UserInfoWithCookie[]) => {
+      users.splice(0, users.length, ...list)
+      await updateDBAndSync()
+    }
+
+    return { init, users, loginUser, logoutUser, findUser, setUsers, refreshData }
   },
   {
     // 自己实现配置的持久化

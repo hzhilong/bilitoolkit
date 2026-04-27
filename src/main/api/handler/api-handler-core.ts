@@ -13,10 +13,10 @@ import {
 import { IconUtils } from '@/main/utils/icon.ts'
 import { pluginManager } from '@/main/plugin/manager.ts'
 import { windowManager } from '@/main/window/window-manager.ts'
-import { userManager } from '@/main/modules/user-manager.ts'
-import { emit } from '@/main/api/handler/api-handler-event.ts'
-import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
 import { getRecommendedPlugins } from '@/main/plugin/loader.ts'
+import type { UserInfoWithCookie } from '@ybgnb/bili-api'
+import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.ts'
+import { userService } from '@/main/service/user.service.ts'
 
 /**
  * 核心API处理器
@@ -92,8 +92,7 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return await IconUtils.downloadPluginIcon(plugin)
   }
 
-  async syncBiliUserState(_: ApiCallerContext): Promise<void> {
-    userManager.refreshFromDB()
-    emit(HOST_EVENT_CHANNELS.USER_UPDATE)
+  syncUserList(context: ApiCallerContext, users: UserInfoWithCookie[]): Promise<UserListSyncResult> {
+    return userService.syncUserList(users)
   }
 }

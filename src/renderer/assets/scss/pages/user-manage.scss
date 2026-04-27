@@ -19,3 +19,26 @@
     width: 300px;
   }
 }
+
+.options{
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  > * {
+    width: 28px;
+    height: 28px;
+    padding: 5px 4px 3px 4px;
+    font-size: 20px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background .3s ease;
+
+    &:hover {
+      background: var(--app-color-primary-transparent-15);
+    }
+  }
+}
