@@ -4,7 +4,6 @@ import path from 'path'
 import { appPath } from '@/main/common/app-path.ts'
 import { MainConstants } from '@/main/common/main-constants.ts'
 import { FileUtils } from '@/main/utils/file.ts'
-import { CommonError } from '@ybgnb/utils'
 import fs from 'fs'
 import { JSONFileSync } from 'lowdb/node'
 import { LowSync } from 'lowdb'
@@ -53,13 +52,13 @@ export default class DBUtils {
    */
   static getDocFilePath(dbPath: string, id: string): string {
     if (path.normalize(id).includes(path.sep)) {
-      throw new CommonError('文档id请勿使用/或者\\')
+      throw new Error('文档id请勿使用/或者\\')
     }
     // 当前文档id关联的文件路径
     const filePath = path.resolve(dbPath, id.endsWith('.json') ? id : `${id}.json`)
     // 校验安全路径，防止访问非法路径
     if (!filePath.startsWith(dbPath)) {
-      throw new CommonError(`非法路径，试图访问受限目录：[${id}]`)
+      throw new Error(`非法路径，试图访问受限目录：[${id}]`)
     }
     // 确保目录存在
     FileUtils.ensureDirExists(dbPath)
@@ -73,7 +72,7 @@ export default class DBUtils {
    */
   static getExistsDocFilePath(dbPath: string, id: string): string {
     const filePath = this.getDocFilePath(dbPath, id)
-    if (!fs.existsSync(filePath)) throw new CommonError(`文档[${id}]不存在`)
+    if (!fs.existsSync(filePath)) throw new Error(`文档[${id}]不存在`)
     return filePath
   }
 
@@ -84,7 +83,7 @@ export default class DBUtils {
    */
   static getDocFilePathsByPrefix(context: ApiCallerContext, idPrefix: string | undefined): string[] {
     const paths = FileUtils.getFilesByPrefixAndSuffix(context.dbPath, idPrefix)
-    if (!paths || paths.length === 0) throw new CommonError(`文档[${idPrefix}]不存在`)
+    if (!paths || paths.length === 0) throw new Error(`文档[${idPrefix}]不存在`)
     return paths
   }
 
@@ -95,7 +94,7 @@ export default class DBUtils {
    */
   static deleteDoc(context: ApiCallerContext, paths: string[]) {
     for (const docPath of paths) {
-      if (!docPath.startsWith(context.dbPath)) throw new CommonError(`非法路径，试图访问受限目录：[${docPath}]`)
+      if (!docPath.startsWith(context.dbPath)) throw new Error(`非法路径，试图访问受限目录：[${docPath}]`)
     }
     return FileUtils.deleteFiles(paths)
   }
@@ -106,7 +105,7 @@ export default class DBUtils {
    */
   static readDocObject<T extends object>(docPath: string): T | null {
     const db = new JSONFileSync<object>(docPath)
-    //    if (db === null) throw new CommonError(`文档[${path.basename(docPath)}]为空`)
+    //    if (db === null) throw new Error(`文档[${path.basename(docPath)}]为空`)
     if (db === null) return null
     return db.read() as T
   }

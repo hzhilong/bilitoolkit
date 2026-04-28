@@ -8,7 +8,6 @@ import type {
 import { windowManager } from '@/main/window/window-manager.ts'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { getAppInstalledPlugins, writeHostDBDoc } from '@/main/utils/host-app.ts'
-import { CommonError } from '@ybgnb/utils'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { cloneDeep } from 'lodash-es'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
@@ -66,7 +65,7 @@ class PluginManager {
   getInstalledPlugin(id: string): InstalledToolkitPlugin {
     const plugin = this.registry.plugins.get(id)
     if (!plugin) {
-      throw new CommonError('插件未安装！')
+      throw new Error('插件未安装！')
     }
     return plugin
   }

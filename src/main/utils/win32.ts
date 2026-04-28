@@ -5,7 +5,7 @@ import fs from 'fs'
 import iconv from 'iconv-lite'
 import path from 'node:path'
 import * as url from 'node:url'
-import { AbortError, CommonError } from '@ybgnb/utils'
+import { AbortError } from '@ybgnb/utils'
 
 const cmdEncoding = 'binary'
 const cmdResultEncoding = 'cp936'
@@ -110,7 +110,7 @@ export class Win32Utils {
         await Win32Utils.execCmd(`start "" "${fileOrDir}"`)
       }
     } else {
-      throw new CommonError('该文件/文件夹不存在')
+      throw new Error('该文件/文件夹不存在')
     }
   }
 

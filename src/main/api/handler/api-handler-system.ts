@@ -1,7 +1,6 @@
 import { mainLogger } from '@/main/common/main-logger'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { FileUtils } from '@/main/utils/file.ts'
-import { CommonError } from '@ybgnb/utils'
 import { nativeTheme, shell } from 'electron'
 import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-toolkit-api.ts'
 import type { AppLog, AppThemeState } from 'bilitoolkit-types'
@@ -19,7 +18,7 @@ export class SystemApiHandler extends ApiHandleStrategy implements IpcToolkitSys
    * 暂未适配该平台
    */
   notAdaptedCurrPlatform(): never {
-    throw new CommonError('暂未适配该平台的System Api')
+    throw new Error('暂未适配该平台的System Api')
   }
 
   async browsePage(context: ApiCallerContext, path: string): Promise<void> {

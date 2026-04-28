@@ -1,6 +1,5 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { generateId } from '@/main/utils/id.ts'
-import { CommonError } from '@ybgnb/utils'
 import type { WebContents } from 'electron'
 import { ipcMain } from 'electron'
 import { cloneDeep } from 'lodash-es'
@@ -56,7 +55,7 @@ export const _getGlobalData = (
       setTimeout(() => {
         if (!isFinish) {
           ipcMain.removeListener(IPC_CHANNELS.RESPONSE_DATA, responseListener)
-          reject(new CommonError(`获取数据[${globalDataKey}]超时`))
+          reject(new Error(`获取数据[${globalDataKey}]超时`))
         }
       }, 5000)
     }

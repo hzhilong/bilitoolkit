@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BizResult, CommonError } from '@ybgnb/utils'
+import { BizResult } from '@ybgnb/utils'
 import { ipcRenderer } from 'electron'
 import type { ToolkitApiModule, ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
@@ -19,7 +19,7 @@ export async function baseInvokeApi<T>(apiPath: string, ...args: any[]): Promise
   if (result.success) {
     return result.data as T
   } else {
-    throw new CommonError(result.msg)
+    throw new Error(result.msg)
   }
 }
 
@@ -40,6 +40,6 @@ export async function invokeModuleApi<A, T = void>(
   if (result.success) {
     return result.data as T
   } else {
-    throw new CommonError(result.msg)
+    throw new Error(result.msg)
   }
 }

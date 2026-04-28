@@ -54,18 +54,8 @@ export const useAppThemeStore = defineStore(
       const newColor = APP_THEME_STATE.primaryColors[state.primaryColorIndex]
       return setPrimaryColor(newColor)
     }
-    /**
-     * 设置主题模式
-     * @param mode
-     * @param isDark
-     */
-    const setThemeMode = (mode: AppThemeMode, isDark: boolean) => {
-      state.themeMode = mode
-      state.dark = isDark
-      return state.themeMode
-    }
 
-    return { init, state, switchThemeColor, setPrimaryColor, setThemeMode }
+    return { init, state, switchThemeColor, setPrimaryColor }
   },
   {
     // 自己实现配置的持久化

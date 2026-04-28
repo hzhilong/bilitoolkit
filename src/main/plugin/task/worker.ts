@@ -2,10 +2,10 @@
 import { parentPort, workerData } from 'node:worker_threads'
 import vm from 'node:vm'
 import type { RpcApiResultMsg, RpcApiRequestMsg, WorkerData, RpcLogRequestMsg } from '@/main/types/task-worker.ts'
-import { stripFunctions, serializeError } from '@/main/utils/serialize.ts'
 import type { ConsoleMethod } from '@ybgnb/bili-api'
 import util from 'node:util'
 import type { TaskLogLevel, TaskLogger, TaskPluginToolkitApi } from 'bilitoolkit-types'
+import { serializeError, stripFunctions } from '@ybgnb/utils'
 
 if (!parentPort) {
   throw new Error('task-plugin.worker must run in a worker thread')

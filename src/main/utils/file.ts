@@ -9,7 +9,7 @@ import type { ApiCallerEnvType } from '@/main/types/ipc-toolkit-api.ts'
 import { appPath } from '@/main/common/app-path.ts'
 import { MainConstants } from '@/main/common/main-constants.ts'
 import NpmUtils from '@/main/utils/npm.ts'
-import { CommonError, convertToCommonError } from '@ybgnb/utils'
+import { convertToCommonError } from '@ybgnb/utils'
 
 export class FileUtils {
   /**
@@ -109,7 +109,7 @@ export class FileUtils {
       mainLogger.info(`已成功删除 ${directory} 下的所有文件和目录`)
     } catch (error) {
       mainLogger.error('删除文件时出错：', error)
-      throw convertToCommonError(error, '删除文件时出错：')
+      throw convertToCommonError(error, '删除文件时出错')
     }
   }
 
@@ -211,7 +211,7 @@ export class FileUtils {
 
   static readJsonFile<T>(filePath: string): T {
     if (!this.isFile(filePath)) {
-      throw new CommonError('文件不存在')
+      throw new Error('文件不存在')
     }
     const jsonRaw = fs.readFileSync(path.resolve(filePath), 'utf-8')
     return JSON.parse(jsonRaw) as T

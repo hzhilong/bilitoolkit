@@ -2,7 +2,7 @@
 import axios from 'axios'
 import type { NpmSearchParams, NpmSearchResult } from '@/shared/types/npm-types.ts'
 import { logger } from '@/renderer/common/renderer-logger.ts'
-import { CommonError, getErrorMessage } from '@ybgnb/utils'
+import { getErrorMessage } from '@ybgnb/utils'
 
 export async function searchNpmPackages(params: NpmSearchParams): Promise<NpmSearchResult> {
   try {
@@ -17,6 +17,6 @@ export async function searchNpmPackages(params: NpmSearchParams): Promise<NpmSea
     return response.data
   } catch (error) {
     logger.error('搜索 npm 包失败:', error)
-    throw new CommonError('搜索 npm 包失败：' + getErrorMessage(error))
+    throw new Error('搜索 npm 包失败：' + getErrorMessage(error))
   }
 }

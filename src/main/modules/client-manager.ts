@@ -1,4 +1,3 @@
-import { CommonError } from '@ybgnb/utils'
 import { BiliClient, type ConsoleMethod } from '@ybgnb/bili-api'
 import type { BiliApiClientConfig } from 'bilitoolkit-types'
 import { generateId } from '@/main/utils/id.ts'
@@ -15,7 +14,7 @@ class BiliClientManager {
   get(id: string) {
     if (this.clients.has(id)) return this.clients.get(id)!
 
-    throw new CommonError('未创建 BiliClient')
+    throw new Error('未创建 BiliClient')
   }
 
   create(config?: Partial<Omit<BiliApiClientConfig, 'id'>>): BiliApiClientConfig {

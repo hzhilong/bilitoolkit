@@ -82,7 +82,7 @@ export interface InstalledToolkitPlugin extends PluginInstallOptions {
   // 是否为测试插件
   isTest?: boolean
   // 插件加载出现错误？（需要重装）
-  // loadingError?: CommonError
+  // loadingError?: Error
 }
 
 export function isInstalledToolkitPlugin(obj: ToolkitPlugin): obj is InstalledToolkitPlugin {

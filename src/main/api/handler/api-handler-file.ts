@@ -1,6 +1,5 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
 import { FileUtils } from '@/main/utils/file.ts'
-import { CommonError } from '@ybgnb/utils'
 import fs from 'fs'
 import path from 'path'
 import type { ApiCallerContext, IpcToolkitFileApi } from '@/main/types/ipc-toolkit-api.ts'
@@ -22,7 +21,7 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
     const absolutePath = path.resolve(context.filePath, filePath)
     // 校验安全路径，防止访问非法路径
     if (!absolutePath.startsWith(context.filePath)) {
-      throw new CommonError(`非法路径，试图访问受限目录：[${filePath}]`)
+      throw new Error(`非法路径，试图访问受限目录：[${filePath}]`)
     }
     FileUtils.ensureDirExists(path.dirname(absolutePath))
     return absolutePath
@@ -35,7 +34,7 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
   async read(context: ApiCallerContext, filePath: string): Promise<Uint8Array> {
     const absolutePath = this._getFilePath(context, filePath)
     if (!this._exists(absolutePath)) {
-      throw new CommonError(`文件[${filePath}]不存在`)
+      throw new Error(`文件[${filePath}]不存在`)
     }
     const buffer = fs.readFileSync(absolutePath)
     return new Uint8Array(buffer)
@@ -63,7 +62,7 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
   async delete(context: ApiCallerContext, filePath: string): Promise<void> {
     const absolutePath = this._getFilePath(context, filePath)
     if (!this._exists(absolutePath)) {
-      throw new CommonError(`文件[${filePath}]不存在`)
+      throw new Error(`文件[${filePath}]不存在`)
     }
     fs.unlinkSync(absolutePath)
   }

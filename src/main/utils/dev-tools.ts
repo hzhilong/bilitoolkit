@@ -2,7 +2,6 @@ import { DevToolsType } from '@/shared/types/app-settings'
 import { WebContentsView } from 'electron'
 import { windowManager } from '@/main/window/window-manager.ts'
 import { getAppSettings } from '@/main/utils/host-app.ts'
-import { CommonError } from '@ybgnb/utils'
 
 // 打开开发者工具
 export const showDevTools = () => {
@@ -18,14 +17,14 @@ export const showDevTools = () => {
   } else if (type === DevToolsType.DIALOG) {
     // 全局对话框
     if (!appDialog) {
-      throw new CommonError('打开开发者工具失败：全局对话框未被创建')
+      throw new Error('打开开发者工具失败：全局对话框未被创建')
     } else {
       appDialog.webContents.openDevTools()
     }
   } else if (type === DevToolsType.PLUGIN) {
     // 显示的插件
     if (!pluginWeb) {
-      throw new CommonError('打开开发者工具失败：当前未打开任何插件')
+      throw new Error('打开开发者工具失败：当前未打开任何插件')
     } else {
       pluginWeb.openDevTools()
     }

@@ -1,5 +1,4 @@
 import { ApiDispatcher } from '@/main/types/api-dispatcher'
-import { CommonError } from '@ybgnb/utils'
 import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
 import { WindowApiHandler } from '@/main/api/handler/api-handler-window.ts'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
@@ -47,16 +46,16 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
    */
   public async handle(event: IpcMainInvokeEvent | null, options: PluginApiInvokeOptions, context: ApiCallerContext) {
     if (!options) {
-      throw new CommonError('缺少调用参数')
+      throw new Error('缺少调用参数')
     }
     // 非宿主环境不允许调用核心API
     if (HOST_API_MODULES.includes(options.module) && context.envType !== 'host') {
-      throw new CommonError('非法调用')
+      throw new Error('非法调用')
     }
     try {
       const strategy = this.strategies[options.module]
       if (!strategy) {
-        throw new CommonError(`暂未支持API模块[${options.module}]`)
+        throw new Error(`暂未支持API模块[${options.module}]`)
       }
 
       if (event && strategy instanceof ApiDispatcher) {
@@ -67,7 +66,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
       // 获取嵌套方法和执行上下文
       const nested = this.getNestedProperty(strategy, options.name)
       if (!nested || typeof nested.handler !== 'function') {
-        throw new CommonError(`API模块[${options.module}]不存在${options.name}方法`)
+        throw new Error(`API模块[${options.module}]不存在${options.name}方法`)
       }
 
       // 绑定正确上下文后执行

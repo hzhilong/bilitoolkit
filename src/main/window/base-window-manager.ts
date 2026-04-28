@@ -2,7 +2,7 @@ import { type WebContents, webContents, BrowserWindow, WebContentsView } from 'e
 import type { CreateWindowOptions } from '@/main/types/create-window.ts'
 import type { ApiCallerContext, HostApiCallerContext, PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
 import { isToolkitPlugin, type ToolkitPlugin, type InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { CommonError, isHttpUrl } from '@ybgnb/utils'
+import { isHttpUrl } from '@ybgnb/utils'
 import path from 'path'
 import { mainLogger } from '@/main/common/main-logger.ts'
 import { appPath } from '@/main/common/app-path.ts'
@@ -45,13 +45,13 @@ export abstract class BaseWindowManager {
 
   protected getOwnerBrowserWindow(contents: WebContents): BrowserWindow {
     const window = this.webContentsToWindow.get(contents.id)
-    if (!window) throw new CommonError('关联的窗口对象为空')
+    if (!window) throw new Error('关联的窗口对象为空')
     return window
   }
 
   protected getMappingPlugin(sender: WebContents): ToolkitPlugin {
     const plugin = this.webContentsToPluginMap.get(sender.id)
-    if (!plugin) throw new CommonError('内部错误，关联的插件为空')
+    if (!plugin) throw new Error('内部错误，关联的插件为空')
     return plugin
   }
 
@@ -62,7 +62,7 @@ export abstract class BaseWindowManager {
         wc = webContents.fromId(webContentsId)
       }
     }
-    if (!wc) throw new CommonError(`目标插件[${pluginId}]未打开`)
+    if (!wc) throw new Error(`目标插件[${pluginId}]未打开`)
     return wc
   }
 
@@ -78,7 +78,7 @@ export abstract class BaseWindowManager {
     } else {
       view = this.webContentsToViewMap.get(sender.id)
     }
-    if (!view) throw new CommonError('内部错误，关联的视图为空')
+    if (!view) throw new Error('内部错误，关联的视图为空')
     return view
   }
 
@@ -162,7 +162,7 @@ export abstract class BaseWindowManager {
   }
   public async createPluginView(context: ApiCallerContext, plugin: InstalledToolkitPlugin) {
     if (!this.isHost(context.webContents)) {
-      throw new CommonError('非法调用')
+      throw new Error('非法调用')
     }
     const window = context.window
     mainLogger.debug(`createPluginView`, plugin)
@@ -238,14 +238,14 @@ export abstract class BaseWindowManager {
   public hidePluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const view = this.pluginToViewMap.get(plugin.id)
     if (!view) {
-      throw new CommonError('该插件未创建视图，关闭失败')
+      throw new Error('该插件未创建视图，关闭失败')
     }
     context.window.contentView.removeChildView(view)
   }
   public closePluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const view = this.pluginToViewMap.get(plugin.id)
     if (!view) {
-      throw new CommonError('该插件未创建视图，关闭失败')
+      throw new Error('该插件未创建视图，关闭失败')
     }
     this.webContentsToPluginMap.get(view.webContents.id)
     this.webContentsToPluginMap.delete(view.webContents.id)
@@ -317,14 +317,14 @@ export abstract class BaseWindowManager {
 
   public showAppDialogView(context: ApiCallerContext, _dialogType: AppDialogType) {
     if (!this.appDialogWebContentsView) {
-      throw new CommonError('内部错误，创建对话框视图失败')
+      throw new Error('内部错误，创建对话框视图失败')
     }
     context.window.contentView.addChildView(this.appDialogWebContentsView)
     return this.appDialogWebContentsView
   }
   public hideAppDialogView(context: ApiCallerContext) {
     if (!this.appDialogWebContentsView) {
-      throw new CommonError('内部错误，对话框视图未创建')
+      throw new Error('内部错误，对话框视图未创建')
     }
     context.window.contentView.removeChildView(this.appDialogWebContentsView)
   }

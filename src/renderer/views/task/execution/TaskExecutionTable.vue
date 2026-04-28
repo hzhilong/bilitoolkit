@@ -1,11 +1,11 @@
 <template>
-  <div class="table-page">
+  <div class="table-page" v-loading="loading">
     <div class="table-page__header">
       <span class="table-page__header__label">任务执行记录列表：</span>
       <el-button @click="refreshTableData">刷新</el-button>
     </div>
     <div ref="tableWrapperRef" class="table-page__table">
-      <el-table height="66vh" :data="tableData" style="width: 100%" v-loading="loading">
+      <el-table height="66vh" :data="tableData" style="width: 100%">
         <el-table-column prop="id" label="ID" min-width="50" width="50" />
         <el-table-column prop="createdAt" label="启动时间" min-width="86">
           <template #default="{ row }: { row: TaskExecution }">

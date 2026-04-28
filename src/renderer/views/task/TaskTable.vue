@@ -1,13 +1,13 @@
 <template>
-  <div class="tasks">
+  <div class="tasks" v-loading="loading">
     <div class="tasks__header">
       <span class="tasks__header__label">任务列表：</span>
       <el-button @click="refreshTableData">刷新</el-button>
       <el-button v-if="pluginId" @click="openModal('add')">新建</el-button>
     </div>
-    <el-table class="tasks__table" :data="tableData" style="width: 100%" v-loading="loading">
+    <el-table class="tasks__table" :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="ID" min-width="60" width="60" />
-      <el-table-column v-if="!pluginId" prop="pluginId" label="插件信息" min-width="200">
+      <el-table-column v-if="!pluginId" prop="pluginId" label="插件信息" min-width="180">
         <template #default="{ row }: { row: TaskWithPlugin }">
           <AppTooltip :content="row.pluginId">
             {{ row.pluginId }}
@@ -33,7 +33,7 @@
           <span v-else>-</span>
         </template>
       </el-table-column>
-      <el-table-column prop="enabled" label="状态" min-width="76">
+      <el-table-column prop="enabled" label="状态" min-width="66">
         <template #default="{ row }: { row: TaskWithPlugin }">
           <el-tag :type="row.enabled ? 'success' : 'danger'" disable-transitions>
             {{ row.enabled ? '启用' : '禁用' }}

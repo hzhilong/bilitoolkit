@@ -4,7 +4,7 @@ import SideBar from '@/renderer/components/layout/SideBar.vue'
 import TopBar from '@/renderer/components/layout/TopBar.vue'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
-import { CommonError, execBiz } from '@ybgnb/utils'
+import { execBiz } from '@ybgnb/utils'
 import { RouterView } from 'vue-router'
 import { useAppTabStore } from '@/renderer/stores/app-tab.ts'
 import { storeToRefs } from 'pinia'
@@ -14,7 +14,7 @@ const mainContentRef = ref<HTMLElement>()
 toolkitApi.global.register(HOST_GLOBAL_DATA.CONTENT_BOUNDS, () => {
   return execBiz(async () => {
     if (!mainContentRef.value) {
-      throw new CommonError('内部错误：窗口未被加载')
+      throw new Error('内部错误：窗口未被加载')
     }
     const rect = mainContentRef.value.getBoundingClientRect()
     return {

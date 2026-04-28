@@ -1,4 +1,3 @@
-import { CommonError } from '@ybgnb/utils'
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
@@ -72,7 +71,7 @@ export const useUserStore = defineStore(
           return user
         }
       }
-      throw new CommonError(`找不到uid=${uid}的用户，可能已登出`)
+      throw new Error(`找不到uid=${uid}的用户，可能已登出`)
     }
 
     const setUsers = async (list: UserInfoWithCookie[]) => {

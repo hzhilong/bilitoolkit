@@ -3,7 +3,7 @@ import type { ApiCallerContext, IpcToolkitBiliApi } from '@/main/types/ipc-toolk
 import { type BaseWindowManager } from '@/main/window/base-window-manager.ts'
 import type { BiliApiClientConfig, BiliApiMethod } from 'bilitoolkit-types'
 import { biliClientManager } from '@/main/modules/client-manager.ts'
-import { dynamicCall } from '@/main/utils/function.ts'
+import { dynamicCall } from '@ybgnb/utils'
 
 /**
  * bili API处理器

@@ -1,7 +1,7 @@
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { session } from 'electron'
 import { BILIBILI_COOKIE_DOMAIN, USER_COOKIE_NAMES } from '@ybgnb/bili-api'
-import { isEmptyArr, CommonError } from '@ybgnb/utils'
+import { isEmptyArr } from '@ybgnb/utils'
 import { trim } from 'lodash-es'
 
 /**
@@ -24,11 +24,11 @@ export async function getUserCookies(session: Electron.Session) {
   const cookies = await session.cookies.get({ domain: BILIBILI_COOKIE_DOMAIN })
   console.log(`cookie`, cookies)
 
-  if (isEmptyArr(cookies)) throw new CommonError('获取cookie失败，请确保已登录成功')
+  if (isEmptyArr(cookies)) throw new Error('获取cookie失败，请确保已登录成功')
 
   const map = Object.fromEntries(cookies.map((c) => [c.name, c.value]))
 
-  if (!map.DedeUserID || !map.bili_jct) throw new CommonError('当前cookie不完整，请重新登录')
+  if (!map.DedeUserID || !map.bili_jct) throw new Error('当前cookie不完整，请重新登录')
 
   const userCookies: string[] = []
 

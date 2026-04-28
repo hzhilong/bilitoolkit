@@ -4,8 +4,8 @@ import { appPath } from '@/main/common/app-path.ts'
 import { writeFileSync, unlinkSync } from 'node:fs'
 import * as tar from 'tar'
 import { FileUtils } from '@/main/utils/file.ts'
-import { convertToCommonError } from '@ybgnb/utils'
 import type { PluginDownloadOptions } from '@/shared/types/toolkit-plugin.ts'
+import { convertToCommonError } from '@ybgnb/utils'
 
 export default class NpmUtils {
   static pkgNameToDirName(pkgName: string) {
