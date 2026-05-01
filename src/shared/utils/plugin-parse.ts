@@ -1,5 +1,7 @@
-import type { PluginType } from '@/shared/types/toolkit-plugin.ts'
+import type { PluginType, ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
 import { pluginKeywordsPrefix } from '@/shared/common/plugin-keywords.ts'
+import type { SearchResultPackage, NpmPackage } from 'public-registry-api'
+import { getFormattedDate } from '@ybgnb/utils'
 
 /**
  * 解析插件关键词
@@ -35,4 +37,39 @@ export const parsePluginKeywords = (id: string, keywords: string[] | undefined):
     name: name || nameV1 || id,
     type: type as PluginType,
   }
+}
+
+/**
+ * 解析 npm 搜索结果的包
+ */
+export const parseNpmSearchResultPkg = (pkg: SearchResultPackage) => {
+  return {
+    ...parsePluginKeywords(pkg.name, pkg.keywords),
+    id: pkg.name,
+    author: pkg.publisher.username,
+    description: pkg.description ?? '',
+    version: pkg.version,
+    date: getFormattedDate(new Date(pkg.date)),
+    links: pkg.links,
+  } satisfies ToolkitPlugin
+}
+
+/**
+ * 解析 npm 包（版本获取最新的）
+ */
+export const parseNpmPackage = (pkg: NpmPackage) => {
+  return {
+    ...parsePluginKeywords(pkg.name, pkg.keywords),
+    id: pkg.name,
+    author: pkg.author?.name ?? '',
+    description: pkg.description ?? '',
+    version: pkg['dist-tags'].latest,
+    date: getFormattedDate(new Date(pkg.time.created)),
+    links: {
+      npm: `https://www.npmjs.com/package/${pkg.name}`,
+      homepage: pkg.homepage,
+      repository: pkg.repository?.url,
+      bugs: pkg.bugs?.url,
+    },
+  } satisfies ToolkitPlugin
 }

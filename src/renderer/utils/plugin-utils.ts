@@ -6,14 +6,13 @@ import type {
   ToolkitPluginWithNpmInfo,
 } from '@/shared/types/toolkit-plugin'
 import { eventBus } from '@/renderer/utils/event-bus.ts'
-import { searchNpmPackages } from '@/renderer/services/npm-service.ts'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
 import { appEnv } from '@/shared/common/app-env.ts'
-import type { NpmPackage } from '@/shared/types/npm-types.ts'
 import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import { parsePluginKeywords } from '@/shared/utils/plugin-parse.ts'
+import { parseNpmSearchResultPkg } from '@/shared/utils/plugin-parse.ts'
 import { toIPC } from 'bilitoolkit-runtime'
 import { getFormattedDate } from '@ybgnb/utils'
+import { searchPackages, type NpmSearchResultItem, SearchText } from 'public-registry-api'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {
@@ -36,7 +35,7 @@ export class PluginUtils {
     return plugin
   }
 
-  private static isSameAuthor(npmPackage: NpmPackage) {
+  private static isSameAuthor(npmPackage: NpmSearchResultItem) {
     return npmPackage.package.publisher.username === appEnv.env.APP_AUTHOR
   }
 
@@ -44,7 +43,7 @@ export class PluginUtils {
    * 排序npm上的插件（推荐插件>同作者>其他）
    * @param plugins
    */
-  static async sortNpmPlugins(plugins: NpmPackage[]): Promise<NpmPackage[]> {
+  static async sortNpmPlugins(plugins: NpmSearchResultItem[]): Promise<NpmSearchResultItem[]> {
     // 获取推荐的插件
     const recommendedPlugins = Array.from(await toolkitApi.core.getRecommendedPlugins())
     // 排序 map
@@ -62,24 +61,20 @@ export class PluginUtils {
     })
   }
 
-  static async searchNpmPlugins(page = 1) {
-    const ps = await searchNpmPackages({
-      keywords: 'bilitoolkit-plugin',
-      page: page,
+  static async searchNpmPlugins(page = 1, pageSize: number = 20) {
+    const result = await searchPackages({
+      text: SearchText.create().keywords(['bilitoolkit-plugin']).toString(),
+      size: pageSize,
+      from: (page - 1) * 20,
     })
-    ps.objects = await this.sortNpmPlugins(ps.objects)
+
+    result.objects = await this.sortNpmPlugins(result.objects)
     return {
-      total: ps.total,
-      time: ps.time,
-      plugins: ps.objects.map((p) => {
+      total: result.total,
+      time: result.time,
+      plugins: result.objects.map((p) => {
         return {
-          ...parsePluginKeywords(p.package.name, p.package.keywords),
-          id: p.package.name,
-          author: p.package.publisher.username,
-          description: p.package.description,
-          version: p.package.version,
-          date: getFormattedDate(new Date(p.package.date)),
-          links: p.package.links,
+          ...parseNpmSearchResultPkg(p.package),
           downloads: {
             weekly: p.downloads.weekly,
             monthly: p.downloads.monthly,

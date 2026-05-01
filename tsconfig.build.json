@@ -11,12 +11,12 @@
   ],
   "exclude": [
     "./node_modules",
-    "./public",
     ".yalc",
     "yalc.lock",
     "./src/**/__tests__/*"
   ],
   "compilerOptions": {
+    "rootDir": ".",
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "module": "ESNext",
@@ -25,6 +25,10 @@
     "allowImportingTsExtensions": true,
     // 显式声明全局类型依赖（仅包含 Node.js 类型定义，避免加载无关的浏览器环境类型）
     "types": ["node"],
-    "target": "ES2022"
+    "target": "ES2022",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/shared": ["./src/shared"]
+    }
   }
 }
