@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
-import { AppUserSelectDialog } from '@/renderer/components/dialog/userSelectService.ts'
+import { AppUserSelectDialog } from '@/renderer/components/dialog/userSelectService.js'
 
 const props = defineProps<{
   modelValue: UserInfoWithCookie[]

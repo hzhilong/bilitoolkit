@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import PluginList from '@/renderer/components/plugin/PluginList.vue'
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { onMounted, ref } from 'vue'
-import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
+import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
 import { useLoadingData } from 'bilitoolkit-ui'
 
 const { loading, loadingData } = useLoadingData()

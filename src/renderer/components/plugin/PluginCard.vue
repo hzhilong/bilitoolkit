@@ -1,14 +1,14 @@
 <script setup lang="ts" generic="T extends CardType">
 import { IconLabel, showToast, useLoadingData, AppTooltip } from 'bilitoolkit-ui'
-import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.ts'
-import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
-import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
-import type { CardType, PluginCardProps } from '@/renderer/components/plugin/types.ts'
+import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.js'
+import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
+import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
+import type { CardType, PluginCardProps } from '@/renderer/components/plugin/types.js'
 import { computed, ref } from 'vue'
-import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
-import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
-import { appEnv } from '@/shared/common/app-env.ts'
+import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.js'
+import { appEnv } from '@/shared/common/app-env.js'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 

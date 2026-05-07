@@ -1,77 +1,66 @@
-import { parentPort as s, workerData as b } from "node:worker_threads";
-import f from "node:vm";
+import { parentPort as l, workerData as b } from "node:worker_threads";
+import u from "node:vm";
 import p from "node:util";
-function d(t) {
-  if (t === null || typeof t != "object") return !1;
-  const e = Object.getPrototypeOf(t);
-  return e === Object.prototype || e === null;
+function d(e) {
+  if (e === null || typeof e != "object") return !1;
+  let t = Object.getPrototypeOf(e);
+  return t === Object.prototype || t === null;
 }
-function a(t, e = /* @__PURE__ */ new WeakMap()) {
-  if (typeof t == "function") return;
-  if (t === null || typeof t != "object" || t instanceof Date || t instanceof RegExp || t instanceof Map || t instanceof Set || ArrayBuffer.isView(t) || t instanceof ArrayBuffer)
-    return t;
-  if (e.has(t))
-    return e.get(t);
-  if (Array.isArray(t)) {
-    const o = [];
-    e.set(t, o);
-    for (const i of t)
-      o.push(a(i, e));
+function s(e, t = /* @__PURE__ */ new WeakMap()) {
+  if (typeof e == "function") return;
+  if (e === null || typeof e != "object" || e instanceof Date || e instanceof RegExp || e instanceof Map || e instanceof Set || ArrayBuffer.isView(e) || e instanceof ArrayBuffer) return e;
+  if (t.has(e)) return t.get(e);
+  if (Array.isArray(e)) {
+    let o = [];
+    t.set(e, o);
+    for (let n of e) o.push(s(n, t));
     return o;
   }
-  if (!d(t))
-    return t;
-  const r = {};
-  e.set(t, r);
-  for (const [o, i] of Object.entries(t)) {
-    if (typeof i == "function") continue;
-    const c = a(i, e);
+  if (!d(e)) return e;
+  let r = {};
+  t.set(e, r);
+  for (let [o, n] of Object.entries(e)) {
+    if (typeof n == "function") continue;
+    let c = s(n, t);
     c !== void 0 && (r[o] = c);
   }
   return r;
 }
-function m(t) {
-  return t instanceof Error ? {
-    name: t.name,
-    message: t.message,
-    stack: t.stack
-  } : {
-    name: "Error",
-    message: String(t)
-  };
+function m(e) {
+  return e instanceof Error ? { name: e.name, message: e.message, stack: e.stack } : { name: "Error", message: String(e) };
 }
-if (!s)
+if (!l)
   throw new Error("task-plugin.worker must run in a worker thread");
-function h(...t) {
-  return t.map((e) => typeof e == "string" ? e : p.inspect(e, { depth: null, colors: !1 })).join(" ");
+function h(...e) {
+  return e.map((t) => typeof t == "string" ? t : p.inspect(t, { depth: null, colors: !1 })).join(" ");
 }
-const l = /* @__PURE__ */ new Map();
-s.on("message", (t) => {
-  if (t?.type !== "rpc:api:result") return;
-  const e = l.get(t.callId);
-  e && (l.delete(t.callId), t.ok ? e.resolve(t.value) : e.reject(Object.assign(new Error(t.error.message), t.error)));
+const i = /* @__PURE__ */ new Map();
+l.on("message", (e) => {
+  if (e?.type !== "rpc:api:result") return;
+  const t = i.get(e.callId);
+  t && (i.delete(e.callId), e.ok ? t.resolve(e.value) : t.reject(Object.assign(new Error(e.error.message), e.error)));
 });
-function T(t, e) {
+function T(e, t) {
   return new Promise((r, o) => {
-    const i = crypto.randomUUID();
-    l.set(i, { resolve: r, reject: o }), s.postMessage({
+    const n = crypto.randomUUID();
+    i.set(n, { resolve: r, reject: o }), l.postMessage({
       type: "rpc:api:call",
-      callId: i,
-      path: t,
-      args: e
+      callId: n,
+      path: e,
+      args: t
     });
   });
 }
-function u(t = []) {
-  const e = function() {
+function f(e = []) {
+  const t = function() {
   };
-  return new Proxy(e, {
+  return new Proxy(t, {
     get(r, o) {
       if (!(o === "then" || o === "catch" || o === "finally"))
-        return o === Symbol.toStringTag ? "RemoteApi" : u([...t, String(o)]);
+        return o === Symbol.toStringTag ? "RemoteApi" : f([...e, String(o)]);
     },
-    apply(r, o, i) {
-      return T(t, i);
+    apply(r, o, n) {
+      return T(e, n);
     },
     construct() {
       throw new Error("Remote API cannot be used with new");
@@ -79,16 +68,16 @@ function u(t = []) {
   });
 }
 function y() {
-  const t = (r) => (...o) => {
-    s.postMessage({
+  const e = (r) => (...o) => {
+    l.postMessage({
       type: "rpc:log:call",
       logLevel: r,
       data: h(...o)
     });
-  }, e = ["debug", "error", "warn", "info"].map((r) => [r, t(r)]);
-  return Object.fromEntries(e);
+  }, t = ["debug", "error", "warn", "info"].map((r) => [r, e(r)]);
+  return Object.fromEntries(t);
 }
-const g = b, n = {
+const g = b, a = {
   // ===== 基础 =====
   console,
   // ===== Web API（Node 18+）=====
@@ -127,15 +116,15 @@ const g = b, n = {
   __dirname: void 0,
   __filename: void 0
 };
-n.exports = n.module.exports;
-n.global = n;
-n.globalThis = n;
-n.taskContext = {
+a.exports = a.module.exports;
+a.global = a;
+a.globalThis = a;
+a.taskContext = {
   ...g.taskContext,
   logger: y(),
-  api: u()
+  api: f()
 };
-const w = f.createContext(n, {
+const w = u.createContext(a, {
   codeGeneration: {
     strings: !1,
     // 想允许 eval / new Function 就改成 true
@@ -144,21 +133,21 @@ const w = f.createContext(n, {
 });
 async function x() {
   try {
-    new f.Script(g.code, {
+    new u.Script(g.code, {
       filename: "task-plugin.js"
     }).runInContext(w);
-    const e = n.module.exports?.run;
-    if (typeof e != "function")
+    const t = a.module.exports, o = (t?.default ?? t)?.run;
+    if (typeof o != "function")
       throw new Error("插件必须导出 run 异步函数");
-    const r = await Reflect.apply(e, n.module.exports, [n.taskContext]);
-    s.postMessage({
+    const n = await Reflect.apply(o, a.module.exports, [a.taskContext]);
+    l.postMessage({
       type: "done",
-      result: a(r)
+      result: s(n)
     });
-  } catch (t) {
-    console.error(t), s.postMessage({
+  } catch (e) {
+    console.error(e), l.postMessage({
       type: "error",
-      error: m(t)
+      error: m(e)
     });
   }
 }

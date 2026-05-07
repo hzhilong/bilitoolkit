@@ -20,11 +20,11 @@
 
 <script setup lang="ts">
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
-import type { TaskPluginInfo } from '@/shared/types/task.ts'
+import type { TaskPluginInfo } from '@/shared/types/task.js'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
+import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.js'
 import TaskTable from '@/renderer/views/task/TaskTable.vue'
 
 const route = useRoute()

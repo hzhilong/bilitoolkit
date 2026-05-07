@@ -2,10 +2,10 @@ import type {
   PluginInstallOptions,
   PluginDownloadOptions,
   InstalledToolkitPlugin,
-} from '@/shared/types/toolkit-plugin.ts'
-import NpmUtils from '@/main/utils/npm.ts'
+} from '@/shared/types/toolkit-plugin.js'
+import NpmUtils from '@/main/utils/npm.js'
 import path from 'path'
-import { appPath } from '@/main/common/app-path.ts'
+import { appPath } from '@/main/common/app-path.js'
 import { rmdirSync } from 'node:fs'
 
 /**

@@ -3,8 +3,8 @@
  * 窗口按钮
  */
 import { storeToRefs } from 'pinia'
-import { useAppSessionStore } from '@/renderer/stores/app-session.ts'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { useAppSessionStore } from '@/renderer/stores/app-session.js'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
 
 const { maxWindow } = storeToRefs(useAppSessionStore())
 const switchWindowMax = () => {
@@ -47,11 +47,19 @@ const switchWindowMax = () => {
     $padding-base: 8px;
 
     &.icon-minimize {
-      @include mixins.pseudo-svg-icon(url('@/renderer/assets/images/icon-minimize.svg'), var(--el-text-color-primary), $padding-base);
+      @include mixins.pseudo-svg-icon(
+        url('@/renderer/assets/images/icon-minimize.svg'),
+        var(--el-text-color-primary),
+        $padding-base
+      );
     }
 
     &.icon-maximize {
-      @include mixins.pseudo-svg-icon(url('@/renderer/assets/images/icon-maximize.svg'), var(--el-text-color-primary), $padding-base);
+      @include mixins.pseudo-svg-icon(
+        url('@/renderer/assets/images/icon-maximize.svg'),
+        var(--el-text-color-primary),
+        $padding-base
+      );
     }
 
     &.icon-cancel-maximize {
@@ -63,7 +71,11 @@ const switchWindowMax = () => {
     }
 
     &.icon-close {
-      @include mixins.pseudo-svg-icon(url('@/renderer/assets/images/icon-close.svg'), var(--el-text-color-primary), $padding-base);
+      @include mixins.pseudo-svg-icon(
+        url('@/renderer/assets/images/icon-close.svg'),
+        var(--el-text-color-primary),
+        $padding-base
+      );
     }
 
     &:hover {

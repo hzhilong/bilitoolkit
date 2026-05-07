@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
-import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
+import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.js'
 import { toIPC } from 'bilitoolkit-runtime'
 import { toolkitApi } from 'bilitoolkit-ui'
 

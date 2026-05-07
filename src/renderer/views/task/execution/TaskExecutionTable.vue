@@ -76,11 +76,11 @@
 </template>
 
 <script setup lang="ts">
-import type { TaskExecution } from '@/shared/types/task.ts'
+import type { TaskExecution } from '@/shared/types/task.js'
 import { ref, watch } from 'vue'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
 import { AppTooltip, useLoadingData } from 'bilitoolkit-ui'
-import type { PageData } from '@/shared/types/page.ts'
+import type { PageData } from '@/shared/types/page.js'
 import TaskExecutionLogsModal from '@/renderer/views/task/execution-log/TaskExecutionLogsModal.vue'
 import ExecutionResultModal from '@/renderer/views/task/execution/ExecutionResultModal.vue'
 import type { TaskResult } from 'bilitoolkit-types'

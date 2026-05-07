@@ -1,5 +1,5 @@
 import { type LogLevel } from '@ybgnb/bili-api'
-import { appEnv } from '@/shared/common/app-env.ts'
+import { appEnv } from '@/shared/common/app-env.js'
 
 /**
  * 获取 bili-api 的日志级别

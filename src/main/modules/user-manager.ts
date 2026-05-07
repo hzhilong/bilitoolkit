@@ -1,5 +1,5 @@
-import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
-import { readHostDBDoc, writeHostDBDoc } from '@/main/utils/host-app.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db.js'
+import { readHostDBDoc, writeHostDBDoc } from '@/main/utils/host-app.js'
 import type { UserInfo } from '@ybgnb/bili-api'
 
 class UserManager {

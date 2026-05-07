@@ -2,9 +2,9 @@
 // 它拥有与Chrome扩展一样的沙盒。
 
 import { contextBridge } from 'electron'
-import { baseToolkitInvoke, exposeToolkitApi } from '@/main/api/invoke/invoke-api'
-import { loadPluginMetadata } from '@/main/preloads/plugin-meta.ts'
-import { EXPOSE_KEYS } from '@/shared/types/expose-keys.ts'
+import { loadPluginMetadata } from '@/main/preloads/plugin-meta.js'
+import { EXPOSE_KEYS } from '@/shared/types/expose-keys.js'
+import { exposeToolkitApi, baseToolkitInvoke } from '@/main/api/invoke/invoke-api.js'
 
 // 读取主进程注入的数据
 loadPluginMetadata()

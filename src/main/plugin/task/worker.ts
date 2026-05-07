@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { parentPort, workerData } from 'node:worker_threads'
 import vm from 'node:vm'
-import type { RpcApiResultMsg, RpcApiRequestMsg, WorkerData, RpcLogRequestMsg } from '@/main/types/task-worker.ts'
+import type { RpcApiResultMsg, RpcApiRequestMsg, WorkerData, RpcLogRequestMsg } from '@/main/types/task-worker.js'
 import type { ConsoleMethod } from '@ybgnb/bili-api'
 import util from 'node:util'
 import type { TaskLogLevel, TaskLogger, TaskPluginToolkitApi } from 'bilitoolkit-types'
@@ -162,7 +162,9 @@ async function main() {
 
     script.runInContext(context)
 
-    const run = sandbox.module.exports?.run
+    const exported = sandbox.module.exports
+    const plugin = exported?.default ?? exported
+    const run = plugin?.run
     if (typeof run !== 'function') {
       throw new Error('插件必须导出 run 异步函数')
     }

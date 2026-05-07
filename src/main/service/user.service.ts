@@ -1,5 +1,6 @@
 import { type UserInfoWithCookie, BiliClient, type UserCookie } from '@ybgnb/bili-api'
-import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.ts'
+import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.js'
+import { sleepRandom } from '@ybgnb/utils'
 
 export class UserService {
   async syncUserList(users: UserInfoWithCookie[]): Promise<UserListSyncResult> {
@@ -15,6 +16,7 @@ export class UserService {
           ...(await biliClient.user.getMyInfo()),
           userCookie: user.userCookie,
         })
+        await sleepRandom(500, 1000)
       } catch {
         expiredList.push(user)
       }

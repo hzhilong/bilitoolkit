@@ -4,9 +4,9 @@ import type {
   InstalledToolkitPlugin,
   PluginInstallOptions,
   PluginTestOptions,
-  ToolkitPlugin
-} from '@/shared/types/toolkit-plugin.ts'
-import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.ts'
+  ToolkitPlugin,
+} from '@/shared/types/toolkit-plugin.js'
+import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 
 /**

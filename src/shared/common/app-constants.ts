@@ -1,5 +1,5 @@
-import { type AppSettings, DevToolsType } from '@/shared/types/app-settings.ts'
-import type { AppInstalledPlugins } from '@/shared/types/toolkit-plugin.ts'
+import { type AppSettings, DevToolsType } from '@/shared/types/app-settings.js'
+import type { AppInstalledPlugins } from '@/shared/types/toolkit-plugin.js'
 
 /**
  * 默认的应用设置

@@ -2,10 +2,10 @@
 import { ref, watch, reactive } from 'vue'
 import TaskConfigForm from '@/renderer/components/form/TaskConfigForm.vue'
 import { cloneDeep } from 'lodash-es'
-import { type TaskModalProps, type TaskSubmitPayload, defaultSchedule } from '@/renderer/views/task/TaskModal.types.ts'
+import { type TaskModalProps, type TaskSubmitPayload, defaultSchedule } from '@/renderer/views/task/TaskModal.types.js'
 import type { FormInstance } from 'element-plus'
-import type { Task } from '@/shared/types/task.ts'
-import { useRunConfigRules } from '@/renderer/composables/task/useRunConfigRules.ts'
+import type { Task } from '@/shared/types/task.js'
+import { useRunConfigRules } from '@/renderer/composables/task/useRunConfigRules.js'
 
 const props = withDefaults(defineProps<TaskModalProps>(), {})
 const visible = defineModel({ required: true, type: Boolean })

@@ -77,7 +77,7 @@ import type { FormInstance } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
 import type { TaskConfigField } from 'bilitoolkit-types'
 import UserSelectTrigger from '@/renderer/components/form/UserSelectTrigger.vue'
-import { useTaskConfigRules } from '@/renderer/composables/task/useTaskConfigRules.ts'
+import { useTaskConfigRules } from '@/renderer/composables/task/useTaskConfigRules.js'
 
 const props = defineProps<{
   fields: TaskConfigField<string>[]

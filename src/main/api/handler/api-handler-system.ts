@@ -1,10 +1,10 @@
-import { mainLogger } from '@/main/common/main-logger'
-import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { FileUtils } from '@/main/utils/file.ts'
+import { mainLogger } from '@/main/common/main-logger.js'
+import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
+import { FileUtils } from '@/main/utils/file.js'
 import { nativeTheme, shell } from 'electron'
-import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-toolkit-api.ts'
+import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-toolkit-api.js'
 import type { AppLog, AppThemeState } from 'bilitoolkit-types'
-import { getAppThemeState } from '@/main/utils/host-app.ts'
+import { getAppThemeState } from '@/main/utils/host-app.js'
 
 /**
  * 系统相关API处理器

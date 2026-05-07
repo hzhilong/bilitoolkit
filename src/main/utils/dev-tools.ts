@@ -1,7 +1,7 @@
-import { DevToolsType } from '@/shared/types/app-settings'
+import { DevToolsType } from '@/shared/types/app-settings.js'
 import { WebContentsView } from 'electron'
-import { windowManager } from '@/main/window/window-manager.ts'
-import { getAppSettings } from '@/main/utils/host-app.ts'
+import { windowManager } from '@/main/window/window-manager.js'
+import { getAppSettings } from '@/main/utils/host-app.js'
 
 // 打开开发者工具
 export const showDevTools = () => {

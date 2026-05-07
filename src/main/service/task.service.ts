@@ -8,12 +8,12 @@ import type {
   TaskExecution,
   TaskExecutionId,
   CreateTaskInput,
-} from '@/shared/types/task.ts'
-import { taskRepo } from '@/main/db/repository/task.ts'
-import { pluginManager } from '@/main/plugin/manager.ts'
-import type { NewTask, TaskUpdate } from '@/main/db/schema.ts'
-import type { PageResult } from '@/shared/types/page.ts'
-import { BaseService } from '@/main/service/base.service.ts'
+} from '@/shared/types/task.js'
+import { taskRepo } from '@/main/db/repository/task.js'
+import { pluginManager } from '@/main/plugin/manager.js'
+import type { NewTask, TaskUpdate } from '@/main/db/schema.js'
+import type { PageResult } from '@/shared/types/page.js'
+import { BaseService } from '@/main/service/base.service.js'
 import type { TaskResult } from 'bilitoolkit-types'
 
 /**
@@ -48,7 +48,8 @@ export class TaskService extends BaseService {
    * 获取所有的任务列表，并且关联插件数据
    */
   async getTaskListWithPlugin(): Promise<TaskWithPlugin[]> {
-    return (await taskRepo.getTasks()).map((task) => {
+    const tasks = await taskRepo.getTasks()
+    return tasks.map((task) => {
       try {
         return { ...task, plugin: pluginManager.getInstalledPlugin(task.pluginId) }
       } catch {

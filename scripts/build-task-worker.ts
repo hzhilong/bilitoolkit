@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
-import { build, InlineConfig } from 'vite'
+import { build, type InlineConfig } from 'vite'
 import { builtinModules } from 'node:module'
 
 const __filename = fileURLToPath(import.meta.url)

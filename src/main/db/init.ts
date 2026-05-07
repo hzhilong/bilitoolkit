@@ -1,4 +1,4 @@
-import { db } from './client'
+import { db } from './client.js'
 
 export async function initDatabase() {
   // ================= 任务配置 =================
@@ -36,7 +36,7 @@ export async function initDatabase() {
   await db.schema
     .createIndex('idx_task_executions_taskId_startedAt')
     .on('task_executions')
-    .columns(['taskId', 'createdAt'])
+    .columns(['taskId', 'startedAt'])
     .ifNotExists()
     .execute()
   await db.schema

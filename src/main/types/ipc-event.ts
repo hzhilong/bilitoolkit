@@ -1,4 +1,4 @@
-import type { HostEventChannel } from '@/shared/types/host-event-channel.ts'
+import type { HostEventChannel } from '@/shared/types/host-event-channel.js'
 
 /**
  * IPC 事件发射者

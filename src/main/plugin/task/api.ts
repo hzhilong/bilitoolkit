@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import DBUtils from '@/main/utils/db.ts'
-import { FileUtils } from '@/main/utils/file.ts'
-import type { PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
-import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { windowManager } from '@/main/window/window-manager.ts'
+import DBUtils from '@/main/utils/db.js'
+import { FileUtils } from '@/main/utils/file.js'
+import type { PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.js'
+import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
+import { windowManager } from '@/main/window/window-manager.js'
 import type { ToolkitApi, TaskPluginToolkitApi } from 'bilitoolkit-types'
 
 export function buildTaskPluginApiCallerContext(plugin: InstalledToolkitPlugin) {

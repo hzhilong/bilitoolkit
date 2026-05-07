@@ -1,11 +1,11 @@
-import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { HOST_EVENT_CHANNELS, type HostEventChannel } from '@/shared/types/host-event-channel.ts'
-import type { IpcEventEmiter } from '@/main/types/ipc-event.ts'
-import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
-import type { ApiCallerContext, IpcToolkitEventApi } from '@/main/types/ipc-toolkit-api.ts'
+import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
+import { HOST_EVENT_CHANNELS, type HostEventChannel } from '@/shared/types/host-event-channel.js'
+import type { IpcEventEmiter } from '@/main/types/ipc-event.js'
+import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
+import type { ApiCallerContext, IpcToolkitEventApi } from '@/main/types/ipc-toolkit-api.js'
 import { webContents } from 'electron'
-import { eventBus } from '@/main/event/event-bus.ts'
-import { windowManager } from '@/main/window/window-manager.ts'
+import { eventBus } from '@/main/event/event-bus.js'
+import { windowManager } from '@/main/window/window-manager.js'
 
 /**
  * 发射事件

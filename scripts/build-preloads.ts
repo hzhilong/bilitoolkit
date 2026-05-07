@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import { basename, dirname, extname, resolve } from 'path'
 import { fileURLToPath } from 'url'
-import { build, InlineConfig } from 'vite'
+import { build, type InlineConfig } from 'vite'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -43,7 +43,7 @@ async function buildIndividualPreloads() {
           lib: {
             entry: entryFile,
             formats: ['cjs'],
-            fileName: () => outputFileName.replace(/\.js$/, ".cjs"),
+            fileName: () => outputFileName.replace(/\.js$/, '.cjs'),
           },
           rollupOptions: {
             external: ['electron'], // 保持 electron 为外部依赖

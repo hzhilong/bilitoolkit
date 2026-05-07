@@ -2,9 +2,9 @@ import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { reactive, watch } from 'vue'
-import type { AppSettings } from '@/shared/types/app-settings.ts'
-import { defaultAppSettings } from '@/shared/common/app-constants.ts'
-import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
+import type { AppSettings } from '@/shared/types/app-settings.js'
+import { defaultAppSettings } from '@/shared/common/app-constants.js'
+import { APP_DB_KEYS } from '@/shared/common/app-db.js'
 
 /**
  * 应用设置

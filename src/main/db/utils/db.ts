@@ -1,5 +1,5 @@
-import type { TaskRow, TaskExecutionRow } from '@/main/db/schema.ts'
-import type { Task, TaskExecution } from '@/shared/types/task.ts'
+import type { TaskRow, TaskExecutionRow } from '@/main/db/schema.js'
+import type { Task, TaskExecution } from '@/shared/types/task.js'
 
 /**
  * 将数据库行映射为业务 Task 对象

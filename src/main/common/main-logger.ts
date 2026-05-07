@@ -1,8 +1,8 @@
-import { appPath } from '@/main/common/app-path.ts'
-import { mainEnv } from '@/main/common/main-env.ts'
+import { appPath } from '@/main/common/app-path.js'
+import { mainEnv } from '@/main/common/main-env.js'
 import log4js from 'log4js'
 import path from 'path'
-import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
+import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
 
 // 日志路径
 export const LOG_DIR = appPath.logsPath

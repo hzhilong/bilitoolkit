@@ -9,13 +9,13 @@ import type {
   CreateTaskOptions,
   TaskDispatchResult,
   TaskExecutionId,
-} from '@/shared/types/task.ts'
-import { taskService } from '@/main/service/task.service.ts'
-import { TaskPluginRunner, taskPluginRunner } from '@/main/plugin/task/runner.ts'
-import { TaskScheduler } from '@/main/plugin/task/scheduler.ts'
-import { getPreviousCronTime } from '@/shared/utils/cron.ts'
-import { mainLogger } from '@/main/common/main-logger.ts'
-import { AbortError, getErrorMessage } from '@ybgnb/utils'
+} from '@/shared/types/task.js'
+import { taskService } from '@/main/service/task.service.js'
+import { TaskPluginRunner, taskPluginRunner } from '@/main/plugin/task/runner.js'
+import { TaskScheduler } from '@/main/plugin/task/scheduler.js'
+import { getPreviousCronTime } from '@/shared/utils/cron.js'
+import { mainLogger } from '@/main/common/main-logger.js'
+import { getErrorMessage, isCanceledError } from '@ybgnb/utils'
 
 /**
  * 任务运行时
@@ -334,7 +334,7 @@ export class TaskRuntime {
       })
       .catch(async (error) => {
         const message = getErrorMessage(error)
-        if (controller.signal.aborted || error instanceof AbortError) {
+        if (controller.signal.aborted || isCanceledError(error)) {
           return await taskService.finishExecutionCanceled(execution.id, message)
         }
         return await taskService.finishExecutionError(execution.id, message)

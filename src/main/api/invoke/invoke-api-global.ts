@@ -1,11 +1,11 @@
-import { invokeModuleApi } from './base-invoke'
+import { invokeModuleApi } from './base-invoke.js'
 import { BizResult } from '@ybgnb/utils'
 import { cloneDeep } from 'lodash-es'
-import type { ApiCallerEnvType, LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
+import type { ApiCallerEnvType, LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.js'
 import type { ToolkitGlobalDataApi } from 'bilitoolkit-types'
 import { ipcRenderer } from 'electron'
-import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
-import { type IpcRequestBody, toIpcResponseBody } from '@/main/types/ipc-request.ts'
+import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
+import { type IpcRequestBody, toIpcResponseBody } from '@/main/types/ipc-request.js'
 
 type IpcRendererEvent = Electron.IpcRendererEvent
 

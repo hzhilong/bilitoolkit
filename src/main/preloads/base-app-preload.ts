@@ -2,9 +2,9 @@
 // 它拥有与Chrome扩展一样的沙盒。
 
 import { contextBridge } from 'electron'
-import { type WindowApp } from '@/shared/types/app-types.ts'
-import { baseToolkitInvoke, exposeHostToolkitApi } from '@/main/api/invoke/invoke-api.ts'
-import { EXPOSE_KEYS } from '@/shared/types/expose-keys.ts'
+import { type WindowApp } from '@/shared/types/app-types.js'
+import { baseToolkitInvoke, exposeHostToolkitApi } from '@/main/api/invoke/invoke-api.js'
+import { EXPOSE_KEYS } from '@/shared/types/expose-keys.js'
 
 // 初始化宿主app的api暴露
 export const initApp = (windowApp: WindowApp) => {

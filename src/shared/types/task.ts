@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { TaskSchedule, TaskResult, TaskConfigField, TaskConfigSchema, TaskLogLevel } from 'bilitoolkit-types'
-import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import type { MaxLengthArray } from '@ybgnb/utils'
-import type { PageParams } from '@/shared/types/page.ts'
-import type { TaskUpdate } from '@/main/db/schema.ts'
+import type { PageParams } from '@/shared/types/page.js'
+import type { TaskUpdate } from '@/main/db/schema.js'
 
 /**
  * 任务插件信息

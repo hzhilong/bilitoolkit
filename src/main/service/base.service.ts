@@ -1,4 +1,4 @@
-import { UpdateResult, InsertResult, DeleteResult } from 'kysely'
+import type { UpdateResult, InsertResult, DeleteResult } from 'kysely'
 
 export class BaseService {
   /**

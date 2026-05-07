@@ -4,15 +4,15 @@ import type {
   PluginInstallOptions,
   PluginTestOptions,
   ToolkitPlugin,
-} from '@/shared/types/toolkit-plugin.ts'
-import { windowManager } from '@/main/window/window-manager.ts'
-import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
-import { getAppInstalledPlugins, writeHostDBDoc } from '@/main/utils/host-app.ts'
-import { mainLogger } from '@/main/common/main-logger.ts'
+} from '@/shared/types/toolkit-plugin.js'
+import { windowManager } from '@/main/window/window-manager.js'
+import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.js'
+import { getAppInstalledPlugins, writeHostDBDoc } from '@/main/utils/host-app.js'
+import { mainLogger } from '@/main/common/main-logger.js'
 import { cloneDeep } from 'lodash-es'
-import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
-import { loadTestPlugin, loadInstalledPlugin } from '@/main/plugin/loader.ts'
-import { downloadPlugin, removePluginFile } from '@/main/plugin/install.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db.js'
+import { loadTestPlugin, loadInstalledPlugin } from '@/main/plugin/loader.js'
+import { downloadPlugin, removePluginFile } from '@/main/plugin/install.js'
 import fs from 'fs'
 import path from 'path'
 
@@ -34,13 +34,13 @@ class PluginManager {
       appVersion: installedPlugins.appVersion,
       plugins: this.buildRegistryPlugins(installedPlugins.plugins),
     }
-    mainLogger.info(`插件已加载`, this.registry.plugins.keys().toArray())
+    mainLogger.info(`插件已加载`, Array.from(this.registry.plugins.keys()))
   }
 
   getInstalledPlugins(): AppInstalledPlugins {
     return {
       appVersion: this.registry.appVersion,
-      plugins: this.registry.plugins.values().toArray(),
+      plugins: Array.from(this.registry.plugins.values()),
     }
   }
 
@@ -72,7 +72,7 @@ class PluginManager {
 
   async installPlugin(options: PluginInstallOptions) {
     mainLogger.info(`插件${options.id} ${options.version} 安装中……`)
-    const plugin = loadInstalledPlugin(await downloadPlugin(options))
+    const plugin = await loadInstalledPlugin(await downloadPlugin(options))
     this.registerPlugin(plugin)
     mainLogger.info(`插件${options.id} ${options.version} 安装成功！`)
     return plugin
@@ -114,7 +114,7 @@ class PluginManager {
 
   async loadTestPlugin(context: ApiCallerContext, options: PluginTestOptions) {
     mainLogger.info(`测试插件${options.pluginPath} 加载中……`)
-    const plugin = loadTestPlugin(options)
+    const plugin = await loadTestPlugin(options)
     this.registerPlugin(plugin)
     mainLogger.info(`插件${plugin.id} ${plugin.version} 加载成功！`)
     return plugin

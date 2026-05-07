@@ -1,4 +1,4 @@
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 
 /**

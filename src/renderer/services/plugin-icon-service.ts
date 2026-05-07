@@ -1,5 +1,5 @@
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { toIPC } from 'bilitoolkit-runtime'
 
 const cache = new Map<string, string>()

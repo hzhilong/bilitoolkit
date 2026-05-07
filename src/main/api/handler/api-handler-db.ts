@@ -1,11 +1,11 @@
-import { mainLogger } from '@/main/common/main-logger'
-import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { FileUtils } from '@/main/utils/file.ts'
+import { mainLogger } from '@/main/common/main-logger.js'
+import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
 import fs from 'fs'
 import { LowSync } from 'lowdb'
 import { JSONFileSync } from 'lowdb/node'
-import type { ApiCallerContext, IpcToolkitDBApi } from '@/main/types/ipc-toolkit-api.ts'
-import DBUtils from '@/main/utils/db.ts'
+import type { ApiCallerContext, IpcToolkitDBApi } from '@/main/types/ipc-toolkit-api.js'
+import DBUtils from '@/main/utils/db.js'
+import { findFilesByPrefixAndSuffix } from '@ybgnb/utils/node'
 
 /**
  * 数据库API处理器
@@ -30,7 +30,7 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
   }
 
   async bulkRead<T extends object>(context: ApiCallerContext, idPrefix: string | undefined): Promise<Array<T | null>> {
-    const paths = FileUtils.getFilesByPrefixAndSuffix(context.dbPath, idPrefix)
+    const paths = await findFilesByPrefixAndSuffix(context.dbPath, idPrefix)
     const dataArr = []
     for (const docPath of paths) {
       dataArr.push(DBUtils.readDocObject<T>(docPath))
@@ -76,6 +76,6 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
   }
 
   async bulkDelete(context: ApiCallerContext, idPrefix: string | undefined): Promise<string[]> {
-    return DBUtils.deleteDoc(context, FileUtils.getFilesByPrefixAndSuffix(context.dbPath, idPrefix))
+    return DBUtils.deleteDoc(context, await findFilesByPrefixAndSuffix(context.dbPath, idPrefix))
   }
 }

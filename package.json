@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/hzhilong/bilitoolkit/issues"
   },
-  "homepage": "https://github.com/hzhilong/bilitoolkit#readme",
+  "homepage": "https://github.com/hzhilong/bilitoolkit",
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
@@ -34,21 +34,22 @@
     "build:preloads": "tsx scripts/build-preloads.ts",
     "build:task-worker": "tsx scripts/build-task-worker.ts",
     "build:recommended": "tsx --tsconfig tsconfig.build.json --require tsconfig-paths/register scripts/build-recommended.ts",
+    "build:all": "pnpm run build:preloads && pnpm run build:task-worker && pnpm run build:recommended",
     "rebuild:native": "npx electron-rebuild -f -w better-sqlite3",
+    "remark": "本地依赖库在版本未更改的情况下，代码会被vite缓存，注意！！！",
     "dev": "rimraf node_modules/.vite && chcp 65001 && vite",
     "dev(cache)": "chcp 65001 && vite",
     "dev(reset all)": "rimraf node_modules/.vite && chcp 65001 && pnpm store prune && pnpm i && vite",
-    "remark": "本地依赖库在版本未更改的情况下，代码会被vite缓存，注意！！！",
     "build": "vite build",
-    "preview": "vite preview"
+    "app:dist": "electron-builder"
   },
   "dependencies": {
     "@npm/types": "^2.1.0",
     "@vueuse/core": "^13.9.0",
     "@vueuse/integrations": "^13.9.0",
     "@ybgnb/bili-api": "workspace:*",
-    "@ybgnb/utils": "^0.1.7",
-    "@ybgnb/vite-env": "^0.0.3",
+    "@ybgnb/utils": "^0.2.0",
+    "@ybgnb/vite-env": "^0.0.6",
     "axios": "^1.12.1",
     "better-sqlite3": "^12.9.0",
     "bilitoolkit-runtime": "workspace:*",

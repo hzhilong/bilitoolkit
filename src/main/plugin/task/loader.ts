@@ -1,9 +1,9 @@
 import type { TaskPlugin, TaskPluginMeta } from 'bilitoolkit-types'
-import NpmUtils from '@/main/utils/npm.ts'
-import { appPath } from '@/main/common/app-path.ts'
+import NpmUtils from '@/main/utils/npm.js'
+import { appPath } from '@/main/common/app-path.js'
 import path from 'path'
-import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { FileUtils } from '@/main/utils/file.ts'
+import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
+import { readJSONFile } from '@ybgnb/utils/node'
 
 /**
  * 加载任务插件实例
@@ -24,10 +24,10 @@ export async function loadTaskPlugin(pluginId: string): Promise<TaskPlugin> {
  * 加载任务插件元信息
  * @param plugin
  */
-export function loadTaskPluginMeta(plugin: InstalledToolkitPlugin): TaskPluginMeta {
+export async function loadTaskPluginMeta(plugin: InstalledToolkitPlugin): Promise<TaskPluginMeta> {
   const meta: TaskPluginMeta = {}
   try {
-    const metaJson = FileUtils.readJsonFile<TaskPluginMeta>(path.join(plugin.files.distPath, 'plugin-meta.json'))
+    const metaJson = await readJSONFile<TaskPluginMeta>(path.join(plugin.files.distPath, 'plugin-meta.json'))
     if (metaJson && typeof metaJson === 'object') {
       meta.taskConfigSchema = metaJson.taskConfigSchema
       meta.taskSchedule = metaJson.taskSchedule

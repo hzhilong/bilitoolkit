@@ -1,4 +1,4 @@
-import { appEnv } from '@/shared/common/app-env.ts'
+import { appEnv } from '@/shared/common/app-env.js'
 
 /**
  * 主进程环境变量

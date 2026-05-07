@@ -1,8 +1,8 @@
-import { eventApi } from './invoke-api-event'
-import { globalApi } from '@/main/api/invoke/invoke-api-global.ts'
+import { eventApi } from './invoke-api-event.js'
+import { globalApi } from '@/main/api/invoke/invoke-api-global.js'
 import type { ToolkitApi } from 'bilitoolkit-types'
-import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
-import { baseInvokeApi } from '@/main/api/invoke/base-invoke.ts'
+import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.js'
+import { baseInvokeApi } from '@/main/api/invoke/base-invoke.js'
 
 export const baseToolkitInvoke = baseInvokeApi
 

@@ -1,12 +1,12 @@
-import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { generateId } from '@/main/utils/id.ts'
+import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
+import { generateId } from '@/main/utils/id.js'
 import type { WebContents } from 'electron'
 import { ipcMain } from 'electron'
 import { cloneDeep } from 'lodash-es'
-import type { IpcRequestBody, IpcResponseBody } from '@/main/types/ipc-request.ts'
-import type { ApiCallerContext, IpcToolkitGlobalApi } from '@/main/types/ipc-toolkit-api.ts'
-import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
-import type { BaseWindowManager } from '@/main/window/base-window-manager.ts'
+import type { IpcRequestBody, IpcResponseBody } from '@/main/types/ipc-request.js'
+import type { ApiCallerContext, IpcToolkitGlobalApi } from '@/main/types/ipc-toolkit-api.js'
+import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
+import type { BaseWindowManager } from '@/main/window/base-window-manager.js'
 
 type IpcMainEvent = Electron.IpcMainEvent
 

@@ -2,8 +2,8 @@
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import PluginList from '@/renderer/components/plugin/PluginList.vue'
 import { ref, computed, type Ref } from 'vue'
-import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
-import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.ts'
+import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
+import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.js'
 
 const { state } = useAppInstalledPlugins()
 const { hasStar } = usePluginStarsStore()

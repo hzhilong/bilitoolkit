@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BizResult } from '@ybgnb/utils'
 import { ipcRenderer } from 'electron'
-import type { ToolkitApiModule, ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
-import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.ts'
-import { IPC_CHANNELS } from '@/shared/types/electron-ipc.ts'
-import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
+import type { ToolkitApiModule, ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.js'
+import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.js'
+import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
+import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
 
 /**
  * 基础的调用API方法

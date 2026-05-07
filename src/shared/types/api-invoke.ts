@@ -1,5 +1,4 @@
-import type { ToolkitApiModule } from '@/shared/types/toolkit-core-api.ts'
-
+import type { ToolkitApiModule } from '@/shared/types/toolkit-core-api.js'
 
 /**
  * API调用选项（渲染进程调用主进程）
@@ -23,7 +22,4 @@ export interface PluginApiInvokeOptions {
 /**
  * 所有层级的 value 类型
  */
-export type DeepValue<T> =
-  T extends object
-    ? T | { [K in keyof T]: DeepValue<T[K]> }[keyof T]
-    : T
+export type DeepValue<T> = T extends object ? T | { [K in keyof T]: DeepValue<T[K]> }[keyof T] : T

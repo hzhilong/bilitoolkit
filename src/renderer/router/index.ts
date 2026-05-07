@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import MainLayout from '@/renderer/components/layout/MainLayout.vue'
-import { useAppTabStore } from '@/renderer/stores/app-tab.ts'
+import { useAppTabStore } from '@/renderer/stores/app-tab.js'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),

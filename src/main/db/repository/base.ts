@@ -1,4 +1,4 @@
-import { InsertResult } from 'kysely'
+import type { InsertResult } from 'kysely'
 
 export class BaseRepository {
   ifDefined<V, R>(value: V, transformer: (val: Exclude<V, undefined>) => R): R | undefined {

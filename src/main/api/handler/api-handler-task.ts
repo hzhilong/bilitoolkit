@@ -1,6 +1,6 @@
-import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import type { ApiCallerContext, IpcToolkitTaskApi } from '@/main/types/ipc-toolkit-api.ts'
-import { pluginManager } from '@/main/plugin/manager.ts'
+import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
+import type { ApiCallerContext, IpcToolkitTaskApi } from '@/main/types/ipc-toolkit-api.js'
+import { pluginManager } from '@/main/plugin/manager.js'
 import type {
   TaskPluginInfo,
   Task,
@@ -8,14 +8,14 @@ import type {
   TaskExecutionLog,
   TaskExecutionFilters,
   TaskDispatchResult,
-} from '@/shared/types/task.ts'
+} from '@/shared/types/task.js'
 
-import type { PageResult } from '@/shared/types/page.ts'
+import type { PageResult } from '@/shared/types/page.js'
 import { types } from 'sass'
-import type { TaskUpdate } from '@/main/db/schema.ts'
+import type { TaskUpdate } from '@/main/db/schema.js'
 import Error = types.Error
-import { taskService } from '@/main/service/task.service.ts'
-import { taskRuntime } from '@/main/plugin/task/runtime.ts'
+import { taskService } from '@/main/service/task.service.js'
+import { taskRuntime } from '@/main/plugin/task/runtime.js'
 
 /**
  * 任务API处理器

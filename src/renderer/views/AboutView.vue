@@ -4,7 +4,7 @@ import type { AppThemeMode } from 'bilitoolkit-types'
 import type { Ref } from 'vue'
 import { computed } from 'vue'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
-import { appEnv } from '@/shared/common/app-env.ts'
+import { appEnv } from '@/shared/common/app-env.js'
 import { switchDefaultTheme, switchThemeMode } from 'bilitoolkit-ui'
 
 const env = appEnv.env

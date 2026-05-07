@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import fs from 'node:fs'
 import { Worker } from 'node:worker_threads'
-import { type TaskContextFactory, taskContextFactory } from '@/main/plugin/task/context.ts'
-import type { Task, TaskExecution } from '@/shared/types/task.ts'
-import { AbortError, stripFunctions, serializeError } from '@ybgnb/utils'
-import { pluginManager } from '@/main/plugin/manager.ts'
-import { createTaskPluginApiProxy } from '@/main/plugin/task/api.ts'
+import { type TaskContextFactory, taskContextFactory } from '@/main/plugin/task/context.js'
+import type { Task, TaskExecution } from '@/shared/types/task.js'
+import { stripFunctions, serializeError, createAbortError } from '@ybgnb/utils'
+import { pluginManager } from '@/main/plugin/manager.js'
+import { createTaskPluginApiProxy } from '@/main/plugin/task/api.js'
 import type { TaskResult } from 'bilitoolkit-types'
-import { appPath } from '@/main/common/app-path.ts'
+import { appPath } from '@/main/common/app-path.js'
 import path from 'node:path'
-import type { RpcLogRequestMsg, RpcApiResultMsg } from '@/main/types/task-worker.ts'
+import type { RpcLogRequestMsg, RpcApiResultMsg } from '@/main/types/task-worker.js'
 
 export function resolveCallable(root: unknown, path: string[]) {
   let parent: any = undefined
@@ -30,7 +30,7 @@ export class TaskPluginRunner {
   constructor(private contextFactory: TaskContextFactory) {}
 
   async run(task: Task, taskExecution: TaskExecution, signal?: AbortSignal) {
-    if (signal?.aborted) throw new AbortError()
+    if (signal?.aborted) throw createAbortError()
 
     const installedPlugin = pluginManager.getInstalledPlugin(task.pluginId)
     const toolkitApi = createTaskPluginApiProxy(installedPlugin, [])
@@ -61,7 +61,7 @@ export class TaskPluginRunner {
       }
 
       const onAbort = () => {
-        finalize(() => reject(new AbortError()))
+        finalize(() => reject(createAbortError()))
       }
 
       if (signal) signal.addEventListener('abort', onAbort)

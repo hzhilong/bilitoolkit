@@ -1,0 +1,20 @@
+{
+  "appVersion": "0.0.1",
+  "plugins": [
+    {
+      "name": "插件示例",
+      "type": "ui",
+      "id": "bilitoolkit-plugin-example",
+      "author": "hzhilong",
+      "description": "哔哩工具姬 插件示例",
+      "version": "0.0.4",
+      "date": "2025-09-22",
+      "links": {
+        "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-example",
+        "homepage": "https://github.com/hzhilong/bilitoolkit-plugin-example#readme",
+        "repository": "git+https://github.com/hzhilong/bilitoolkit-plugin-example.git",
+        "bugs": "https://github.com/hzhilong/bilitoolkit-plugin-example/issues"
+      }
+    }
+  ]
+}

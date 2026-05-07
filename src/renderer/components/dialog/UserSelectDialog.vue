@@ -2,8 +2,8 @@
 import UserLoginDialog from '@/renderer/components/dialog/UserLoginDialog.vue'
 import { cloneDeep } from 'lodash-es'
 import { reactive, ref, watchEffect, onMounted } from 'vue'
-import type { UserSelectDialogProps } from '@/renderer/components/dialog/types.ts'
-import { useUserStore } from '@/renderer/stores/user.ts'
+import type { UserSelectDialogProps } from '@/renderer/components/dialog/types.js'
+import { useUserStore } from '@/renderer/stores/user.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 import { BiliUserCard } from 'bilitoolkit-ui'
 

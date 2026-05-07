@@ -1,8 +1,8 @@
 import { createVNode, nextTick, render, type VNode } from 'vue'
-import type { UserSelectDialogExposed, UserSelectDialogProps } from '@/renderer/components/dialog/types.ts'
+import type { UserSelectDialogExposed, UserSelectDialogProps } from '@/renderer/components/dialog/types.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 import UserSelectDialog from '@/renderer/components/dialog/UserSelectDialog.vue'
-import { AbortError } from '@ybgnb/utils'
+import { createAbortError } from '@ybgnb/utils'
 
 let instance: VNode | undefined = undefined
 let container: HTMLElement | null = null
@@ -37,7 +37,7 @@ export const AppUserSelectDialog = {
           resolve(user)
         },
         onCancel: () => {
-          reject(new AbortError())
+          reject(createAbortError())
         },
       })
     })

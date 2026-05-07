@@ -1,5 +1,5 @@
 import cron, { type ScheduledTask } from 'node-cron'
-import type { TaskId, Task } from '@/shared/types/task.ts'
+import type { TaskId, Task } from '@/shared/types/task.js'
 
 /**
  * 调度触发回调

@@ -3,9 +3,9 @@
 // BrowserWindow 创建并控制浏览器窗口（相当于打开桌面弹框）
 import { app, BrowserWindow, ipcMain, session } from 'electron'
 import * as os from 'node:os'
-import { windowManager } from '@/main/window/window-manager.ts'
-import { appPath } from '@/main/common/app-path.ts'
-import { mainEnv } from '@/main/common/main-env.ts'
+import { windowManager } from '@/main/window/window-manager.js'
+import { appPath } from '@/main/common/app-path.js'
+import { mainEnv } from '@/main/common/main-env.js'
 
 if (mainEnv.isDev) {
   // Source Map 支持库 => 开发环境打印日志时输出源码路径和行号

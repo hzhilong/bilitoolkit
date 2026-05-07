@@ -1,4 +1,4 @@
-import { db } from '../client.ts'
+import { db } from '../client.js'
 
 import type {
   Task,
@@ -8,10 +8,10 @@ import type {
   TaskTrigger,
   TaskExecutionId,
   TaskId,
-} from '@/shared/types/task.ts'
-import { BaseRepository } from '@/main/db/repository/base.ts'
-import { mapRowToTask, mapRowToExecution } from '@/main/db/utils/db.ts'
-import type { PageResult } from '@/shared/types/page.ts'
+} from '@/shared/types/task.js'
+import { BaseRepository } from '@/main/db/repository/base.js'
+import { mapRowToTask, mapRowToExecution } from '@/main/db/utils/db.js'
+import type { PageResult } from '@/shared/types/page.js'
 import type {
   NewTask,
   TaskUpdate,
@@ -20,8 +20,8 @@ import type {
   TaskExecutionUpdate,
   NewTaskExecutionLog,
   DatabaseSchema,
-} from '@/main/db/schema.ts'
-import { Transaction } from 'kysely'
+} from '@/main/db/schema.js'
+import type { Transaction } from 'kysely'
 
 export class TaskRepository extends BaseRepository {
   async getTasks(pluginId?: string): Promise<Task[]> {

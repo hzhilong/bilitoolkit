@@ -1,6 +1,6 @@
-import type { ApiCallerContext, PluginApiCallerContext, HostApiCallerContext } from '@/main/types/ipc-toolkit-api.ts'
-import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.ts'
-import type { ApiCallerIdentity } from '@/shared/types/toolkit-core-api.ts'
+import type { ApiCallerContext, PluginApiCallerContext, HostApiCallerContext } from '@/main/types/ipc-toolkit-api.js'
+import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
+import type { ApiCallerIdentity } from '@/shared/types/toolkit-core-api.js'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -29,7 +29,7 @@ export abstract class BiliApiHandleStrategy extends ApiHandleStrategy {}
 /**
  * API调度器
  */
-export abstract class ApiDispatcher<A, S extends ApiHandleStrategy = ApiHandleStrategy> extends ApiHandleStrategy{
+export abstract class ApiDispatcher<A, S extends ApiHandleStrategy = ApiHandleStrategy> extends ApiHandleStrategy {
   // 处理策略
   protected readonly strategies: Partial<Record<keyof A, S>> = {}
 

@@ -6,9 +6,9 @@ import type {
   TaskExecutionLog,
   TaskWithPlugin,
   TaskDispatchResult,
-} from '@/shared/types/task.ts'
-import type { PageResult } from '@/shared/types/page.ts'
-import type { TaskUpdate } from '@/main/db/schema.ts'
+} from '@/shared/types/task.js'
+import type { PageResult } from '@/shared/types/page.js'
+import type { TaskUpdate } from '@/main/db/schema.js'
 
 /**
  * 任务相关的API

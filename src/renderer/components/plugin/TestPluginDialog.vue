@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
+import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
 import { ref } from 'vue'
 import { showError } from 'bilitoolkit-ui'
 

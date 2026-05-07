@@ -1,11 +1,11 @@
 import axios from 'axios'
 import path from 'path'
-import { appPath } from '@/main/common/app-path.ts'
+import { appPath } from '@/main/common/app-path.js'
 import { writeFileSync, unlinkSync } from 'node:fs'
 import * as tar from 'tar'
-import { FileUtils } from '@/main/utils/file.ts'
-import type { PluginDownloadOptions } from '@/shared/types/toolkit-plugin.ts'
+import type { PluginDownloadOptions } from '@/shared/types/toolkit-plugin.js'
 import { convertToCommonError } from '@ybgnb/utils'
+import { ensureDirSync } from '@ybgnb/utils/node'
 
 export default class NpmUtils {
   static pkgNameToDirName(pkgName: string) {
@@ -34,7 +34,7 @@ export default class NpmUtils {
       writeFileSync(tempFile, tarballBuffer)
 
       const tarTo = path.join(appPath.pluginsPath, `${options.pluginDirName}`)
-      FileUtils.ensureDirExists(tarTo)
+      ensureDirSync(tarTo)
 
       // 解压
       await tar.x({

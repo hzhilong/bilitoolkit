@@ -1,5 +1,44 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": [
+      "ES2020", "dom"
+    ],
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    // 强制每个文件都是独立可编译的模块
+    "isolatedModules": true,
+    // 跳过库的声明文件检查
+    "skipLibCheck": true,
+    // 文件名大小写一致检查
+    "forceConsistentCasingInFileNames": true,
+    // 允许导入 .ts/.tsx 文件扩展名
+    "allowImportingTsExtensions": false,
+    // 旧版 TS 装饰器语法
+    "experimentalDecorators": false,
+    // 生成 source map
+    "sourceMap": true,
+    // 禁用增量编译
+    "incremental": false,
+    // CommonJS 和 ES 模块互操作
+    "esModuleInterop": true,
+    // 启用导入 .json 文件
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    // vue jsx
+    "jsx": "preserve",
+    "jsxFactory": "h",
+    "jsxImportSource": "vue",
+    "jsxFragmentFactory": "Fragment",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
+  },
   "include": [
     "./src/shared/env.d.ts",
     "./auto-imports.d.ts",
@@ -16,33 +55,5 @@
     ".yalc",
     "yalc.lock",
     "./src/**/__tests__/*"
-  ],
-  "compilerOptions": {
-    // 启用所有严格类型检查
-    "strict": true,
-    // 使用 .ts 和 .tsx 扩展名
-    "allowImportingTsExtensions": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-    },
-    // vue jsx
-    "jsx": "preserve",
-    "jsxFactory": "h",
-    "jsxImportSource": "vue",
-    "jsxFragmentFactory": "Fragment",
-    // 包含的全局类型声明包
-    // "types": ["vite/client"],
-    // 包含哪些内置的API声明文件
-    "lib": [
-      "DOM",
-      "ESNext"
-    ]
-    // https://www.typescriptlang.org/tsconfig/#verbatimModuleSyntax
-    // 想关闭import显示类型，但vue好像推荐打开
-    // https://cn.vuejs.org/guide/typescript/overview
-    //    "verbatimModuleSyntax": false
-  }
+  ]
 }

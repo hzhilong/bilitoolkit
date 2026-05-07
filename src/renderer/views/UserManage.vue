@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import UserLoginDialog from '@/renderer/components/dialog/UserLoginDialog.vue'
 import { ref, onMounted } from 'vue'
-import { useUserStore } from '@/renderer/stores/user.ts'
+import { useUserStore } from '@/renderer/stores/user.js'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import { showConfirm, showToast, BiliUserCard, IconButton, showError } from 'bilitoolkit-ui'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
 import UserCookieModal from '@/renderer/components/modal/UserCookieModal.vue'
 import type { UserInfoWithCookie, UserCookie } from '@ybgnb/bili-api'
 import { useRouter } from 'vue-router'

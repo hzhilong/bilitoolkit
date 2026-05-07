@@ -1,7 +1,7 @@
 import type { WebContents } from 'electron'
 import { BrowserWindow, WebContentsView } from 'electron'
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import type { ToolkitCoreApi } from '@/shared/types/toolkit-core-api.ts'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
+import type { ToolkitCoreApi } from '@/shared/types/toolkit-core-api.js'
 import type {
   ToolkitBiliApi,
   ToolkitDBApi,
@@ -12,7 +12,7 @@ import type {
   ToolkitWindowApi,
   ToolkitUserApi,
 } from 'bilitoolkit-types'
-import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.ts'
+import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.js'
 
 /**
  * API调用环境：宿主环境|插件环境

@@ -5,11 +5,11 @@ import type {
   ToolkitPlugin,
   ToolkitPluginWithNpmInfo,
 } from '@/shared/types/toolkit-plugin'
-import { eventBus } from '@/renderer/utils/event-bus.ts'
-import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.ts'
-import { appEnv } from '@/shared/common/app-env.ts'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import { parseNpmSearchResultPkg } from '@/shared/utils/plugin-parse.ts'
+import { eventBus } from '@/renderer/utils/event-bus.js'
+import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
+import { appEnv } from '@/shared/common/app-env.js'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
+import { parseNpmSearchResultPkg } from '@/shared/utils/plugin-parse.js'
 import { toIPC } from 'bilitoolkit-runtime'
 import { getFormattedDate } from '@ybgnb/utils'
 import { searchPackages, type NpmSearchResultItem, SearchText } from 'public-registry-api'

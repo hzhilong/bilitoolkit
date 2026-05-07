@@ -1,9 +1,9 @@
 import { BiliClient, type ConsoleMethod } from '@ybgnb/bili-api'
 import type { BiliApiClientConfig } from 'bilitoolkit-types'
-import { generateId } from '@/main/utils/id.ts'
+import { generateId } from '@/main/utils/id.js'
 import { omit } from 'lodash-es'
-import { getLogLevel } from '@/shared/common/bili-api-log.ts'
-import { mainFileLogger } from '@/main/common/main-logger.ts'
+import { getLogLevel } from '@/shared/common/bili-api-log.js'
+import { mainFileLogger } from '@/main/common/main-logger.js'
 
 /**
  * 主进程代理的 bili-api Client 管理器

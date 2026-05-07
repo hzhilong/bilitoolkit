@@ -1,11 +1,11 @@
-import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
+import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.js'
 import { execBiz } from '@ybgnb/utils'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import type { ApiCallerIdentity } from '@/shared/types/toolkit-core-api.ts'
-import { AppUserAuthDialog } from '@/renderer/components/dialog/userAuthService.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
+import type { ApiCallerIdentity } from '@/shared/types/toolkit-core-api.js'
+import { AppUserAuthDialog } from '@/renderer/components/dialog/userAuthService.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
-import { AppUserSelectDialog } from '@/renderer/components/dialog/userSelectService.ts'
-import { appEnv } from '@/shared/common/app-env.ts'
+import { AppUserSelectDialog } from '@/renderer/components/dialog/userSelectService.js'
+import { appEnv } from '@/shared/common/app-env.js'
 import { toIPC } from 'bilitoolkit-runtime'
 
 /**

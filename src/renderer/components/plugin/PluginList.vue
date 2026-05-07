@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T extends CardType">
 import PluginCard from '@/renderer/components/plugin/PluginCard.vue'
-import type { PluginListProps, CardType } from '@/renderer/components/plugin/types.ts'
-import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { PluginListProps, CardType } from '@/renderer/components/plugin/types.js'
+import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 
 const props = defineProps<PluginListProps<T>>()
 </script>

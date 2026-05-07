@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { TaskExecution } from '@/shared/types/task.ts'
+import type { TaskExecution } from '@/shared/types/task.js'
 import type { ConsoleMethod } from '@ybgnb/bili-api'
-import { mainTaskLogger } from '@/main/common/main-logger.ts'
-import { emit } from '@/main/api/handler/api-handler-event.ts'
-import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.ts'
+import { mainTaskLogger } from '@/main/common/main-logger.js'
+import { emit } from '@/main/api/handler/api-handler-event.js'
+import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.js'
 import type { TaskLogger } from 'bilitoolkit-types'
 import * as util from 'node:util'
-import type { NewTaskExecutionLog } from '@/main/db/schema.ts'
-import { taskRepo } from '@/main/db/repository/task.ts'
+import type { NewTaskExecutionLog } from '@/main/db/schema.js'
+import { taskRepo } from '@/main/db/repository/task.js'
 
 function formatLogMessage(...data: Parameters<ConsoleMethod>): string {
   return data

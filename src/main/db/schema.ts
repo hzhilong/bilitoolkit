@@ -1,5 +1,5 @@
 import type { Selectable, Generated } from 'kysely'
-import type { Task, TaskExecution, TaskExecutionLog } from '@/shared/types/task.ts'
+import type { Task, TaskExecution, TaskExecutionLog } from '@/shared/types/task.js'
 
 // 定义数据库结构
 export interface TaskTable extends Omit<Task, 'id' | 'config' | 'schedule' | 'enabled'> {

@@ -1,12 +1,12 @@
-import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import type { ApiCallerContext, IpcToolkitUserApi } from '@/main/types/ipc-toolkit-api.ts'
-import { type BaseWindowManager } from '@/main/window/base-window-manager.ts'
-import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
-import { _getGlobalData } from '@/main/api/handler/api-handler-global.ts'
+import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
+import type { ApiCallerContext, IpcToolkitUserApi } from '@/main/types/ipc-toolkit-api.js'
+import { type BaseWindowManager } from '@/main/window/base-window-manager.js'
+import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.js'
+import { _getGlobalData } from '@/main/api/handler/api-handler-global.js'
 import type { UserInfoWithCookie, UserCookie } from '@ybgnb/bili-api'
 import { sleep } from '@ybgnb/utils'
-import { setUserCookies, delUserCookies, getUserCookies } from '@/main/utils/session.ts'
-import { userService } from '@/main/service/user.service.ts'
+import { setUserCookies, delUserCookies, getUserCookies } from '@/main/utils/session.js'
+import { userService } from '@/main/service/user.service.js'
 
 /**
  * user API处理器

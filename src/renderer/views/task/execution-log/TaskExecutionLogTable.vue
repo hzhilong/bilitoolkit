@@ -27,9 +27,9 @@
 </template>
 
 <script setup lang="ts">
-import type { TaskExecutionLog } from '@/shared/types/task.ts'
+import type { TaskExecutionLog } from '@/shared/types/task.js'
 import { ref, watch } from 'vue'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
 import { useLoadingData } from 'bilitoolkit-ui'
 
 interface TaskExecutionLogTableProps {

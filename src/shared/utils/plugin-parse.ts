@@ -1,5 +1,5 @@
-import type { PluginType, ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { pluginKeywordsPrefix } from '@/shared/common/plugin-keywords.ts'
+import type { PluginType, ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
+import { pluginKeywordsPrefix } from '@/shared/common/plugin-keywords.js'
 import type { SearchResultPackage, NpmPackage } from 'public-registry-api'
 import { getFormattedDate } from '@ybgnb/utils'
 

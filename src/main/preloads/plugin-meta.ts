@@ -1,4 +1,4 @@
-import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 
 export interface PluginMeta {
   id: string

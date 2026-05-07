@@ -5,10 +5,10 @@ import { PluginUtils } from '@/renderer/utils/plugin-utils'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
 import { cloneDeep } from 'lodash-es'
 import { nextTick, ref, reactive, watch, toRaw } from 'vue'
-import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
+import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.js'
 import { handleError } from 'bilitoolkit-ui'
 import { useRouter } from 'vue-router'
-import { useAppTabStore } from '@/renderer/stores/app-tab.ts'
+import { useAppTabStore } from '@/renderer/stores/app-tab.js'
 
 const router = useRouter()
 const { removeTab } = useAppTabStore()

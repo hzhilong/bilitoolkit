@@ -2,8 +2,8 @@ import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { defaultAppInstalledPlugins } from '@/shared/common/app-constants'
 import { defineStore } from 'pinia'
 import { reactive, computed, type Reactive, toRef } from 'vue'
-import type { AppInstalledPlugins, InstalledToolkitPlugin, ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { updatePluginIconCache, getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
+import type { AppInstalledPlugins, InstalledToolkitPlugin, ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
+import { updatePluginIconCache, getPluginIconCache } from '@/renderer/services/plugin-icon-service.js'
 
 /**
  * 应用已安装的插件

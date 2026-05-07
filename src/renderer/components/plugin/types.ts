@@ -1,4 +1,4 @@
-import type { ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 
 export type CardType = 'market' | 'manage' | 'no-options'
 

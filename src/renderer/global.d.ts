@@ -1,5 +1,5 @@
-import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.ts'
-import type { WindowApp } from '@/shared/types/app-types.ts'
+import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.js'
+import type { WindowApp } from '@/shared/types/app-types.js'
 
 declare module 'vue' {
   // interface ComponentCustomOptions {}

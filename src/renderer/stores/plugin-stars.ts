@@ -2,8 +2,8 @@ import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { reactive, watch, computed } from 'vue'
-import { APP_DB_KEYS } from '@/shared/common/app-db.ts'
-import { defaultPluginStars } from '@/shared/common/app-constants.ts'
+import { APP_DB_KEYS } from '@/shared/common/app-db.js'
+import { defaultPluginStars } from '@/shared/common/app-constants.js'
 
 /**
  * 收藏的插件

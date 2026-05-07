@@ -1,6 +1,6 @@
 import type { TaskContext, TaskPluginToolkitApi } from 'bilitoolkit-types'
-import type { Task, TaskExecution } from '@/shared/types/task.ts'
-import { buildLogger } from '@/main/plugin/task/logger.ts'
+import type { Task, TaskExecution } from '@/shared/types/task.js'
+import { buildLogger } from '@/main/plugin/task/logger.js'
 
 /**
  * 任务上下文工厂，用于创建任务执行时的上下文对象。

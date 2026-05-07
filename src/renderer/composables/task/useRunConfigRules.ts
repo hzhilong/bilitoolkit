@@ -1,6 +1,6 @@
 import { toValue, computed } from 'vue'
 import type { FormRules } from 'element-plus'
-import type { Task } from '@/shared/types/task.ts'
+import type { Task } from '@/shared/types/task.js'
 
 export const useRunConfigRules = (runConfig: Pick<Task, 'schedule' | 'enabled'>) => {
   return computed(() => {

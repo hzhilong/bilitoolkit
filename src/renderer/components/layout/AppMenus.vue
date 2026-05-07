@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
+import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
 import { AppIcon } from 'bilitoolkit-ui'
-import { IGNORE_MENU_PATH_PREFIXES } from '@/renderer/router/menus.ts'
+import { IGNORE_MENU_PATH_PREFIXES } from '@/renderer/router/menus.js'
 
 /**
  * 应用菜单

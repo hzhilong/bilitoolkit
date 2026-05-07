@@ -1,7 +1,7 @@
-import { appPath } from '@/main/common/app-path'
-import { ApiHandleStrategy } from '@/main/types/api-dispatcher'
-import { FileUtils } from '@/main/utils/file.ts'
-import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolkit-api.ts'
+import { appPath } from '@/main/common/app-path.js'
+import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
+import { FileUtils } from '@/main/utils/file.js'
+import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolkit-api.js'
 import {
   type AppInstalledPlugins,
   type InstalledToolkitPlugin,
@@ -9,14 +9,15 @@ import {
   type PluginInstallOptions,
   type PluginTestOptions,
   type ToolkitPlugin,
-} from '@/shared/types/toolkit-plugin.ts'
-import { IconUtils } from '@/main/utils/icon.ts'
-import { pluginManager } from '@/main/plugin/manager.ts'
-import { windowManager } from '@/main/window/window-manager.ts'
-import { getRecommendedPlugins } from '@/main/plugin/loader.ts'
+} from '@/shared/types/toolkit-plugin.js'
+import { IconUtils } from '@/main/utils/icon.js'
+import { pluginManager } from '@/main/plugin/manager.js'
+import { windowManager } from '@/main/window/window-manager.js'
+import { getRecommendedPlugins } from '@/main/plugin/loader.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
-import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.ts'
-import { userService } from '@/main/service/user.service.ts'
+import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.js'
+import { userService } from '@/main/service/user.service.js'
+import { getFileSizeKB, formatFileSizeFromKB } from '@ybgnb/utils/node'
 
 /**
  * 核心API处理器
@@ -38,15 +39,15 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   }
 
   async getLogsFolderSize(_: ApiCallerContext): Promise<string> {
-    return FileUtils.formatKBSize(FileUtils.getFolderSizeSync(appPath.logsPath) / 1024)
+    return formatFileSizeFromKB((await getFileSizeKB(appPath.logsPath)) / 1024)
   }
 
   async getDBsFolderSize(_: ApiCallerContext): Promise<string> {
-    return FileUtils.formatKBSize(FileUtils.getFolderSizeSync(appPath.dbPath) / 1024)
+    return formatFileSizeFromKB((await getFileSizeKB(appPath.dbPath)) / 1024)
   }
 
   async getFilesFolderSize(_: ApiCallerContext): Promise<string> {
-    return FileUtils.formatKBSize(FileUtils.getFolderSizeSync(appPath.filePath) / 1024)
+    return formatFileSizeFromKB((await getFileSizeKB(appPath.filePath)) / 1024)
   }
 
   async getInstalledPlugins(_: ApiCallerContext): Promise<AppInstalledPlugins> {

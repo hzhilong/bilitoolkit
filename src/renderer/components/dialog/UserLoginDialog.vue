@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useUserStore } from '@/renderer/stores/user.ts'
+import { useUserStore } from '@/renderer/stores/user.js'
 import type { UserInfo } from '@ybgnb/bili-api'
-import { biliClient } from '@/renderer/api/bili-client.ts'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { biliClient } from '@/renderer/api/bili-client.js'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
 import QRCode from 'qrcode'
 
 const visible = defineModel<boolean>({ required: true })

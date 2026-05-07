@@ -1,12 +1,12 @@
-import type { ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { appPath } from '@/main/common/app-path.ts'
+import type { ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
+import { appPath } from '@/main/common/app-path.js'
 import path from 'path'
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs'
-import { GithubUtils } from '@/main/utils/github.ts'
-import { mainLogger } from '@/main/common/main-logger.ts'
-import NpmUtils from '@/main/utils/npm.ts'
-import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
-import { parseGithubRepo } from '@ybgnb/utils'
+import { mainLogger } from '@/main/common/main-logger.js'
+import NpmUtils from '@/main/utils/npm.js'
+import { APP_FILE_KEYS } from '@/shared/common/app-files.js'
+import { parseGithubRepoUrl, parseGithubRawUrl } from '@ybgnb/utils'
+import { downloadFile } from '@ybgnb/utils/node'
 
 let defaultPluginIcon: string | undefined = undefined
 
@@ -50,13 +50,13 @@ export class IconUtils {
       return readFileSync(saveTo, 'utf8')
     }
     try {
-      const repo = parseGithubRepo(plugin.links.repository)
+      const repo = parseGithubRepoUrl(plugin.links.repository)
       try {
-        await GithubUtils.downloadFromGithubRaw(repo, 'public/favicon.ico', saveTo)
+        await downloadFile(parseGithubRawUrl({ ...repo, filePath: 'public/favicon.ico' }), saveTo)
         return this.convertIconFile(saveTo, 'image/x-icon')
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (ignored) {
-        await GithubUtils.downloadFromGithubRaw(repo, 'public/favicon.png', saveTo)
+        await downloadFile(parseGithubRawUrl({ ...repo, filePath: 'public/favicon.png' }), saveTo)
         return this.convertIconFile(saveTo, 'image/png')
       }
     } catch (error: unknown) {

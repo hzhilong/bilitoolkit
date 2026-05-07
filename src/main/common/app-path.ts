@@ -1,8 +1,8 @@
 import { app } from 'electron'
 import path from 'path'
-import { FileUtils } from '@/main/utils/file.ts'
-import { APP_FILE_KEYS } from '@/shared/common/app-files.ts'
-import { MainConstants } from '@/main/common/main-constants.ts'
+import { APP_FILE_KEYS } from '@/shared/common/app-files.js'
+import { MainConstants } from '@/main/common/main-constants.js'
+import { ensureDirSync } from '@ybgnb/utils/node'
 
 /**
  * 应用相关路径数据
@@ -69,28 +69,28 @@ const logsPath = path.join(programRoot, 'logs')
  * 数据库路径
  */
 const dbPath = path.join(programRoot, 'dbs')
-FileUtils.ensureDirExists(dbPath)
+ensureDirSync(dbPath)
 const hostAppDBPath = path.join(dbPath, MainConstants.DB.CORE_NAME)
-FileUtils.ensureDirExists(hostAppDBPath)
+ensureDirSync(hostAppDBPath)
 /**
  * 文件路径
  */
 const filePath = path.join(programRoot, 'files')
-FileUtils.ensureDirExists(filePath)
+ensureDirSync(filePath)
 /**
  * 主应用文件路径
  */
 const hostAppFilePath = path.join(filePath, MainConstants.FILE.CORE_NAME)
-FileUtils.ensureDirExists(hostAppFilePath)
+ensureDirSync(hostAppFilePath)
 /**
  * 插件图标根路径
  */
-FileUtils.ensureDirExists(path.join(hostAppFilePath, APP_FILE_KEYS.PLUGIN_ICON))
+ensureDirSync(path.join(hostAppFilePath, APP_FILE_KEYS.PLUGIN_ICON))
 /**
  * 插件目录
  */
 const pluginsPath = path.join(programRoot, 'plugins')
-FileUtils.ensureDirExists(pluginsPath)
+ensureDirSync(pluginsPath)
 
 /**
  * 默认窗口图标
@@ -109,13 +109,13 @@ const defaultPluginIcon = path.join(appPublicPath, 'images/plugin-default-icon.p
  * workers目录
  */
 const workersDir = path.join(appPublicPath, 'workers')
-FileUtils.ensureDirExists(workersDir)
+ensureDirSync(workersDir)
 
 /**
  * 临时目录
  */
 const temp = path.join(programRoot, 'temp')
-FileUtils.ensureDirExists(temp)
+ensureDirSync(temp)
 
 export const appPath = {
   devUrl,

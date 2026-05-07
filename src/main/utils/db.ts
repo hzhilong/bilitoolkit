@@ -1,20 +1,20 @@
-import type { ApiCallerContext, ApiCallerEnvType } from '@/main/types/ipc-toolkit-api.ts'
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { ApiCallerContext, ApiCallerEnvType } from '@/main/types/ipc-toolkit-api.js'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import path from 'path'
-import { appPath } from '@/main/common/app-path.ts'
-import { MainConstants } from '@/main/common/main-constants.ts'
-import { FileUtils } from '@/main/utils/file.ts'
+import { appPath } from '@/main/common/app-path.js'
+import { MainConstants } from '@/main/common/main-constants.js'
 import fs from 'fs'
 import { JSONFileSync } from 'lowdb/node'
 import { LowSync } from 'lowdb'
-import NpmUtils from '@/main/utils/npm.ts'
+import NpmUtils from '@/main/utils/npm.js'
+import { ensureDirSync, findFilesByPrefixAndSuffix, deleteFiles } from '@ybgnb/utils/node'
 
 export default class DBUtils {
   /**
    * 创建初始目录
    */
   static createDBRootDir() {
-    FileUtils.ensureDirExists(appPath.dbPath)
+    ensureDirSync(appPath.dbPath)
   }
 
   /**
@@ -61,7 +61,7 @@ export default class DBUtils {
       throw new Error(`非法路径，试图访问受限目录：[${id}]`)
     }
     // 确保目录存在
-    FileUtils.ensureDirExists(dbPath)
+    ensureDirSync(dbPath)
     return filePath
   }
 
@@ -81,8 +81,8 @@ export default class DBUtils {
    * @param context  插件上下文
    * @param idPrefix id前缀
    */
-  static getDocFilePathsByPrefix(context: ApiCallerContext, idPrefix: string | undefined): string[] {
-    const paths = FileUtils.getFilesByPrefixAndSuffix(context.dbPath, idPrefix)
+  static async getDocFilePathsByPrefix(context: ApiCallerContext, idPrefix: string | undefined): Promise<string[]> {
+    const paths = await findFilesByPrefixAndSuffix(context.dbPath, idPrefix)
     if (!paths || paths.length === 0) throw new Error(`文档[${idPrefix}]不存在`)
     return paths
   }
@@ -96,7 +96,7 @@ export default class DBUtils {
     for (const docPath of paths) {
       if (!docPath.startsWith(context.dbPath)) throw new Error(`非法路径，试图访问受限目录：[${docPath}]`)
     }
-    return FileUtils.deleteFiles(paths)
+    return deleteFiles(paths)
   }
 
   /**

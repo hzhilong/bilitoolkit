@@ -1,4 +1,4 @@
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { session } from 'electron'
 import { BILIBILI_COOKIE_DOMAIN, USER_COOKIE_NAMES } from '@ybgnb/bili-api'
 import { isEmptyArr } from '@ybgnb/utils'

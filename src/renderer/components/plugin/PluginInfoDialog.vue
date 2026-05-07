@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { ref, watch, computed } from 'vue'
 import axios from 'axios'
 import { marked } from 'marked'
@@ -8,7 +8,7 @@ import { ExternalLink } from 'bilitoolkit-ui'
 const props = defineProps<ToolkitPlugin>()
 const visible = defineModel<boolean>({ required: true })
 const readMeData = ref('加载 ReadMe.md 中...')
-const title = computed(()=>{
+const title = computed(() => {
   return `${props.name}  ${props.id}`
 })
 watch(visible, async (newValue) => {

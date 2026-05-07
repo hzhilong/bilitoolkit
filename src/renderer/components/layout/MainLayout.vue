@@ -2,11 +2,11 @@
 import { ref } from 'vue'
 import SideBar from '@/renderer/components/layout/SideBar.vue'
 import TopBar from '@/renderer/components/layout/TopBar.vue'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
-import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
+import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.js'
 import { execBiz } from '@ybgnb/utils'
 import { RouterView } from 'vue-router'
-import { useAppTabStore } from '@/renderer/stores/app-tab.ts'
+import { useAppTabStore } from '@/renderer/stores/app-tab.js'
 import { storeToRefs } from 'pinia'
 
 const mainContentRef = ref<HTMLElement>()

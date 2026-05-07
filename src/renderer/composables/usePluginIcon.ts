@@ -1,7 +1,7 @@
 import { computed, watch, ref, type Reactive } from 'vue'
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.ts'
-import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.ts'
-import { parseGithubRepo } from '@ybgnb/utils'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
+import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.js'
+import { parseGithubRepoUrl } from '@ybgnb/utils'
 
 const defaultIconSrc = new URL('/images/plugin-default-icon.png', import.meta.url).href
 
@@ -13,7 +13,7 @@ export const usePluginIconURL = (plugin: Reactive<ToolkitPlugin>) => {
       return defaultIconSrc
     }
     try {
-      const { owner, repo, branch } = parseGithubRepo(repository)
+      const { owner, repo, branch } = parseGithubRepoUrl(repository)
       return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/public/favicon.ico`
     } catch {
       return defaultIconSrc

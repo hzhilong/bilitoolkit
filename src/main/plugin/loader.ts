@@ -3,30 +3,30 @@ import type {
   InstalledToolkitPlugin,
   PluginDownloadOptions,
   ToolkitPlugin,
-} from '@/shared/types/toolkit-plugin.ts'
-import { generateId } from '@/main/utils/id.ts'
-import { getFormattedDate, parseGithubRepo, getErrorMessage } from '@ybgnb/utils'
-import { parsePluginKeywords } from '@/shared/utils/plugin-parse.ts'
+} from '@/shared/types/toolkit-plugin.js'
+import { generateId } from '@/main/utils/id.js'
+import { getFormattedDate, getErrorMessage, getGithubRawJson, parseGithubRepoUrl } from '@ybgnb/utils'
+import { parsePluginKeywords } from '@/shared/utils/plugin-parse.js'
 import path from 'path'
 import fs from 'fs'
 import type { PackageJSON } from '@npm/types'
-import { FileUtils } from '@/main/utils/file.ts'
-import { IconUtils } from '@/main/utils/icon.ts'
+import { FileUtils } from '@/main/utils/file.js'
+import { IconUtils } from '@/main/utils/icon.js'
 import { writeFileSync } from 'node:fs'
-import { mainEnv } from '@/main/common/main-env.ts'
-import { GithubUtils } from '@/main/utils/github.ts'
-import { mainLogger } from '@/main/common/main-logger.ts'
-import { appPath } from '@/main/common/app-path.ts'
-import DBUtils from '@/main/utils/db.ts'
-import type { TaskPluginInfo } from '@/shared/types/task'
-import { loadTaskPluginMeta } from '@/main/plugin/task/loader.ts'
+import { mainEnv } from '@/main/common/main-env.js'
+import { mainLogger } from '@/main/common/main-logger.js'
+import { appPath } from '@/main/common/app-path.js'
+import DBUtils from '@/main/utils/db.js'
+import type { TaskPluginInfo } from '@/shared/types/task.js'
+import { loadTaskPluginMeta } from '@/main/plugin/task/loader.js'
+import { readJSONFile, getDirSize, formatFileSizeFromKB, emptyDirectory } from '@ybgnb/utils/node'
 
 /**
  * 读取插件的 package.json
  * @param pluginRootPath 插件根目录
  */
 export function readPluginPackage(pluginRootPath: string) {
-  return FileUtils.readJsonFile<PackageJSON>(path.join(pluginRootPath, 'package.json'))
+  return readJSONFile<PackageJSON>(path.join(pluginRootPath, 'package.json'))
 }
 
 /**
@@ -34,12 +34,12 @@ export function readPluginPackage(pluginRootPath: string) {
  * @param options   插件下载选项
  * @param cacheIcon 是否缓存图标
  */
-export function loadInstalledPlugin(
+export async function loadInstalledPlugin(
   options: PluginDownloadOptions,
   cacheIcon: boolean = true,
-): InstalledToolkitPlugin | TaskPluginInfo {
-  const size = FileUtils.getFolderSizeSync(options.rootDirPath) / 1024
-  const sizeDesc = FileUtils.formatKBSize(size)
+): Promise<InstalledToolkitPlugin | TaskPluginInfo> {
+  const size = (await getDirSize(options.rootDirPath)) / 1024
+  const sizeDesc = formatFileSizeFromKB(size)
   const installed = {
     ...options,
     files: {
@@ -56,7 +56,7 @@ export function loadInstalledPlugin(
     writeFileSync(iconCachePath, icon, 'utf8')
   }
   if (installed.type === 'task') {
-    Object.assign(installed as TaskPluginInfo, loadTaskPluginMeta(installed))
+    Object.assign(installed as TaskPluginInfo, await loadTaskPluginMeta(installed))
   }
   return installed
 }
@@ -65,7 +65,7 @@ export function loadInstalledPlugin(
  * 加载测试插件
  * @param options 插件测试选项
  */
-export function loadTestPlugin({ pluginPath }: PluginTestOptions): InstalledToolkitPlugin {
+export async function loadTestPlugin({ pluginPath }: PluginTestOptions): Promise<InstalledToolkitPlugin> {
   if (/^https?:\/\//i.test(pluginPath)) {
     return loadTestUIPluginByUrl(pluginPath)
   }
@@ -107,8 +107,8 @@ function loadTestUIPluginByUrl(devUrl: string): InstalledToolkitPlugin {
  * 加载测试插件（本地项目）
  * @param rootPath  本地已打包的开发项目根目录
  */
-function loadTestPluginByFile(rootPath: string): InstalledToolkitPlugin | TaskPluginInfo {
-  const pkg = readPluginPackage(rootPath)
+async function loadTestPluginByFile(rootPath: string): Promise<InstalledToolkitPlugin | TaskPluginInfo> {
+  const pkg = await readPluginPackage(rootPath)
   const { name, type } = parsePluginKeywords(pkg.name, pkg.keywords)
   const distPath = path.join(rootPath, 'dist')
   const indexName = type === 'ui' ? 'index.html' : 'index.js'
@@ -141,7 +141,7 @@ function loadTestPluginByFile(rootPath: string): InstalledToolkitPlugin | TaskPl
   }
 
   if (plugin.type === 'task') {
-    Object.assign(plugin as TaskPluginInfo, loadTaskPluginMeta(plugin))
+    Object.assign(plugin as TaskPluginInfo, await loadTaskPluginMeta(plugin))
   }
   return plugin
 }
@@ -149,9 +149,9 @@ function loadTestPluginByFile(rootPath: string): InstalledToolkitPlugin | TaskPl
 /**
  * 移除测试的插件
  */
-export function removeTestPlugin(plugin: InstalledToolkitPlugin) {
-  FileUtils.deleteFilesInDirectory(DBUtils.getDBPath('plugin', plugin))
-  FileUtils.deleteFilesInDirectory(FileUtils.getFileRootPath('plugin', plugin))
+export async function removeTestPlugin(plugin: InstalledToolkitPlugin) {
+  await emptyDirectory(DBUtils.getDBPath('plugin', plugin))
+  await emptyDirectory(FileUtils.getFileRootPath('plugin', plugin))
 }
 
 /**
@@ -160,11 +160,11 @@ export function removeTestPlugin(plugin: InstalledToolkitPlugin) {
 export async function getRecommendedPlugins() {
   try {
     // 先尝试从github仓库下载
-    const repo = parseGithubRepo(mainEnv.env.APP_REPO_URL)
-    return await GithubUtils.getRawJson<ToolkitPlugin[]>(repo, 'public/recommended-plugins.json')
+    const repo = parseGithubRepoUrl(mainEnv.env.APP_REPO_URL)
+    return await getGithubRawJson<ToolkitPlugin[]>({ ...repo, filePath: 'public/recommended-plugins.json' })
   } catch (error: unknown) {
     mainLogger.error('获取推荐的插件失败', getErrorMessage(error))
     // 加载本地文件（该版本app推荐的插件）
-    return FileUtils.readJsonFile<ToolkitPlugin[]>(path.join(appPath.appPublicPath, 'recommended-plugins.json'))
+    return await readJSONFile<ToolkitPlugin[]>(path.join(appPath.appPublicPath, 'recommended-plugins.json'))
   }
 }

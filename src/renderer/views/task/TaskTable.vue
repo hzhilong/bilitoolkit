@@ -90,15 +90,15 @@
 </template>
 
 <script setup lang="ts">
-import type { TaskPluginInfo, TaskWithPlugin, Task } from '@/shared/types/task.ts'
+import type { TaskPluginInfo, TaskWithPlugin, Task } from '@/shared/types/task.js'
 import { ref, watch } from 'vue'
-import { toolkitApi } from '@/renderer/api/toolkit-api.ts'
+import { toolkitApi } from '@/renderer/api/toolkit-api.js'
 import { AppTooltip, useAutoRefreshData, showToast, showError } from 'bilitoolkit-ui'
 import TaskModal from '@/renderer/views/task/TaskModal.vue'
-import type { TaskSubmitPayload } from '@/renderer/views/task/TaskModal.types.ts'
-import { PluginUtils } from '@/renderer/utils/plugin-utils.ts'
+import type { TaskSubmitPayload } from '@/renderer/views/task/TaskModal.types.js'
+import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
 import TaskExecutionsModal from '@/renderer/views/task/execution/TaskExecutionsModal.vue'
-import { appEnv } from '@/shared/common/app-env.ts'
+import { appEnv } from '@/shared/common/app-env.js'
 
 interface TaskTableProps {
   pluginId?: string

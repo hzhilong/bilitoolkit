@@ -66,5 +66,4 @@ const appName = import.meta.env.APP_PRODUCT_CN_NAME
     overflow-y: auto;
   }
 }
-
 </style>
