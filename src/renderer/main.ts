@@ -17,6 +17,7 @@ import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
 import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.js'
 import { useUserStore } from '@/renderer/stores/user.js'
 import { appEnv } from '@/shared/common/app-env.js'
+import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
 
 async function bootstrapApp() {
   if (appEnv.isDev) {
@@ -58,6 +59,7 @@ async function bootstrapApp() {
     await useAppSettingsStore().init()
     await useAppThemeStore().init()
     await useAppInstalledPlugins().init()
+    await useRecommendedPlugins().init()
     await usePluginStarsStore().init()
     await useUserStore().init()
     await initHostAppListener()

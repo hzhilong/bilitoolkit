@@ -57,12 +57,6 @@ export function isToolkitPlugin(obj: any): obj is ToolkitPlugin {
   return typeof obj === 'object' && obj !== null && 'links' in obj
 }
 
-export interface PluginSearchResult {
-  total: number
-  time: string
-  plugins: Array<ToolkitPluginWithNpmInfo>
-}
-
 /**
  * 已安装的插件
  */

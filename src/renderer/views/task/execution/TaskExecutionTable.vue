@@ -2,7 +2,7 @@
   <div class="table-page" v-loading="loading">
     <div class="table-page__header">
       <span class="table-page__header__label">任务执行记录列表：</span>
-      <el-button @click="refreshTableData">刷新</el-button>
+      <el-button @click="refreshTable">刷新</el-button>
     </div>
     <div ref="tableWrapperRef" class="table-page__table">
       <el-table height="66vh" :data="tableData" style="width: 100%">
@@ -112,10 +112,10 @@ const refreshTableData = loadingData(async () => {
 })
 
 const resetPageData = () => {
-  Object.assign(pageData.value, defaultPageData)
+  const { pageSize: _, ...rest } = defaultPageData
+  Object.assign(pageData.value, rest)
 }
 const refreshTable = () => {
-  console.log(`refreshTable 2=`)
   tableData.value = []
   resetPageData()
   refreshTableData()

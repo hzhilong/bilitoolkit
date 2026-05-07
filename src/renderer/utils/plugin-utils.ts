@@ -1,6 +1,5 @@
 import type {
   InstalledToolkitPlugin,
-  PluginSearchResult,
   PluginTestOptions,
   ToolkitPlugin,
   ToolkitPluginWithNpmInfo,
@@ -13,6 +12,8 @@ import { parseNpmSearchResultPkg } from '@/shared/utils/plugin-parse.js'
 import { toIPC } from 'bilitoolkit-runtime'
 import { getFormattedDate } from '@ybgnb/utils'
 import { searchPackages, type NpmSearchResultItem, SearchText } from 'public-registry-api'
+import type { PageResult } from '@/shared/types/page'
+import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {
@@ -45,7 +46,7 @@ export class PluginUtils {
    */
   static async sortNpmPlugins(plugins: NpmSearchResultItem[]): Promise<NpmSearchResultItem[]> {
     // 获取推荐的插件
-    const recommendedPlugins = Array.from(await toolkitApi.core.getRecommendedPlugins())
+    const recommendedPlugins = useRecommendedPlugins().plugins
     // 排序 map
     const orderMap = new Map<string, number>()
     // 按照顺序设置从小到大的负值
@@ -61,18 +62,31 @@ export class PluginUtils {
     })
   }
 
-  static async searchNpmPlugins(page = 1, pageSize: number = 20) {
+  static async searchNpmPlugins({
+    pageNum = 1,
+    pageSize = 20,
+    showThirdPartyPlugins = false,
+  }: {
+    pageNum?: number
+    pageSize?: number
+    showThirdPartyPlugins?: boolean
+  }): Promise<PageResult<ToolkitPluginWithNpmInfo>> {
+    const searchText = SearchText.create().keywords(['bilitoolkit-plugin'])
+    if (!showThirdPartyPlugins) {
+      searchText.author(appEnv.env.APP_AUTHOR)
+    }
     const result = await searchPackages({
-      text: SearchText.create().keywords(['bilitoolkit-plugin']).toString(),
+      text: searchText.toString(),
       size: pageSize,
-      from: (page - 1) * 20,
+      from: (pageNum - 1) * 20,
     })
-
     result.objects = await this.sortNpmPlugins(result.objects)
     return {
+      pageNum: pageNum,
+      pageSize: pageSize,
       total: result.total,
-      time: result.time,
-      plugins: result.objects.map((p) => {
+      totalPages: Math.floor(result.total / pageSize) + 1,
+      data: result.objects.map((p) => {
         return {
           ...parseNpmSearchResultPkg(p.package),
           downloads: {
@@ -82,7 +96,7 @@ export class PluginUtils {
           searchScore: p.searchScore,
         } satisfies ToolkitPluginWithNpmInfo
       }),
-    } satisfies PluginSearchResult
+    }
   }
 
   static async install(plugin: ToolkitPlugin) {
