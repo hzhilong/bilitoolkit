@@ -13,7 +13,7 @@ const devPatternStart = '%d{yyyy-MM-dd hh:mm:ss} %p %f{3}:%l%'
 // 生产环境输出格式头
 const prodPatternStart = '%d{yyyy-MM-dd hh:mm:ss} %p'
 // 使用的输出格式头
-const patternStart = mainEnv.isProd ? prodPatternStart : devPatternStart
+const patternStart = mainEnv.PROD ? prodPatternStart : devPatternStart
 
 // https://log4js-node.github.io/log4js-node/api.html
 log4js.configure({
@@ -53,25 +53,25 @@ log4js.configure({
       appenders: ['all', 'console', 'errorFilter'],
       level: import.meta.env.APP_LOG_LEVEL || 'info',
       // 开发模式启用调用堆栈，打印行号
-      enableCallStack: mainEnv.isDev,
+      enableCallStack: mainEnv.DEV,
     },
     onlyConsole: {
       appenders: ['console'],
       level: import.meta.env.APP_LOG_LEVEL || 'info',
       // 开发模式启用调用堆栈，打印行号
-      enableCallStack: mainEnv.isDev,
+      enableCallStack: mainEnv.DEV,
     },
     onlyFile: {
       appenders: ['all', 'errorFilter'],
       level: import.meta.env.APP_LOG_LEVEL || 'info',
       // 开发模式启用调用堆栈，打印行号
-      enableCallStack: mainEnv.isDev,
+      enableCallStack: mainEnv.DEV,
     },
     task: {
       appenders: ['task', 'console', 'errorFilter'],
       level: import.meta.env.APP_LOG_LEVEL || 'info',
       // 开发模式启用调用堆栈，打印行号
-      enableCallStack: mainEnv.isDev,
+      enableCallStack: mainEnv.DEV,
     },
   },
 })

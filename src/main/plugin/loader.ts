@@ -160,7 +160,7 @@ export async function removeTestPlugin(plugin: InstalledToolkitPlugin) {
 export async function getRecommendedPlugins() {
   try {
     // 先尝试从github仓库下载
-    const repo = parseGithubRepoUrl(mainEnv.env.APP_REPO_URL)
+    const repo = parseGithubRepoUrl(mainEnv.APP_REPO_URL)
     return await getGithubRawJson<ToolkitPlugin[]>({ ...repo, filePath: 'public/recommended-plugins.json' })
   } catch (error: unknown) {
     mainLogger.error('获取推荐的插件失败', getErrorMessage(error))

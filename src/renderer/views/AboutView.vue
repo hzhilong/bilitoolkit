@@ -4,10 +4,10 @@ import type { AppThemeMode } from 'bilitoolkit-types'
 import type { Ref } from 'vue'
 import { computed } from 'vue'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
-import { appEnv } from '@/shared/common/app-env.js'
 import { switchDefaultTheme, switchThemeMode } from 'bilitoolkit-ui'
+import { appEnv } from '@ybgnb/vite-env/common'
 
-const env = appEnv.env
+const env = appEnv
 const appVersion = env.PROD ? env.APP_VERSION : `${env.APP_VERSION} ${env.MODE}`
 
 const state = useAppThemeStore().state

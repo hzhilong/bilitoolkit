@@ -8,7 +8,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { loadEnvConfig } from '@ybgnb/vite-env'
-import { builtinModules, findPackageJSON } from 'node:module'
+import { builtinModules } from 'node:module'
 import { merge, cloneDeep } from 'lodash-es'
 import path from 'path'
 

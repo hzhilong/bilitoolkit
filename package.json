@@ -49,7 +49,7 @@
     "@vueuse/integrations": "^13.9.0",
     "@ybgnb/bili-api": "workspace:*",
     "@ybgnb/utils": "^0.2.0",
-    "@ybgnb/vite-env": "^0.0.6",
+    "@ybgnb/vite-env": "^0.0.7",
     "axios": "^1.12.1",
     "better-sqlite3": "^12.9.0",
     "bilitoolkit-runtime": "workspace:*",

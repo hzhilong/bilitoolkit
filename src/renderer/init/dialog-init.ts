@@ -5,7 +5,7 @@ import type { ApiCallerIdentity } from '@/shared/types/toolkit-core-api.js'
 import { AppUserAuthDialog } from '@/renderer/components/dialog/userAuthService.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 import { AppUserSelectDialog } from '@/renderer/components/dialog/userSelectService.js'
-import { appEnv } from '@/shared/common/app-env.js'
+import { appEnv } from '@ybgnb/vite-env/common'
 import { toIPC } from 'bilitoolkit-runtime'
 
 /**
@@ -19,7 +19,7 @@ export const initDialogAppListener = async () => {
         const authUser = await AppUserSelectDialog.show({
           title: title,
         })
-        if (context.envType === 'host' || context.plugin.author === appEnv.env.APP_AUTHOR) {
+        if (context.envType === 'host' || context.plugin.author === appEnv.APP_AUTHOR) {
           return toIPC(authUser)
         }
         await AppUserAuthDialog.show({

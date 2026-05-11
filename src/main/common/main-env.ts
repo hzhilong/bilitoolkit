@@ -1,4 +1,4 @@
-import { appEnv } from '@/shared/common/app-env.js'
+import { appEnv } from '@ybgnb/vite-env/common'
 
 /**
  * 主进程环境变量

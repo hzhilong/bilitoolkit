@@ -6,7 +6,7 @@ import type {
 } from '@/shared/types/toolkit-plugin'
 import { eventBus } from '@/renderer/utils/event-bus.js'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
-import { appEnv } from '@/shared/common/app-env.js'
+import { appEnv } from '@ybgnb/vite-env/common'
 import { toolkitApi } from '@/renderer/api/toolkit-api.js'
 import { parseNpmSearchResultPkg } from '@/shared/utils/plugin-parse.js'
 import { toIPC } from 'bilitoolkit-runtime'
@@ -30,14 +30,13 @@ export class PluginUtils {
 
   static async loadTestPlugin(options: PluginTestOptions) {
     const plugin = await toolkitApi.core.loadTestPlugin(options)
-    console.log('loadTestPlugin', plugin)
     useAppInstalledPlugins().addPlugin(plugin)
     eventBus.emit('openPluginView', { plugin: plugin })
     return plugin
   }
 
   private static isSameAuthor(npmPackage: NpmSearchResultItem) {
-    return npmPackage.package.publisher.username === appEnv.env.APP_AUTHOR
+    return npmPackage.package.publisher.username === appEnv.APP_AUTHOR
   }
 
   /**
@@ -73,7 +72,7 @@ export class PluginUtils {
   }): Promise<PageResult<ToolkitPluginWithNpmInfo>> {
     const searchText = SearchText.create().keywords(['bilitoolkit-plugin'])
     if (!showThirdPartyPlugins) {
-      searchText.author(appEnv.env.APP_AUTHOR)
+      searchText.author(appEnv.APP_AUTHOR)
     }
     const result = await searchPackages({
       text: searchText.toString(),

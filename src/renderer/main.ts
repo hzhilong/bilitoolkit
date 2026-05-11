@@ -16,11 +16,11 @@ import 'remixicon/fonts/remixicon.css'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
 import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.js'
 import { useUserStore } from '@/renderer/stores/user.js'
-import { appEnv } from '@/shared/common/app-env.js'
+import { appEnv } from '@ybgnb/vite-env/common'
 import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
 
 async function bootstrapApp() {
-  if (appEnv.isDev) {
+  if (appEnv.DEV) {
     // 开发环境全量引入样式，禁用样式自动引入（应用会因为vite构建动态组件而频繁重启）
     import('element-plus/dist/index.css')
   }

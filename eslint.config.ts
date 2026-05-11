@@ -23,7 +23,7 @@ export default defineConfigWithVueTs(
     'yalc.lock',
     '**/dist-ssr/**',
     '**/coverage/**',
-    'public/workers/task-plugin.worker.js',
+    'public/**/*.js',
   ]),
 
   pluginVue.configs['flat/essential'],

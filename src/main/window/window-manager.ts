@@ -9,7 +9,7 @@ import { isLogApiResult, mainLogger, mainConsoleLogger, mainFileLogger } from '@
 import { appPath } from '@/main/common/app-path.js'
 import { updateElectronApp } from 'update-electron-app'
 import { BiliApiBusinessError } from '@ybgnb/bili-api'
-import { appEnv } from '@/shared/common/app-env.js'
+import { appEnv } from '@ybgnb/vite-env/common'
 import { initDatabase } from '@/main/db/init.js'
 import { IGNORE_LOGGING_PATHS } from '@/main/common/main-constants.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
@@ -49,7 +49,7 @@ export class WindowManager extends BaseWindowManager {
     // 设置菜单
     Menu.setApplicationMenu(null)
     // 应用更新检测
-    if (appEnv.isProd) {
+    if (appEnv.PROD) {
       updateElectronApp()
     }
     // 在开发环境和生产环境均可通过快捷键打开devTools

@@ -98,7 +98,7 @@ import TaskModal from '@/renderer/views/task/TaskModal.vue'
 import type { TaskSubmitPayload } from '@/renderer/views/task/TaskModal.types.js'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
 import TaskExecutionsModal from '@/renderer/views/task/execution/TaskExecutionsModal.vue'
-import { appEnv } from '@/shared/common/app-env.js'
+import { appEnv } from '@ybgnb/vite-env/common'
 
 interface TaskTableProps {
   pluginId?: string
@@ -118,7 +118,7 @@ const { refreshTableData, loading, reset } = useAutoRefreshData(
       tableData.value = await toolkitApi.task.getTaskListWithPlugin()
     }
   },
-  appEnv.isDev ? 999999 : 3000,
+  appEnv.DEV ? 999999 : 3000,
 )
 const refreshTable = () => {
   tableData.value = []

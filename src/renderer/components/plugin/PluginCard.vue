@@ -8,7 +8,7 @@ import { computed, ref } from 'vue'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
 import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.js'
-import { appEnv } from '@/shared/common/app-env.js'
+import { appEnv } from '@ybgnb/vite-env/common'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
@@ -39,7 +39,7 @@ const openPlugin = () => {
   PluginUtils.openPluginView(props.plugin)
 }
 const installConfirm = computed(() => {
-  if (appEnv.env.APP_AUTHOR === props.plugin.author) {
+  if (appEnv.APP_AUTHOR === props.plugin.author) {
     return '确认安装吗？'
   } else {
     return '该插件非工具姬作者开发，确认安装吗？'

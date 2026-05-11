@@ -7,14 +7,14 @@ import { windowManager } from '@/main/window/window-manager.js'
 import { appPath } from '@/main/common/app-path.js'
 import { mainEnv } from '@/main/common/main-env.js'
 
-if (mainEnv.isDev) {
+if (mainEnv.DEV) {
   // Source Map 支持库 => 开发环境打印日志时输出源码路径和行号
   ;(await import('source-map-support')).install()
 }
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 app.commandLine.appendSwitch('disable-web-security')
-if (mainEnv.isDev) app.commandLine.appendSwitch('disable-http-cache')
+if (mainEnv.DEV) app.commandLine.appendSwitch('disable-http-cache')
 
 // 设置全局最大监听器数
 ipcMain.setMaxListeners(0)
@@ -52,7 +52,7 @@ const createWindow = async () => {
 // 这段程序将会在 Electron 结束初始化和创建浏览器窗口的时候调用
 // 部分 API 在 ready 事件触发后才能使用。
 app.whenReady().then(() => {
-  if (mainEnv.isDev) {
+  if (mainEnv.DEV) {
     // 进一步确保请求不走缓存
     session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
       details.requestHeaders['Pragma'] = 'no-cache'
