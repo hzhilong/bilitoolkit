@@ -28,7 +28,9 @@ const pluginCountDesc = computed(() => {
         <el-checkbox-button value="已收藏"> 已收藏 </el-checkbox-button>
       </el-checkbox-group>
     </div>
-    <plugin-list class="list-container" :plugins="renderPlugins" :type="'manage'" />
+    <div class="list-wrapper">
+      <plugin-list :plugins="renderPlugins" :type="'manage'" />
+    </div>
   </PageContainer>
 </template>
 

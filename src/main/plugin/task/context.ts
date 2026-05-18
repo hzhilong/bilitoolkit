@@ -13,7 +13,7 @@ export class TaskContextFactory {
     return {
       api: api,
       config: task.config,
-      logger: buildLogger(taskExecution),
+      logger: buildLogger(task.pluginId, taskExecution),
     }
   }
 }

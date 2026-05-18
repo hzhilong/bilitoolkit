@@ -21,19 +21,14 @@ const props = defineProps<PluginListProps<T>>()
 <style scoped lang="scss">
 .plugin-list {
   width: 100%;
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
   margin: 10px 0;
+  padding-right: 10px;
   box-sizing: border-box;
-  padding: 10px 0;
-  gap: 10px 4%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
 
   .plugin-card {
-    width: 46%;
-    max-width: 400px;
-    flex-grow: 0;
-    flex-shrink: 0;
   }
 }
 </style>

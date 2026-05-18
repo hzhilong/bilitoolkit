@@ -114,9 +114,14 @@ class PluginManager {
 
   async loadTestPlugin(context: ApiCallerContext, options: PluginTestOptions) {
     mainLogger.info(`测试插件${options.pluginPath} 加载中……`)
+    for (const oldPlugin of this.registry.plugins.values()) {
+      if (oldPlugin.isTest && oldPlugin.files.indexPath === options.pluginPath) {
+        mainLogger.info(`插件已存在 ${oldPlugin.id} ${oldPlugin.version} `)
+        return oldPlugin
+      }
+    }
     const plugin = await loadTestPlugin(options)
     this.registerPlugin(plugin)
-    mainLogger.info(`插件${plugin.id} ${plugin.version} 加载成功！`)
     return plugin
   }
 }

@@ -90,22 +90,24 @@ const syncAllUserInfo = async () => {
       <el-button type="primary" @click="refreshData">刷新</el-button>
       <el-button type="primary" @click="syncAllUserInfo">同步用户信息</el-button>
     </div>
-    <div class="user-list" v-loading="loading">
-      <bili-user-card
-        class="bili-user-card"
-        v-for="user in users"
-        :key="user.mid"
-        :user="user"
-        :show-logout-btn="true"
-        @mouseenter="mouseuserId = user.mid"
-        @mouseleave="mouseuserId = null"
-      >
-        <div class="options" v-if="optionsVisible(user.mid)">
-          <IconButton icon="logout-box-r" tip="登出" @click="logout(user.mid)" />
-          <IconButton icon="edit" tip="编辑" @click="handleEditCookie(user)" />
-          <IconButton icon="chrome" @click="handleOpenBili(user)" />
-        </div>
-      </bili-user-card>
+    <div class="user-list-wrapper">
+      <div class="user-list" v-loading="loading">
+        <bili-user-card
+          class="bili-user-card"
+          v-for="user in users"
+          :key="user.mid"
+          :user="user"
+          :show-logout-btn="true"
+          @mouseenter="mouseuserId = user.mid"
+          @mouseleave="mouseuserId = null"
+        >
+          <div class="options" v-if="optionsVisible(user.mid)">
+            <IconButton icon="logout-box-r" tip="登出" @click="logout(user.mid)" />
+            <IconButton icon="edit" tip="编辑" @click="handleEditCookie(user)" />
+            <IconButton icon="chrome" @click="handleOpenBili(user)" />
+          </div>
+        </bili-user-card>
+      </div>
     </div>
     <UserLoginDialog v-model="userLoginDialogVisible" />
     <UserCookieModal

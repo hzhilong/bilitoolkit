@@ -1,4 +1,4 @@
-import { mainLogger } from '@/main/common/main-logger.js'
+import { mainLogger, getPluginLogger } from '@/main/common/main-logger.js'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
 import { FileUtils } from '@/main/utils/file.js'
 import { nativeTheme, shell } from 'electron'
@@ -26,10 +26,16 @@ export class SystemApiHandler extends ApiHandleStrategy implements IpcToolkitSys
   }
 
   async saveLog(context: ApiCallerContext, appLog: AppLog): Promise<void> {
-    if (appLog.args) {
-      mainLogger[appLog.level](appLog.message, ...appLog.args)
+    let logger
+    if (context.envType === 'host') {
+      logger = mainLogger
     } else {
-      mainLogger[appLog.level](appLog.message)
+      logger = getPluginLogger(context.plugin.id)
+    }
+    if (appLog.args) {
+      logger[appLog.level](appLog.message, ...appLog.args)
+    } else {
+      logger[appLog.level](appLog.message)
     }
   }
 

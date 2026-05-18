@@ -126,6 +126,10 @@ const starPlugin = () => {
 
 .plugin-card {
   @include mixins.card-tech-style;
+  min-width: 340px;
+  max-width: 500px;
+  height: fit-content;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -133,7 +137,6 @@ const starPlugin = () => {
   border: 2px solid var(--el-border-color);
   border-radius: 12px;
   padding: 10px 10px;
-  box-sizing: border-box;
   font-size: 14px;
   line-height: 1.5;
   color: var(--el-text-color-placeholder);

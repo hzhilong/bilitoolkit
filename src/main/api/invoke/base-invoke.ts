@@ -14,7 +14,7 @@ import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
 export async function baseInvokeApi<T>(apiPath: string, ...args: any[]): Promise<T> {
   const [module, name] = apiPath.split('.')
   const options: PluginApiInvokeOptions = { module: module as keyof ToolkitApiWithCore, name, args: args }
-  // 当作前后端通信就行，后端只能传序列化的数据，所有异步任务的结果需要包装成BuResult，获取后再解包成Promise
+  // 当作前后端通信就行，后端只能传序列化的数据，所有异步任务的结果需要包装成 BizResult，获取后再解包成Promise
   const result = (await ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_APIS, options)) as BizResult<T>
   if (result.success) {
     return result.data as T

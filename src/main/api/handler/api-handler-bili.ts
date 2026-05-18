@@ -21,10 +21,10 @@ export class BiliApiHandler extends ApiHandleStrategy implements IpcToolkitBiliA
    * @description 用于后续主线程发起bili接口请求（可操作多用户）
    */
   async createBiliClient(
-    _context: ApiCallerContext,
+    context: ApiCallerContext,
     config?: Partial<Omit<BiliApiClientConfig, 'id'>>,
   ): Promise<BiliApiClientConfig> {
-    return biliClientManager.create(config)
+    return biliClientManager.create(config, context.envType !== 'host' ? context.plugin : undefined)
   }
 
   /**

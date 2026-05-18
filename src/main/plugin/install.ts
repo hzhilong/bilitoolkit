@@ -7,6 +7,7 @@ import NpmUtils from '@/main/utils/npm.js'
 import path from 'path'
 import { appPath } from '@/main/common/app-path.js'
 import { rmdirSync } from 'node:fs'
+import { getSessionPartition } from '@/main/utils/session.js'
 
 /**
  * 下载插件
@@ -28,5 +29,9 @@ export async function downloadPlugin(options: PluginInstallOptions) {
  */
 export function removePluginFile(plugin: InstalledToolkitPlugin) {
   // 只删除插件文件，不删除数据库和其他文件
-  rmdirSync(path.join(appPath.pluginsPath, plugin.files.rootPath), { recursive: true })
+  if (!plugin.isTest) {
+    rmdirSync(path.resolve(plugin.files.rootPath), { recursive: true })
+  }
+  // 清理会话数据
+  getSessionPartition('plugin', plugin).clearData()
 }

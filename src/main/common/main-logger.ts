@@ -6,21 +6,20 @@ import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
 
 // 日志路径
 export const LOG_DIR = appPath.logsPath
-
-// https://log4js-node.github.io/log4js-node/layouts.html
-// 开发环境输出格式头
+// 开发环境输出格式头    https://log4js-node.github.io/log4js-node/layouts.html
 const devPatternStart = '%d{yyyy-MM-dd hh:mm:ss} %p %f{3}:%l%'
 // 生产环境输出格式头
 const prodPatternStart = '%d{yyyy-MM-dd hh:mm:ss} %p'
 // 使用的输出格式头
 const patternStart = mainEnv.PROD ? prodPatternStart : devPatternStart
+// 日志级别
+const level = import.meta.env.APP_LOG_LEVEL || 'info'
 
 // https://log4js-node.github.io/log4js-node/api.html
 log4js.configure({
   appenders: {
     console: {
       type: 'stdout',
-      // 根据日志级别输出不同颜色的头部
       layout: { type: 'pattern', pattern: `%[${patternStart}] - %m%` },
     },
     all: {
@@ -41,35 +40,36 @@ log4js.configure({
       level: 'ERROR',
       appender: 'error',
     },
-    task: {
-      type: 'dateFile',
-      filename: path.join(LOG_DIR, 'task-logs.log'),
-      compress: true,
+    // 动态多文件分发器
+    pluginMultiAppender: {
+      type: 'multiFile',
+      base: path.join(LOG_DIR, 'plugins'),
+      // 通过 getLogger('xxx') 传入的名字来切分
+      property: 'categoryName',
+      extension: '.log',
       layout: { type: 'pattern', pattern: `${patternStart} - %m%` },
     },
   },
   categories: {
     default: {
+      appenders: ['pluginMultiAppender'],
+      level: process.env.APP_LOG_LEVEL || 'info',
+    },
+    main: {
       appenders: ['all', 'console', 'errorFilter'],
-      level: import.meta.env.APP_LOG_LEVEL || 'info',
+      level: level,
       // 开发模式启用调用堆栈，打印行号
       enableCallStack: mainEnv.DEV,
     },
     onlyConsole: {
       appenders: ['console'],
-      level: import.meta.env.APP_LOG_LEVEL || 'info',
+      level: level,
       // 开发模式启用调用堆栈，打印行号
       enableCallStack: mainEnv.DEV,
     },
     onlyFile: {
       appenders: ['all', 'errorFilter'],
-      level: import.meta.env.APP_LOG_LEVEL || 'info',
-      // 开发模式启用调用堆栈，打印行号
-      enableCallStack: mainEnv.DEV,
-    },
-    task: {
-      appenders: ['task', 'console', 'errorFilter'],
-      level: import.meta.env.APP_LOG_LEVEL || 'info',
+      level: level,
       // 开发模式启用调用堆栈，打印行号
       enableCallStack: mainEnv.DEV,
     },
@@ -79,15 +79,23 @@ log4js.configure({
 /**
  * 主进程Logger
  */
-export const mainLogger = log4js.getLogger()
+export const mainLogger = log4js.getLogger('main')
 export const mainConsoleLogger = log4js.getLogger('onlyConsole')
 export const mainFileLogger = log4js.getLogger('onlyFile')
-export const mainTaskLogger = log4js.getLogger('task')
 
 /**
  * 是否打印 api 调用结果
  * @param options
  */
 export const isLogApiResult = (options: PluginApiInvokeOptions) => {
-  return options && ![`core.getPluginIcon`].includes(`${options.module}.${options.name}`)
+  return (
+    options && ![`core.getPluginIcon`, 'file.write', 'core.getPluginIcon'].includes(`${options.module}.${options.name}`)
+  )
+}
+
+/**
+ * 获取插件 Logger
+ */
+export function getPluginLogger(pluginName: string) {
+  return log4js.getLogger(`${pluginName}`)
 }

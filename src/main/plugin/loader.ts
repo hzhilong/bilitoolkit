@@ -4,7 +4,6 @@ import type {
   PluginDownloadOptions,
   ToolkitPlugin,
 } from '@/shared/types/toolkit-plugin.js'
-import { generateId } from '@/main/utils/id.js'
 import { getFormattedDate, getErrorMessage, getGithubRawJson, parseGithubRepoUrl } from '@ybgnb/utils'
 import { parsePluginKeywords } from '@/shared/utils/plugin-parse.js'
 import path from 'path'
@@ -81,8 +80,8 @@ export async function loadTestPlugin({ pluginPath }: PluginTestOptions): Promise
  */
 function loadTestUIPluginByUrl(devUrl: string): InstalledToolkitPlugin {
   return {
-    id: `test-${generateId()}`,
-    name: '测试',
+    id: `test-${Math.floor(Date.now() / 1000)}`,
+    name: `测试-${Math.floor(Date.now() / 1000)}`,
     type: 'ui',
     author: 'dev',
     description: 'test',

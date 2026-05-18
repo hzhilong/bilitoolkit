@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { TaskExecution } from '@/shared/types/task.js'
 import type { ConsoleMethod } from '@ybgnb/bili-api'
-import { mainTaskLogger } from '@/main/common/main-logger.js'
 import { emit } from '@/main/api/handler/api-handler-event.js'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.js'
 import type { TaskLogger } from 'bilitoolkit-types'
 import * as util from 'node:util'
 import type { NewTaskExecutionLog } from '@/main/db/schema.js'
 import { taskRepo } from '@/main/db/repository/task.js'
+import { getPluginLogger } from '@/main/common/main-logger.js'
 
 function formatLogMessage(...data: Parameters<ConsoleMethod>): string {
   return data
@@ -15,13 +15,13 @@ function formatLogMessage(...data: Parameters<ConsoleMethod>): string {
     .join(' ')
 }
 
-export function buildLogger(taskExecution: TaskExecution) {
+export function buildLogger(pluginId: string, taskExecution: TaskExecution) {
   const logger: any = {}
   const fnList = ['debug', 'info', 'warn', 'error']
   for (const fn of fnList) {
     logger[fn] = (...data: Parameters<ConsoleMethod>) => {
       // 主进程记录任务日志
-      ;(mainTaskLogger as any)[fn](`[task ${taskExecution.taskId}]`, ...data)
+      ;(getPluginLogger(pluginId) as any)[fn](`[task ${taskExecution.taskId}]`, ...data)
       const log: NewTaskExecutionLog = {
         executionId: taskExecution.id,
         createdAt: Date.now(),

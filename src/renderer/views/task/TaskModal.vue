@@ -28,9 +28,7 @@ const runConfig = reactive<Required<Pick<Task, 'schedule' | 'enabled'>>>({
 const runConfigRules = useRunConfigRules(runConfig)
 watch(
   () => runConfig.schedule?.type,
-  () => {
-    runConfigFormRef.value?.validateField('schedule.value')
-  },
+  () => {},
 )
 
 watch(
@@ -132,6 +130,7 @@ const handleCancel = () => {
           >
             <el-input
               v-model="runConfig.schedule.value"
+              :validate-event="false"
               :placeholder="`请输入${runConfig.schedule.type === 'cron' ? 'cron 表达式' : '间隔时间(秒)'}`"
               clearable
             />

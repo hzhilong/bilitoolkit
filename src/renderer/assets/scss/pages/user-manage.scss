@@ -6,19 +6,25 @@
   margin-bottom: .5em;
 }
 
-.user-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 20px 10px;
-  padding: 10px 0;
+.user-list-wrapper{
+  width: 100%;
+  flex: 1;
   overflow-y: auto;
-  justify-content: flex-start;
 
-  ::v-deep(.bili-user-card) {
-    width: 300px;
+  .user-list {
+    padding: 10px 10px 10px 0;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px 30px;
+
+    ::v-deep(.bili-user-card) {
+      width: unset;
+    }
   }
+
 }
+
 
 .options{
   position: absolute;
