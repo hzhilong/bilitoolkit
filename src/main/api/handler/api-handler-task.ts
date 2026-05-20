@@ -8,14 +8,12 @@ import type {
   TaskExecutionLog,
   TaskExecutionFilters,
   TaskDispatchResult,
+  TaskUpdate,
 } from '@/shared/types/task.js'
 
-import type { PageResult } from '@/shared/types/page.js'
-import { types } from 'sass'
-import type { TaskUpdate } from '@/main/db/schema.js'
-import Error = types.Error
 import { taskService } from '@/main/service/task.service.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
+import type { PageResult } from 'bilitoolkit-ui'
 
 /**
  * 任务API处理器
@@ -43,7 +41,7 @@ export class TaskApiHandler extends ApiHandleStrategy implements IpcToolkitTaskA
     context: ApiCallerContext,
     filters: TaskExecutionFilters,
   ): Promise<PageResult<TaskExecution>> {
-    return taskService.getExecutionListByPage(filters)
+    return taskService.fetchExecutionsPage(filters)
   }
 
   createTask(context: ApiCallerContext, task: Omit<Task, 'id' | 'createdAt'>): Promise<Task> {

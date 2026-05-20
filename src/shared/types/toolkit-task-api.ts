@@ -6,9 +6,9 @@ import type {
   TaskExecutionLog,
   TaskWithPlugin,
   TaskDispatchResult,
+  TaskUpdate,
 } from '@/shared/types/task.js'
-import type { PageResult } from '@/shared/types/page.js'
-import type { TaskUpdate } from '@/main/db/schema.js'
+import type { PageResult } from 'bilitoolkit-ui'
 
 /**
  * 任务相关的API

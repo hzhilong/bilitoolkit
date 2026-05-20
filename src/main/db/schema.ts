@@ -30,13 +30,7 @@ export type TableColumns<T extends keyof DatabaseSchema> = keyof DatabaseSchema[
 
 // 导出辅助类型，方便在 Service 层使用
 export type TaskRow = Selectable<TaskTable>
-export type NewTask = Omit<Task, 'id'>
-export type TaskUpdate = Pick<Task, 'id'> & Partial<Omit<Task, 'pluginId' | 'createdAt' | 'id'>>
 
 export type TaskExecutionRow = Selectable<TaskExecutionTable>
-export type NewTaskExecution = Omit<TaskExecution, 'id'>
-export type TaskExecutionUpdate = Pick<TaskExecution, 'id'> &
-  Partial<Omit<TaskExecution, 'taskId' | 'createdAt' | 'id'>>
 
 export type TaskExecutionLogRow = Selectable<TaskExecutionLogTable>
-export type NewTaskExecutionLog = Omit<TaskExecutionLog, 'id'>

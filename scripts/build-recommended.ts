@@ -1,9 +1,9 @@
-import { type ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { writeFileSync } from 'node:fs'
 import path from 'path'
 import { getPackage } from 'public-registry-api'
-import { parseNpmPackage } from '@/shared/utils/plugin-parse.js'
 import pkg from '../package.json' with { type: 'json' }
+import { parseNpmPackage } from '@/shared/utils/plugin-parse'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
 
 /**
  * 构建 recommended-plugins.json 配置文件

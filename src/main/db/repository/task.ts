@@ -8,20 +8,17 @@ import type {
   TaskTrigger,
   TaskExecutionId,
   TaskId,
-} from '@/shared/types/task.js'
-import { BaseRepository } from '@/main/db/repository/base.js'
-import { mapRowToTask, mapRowToExecution } from '@/main/db/utils/db.js'
-import type { PageResult } from '@/shared/types/page.js'
-import type {
   NewTask,
   TaskUpdate,
-  TaskExecutionRow,
   NewTaskExecution,
   TaskExecutionUpdate,
   NewTaskExecutionLog,
-  DatabaseSchema,
-} from '@/main/db/schema.js'
+} from '@/shared/types/task.js'
+import { BaseRepository } from '@/main/db/repository/base.js'
+import { mapRowToTask, mapRowToExecution } from '@/main/db/utils/db.js'
+import type { TaskExecutionRow, DatabaseSchema } from '@/main/db/schema.js'
 import type { Transaction } from 'kysely'
+import type { PageResult } from 'bilitoolkit-ui'
 
 export class TaskRepository extends BaseRepository {
   async getTasks(pluginId?: string): Promise<Task[]> {
@@ -106,7 +103,7 @@ export class TaskRepository extends BaseRepository {
    * 获取执行记录的分页数据
    * @param filters 查询条件
    */
-  async getExecutionsPage(filters: TaskExecutionFilters): Promise<PageResult<TaskExecution>> {
+  async fetchExecutionsPage(filters: TaskExecutionFilters): Promise<PageResult<TaskExecution>> {
     let query = db.selectFrom('task_executions').selectAll()
 
     if (filters.id) {

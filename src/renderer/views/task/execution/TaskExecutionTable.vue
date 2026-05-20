@@ -1,17 +1,12 @@
 <template>
   <div class="table-page" v-loading="loading">
     <div class="table-page__header">
-      <span class="table-page__header__label">任务执行记录列表：</span>
+      <span class="table-page__header__label"></span>
       <el-button @click="refreshTable">刷新</el-button>
     </div>
     <div ref="tableWrapperRef" class="table-page__table">
       <el-table height="66vh" :data="tableData" style="width: 100%">
         <el-table-column prop="id" label="ID" min-width="50" width="50" />
-        <el-table-column prop="createdAt" label="启动时间" min-width="86">
-          <template #default="{ row }: { row: TaskExecution }">
-            {{ new Date(row.startedAt).toLocaleString() }}
-          </template>
-        </el-table-column>
         <el-table-column prop="status" label="状态" min-width="80" width="80">
           <template #default="{ row }: { row: TaskExecution }">
             <el-tag v-if="row.status === 'running'" type="primary" disable-transitions>执行中</el-tag>
@@ -22,19 +17,19 @@
         </el-table-column>
         <el-table-column prop="startedAt" label="启动时间" min-width="86">
           <template #default="{ row }: { row: TaskExecution }">
-            {{ row.startedAt ? new Date(row.startedAt).toLocaleString() : '' }}
+            {{ formatTime(row.startedAt) }}
           </template>
         </el-table-column>
         <el-table-column prop="endedAt" label="结束时间" min-width="86">
           <template #default="{ row }: { row: TaskExecution }">
-            {{ row.endedAt ? new Date(row.endedAt).toLocaleString() : '' }}
+            {{ formatTime(row.endedAt) }}
           </template>
         </el-table-column>
         <el-table-column prop="result" label="执行结果" min-width="100">
           <template #default="{ row }: { row: TaskExecution }">
             <template v-if="row.result">
               <AppTooltip :content="row.result.message">
-                {{ row.result.message }}
+                {{ row.result?.message }}
               </AppTooltip>
             </template>
           </template>
@@ -79,8 +74,7 @@
 import type { TaskExecution } from '@/shared/types/task.js'
 import { ref, watch } from 'vue'
 import { toolkitApi } from '@/renderer/api/toolkit-api.js'
-import { AppTooltip, useLoadingData } from 'bilitoolkit-ui'
-import type { PageData } from '@/shared/types/page.js'
+import { AppTooltip, useLoadingData, formatTime, type PageData } from 'bilitoolkit-ui'
 import TaskExecutionLogsModal from '@/renderer/views/task/execution-log/TaskExecutionLogsModal.vue'
 import ExecutionResultModal from '@/renderer/views/task/execution/ExecutionResultModal.vue'
 import type { TaskResult } from 'bilitoolkit-types'
@@ -185,6 +179,7 @@ defineExpose({ refreshTable })
 
   &__page {
     margin-top: 10px;
+    margin-left: auto;
   }
 }
 </style>

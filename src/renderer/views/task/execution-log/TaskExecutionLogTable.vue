@@ -1,7 +1,7 @@
 <template>
   <div class="table-page" v-loading="loading">
     <div class="table-page__header">
-      <span class="table-page__header__label">任务执行日志列表：</span>
+      <span class="table-page__header__label"></span>
       <el-button @click="refreshTableData">刷新</el-button>
     </div>
     <div ref="tableWrapperRef" class="table-page__table">

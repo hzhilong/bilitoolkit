@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { TaskExecution } from '@/shared/types/task.js'
+import type { TaskExecution, NewTaskExecutionLog } from '@/shared/types/task.js'
 import type { ConsoleMethod } from '@ybgnb/bili-api'
 import { emit } from '@/main/api/handler/api-handler-event.js'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel.js'
 import type { TaskLogger } from 'bilitoolkit-types'
 import * as util from 'node:util'
-import type { NewTaskExecutionLog } from '@/main/db/schema.js'
 import { taskRepo } from '@/main/db/repository/task.js'
 import { getPluginLogger } from '@/main/common/main-logger.js'
 

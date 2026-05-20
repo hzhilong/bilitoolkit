@@ -2,9 +2,8 @@
 
 import type { TaskSchedule, TaskResult, TaskConfigField, TaskConfigSchema, TaskLogLevel } from 'bilitoolkit-types'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
+import type { PageParams } from 'bilitoolkit-ui'
 import type { MaxLengthArray } from '@ybgnb/utils'
-import type { PageParams } from '@/shared/types/page.js'
-import type { TaskUpdate } from '@/main/db/schema.js'
 
 /**
  * 任务插件信息
@@ -97,12 +96,14 @@ export interface TaskExecution {
 /**
  * 任务执行记录过滤条件
  */
-export type TaskExecutionFilters = PageParams<Partial<Omit<TaskExecution, 'result' | 'startedAt' | 'endedAt'>>> & {
-  /** 启动时间 */
-  startedAt?: MaxLengthArray<number, 2>
-  /** 结束时间 */
-  endedAt?: MaxLengthArray<number, 2>
-}
+export type TaskExecutionFilters = PageParams<
+  Omit<TaskExecution, 'result' | 'startedAt' | 'endedAt'> & {
+    /** 启动时间 */
+    startedAt?: MaxLengthArray<number, 2>
+    /** 结束时间 */
+    endedAt?: MaxLengthArray<number, 2>
+  }
+>
 
 /**
  * 任务执行日志
@@ -162,3 +163,11 @@ export interface TaskDispatchResult {
   /** 原因说明 */
   reason?: string
 }
+
+// 导出辅助类型，方便在 Service 层使用
+export type NewTask = Omit<Task, 'id'>
+export type TaskUpdate = Pick<Task, 'id'> & Partial<Omit<Task, 'pluginId' | 'createdAt' | 'id'>>
+export type NewTaskExecution = Omit<TaskExecution, 'id'>
+export type TaskExecutionUpdate = Pick<TaskExecution, 'id'> &
+  Partial<Omit<TaskExecution, 'taskId' | 'createdAt' | 'id'>>
+export type NewTaskExecutionLog = Omit<TaskExecutionLog, 'id'>

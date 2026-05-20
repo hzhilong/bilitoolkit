@@ -1,5 +1,4 @@
-import type { TaskPluginInfo, Task } from '@/shared/types/task.js'
-import type { TaskUpdate } from '@/main/db/schema.js'
+import type { TaskPluginInfo, Task, TaskUpdate } from '@/shared/types/task.js'
 import type { TaskSchedule } from 'bilitoolkit-types'
 
 export type TaskModalProps =

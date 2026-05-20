@@ -8,13 +8,14 @@ import type {
   TaskExecution,
   TaskExecutionId,
   CreateTaskInput,
+  NewTask,
+  TaskUpdate,
 } from '@/shared/types/task.js'
 import { taskRepo } from '@/main/db/repository/task.js'
 import { pluginManager } from '@/main/plugin/manager.js'
-import type { NewTask, TaskUpdate } from '@/main/db/schema.js'
-import type { PageResult } from '@/shared/types/page.js'
 import { BaseService } from '@/main/service/base.service.js'
 import type { TaskResult } from 'bilitoolkit-types'
+import type { PageResult } from 'bilitoolkit-ui'
 
 /**
  * task 相关的数据操作服务，并持有执行态索引
@@ -61,8 +62,8 @@ export class TaskService extends BaseService {
   /**
    * 获取执行记录的分页数据
    */
-  async getExecutionListByPage(filters: TaskExecutionFilters): Promise<PageResult<TaskExecution>> {
-    return taskRepo.getExecutionsPage(filters)
+  async fetchExecutionsPage(filters: TaskExecutionFilters): Promise<PageResult<TaskExecution>> {
+    return taskRepo.fetchExecutionsPage(filters)
   }
 
   /**

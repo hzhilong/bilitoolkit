@@ -4,8 +4,7 @@ import PluginList from '@/renderer/components/plugin/PluginList.vue'
 import type { ToolkitPluginWithNpmInfo } from '@/shared/types/toolkit-plugin.js'
 import { onMounted, ref } from 'vue'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
-import { useLoadingData } from 'bilitoolkit-ui'
-import type { PageData } from '@/shared/types/page'
+import { useLoadingData, type PageData } from 'bilitoolkit-ui'
 
 const defaultPageData: PageData = {
   pageNum: 1,

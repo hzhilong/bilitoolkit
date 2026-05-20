@@ -12,8 +12,8 @@ import { parseNpmSearchResultPkg } from '@/shared/utils/plugin-parse.js'
 import { toIPC } from 'bilitoolkit-runtime'
 import { getFormattedDate } from '@ybgnb/utils'
 import { searchPackages, type NpmSearchResultItem, SearchText } from 'public-registry-api'
-import type { PageResult } from '@/shared/types/page'
 import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
+import type { PageResult } from 'bilitoolkit-ui'
 
 export class PluginUtils {
   static async openPluginView(plugin: ToolkitPlugin) {

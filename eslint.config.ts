@@ -1,4 +1,4 @@
-import { globalIgnores } from 'eslint/config'
+import { globalIgnores, type Config } from 'eslint/config'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVue from 'eslint-plugin-vue'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
@@ -9,6 +9,14 @@ import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 // More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
 
 export default defineConfigWithVueTs(
+  {
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+        //        projectService: true,
+      },
+    },
+  },
   {
     name: 'app/files-to-lint',
     files: ['**/*.{ts,mts,tsx,vue}'],
@@ -37,4 +45,4 @@ export default defineConfigWithVueTs(
       ],
     },
   },
-)
+) as Config[]
