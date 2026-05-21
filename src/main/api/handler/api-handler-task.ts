@@ -13,7 +13,7 @@ import type {
 
 import { taskService } from '@/main/service/task.service.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
-import type { PageResult } from 'bilitoolkit-ui'
+import type { PageResult, PageParams } from 'bilitoolkit-ui'
 
 /**
  * 任务API处理器
@@ -39,9 +39,10 @@ export class TaskApiHandler extends ApiHandleStrategy implements IpcToolkitTaskA
 
   async getTaskExecutionsByPage(
     context: ApiCallerContext,
+    pageParams: PageParams,
     filters: TaskExecutionFilters,
   ): Promise<PageResult<TaskExecution>> {
-    return taskService.fetchExecutionsPage(filters)
+    return taskService.fetchExecutionsPage(pageParams, filters)
   }
 
   createTask(context: ApiCallerContext, task: Omit<Task, 'id' | 'createdAt'>): Promise<Task> {

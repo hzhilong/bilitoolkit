@@ -11,6 +11,7 @@ import type {
   ToolkitSystemApi,
   ToolkitWindowApi,
   ToolkitUserApi,
+  ToolkitTimerApi,
 } from 'bilitoolkit-types'
 import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.js'
 
@@ -185,3 +186,14 @@ export type GeneratedIpcToolkitEventApi = AddApiCallerContext<ToolkitEventApi>
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IpcToolkitEventApi extends GeneratedIpcToolkitEventApi {}
+
+/**
+ * 自动生成 定时器相关的API（添加API调用的上下文参数）
+ */
+export type GeneratedIpcToolkitTimerApi = AddApiCallerContext<ToolkitTimerApi>
+
+/**
+ * 定时器相关的API（添加API调用的上下文参数）
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IpcToolkitTimerApi extends GeneratedIpcToolkitTimerApi {}

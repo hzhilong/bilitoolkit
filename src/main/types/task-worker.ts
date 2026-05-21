@@ -1,5 +1,4 @@
 import type { TaskLogLevel } from 'bilitoolkit-types'
-
 /**
  * 工作线程的数据
  */

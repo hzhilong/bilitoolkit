@@ -8,7 +8,7 @@ import type {
   TaskDispatchResult,
   TaskUpdate,
 } from '@/shared/types/task.js'
-import type { PageResult } from 'bilitoolkit-ui'
+import type { PageResult, PageParams } from 'bilitoolkit-ui'
 
 /**
  * 任务相关的API
@@ -32,7 +32,7 @@ export interface ToolkitTaskApi {
   /**
    * 获取任务执行记录的分页数据
    */
-  getTaskExecutionsByPage(filters: TaskExecutionFilters): Promise<PageResult<TaskExecution>>
+  getTaskExecutionsByPage(pageParams: PageParams, filters: TaskExecutionFilters): Promise<PageResult<TaskExecution>>
 
   /**
    * 获取任务执行记录的日志

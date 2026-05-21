@@ -13,4 +13,11 @@ export const defaultAppInstalledPlugins: AppInstalledPlugins = {
   plugins: [],
 }
 
+/**
+ * 事件前缀
+ */
+export const EVENT_PREFIX = {
+  TIMER: 'TIMER_',
+}
+
 export const defaultPluginStars: string[] = []

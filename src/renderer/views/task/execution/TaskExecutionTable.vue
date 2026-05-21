@@ -74,10 +74,11 @@
 import type { TaskExecution } from '@/shared/types/task.js'
 import { ref, watch } from 'vue'
 import { toolkitApi } from '@/renderer/api/toolkit-api.js'
-import { AppTooltip, useLoadingData, formatTime, type PageData } from 'bilitoolkit-ui'
+import { AppTooltip, useLoadingData, type PageData } from 'bilitoolkit-ui'
 import TaskExecutionLogsModal from '@/renderer/views/task/execution-log/TaskExecutionLogsModal.vue'
 import ExecutionResultModal from '@/renderer/views/task/execution/ExecutionResultModal.vue'
 import type { TaskResult } from 'bilitoolkit-types'
+import { formatTime } from '@ybgnb/utils'
 
 interface TaskExecutionTableProps {
   taskId: number
@@ -96,11 +97,15 @@ const tableData = ref<TaskExecution[]>([])
 const { loading, loadingData } = useLoadingData()
 
 const refreshTableData = loadingData(async () => {
-  const { data, ...page } = await toolkitApi.task.getTaskExecutionsByPage({
-    taskId: props.taskId,
-    pageNum: pageData.value.pageNum,
-    pageSize: pageData.value.pageSize,
-  })
+  const { data, ...page } = await toolkitApi.task.getTaskExecutionsByPage(
+    {
+      pageNum: pageData.value.pageNum,
+      pageSize: pageData.value.pageSize,
+    },
+    {
+      taskId: props.taskId,
+    },
+  )
   tableData.value = data
   pageData.value = page
 })

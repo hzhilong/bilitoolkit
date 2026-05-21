@@ -18,7 +18,7 @@ import { BaseRepository } from '@/main/db/repository/base.js'
 import { mapRowToTask, mapRowToExecution } from '@/main/db/utils/db.js'
 import type { TaskExecutionRow, DatabaseSchema } from '@/main/db/schema.js'
 import type { Transaction } from 'kysely'
-import type { PageResult } from 'bilitoolkit-ui'
+import type { PageResult, PageParams } from 'bilitoolkit-ui'
 
 export class TaskRepository extends BaseRepository {
   async getTasks(pluginId?: string): Promise<Task[]> {
@@ -103,7 +103,7 @@ export class TaskRepository extends BaseRepository {
    * 获取执行记录的分页数据
    * @param filters 查询条件
    */
-  async fetchExecutionsPage(filters: TaskExecutionFilters): Promise<PageResult<TaskExecution>> {
+  async fetchExecutionsPage(pageParams: PageParams, filters: TaskExecutionFilters): Promise<PageResult<TaskExecution>> {
     let query = db.selectFrom('task_executions').selectAll()
 
     if (filters.id) {
@@ -135,9 +135,9 @@ export class TaskRepository extends BaseRepository {
     const baseQuery = query
 
     // 处理分页（仅对获取数据的 query 生效）
-    const pageSize = filters.pageSize
+    const pageSize = pageParams.pageSize
     const limit = pageSize
-    const pageNum = filters.pageNum
+    const pageNum = pageParams.pageNum
     const offset = (pageNum - 1) * pageSize
     query = query.limit(limit).offset(offset)
 

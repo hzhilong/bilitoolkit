@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
-
 import router from './router/index.js'
 import App from '@/renderer/App.vue'
 import { logger } from '@/renderer/common/renderer-logger.js'

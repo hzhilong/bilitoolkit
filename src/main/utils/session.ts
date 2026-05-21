@@ -11,12 +11,12 @@ export function getSessionPartition(envType: 'host' | 'host-dialog' | 'plugin', 
   if (envType === 'host') {
     return session.defaultSession
   } else if (envType === 'host-dialog') {
-    return session.fromPartition(`<dialog-app>`)
+    return session.fromPartition(`persist:dialog-app`)
   } else {
     if (!plugin) {
       throw new Error('内部错误')
     }
-    return session.fromPartition('<plugin-' + plugin.id + '>')
+    return session.fromPartition('persist:plugin-' + plugin.id)
   }
 }
 

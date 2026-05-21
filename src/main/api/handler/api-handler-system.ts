@@ -14,6 +14,10 @@ export class SystemApiHandler extends ApiHandleStrategy implements IpcToolkitSys
     super()
   }
 
+  ping(_context: ApiCallerContext): Promise<boolean> {
+    return Promise.resolve(true)
+  }
+
   /**
    * 暂未适配该平台
    */

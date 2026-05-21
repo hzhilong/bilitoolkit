@@ -14,6 +14,7 @@ import { BaseWindowManager } from '@/main/window/base-window-manager.js'
 import { UserApiHandler } from '@/main/api/handler/api-handler-user.js'
 import { TaskApiHandler } from '@/main/api/handler/api-handler-task.js'
 import { HOST_API_MODULES } from '@/main/common/main-constants.js'
+import { TimerApiHandler } from '@/main/api/handler/api-handler-timer.js'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -36,6 +37,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     this.register('user', new UserApiHandler(wm))
     this.register('core', new CoreApiHandler())
     this.register('task', new TaskApiHandler())
+    this.register('timer', new TimerApiHandler())
   }
 
   /**

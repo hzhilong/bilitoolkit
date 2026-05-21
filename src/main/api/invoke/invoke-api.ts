@@ -3,6 +3,7 @@ import { globalApi } from '@/main/api/invoke/invoke-api-global.js'
 import type { ToolkitApi } from 'bilitoolkit-types'
 import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.js'
 import { baseInvokeApi } from '@/main/api/invoke/base-invoke.js'
+import { timerApi } from '@/main/api/invoke/invoke-api-timer.js'
 
 export const baseToolkitInvoke = baseInvokeApi
 
@@ -11,6 +12,7 @@ export const baseToolkitInvoke = baseInvokeApi
  */
 const commonToolkitApi = {
   event: eventApi,
+  timer: timerApi,
 }
 
 /**

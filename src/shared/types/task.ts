@@ -2,7 +2,6 @@
 
 import type { TaskSchedule, TaskResult, TaskConfigField, TaskConfigSchema, TaskLogLevel } from 'bilitoolkit-types'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
-import type { PageParams } from 'bilitoolkit-ui'
 import type { MaxLengthArray } from '@ybgnb/utils'
 
 /**
@@ -96,14 +95,12 @@ export interface TaskExecution {
 /**
  * 任务执行记录过滤条件
  */
-export type TaskExecutionFilters = PageParams<
-  Omit<TaskExecution, 'result' | 'startedAt' | 'endedAt'> & {
-    /** 启动时间 */
-    startedAt?: MaxLengthArray<number, 2>
-    /** 结束时间 */
-    endedAt?: MaxLengthArray<number, 2>
-  }
->
+export type TaskExecutionFilters = Partial<Omit<TaskExecution, 'result' | 'startedAt' | 'endedAt'>> & {
+  /** 启动时间 */
+  startedAt?: MaxLengthArray<number, 2>
+  /** 结束时间 */
+  endedAt?: MaxLengthArray<number, 2>
+}
 
 /**
  * 任务执行日志
