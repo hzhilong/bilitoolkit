@@ -17,6 +17,10 @@ export class DBApiHandler extends ApiHandleStrategy implements IpcToolkitDBApi {
     DBUtils.createDBRootDir()
   }
 
+  async getRootDir(context: ApiCallerContext): Promise<string> {
+    return context.dbPath
+  }
+
   async has(context: ApiCallerContext, id: string): Promise<boolean> {
     return fs.existsSync(DBUtils.getDocFilePath(context.dbPath, id))
   }

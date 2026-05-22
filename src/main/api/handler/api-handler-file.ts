@@ -27,6 +27,10 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
     return absolutePath
   }
 
+  async getRootDir(context: ApiCallerContext): Promise<string> {
+    return context.filePath
+  }
+
   async exists(context: ApiCallerContext, filePath: string): Promise<boolean> {
     return this._exists(await this._getFilePath(context, filePath))
   }
