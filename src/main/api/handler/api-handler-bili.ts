@@ -1,9 +1,8 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
 import type { ApiCallerContext, IpcToolkitBiliApi } from '@/main/types/ipc-toolkit-api.js'
 import { type BaseWindowManager } from '@/main/window/base-window-manager.js'
-import type { BiliApiClientConfig, BiliApiMethod } from 'bilitoolkit-types'
-import { biliClientManager } from '@/main/modules/client-manager.js'
-import { dynamicCall } from '@ybgnb/utils'
+import type { BiliApiClientConfig, BiliApiMethod, ApiProxyContext } from 'bilitoolkit-types'
+import { biliApiProxy } from '@/main/modules/bili-api-proxy.js'
 
 /**
  * bili API处理器
@@ -24,25 +23,29 @@ export class BiliApiHandler extends ApiHandleStrategy implements IpcToolkitBiliA
     context: ApiCallerContext,
     config?: Partial<Omit<BiliApiClientConfig, 'id'>>,
   ): Promise<BiliApiClientConfig> {
-    return biliClientManager.create(config, context.envType !== 'host' ? context.plugin : undefined)
+    return biliApiProxy.create(config, context.envType !== 'host' ? context.plugin : undefined)
   }
 
   /**
    * 调用 bili-api 方法（由主线程发起请求，所以可以操作多用户）
+   * @description 不可传入 signal 等非结构化的参数
    * @param context
-   * @param clientId  由createBiliClient创建的客户端ID
+   * @param apiProxyContext  api 代理上下文
    * @param apiInvokePath api调用路径（可传入服务方法 client.xxxService.xxx 或者基础请求方法 client.api.xxx，不包含'client.'，
    *  这里的类型只是方便自动提示，实际传入请使用库 bilitoolkit-runtime 的 createBiliApiProxy().xxx.xxx ）
    * @param args          api 方法参数
    * @example await api(null, c.user.getUserCards, 22)
    */
-  invokeBiliApi<AM extends BiliApiMethod>(
+  async invokeBiliApi<AM extends BiliApiMethod>(
     context: ApiCallerContext,
-    clientId: string,
+    apiProxyContext: ApiProxyContext,
     apiInvokePath: AM,
     ...args: Parameters<AM>
-  ): ReturnType<AM> {
-    const client = biliClientManager.get(clientId)
-    return dynamicCall(client, apiInvokePath as unknown as string, ...args)
+  ): Promise<Awaited<ReturnType<AM>>> {
+    return await biliApiProxy.invokeBiliApi(apiProxyContext, apiInvokePath, ...args)
+  }
+
+  abortBiliApi(context: ApiCallerContext, abortSignalId: string): Promise<void> {
+    return biliApiProxy.abortBiliApi(abortSignalId)
   }
 }

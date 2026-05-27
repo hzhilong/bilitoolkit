@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BizResult } from '@ybgnb/utils'
 import { ipcRenderer } from 'electron'
 import type { ToolkitApiModule, ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.js'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.js'
@@ -14,13 +13,9 @@ import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
 export async function baseInvokeApi<T>(apiPath: string, ...args: any[]): Promise<T> {
   const [module, name] = apiPath.split('.')
   const options: PluginApiInvokeOptions = { module: module as keyof ToolkitApiWithCore, name, args: args }
-  // 当作前后端通信就行，后端只能传序列化的数据，所有异步任务的结果需要包装成 BizResult，获取后再解包成Promise
-  const result = (await ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_APIS, options)) as BizResult<T>
-  if (result.success) {
-    return result.data as T
-  } else {
-    throw new Error(result.msg)
-  }
+  // 当作前后端通信就行，后端只能传序列化的数据，所有异步任务的结果需要包装成 BizResult
+  // ，渲染进程再解包成Promise。不要在preload解包，会丢失Error.name
+  return await ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_APIS, options)
 }
 
 /**
@@ -35,11 +30,7 @@ export async function invokeModuleApi<A, T = void>(
   ...args: any[]
 ): Promise<T> {
   const options: PluginApiInvokeOptions = { module, name, args: args }
-  // 当作前后端通信就行，后端只能传序列化的数据，所有异步任务的结果需要包装成BuResult，获取后再解包成Promise
-  const result = (await ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_APIS, options)) as BizResult<T>
-  if (result.success) {
-    return result.data as T
-  } else {
-    throw new Error(result.msg)
-  }
+  // 当作前后端通信就行，后端只能传序列化的数据，所有异步任务的结果需要包装成 BizResult
+  // ，渲染进程再解包成Promise。不要在preload解包，会丢失Error.name
+  return await ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_APIS, options)
 }

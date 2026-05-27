@@ -6,14 +6,14 @@ function d(e) {
   let t = Object.getPrototypeOf(e);
   return t === Object.prototype || t === null;
 }
-function s(e, t = /* @__PURE__ */ new WeakMap()) {
+function i(e, t = /* @__PURE__ */ new WeakMap()) {
   if (typeof e == "function") return;
   if (e === null || typeof e != "object" || e instanceof Date || e instanceof RegExp || e instanceof Map || e instanceof Set || ArrayBuffer.isView(e) || e instanceof ArrayBuffer) return e;
   if (t.has(e)) return t.get(e);
   if (Array.isArray(e)) {
     let o = [];
     t.set(e, o);
-    for (let n of e) o.push(s(n, t));
+    for (let n of e) o.push(i(n, t));
     return o;
   }
   if (!d(e)) return e;
@@ -21,7 +21,7 @@ function s(e, t = /* @__PURE__ */ new WeakMap()) {
   t.set(e, r);
   for (let [o, n] of Object.entries(e)) {
     if (typeof n == "function") continue;
-    let c = s(n, t);
+    let c = i(n, t);
     c !== void 0 && (r[o] = c);
   }
   return r;
@@ -34,16 +34,16 @@ if (!l)
 function h(...e) {
   return e.map((t) => typeof t == "string" ? t : p.inspect(t, { depth: null, colors: !1 })).join(" ");
 }
-const i = /* @__PURE__ */ new Map();
+const s = /* @__PURE__ */ new Map();
 l.on("message", (e) => {
   if (e?.type !== "rpc:api:result") return;
-  const t = i.get(e.callId);
-  t && (i.delete(e.callId), e.ok ? t.resolve(e.value) : t.reject(Object.assign(new Error(e.error.message), e.error)));
+  const t = s.get(e.callId);
+  t && (s.delete(e.callId), e.ok ? t.resolve(e.value) : t.reject(Object.assign(new Error(e.error.message), e.error)));
 });
 function T(e, t) {
   return new Promise((r, o) => {
     const n = crypto.randomUUID();
-    i.set(n, { resolve: r, reject: o }), l.postMessage({
+    s.set(n, { resolve: r, reject: o }), l.postMessage({
       type: "rpc:api:call",
       callId: n,
       path: e,
@@ -142,7 +142,7 @@ async function x() {
     const n = await Reflect.apply(o, a.module.exports, [a.taskContext]);
     l.postMessage({
       type: "done",
-      result: s(n)
+      result: i(n)
     });
   } catch (e) {
     console.error(e), l.postMessage({

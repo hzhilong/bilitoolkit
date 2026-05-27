@@ -13,7 +13,9 @@ import { appEnv } from '@ybgnb/vite-env/common'
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
 const { base64 } = usePluginIconBase64(props.plugin)
-const { loading, loadingData } = useLoadingData()
+const { loading, loadingData: WrappedLoad } = useLoadingData({
+  singleFlight: true,
+})
 const { hasInstalled } = useAppInstalledPlugins()
 const isInstalled = hasInstalled(props.plugin)
 const showInfoDialog = ref(false)
@@ -35,9 +37,9 @@ const displayInstallSize = computed(() => {
     return ``
   }
 })
-const openPlugin = () => {
+const openPlugin = WrappedLoad(() => {
   PluginUtils.openPluginView(props.plugin)
-}
+})
 const installConfirm = computed(() => {
   if (appEnv.APP_AUTHOR === props.plugin.author) {
     return '确认安装吗？'
@@ -45,15 +47,15 @@ const installConfirm = computed(() => {
     return '该插件非工具姬作者开发，确认安装吗？'
   }
 })
-const installPlugin = loadingData(async () => {
+const installPlugin = WrappedLoad(async () => {
   await PluginUtils.install(props.plugin)
   showToast('插件安装成功')
 })
-const updatePlugin = loadingData(async () => {
+const updatePlugin = WrappedLoad(async () => {
   await PluginUtils.install(props.plugin)
   showToast('插件更新成功')
 })
-const uninstallPlugin = loadingData(async () => {
+const uninstallPlugin = WrappedLoad(async () => {
   await PluginUtils.uninstall(props.plugin as InstalledToolkitPlugin)
   showToast('插件卸载成功')
 })

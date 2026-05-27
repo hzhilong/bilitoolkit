@@ -140,7 +140,7 @@ function handleLogger(
   }
   const jsonData = JSON.stringify(data)
   const argSize = jsonData.length ?? 0
-  if (argSize > 100) {
+  if (argSize > 300) {
     // 参数过长时，不在控制台打印具体参数
     mainConsoleLogger.info(`${logPrefix} ${status} ${dataName} size: ${formatSize(argSize)}`)
     mainFileLogger.info(`${logPrefix} ${status}`, jsonData)
