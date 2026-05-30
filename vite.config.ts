@@ -56,6 +56,12 @@ const baseConfig = (configEnv: ConfigEnv): UserConfig => {
       // 生成 Source Map => 开发环境日志打印时输出源码路径和行号
       sourcemap: mode !== 'production',
     },
+    optimizeDeps: {
+      // 依赖预构建，防止启动后页面频繁重新加载
+      include: ['element-plus', 'element-plus/es', 'consola', '@ybgnb/bili-api'],
+      // 将本地 Monorepo 组件库排除在预构建之外
+      exclude: ['bilitoolkit-ui'],
+    },
     css: {
       preprocessorOptions: {
         scss: {
