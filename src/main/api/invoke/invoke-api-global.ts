@@ -1,5 +1,5 @@
 import { invokeModuleApi } from './base-invoke.js'
-import { BizResult } from '@ybgnb/utils'
+import type { BizResult } from '@ybgnb/utils'
 import { cloneDeep } from 'lodash-es'
 import type { ApiCallerEnvType, LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.js'
 import type { ToolkitGlobalDataApi } from 'bilitoolkit-types'

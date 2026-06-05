@@ -83,8 +83,8 @@ defineExpose({ show, hide })
 
 .detail {
   color: var(--el-text-color-secondary);
-  margin: 10px 0;
   padding: 10px;
+  margin: 22px 0 10px;
   text-align: center;
   border: 2px dashed var(--el-border-color);
   border-radius: 12px;

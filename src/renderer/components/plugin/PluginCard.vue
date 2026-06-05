@@ -229,6 +229,7 @@ const starPlugin = () => {
     padding-top: 4px;
     margin-top: 6px;
     text-wrap: auto;
+    line-height: 1.5em;
     height: calc(1.5em * 2);
   }
 

@@ -3,6 +3,7 @@ import type { ApiCallerContext, IpcToolkitBiliApi } from '@/main/types/ipc-toolk
 import { type BaseWindowManager } from '@/main/window/base-window-manager.js'
 import type { BiliApiClientConfig, BiliApiMethod, ApiProxyContext } from 'bilitoolkit-types'
 import { biliApiProxy } from '@/main/modules/bili-api-proxy.js'
+import { type BizResult, execBiz } from '@ybgnb/utils'
 
 /**
  * bili API处理器
@@ -41,8 +42,10 @@ export class BiliApiHandler extends ApiHandleStrategy implements IpcToolkitBiliA
     apiProxyContext: ApiProxyContext,
     apiInvokePath: AM,
     ...args: Parameters<AM>
-  ): Promise<Awaited<ReturnType<AM>>> {
-    return await biliApiProxy.invokeBiliApi(apiProxyContext, apiInvokePath, ...args)
+  ): Promise<BizResult<Awaited<ReturnType<AM>>>> {
+    return execBiz(async () => {
+      return await biliApiProxy.invokeBiliApi(apiProxyContext, apiInvokePath, ...args)
+    })
   }
 
   abortBiliApi(context: ApiCallerContext, abortSignalId: string): Promise<void> {

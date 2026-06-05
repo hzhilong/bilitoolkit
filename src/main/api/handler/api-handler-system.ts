@@ -22,24 +22,23 @@ export class SystemApiHandler extends ApiHandleStrategy implements IpcToolkitSys
    * 暂未适配该平台
    */
   notAdaptedCurrPlatform(): never {
-    throw new Error('暂未适配该平台的System Api')
+    throw new Error('内部错误，暂未适配该平台的System Api')
   }
 
   async browsePage(context: ApiCallerContext, path: string): Promise<void> {
     await shell.openExternal(path)
   }
 
-  async saveLog(context: ApiCallerContext, appLog: AppLog): Promise<void> {
+  async saveLog(context: ApiCallerContext, log: AppLog): Promise<void> {
     let logger
     if (context.envType === 'host') {
       logger = mainLogger
     } else {
       logger = getPluginLogger(context.plugin.id)
     }
-    if (appLog.args) {
-      logger[appLog.level](appLog.message, ...appLog.args)
-    } else {
-      logger[appLog.level](appLog.message)
+    const args = log.data.map((d) => JSON.parse(d))
+    if (args.length > 0) {
+      logger[log.level](args[0], ...args.slice(1))
     }
   }
 

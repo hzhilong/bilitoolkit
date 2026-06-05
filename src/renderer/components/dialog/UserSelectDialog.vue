@@ -85,6 +85,7 @@ defineExpose({ show, hide })
   display: flex;
   align-items: center;
   justify-content: end;
+  padding: 10px 0;
 }
 
 .user-list {

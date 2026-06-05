@@ -105,7 +105,7 @@ export class WindowManager extends BaseWindowManager {
         return result
       } catch (e) {
         if (e instanceof BiliApiBusinessError) {
-          mainLogger.error(`${logPrefix} 执行错误`, e.message)
+          mainLogger.error(`${logPrefix} 执行错误`, e.message, e.responseCode)
         } else {
           mainLogger.error(`${logPrefix} 执行错误`, e)
         }

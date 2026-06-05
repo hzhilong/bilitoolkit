@@ -66,8 +66,7 @@ class BiliApiProxy {
         }
       }
 
-      const result = await dynamicCall(client, apiInvokePath as unknown as string, ...args)
-      return result
+      return await dynamicCall(client, apiInvokePath as unknown as string, ...args)
     } catch (error) {
       throw error
     } finally {

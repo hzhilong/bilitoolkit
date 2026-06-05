@@ -1,4 +1,4 @@
-import { BizResult } from "@ybgnb/utils";
+import type { BizResult } from '@ybgnb/utils'
 
 /**
  * IPC 请求体（主要用于 主进程=>渲染进程）
