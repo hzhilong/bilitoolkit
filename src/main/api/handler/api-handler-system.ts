@@ -5,6 +5,7 @@ import { nativeTheme, shell } from 'electron'
 import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-toolkit-api.js'
 import type { AppLog, AppThemeState } from 'bilitoolkit-types'
 import { getAppThemeState } from '@/main/utils/host-app.js'
+import { getAppLogLevel } from '@/shared/common/app-log.js'
 
 /**
  * 系统相关API处理器
@@ -27,6 +28,10 @@ export class SystemApiHandler extends ApiHandleStrategy implements IpcToolkitSys
 
   async browsePage(context: ApiCallerContext, path: string): Promise<void> {
     await shell.openExternal(path)
+  }
+
+  getLogLevel() {
+    return Promise.resolve(getAppLogLevel())
   }
 
   async saveLog(context: ApiCallerContext, log: AppLog): Promise<void> {

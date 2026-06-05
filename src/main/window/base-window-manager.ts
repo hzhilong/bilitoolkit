@@ -165,7 +165,6 @@ export abstract class BaseWindowManager {
       throw new Error('非法调用')
     }
     const window = context.window
-    mainLogger.debug(`createPluginView`, plugin)
     try {
       const webView = this.getMappingView(plugin)
       if (webView) {

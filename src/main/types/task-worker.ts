@@ -1,4 +1,5 @@
-import type { TaskLogLevel } from 'bilitoolkit-types'
+import type { LogLevel } from '@ybgnb/utils'
+
 /**
  * 工作线程的数据
  */
@@ -36,6 +37,6 @@ export type RpcApiResultMsg =
  */
 export interface RpcLogRequestMsg {
   type: 'rpc:log:call'
-  logLevel: TaskLogLevel
+  logLevel: LogLevel
   data: string
 }

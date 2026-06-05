@@ -2,7 +2,6 @@ import { appPath } from '@/main/common/app-path.js'
 import { mainEnv } from '@/main/common/main-env.js'
 import log4js from 'log4js'
 import path from 'path'
-import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
 
 // 日志路径
 export const LOG_DIR = appPath.logsPath
@@ -47,7 +46,7 @@ log4js.configure({
       // 通过 getLogger('xxx') 传入的名字来切分
       property: 'categoryName',
       extension: '.log',
-      layout: { type: 'pattern', pattern: `${patternStart} - %m%` },
+      layout: { type: 'pattern', pattern: `${prodPatternStart} - %m%` },
     },
   },
   categories: {
@@ -82,16 +81,6 @@ log4js.configure({
 export const mainLogger = log4js.getLogger('main')
 export const mainConsoleLogger = log4js.getLogger('onlyConsole')
 export const mainFileLogger = log4js.getLogger('onlyFile')
-
-/**
- * 是否打印 api 调用结果
- * @param options
- */
-export const isLogApiResult = (options: PluginApiInvokeOptions) => {
-  return (
-    options && ![`core.getPluginIcon`, 'file.write', 'core.getPluginIcon'].includes(`${options.module}.${options.name}`)
-  )
-}
 
 /**
  * 获取插件 Logger

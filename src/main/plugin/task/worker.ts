@@ -2,16 +2,15 @@
 import { parentPort, workerData } from 'node:worker_threads'
 import vm from 'node:vm'
 import type { RpcApiResultMsg, RpcApiRequestMsg, WorkerData, RpcLogRequestMsg } from '@/main/types/task-worker.js'
-import type { ConsoleMethod } from '@ybgnb/bili-api'
 import util from 'node:util'
-import type { TaskLogLevel, TaskLogger, TaskPluginToolkitApi } from 'bilitoolkit-types'
-import { serializeError, stripFunctions } from '@ybgnb/utils'
+import type { TaskPluginToolkitApi } from 'bilitoolkit-types'
+import { serializeError, stripFunctions, type LogLevel } from '@ybgnb/utils'
 
 if (!parentPort) {
   throw new Error('task-plugin.worker must run in a worker thread')
 }
 
-function formatLogMessage(...data: Parameters<ConsoleMethod>): string {
+function formatLogMessage(...data: any[]): string {
   return data
     .map((arg) => (typeof arg === 'string' ? arg : util.inspect(arg, { depth: null, colors: false })))
     .join(' ')
@@ -70,7 +69,7 @@ function createRemoteApi(path: string[] = []): TaskPluginToolkitApi {
 }
 
 function createRemoteLogger() {
-  const buildLog = (level: TaskLogLevel) => {
+  const buildLog = (level: LogLevel) => {
     return (...data: unknown[]) => {
       parentPort!.postMessage({
         type: 'rpc:log:call',
@@ -81,9 +80,9 @@ function createRemoteLogger() {
   }
 
   const logger = ['debug', 'error', 'warn', 'info'].map((level) => {
-    return [level, buildLog(level as TaskLogLevel)]
+    return [level, buildLog(level as LogLevel)]
   })
-  return Object.fromEntries(logger) satisfies TaskLogger
+  return Object.fromEntries(logger) satisfies LogLevel
 }
 
 const data = workerData as WorkerData

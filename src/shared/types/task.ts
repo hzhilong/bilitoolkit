@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { TaskSchedule, TaskResult, TaskConfigField, TaskConfigSchema, TaskLogLevel } from 'bilitoolkit-types'
+import type { TaskSchedule, TaskResult, TaskConfigField, TaskConfigSchema } from 'bilitoolkit-types'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
-import type { MaxLengthArray } from '@ybgnb/utils'
+import type { MaxLengthArray, LogLevel } from '@ybgnb/utils'
 
 /**
  * 任务插件信息
@@ -113,7 +113,7 @@ export interface TaskExecutionLog {
   /** 日志时间 */
   createdAt: number
   /** 日志级别 */
-  level: TaskLogLevel
+  level: LogLevel
   /** 日志信息 */
   message: string
 }

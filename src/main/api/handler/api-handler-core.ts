@@ -39,15 +39,15 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   }
 
   async getLogsFolderSize(_: ApiCallerContext): Promise<string> {
-    return formatFileSizeFromKB((await getFileSizeKB(appPath.logsPath)) / 1024)
+    return formatFileSizeFromKB(await getFileSizeKB(appPath.logsPath))
   }
 
   async getDBsFolderSize(_: ApiCallerContext): Promise<string> {
-    return formatFileSizeFromKB((await getFileSizeKB(appPath.dbPath)) / 1024)
+    return formatFileSizeFromKB(await getFileSizeKB(appPath.dbPath))
   }
 
   async getFilesFolderSize(_: ApiCallerContext): Promise<string> {
-    return formatFileSizeFromKB((await getFileSizeKB(appPath.filePath)) / 1024)
+    return formatFileSizeFromKB(await getFileSizeKB(appPath.filePath))
   }
 
   async getInstalledPlugins(_: ApiCallerContext): Promise<AppInstalledPlugins> {

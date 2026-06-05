@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 // 导入语句会破坏类型增强 https://cn.vite.dev/guide/env-and-mode#intellisense
+
 interface ImportMetaEnv {
   readonly APP_NPM_NAME: string
   readonly APP_PRODUCT_NAME: string
@@ -10,7 +11,7 @@ interface ImportMetaEnv {
   readonly APP_VERSION: string
   readonly APP_AUTHOR: string
   readonly APP_REPO_URL: string
-  readonly APP_LOG_LEVEL: string
+  readonly APP_LOG_LEVEL: 'trace' | 'debug' | 'info' | 'warn' | 'error'
   readonly BASE_URL: string
   readonly MODE: string
   readonly PROD: boolean

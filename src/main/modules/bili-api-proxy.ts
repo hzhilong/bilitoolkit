@@ -1,8 +1,8 @@
-import { BiliClient, type ConsoleMethod, type BiliClientConfig } from '@ybgnb/bili-api'
+import { BiliClient, type BiliClientConfig } from '@ybgnb/bili-api'
 import type { BiliApiClientConfig, ApiProxyContext, BiliApiMethod } from 'bilitoolkit-types'
 import { generateId } from '@/main/utils/id.js'
 import { omit } from 'lodash-es'
-import { getLogLevel } from '@/shared/common/bili-api-log.js'
+import { getAppLogLevel } from '@/shared/common/app-log.js'
 import { mainFileLogger, getPluginLogger } from '@/main/common/main-logger.js'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { dynamicCall } from '@ybgnb/utils'
@@ -15,18 +15,8 @@ class BiliApiProxy {
     const logger = plugin ? getPluginLogger(plugin.id) : mainFileLogger
     const client = new BiliClient({
       ...config,
-      logLevel: getLogLevel(),
-      logger: {
-        debug: (...data: Parameters<ConsoleMethod>) => {
-          logger.debug(...data)
-        },
-        info: (...data: Parameters<ConsoleMethod>) => {
-          logger.info(...data)
-        },
-        error: (...data: Parameters<ConsoleMethod>) => {
-          logger.error(...data)
-        },
-      },
+      logLevel: getAppLogLevel(),
+      logger: logger,
     })
     const id = generateId()
     this.clients.set(id, client)

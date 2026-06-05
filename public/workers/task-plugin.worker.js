@@ -1,4 +1,4 @@
-import { parentPort as s, workerData as b } from "node:worker_threads";
+import { parentPort as s, workerData as p } from "node:worker_threads";
 import u from "node:vm";
 import d from "node:util";
 function m(e) {
@@ -80,7 +80,7 @@ function w() {
   }, o = ["debug", "error", "warn", "info"].map((t) => [t, e(t)]);
   return Object.fromEntries(o);
 }
-const p = b, a = {
+const b = p, a = {
   // ===== 基础 =====
   console,
   // ===== Web API（Node 18+）=====
@@ -123,7 +123,7 @@ a.exports = a.module.exports;
 a.global = a;
 a.globalThis = a;
 a.taskContext = {
-  ...p.taskContext,
+  ...b.taskContext,
   logger: w(),
   api: g()
 };
@@ -136,7 +136,7 @@ const x = u.createContext(a, {
 });
 async function k() {
   try {
-    new u.Script(p.code, {
+    new u.Script(b.code, {
       filename: "task-plugin.js"
     }).runInContext(x);
     const o = a.module.exports, r = (o?.default ?? o)?.run;

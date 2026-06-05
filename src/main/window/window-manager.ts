@@ -1,18 +1,19 @@
 import { BrowserWindow, globalShortcut, ipcMain, type HandlerDetails, Menu } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
-import { execBiz } from '@ybgnb/utils'
+import { execBiz, formatUnitSize } from '@ybgnb/utils'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
 import { ToolkitApiDispatcher } from '@/main/api/handler/toolkit-api-dispatcher.js'
 import { BaseWindowManager } from '@/main/window/base-window-manager.js'
 import { showDevTools } from '@/main/utils/dev-tools.js'
-import { isLogApiResult, mainLogger, mainConsoleLogger, mainFileLogger } from '@/main/common/main-logger.js'
+import { mainLogger, mainConsoleLogger, mainFileLogger } from '@/main/common/main-logger.js'
 import { appPath } from '@/main/common/app-path.js'
 import { updateElectronApp } from 'update-electron-app'
 import { BiliApiBusinessError } from '@ybgnb/bili-api'
 import { appEnv } from '@ybgnb/vite-env/common'
 import { initDatabase } from '@/main/db/init.js'
-import { IGNORE_LOGGING_PATHS } from '@/main/common/main-constants.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
+import { LOG_IGNORED_API_SET } from '@/main/common/main-constants.js'
+import util from 'node:util'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -100,7 +101,7 @@ export class WindowManager extends BaseWindowManager {
         }
         const result = await this.apiDispatcher.handle(event, options, apiCallerContext)
         if (!isDialog) {
-          handleLogger(options, logPrefix, '执行成功', 'rep', isLogApiResult(result) ? result : null)
+          handleLogger(options, logPrefix, '执行成功', 'rep', result)
         }
         return result
       } catch (e) {
@@ -115,16 +116,6 @@ export class WindowManager extends BaseWindowManager {
   }
 }
 
-// 格式化大小
-function formatSize(bytes: number) {
-  if (bytes === 0) return '0 B'
-  const units = ['B', 'KB', 'MB', 'GB', 'TB']
-  const k = 1000
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  const size = bytes / Math.pow(k, i)
-  return `${size.toFixed(1)} ${units[i]}`
-}
-
 // 处理日志打印
 function handleLogger(
   options: Omit<PluginApiInvokeOptions, 'args'>,
@@ -133,16 +124,18 @@ function handleLogger(
   dataName: 'arg' | 'rep',
   data: unknown,
 ) {
-  if (IGNORE_LOGGING_PATHS.includes(`${options.module}.${options.name}`)) return
+  if (LOG_IGNORED_API_SET.has(`${options.module}.${options.name}`)) return
   if (data == null || data === '') {
     mainLogger.info(`${logPrefix} ${status}`)
     return
   }
-  const jsonData = JSON.stringify(data)
+  const jsonData = util.inspect(data, { depth: null, colors: false })
   const argSize = jsonData.length ?? 0
   if (argSize > 300) {
     // 参数过长时，不在控制台打印具体参数
-    mainConsoleLogger.info(`${logPrefix} ${status} ${dataName} size: ${formatSize(argSize)}`)
+    mainConsoleLogger.info(
+      `${logPrefix} ${status} ${dataName} size: ${formatUnitSize(argSize, 1024, ['B', 'KB', 'MB', 'GB', 'TB'], '').text}`,
+    )
     mainFileLogger.info(`${logPrefix} ${status}`, jsonData)
   } else {
     mainLogger.info(`${logPrefix} ${status}`, jsonData)

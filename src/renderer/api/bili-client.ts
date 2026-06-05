@@ -1,4 +1,4 @@
 import { BiliClient } from '@ybgnb/bili-api'
-import { getLogLevel } from '@/shared/common/bili-api-log.js'
+import { getAppLogLevel } from '@/shared/common/app-log'
 
-export const biliClient = new BiliClient({ logLevel: getLogLevel() })
+export const biliClient = new BiliClient({ logLevel: getAppLogLevel() })
