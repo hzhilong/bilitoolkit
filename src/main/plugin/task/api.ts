@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import DBUtils from '@/main/utils/db.js'
-import { FileUtils } from '@/main/utils/file.js'
 import type { PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.js'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { windowManager } from '@/main/window/window-manager.js'
 import type { ToolkitApi, TaskPluginToolkitApi } from 'bilitoolkit-types'
+import { getFileRootPath } from '@/main/utils/file.js'
 
 export function buildTaskPluginApiCallerContext(plugin: InstalledToolkitPlugin) {
   return {
@@ -13,7 +13,7 @@ export function buildTaskPluginApiCallerContext(plugin: InstalledToolkitPlugin) 
     window: windowManager.mainWindow!,
     webContents: windowManager.mainWindow!.webContents,
     dbPath: DBUtils.getDBPath('plugin', plugin),
-    filePath: FileUtils.getFileRootPath('plugin', plugin),
+    filePath: getFileRootPath('plugin', plugin),
   } satisfies PluginApiCallerContext
 }
 

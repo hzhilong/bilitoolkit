@@ -29,6 +29,8 @@ export const LOG_IGNORED_API_PATHS = [
   'core.getPluginIcon',
   'file.write',
   'bili.invokeBiliApi',
+  'system.saveLog',
+  'system.getAppThemeState',
 ]
 
 // 忽略打印日志的 API 路径

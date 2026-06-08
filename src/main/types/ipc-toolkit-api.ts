@@ -147,7 +147,7 @@ export interface IpcToolkitDBApi extends GeneratedIpcToolkitDBApi {}
 /**
  * 文件相关的API（添加API调用的上下文参数）
  */
-export type GeneratedIpcToolkitFileApi = AddApiCallerContext<ToolkitFileApi>
+export type GeneratedIpcToolkitFileApi = AddApiCallerContext<Omit<ToolkitFileApi, 'open'>>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IpcToolkitFileApi extends GeneratedIpcToolkitFileApi {}
 

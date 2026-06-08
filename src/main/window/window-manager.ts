@@ -14,6 +14,7 @@ import { initDatabase } from '@/main/db/init.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
 import { LOG_IGNORED_API_SET } from '@/main/common/main-constants.js'
 import util from 'node:util'
+import { fileHandleManger } from '@/main/modules/file-handle/file-handle-manager.js'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -63,6 +64,8 @@ export class WindowManager extends BaseWindowManager {
     await this.initAppDialogView()
     // 初始化任务调度
     void taskRuntime.bootstrap()
+    // 初始化文件句柄API
+    fileHandleManger.init()
     if (appPath.devUrl) {
       // 开发
       mainWindow.loadURL(appPath.devUrl).then(() => {})

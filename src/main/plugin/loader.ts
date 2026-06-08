@@ -9,7 +9,6 @@ import { parsePluginKeywords } from '@/shared/utils/plugin-parse.js'
 import path from 'path'
 import fs from 'fs'
 import type { PackageJSON } from '@npm/types'
-import { FileUtils } from '@/main/utils/file.js'
 import { IconUtils } from '@/main/utils/icon.js'
 import { writeFileSync } from 'node:fs'
 import { mainEnv } from '@/main/common/main-env.js'
@@ -19,6 +18,7 @@ import DBUtils from '@/main/utils/db.js'
 import type { TaskPluginInfo } from '@/shared/types/task.js'
 import { loadTaskPluginMeta } from '@/main/plugin/task/loader.js'
 import { readJSONFile, getDirSize, formatFileSizeFromKB, emptyDirectory } from '@ybgnb/utils/node'
+import { getFileRootPath } from '@/main/utils/file.js'
 
 /**
  * 读取插件的 package.json
@@ -150,7 +150,7 @@ async function loadTestPluginByFile(rootPath: string): Promise<InstalledToolkitP
  */
 export async function removeTestPlugin(plugin: InstalledToolkitPlugin) {
   await emptyDirectory(DBUtils.getDBPath('plugin', plugin))
-  await emptyDirectory(FileUtils.getFileRootPath('plugin', plugin))
+  await emptyDirectory(getFileRootPath('plugin', plugin))
 }
 
 /**

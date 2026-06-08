@@ -1,6 +1,6 @@
 import { mainLogger, getPluginLogger } from '@/main/common/main-logger.js'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
-import { FileUtils } from '@/main/utils/file.js'
+import { showItemInFolder as _showItemInFolder } from '@/main/utils/file.js'
 import { nativeTheme, shell } from 'electron'
 import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-toolkit-api.js'
 import type { AppLog, AppThemeState } from 'bilitoolkit-types'
@@ -48,7 +48,7 @@ export class SystemApiHandler extends ApiHandleStrategy implements IpcToolkitSys
   }
 
   async showItemInFolder(context: ApiCallerContext, path: string): Promise<void> {
-    return FileUtils.showItemInFolder(path)
+    return _showItemInFolder(path)
   }
 
   async shouldUseDarkColors(_: ApiCallerContext): Promise<boolean> {

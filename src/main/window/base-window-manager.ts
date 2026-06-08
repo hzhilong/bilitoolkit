@@ -9,11 +9,11 @@ import { appPath } from '@/main/common/app-path.js'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.js'
 import { defaultsDeep, debounce } from 'lodash-es'
 import DBUtils from '@/main/utils/db.js'
-import { FileUtils } from '@/main/utils/file.js'
 import { injectingPluginMetadata } from '@/main/preloads/plugin-meta.js'
 import { _getGlobalData } from '@/main/api/handler/api-handler-global.js'
 import type { AppDialogType } from '@/shared/types/app-dialog.js'
 import { getSessionPartition } from '@/main/utils/session.js'
+import { getFileRootPath } from '@/main/utils/file.js'
 
 type Rectangle = Electron.Rectangle
 
@@ -100,7 +100,7 @@ export abstract class BaseWindowManager {
         window: window,
         webContents: sender,
         dbPath: DBUtils.getDBPath('host'),
-        filePath: FileUtils.getFileRootPath('host'),
+        filePath: getFileRootPath('host'),
         isDialogWebContents: this.appDialogWebContents?.id === sender.id,
       } satisfies HostApiCallerContext
     } else {
@@ -114,7 +114,7 @@ export abstract class BaseWindowManager {
         webContentsView: this.getMappingView(sender),
         hostWebContents: window.webContents,
         dbPath: DBUtils.getDBPath('plugin', plugin),
-        filePath: FileUtils.getFileRootPath('plugin', plugin),
+        filePath: getFileRootPath('plugin', plugin),
       } satisfies PluginApiCallerContext
     }
   }

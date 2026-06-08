@@ -1,6 +1,5 @@
 import { appPath } from '@/main/common/app-path.js'
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
-import { FileUtils } from '@/main/utils/file.js'
 import type { ApiCallerContext, IpcToolkitCoreApi } from '@/main/types/ipc-toolkit-api.js'
 import {
   type AppInstalledPlugins,
@@ -18,6 +17,7 @@ import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.js'
 import { userService } from '@/main/service/user.service.js'
 import { getFileSizeKB, formatFileSizeFromKB } from '@ybgnb/utils/node'
+import { showItemInFolder } from '@/main/utils/file.js'
 
 /**
  * 核心API处理器
@@ -27,15 +27,15 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     super()
   }
   openLogsFolder(_: ApiCallerContext): Promise<void> {
-    return FileUtils.showItemInFolder(appPath.logsPath)
+    return showItemInFolder(appPath.logsPath)
   }
 
   openDBsFolder(_: ApiCallerContext): Promise<void> {
-    return FileUtils.showItemInFolder(appPath.dbPath)
+    return showItemInFolder(appPath.dbPath)
   }
 
   openFilesFolder(_: ApiCallerContext): Promise<void> {
-    return FileUtils.showItemInFolder(appPath.filePath)
+    return showItemInFolder(appPath.filePath)
   }
 
   async getLogsFolderSize(_: ApiCallerContext): Promise<string> {
