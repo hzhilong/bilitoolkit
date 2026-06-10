@@ -31,12 +31,11 @@ export const registerGlobalData = (
     if (dataName === requestBody.name) {
       // 回传给主进程
       if (requestBody.args) {
-        event.sender.send(
-          IPC_CHANNELS.RESPONSE_DATA,
-          toIpcResponseBody(requestBody, cloneDeep(await getFn(...requestBody.args))),
-        )
+        const data = cloneDeep(await getFn(...requestBody.args))
+        event.sender.send(IPC_CHANNELS.RESPONSE_DATA, toIpcResponseBody(requestBody, data))
       } else {
-        event.sender.send(IPC_CHANNELS.RESPONSE_DATA, toIpcResponseBody(requestBody, cloneDeep(await getFn())))
+        const data = cloneDeep(await getFn())
+        event.sender.send(IPC_CHANNELS.RESPONSE_DATA, toIpcResponseBody(requestBody, data))
       }
     }
   })

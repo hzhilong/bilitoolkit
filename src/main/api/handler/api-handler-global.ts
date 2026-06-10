@@ -2,11 +2,11 @@ import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
 import { generateId } from '@/main/utils/id.js'
 import type { WebContents } from 'electron'
 import { ipcMain } from 'electron'
-import { cloneDeep } from 'lodash-es'
 import type { IpcRequestBody, IpcResponseBody } from '@/main/types/ipc-request.js'
 import type { ApiCallerContext, IpcToolkitGlobalApi } from '@/main/types/ipc-toolkit-api.js'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
 import type { BaseWindowManager } from '@/main/window/base-window-manager.js'
+import { unwrapBizResult } from '@ybgnb/utils'
 
 type IpcMainEvent = Electron.IpcMainEvent
 
@@ -32,11 +32,7 @@ export const _getGlobalData = (
         ipcMain.removeListener(IPC_CHANNELS.RESPONSE_DATA, responseListener) // 清理监听器
         isFinish = true
         // 解包BizResult
-        if (rep.data.success) {
-          resolve(cloneDeep(rep.data.data))
-        } else {
-          reject(rep.data.msg)
-        }
+        unwrapBizResult(rep.data).then(resolve).catch(reject)
       }
     }
     ipcMain.on(IPC_CHANNELS.RESPONSE_DATA, responseListener)
