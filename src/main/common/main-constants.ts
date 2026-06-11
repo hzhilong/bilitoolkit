@@ -22,16 +22,13 @@ export const MainConstants = {
 export const HOST_API_MODULES = ['core', 'task']
 
 // 忽略打印日志的 API 路径
-export const LOG_IGNORED_API_PATHS = [
-  'task.getTaskExecutionLogs',
-  'task.getTaskList',
-  'task.getTaskExecutionsByPage',
-  'core.getPluginIcon',
-  'file.write',
+export const LOG_IGNORED_API_PATHS: (RegExp | string)[] = [
   'bili.invokeBiliApi',
   'system.saveLog',
   'system.getAppThemeState',
+  'system.shouldUseDarkColors',
 ]
 
 // 忽略打印日志的 API 路径
 export const LOG_IGNORED_API_SET = new Set(LOG_IGNORED_API_PATHS)
+export const LOG_IGNORED_API_REGEXP = [/^task\./, /^file\./]

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useAppThemeStore } from '@/renderer/stores/app-theme'
 import { ref } from 'vue'
-import { CountdownDialog, updatePrimaryColor as updatePrimary } from 'bilitoolkit-ui'
+import { CountdownDialog, updatePrimaryColor as updatePrimary, useAppThemeStore } from 'bilitoolkit-ui'
 import { APP_THEME_STATE } from 'bilitoolkit-ui/common'
 
 // 保存的主题状态

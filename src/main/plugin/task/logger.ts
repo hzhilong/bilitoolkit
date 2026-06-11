@@ -15,7 +15,7 @@ function formatLogMessage(...data: any[]): string {
 }
 
 export function buildLogger(pluginId: string, taskExecution: TaskExecution): Logger {
-  return createLogger(getAppLogLevel(), (logLevel, data) => {
+  return createLogger(getAppLogLevel(), (logLevel, ...data) => {
     // 主进程记录任务日志
     getPluginLogger(pluginId)[logLevel](`[task ${taskExecution.taskId}]`, ...data)
     const log: NewTaskExecutionLog = {

@@ -5,11 +5,10 @@ import router from './router/index.js'
 import App from '@/renderer/App.vue'
 import { logger } from '@/renderer/common/renderer-logger.js'
 import { useAppSettingsStore } from '@/renderer/stores/app-settings.js'
-import { useAppThemeStore } from '@/renderer/stores/app-theme.js'
 import DialogApp from '@/renderer/DialogApp.vue'
 import { initDialogAppListener } from '@/renderer/init/dialog-init.js'
 import { initHostAppListener } from '@/renderer/init/host-init.js'
-import { handleError, initBilitoolkitUi } from 'bilitoolkit-ui'
+import { handleError, initBilitoolkitUi, useAppThemeStore } from 'bilitoolkit-ui'
 import 'bilitoolkit-ui/style.css'
 import 'remixicon/fonts/remixicon.css'
 import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
@@ -17,6 +16,8 @@ import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.js'
 import { useUserStore } from '@/renderer/stores/user.js'
 import { appEnv } from '@ybgnb/vite-env/common'
 import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
+import { APP_DB_KEYS } from '@/shared/common/app-db'
+import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel'
 
 async function bootstrapApp() {
   if (appEnv.DEV) {
@@ -44,7 +45,10 @@ async function bootstrapApp() {
   pinia.use(piniaPluginPersistedState)
   app.use(pinia)
 
-  const ui = await initBilitoolkitUi(pinia)
+  const ui = await initBilitoolkitUi(pinia, {
+    appThemeDBName: APP_DB_KEYS.APP_THEME_STATE,
+    appThemeUpdateEvent: HOST_EVENT_CHANNELS.UPDATE_APP_THEME,
+  })
 
   if (_windowApp?.type === 'dialogApp') {
     logger.log('对话框环境初始化')

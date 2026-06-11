@@ -1,14 +1,15 @@
-import { computed, watch, ref, type Reactive } from 'vue'
+import { computed, watch, ref, toValue } from 'vue'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.js'
 import { parseGithubRepoUrl } from '@ybgnb/utils'
+import type { MaybeRefOrGetter } from '@vueuse/core'
 
 const defaultIconSrc = new URL('/images/plugin-default-icon.png', import.meta.url).href
 
 // 插件图标源，目前只支持 github仓库下 public/favicon.ico
-export const usePluginIconURL = (plugin: Reactive<ToolkitPlugin>) => {
+export const usePluginIconURL = (plugin: MaybeRefOrGetter<ToolkitPlugin>) => {
   const iconUrl = computed(() => {
-    const repository = plugin.links.repository
+    const repository = toValue(plugin).links.repository
     if (!repository) {
       return defaultIconSrc
     }
@@ -22,12 +23,12 @@ export const usePluginIconURL = (plugin: Reactive<ToolkitPlugin>) => {
   return { iconUrl }
 }
 
-export const usePluginIconBase64 = (plugin: Reactive<ToolkitPlugin> | ToolkitPlugin) => {
+export const usePluginIconBase64 = (plugin: MaybeRefOrGetter<ToolkitPlugin>) => {
   const base64 = ref('')
   watch(
-    () => plugin.id,
+    () => toValue(plugin).id,
     async () => {
-      const result = await getPluginIconCache(plugin)
+      const result = await getPluginIconCache(toValue(plugin))
       console.log('获取图标完成')
       base64.value = result
     },

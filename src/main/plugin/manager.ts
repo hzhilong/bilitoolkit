@@ -81,7 +81,7 @@ class PluginManager {
   async uninstallPlugin(id: string): Promise<void> {
     const plugin = this.getInstalledPlugin(id)
     mainLogger.info(`插件${plugin.id} ${plugin.version} 卸载中……`)
-    removePluginFile(plugin)
+    await removePluginFile(plugin)
     this.unregisterPlugin(plugin.id)
     mainLogger.info(`插件${plugin.id} ${plugin.version} 卸载成功`)
   }

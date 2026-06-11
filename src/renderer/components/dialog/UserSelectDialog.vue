@@ -59,6 +59,7 @@ defineExpose({ show, hide })
     :close-on-press-escape="false"
     :show-close="true"
     @close="handleCancel"
+    align-center
   >
     <div class="content-container">
       <div class="header">

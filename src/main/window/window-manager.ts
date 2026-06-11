@@ -1,6 +1,6 @@
 import { BrowserWindow, globalShortcut, ipcMain, type HandlerDetails, Menu } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
-import { execBiz, formatUnitSize } from '@ybgnb/utils'
+import { execBiz, formatUnitSize, isCanceledError } from '@ybgnb/utils'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
 import { ToolkitApiDispatcher } from '@/main/api/handler/toolkit-api-dispatcher.js'
 import { BaseWindowManager } from '@/main/window/base-window-manager.js'
@@ -12,7 +12,7 @@ import { BiliApiBusinessError } from '@ybgnb/bili-api'
 import { appEnv } from '@ybgnb/vite-env/common'
 import { initDatabase } from '@/main/db/init.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
-import { LOG_IGNORED_API_SET } from '@/main/common/main-constants.js'
+import { LOG_IGNORED_API_SET, LOG_IGNORED_API_REGEXP } from '@/main/common/main-constants.js'
 import util from 'node:util'
 import { fileHandleManger } from '@/main/modules/file-handle/file-handle-manager.js'
 
@@ -108,6 +108,9 @@ export class WindowManager extends BaseWindowManager {
         }
         return result
       } catch (e) {
+        if (isCanceledError(e)) {
+          throw e
+        }
         if (e instanceof BiliApiBusinessError) {
           mainLogger.error(`${logPrefix} 执行错误`, e.message, e.responseCode)
         } else {
@@ -127,7 +130,13 @@ function handleLogger(
   dataName: 'arg' | 'rep',
   data: unknown,
 ) {
-  if (LOG_IGNORED_API_SET.has(`${options.module}.${options.name}`)) return
+  const apiPath = `${options.module}.${options.name}`
+  if (LOG_IGNORED_API_SET.has(apiPath)) return
+  for (const regExp of LOG_IGNORED_API_REGEXP) {
+    if (apiPath.match(regExp)) {
+      return
+    }
+  }
   if (data == null || data === '') {
     mainLogger.info(`${logPrefix} ${status}`)
     return

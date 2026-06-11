@@ -12,7 +12,7 @@ import { appEnv } from '@ybgnb/vite-env/common'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
-const { base64 } = usePluginIconBase64(props.plugin)
+const { base64 } = usePluginIconBase64(() => props.plugin)
 const { loading, loadingData: WrappedLoad } = useLoadingData({
   singleFlight: true,
 })
@@ -136,7 +136,6 @@ const starPlugin = () => {
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  border: 2px solid var(--el-border-color);
   border-radius: 12px;
   padding: 10px 10px;
   font-size: 14px;
@@ -243,8 +242,8 @@ const starPlugin = () => {
 
     .star-btn {
       display: inline-block;
-      width: 16px;
-      height: 16px;
+      width: 24px;
+      height: 24px;
       margin-right: auto;
       font-size: 16px;
       line-height: 16px;

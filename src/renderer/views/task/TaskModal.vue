@@ -51,30 +51,27 @@ watch(
 
 const handleSubmit = async () => {
   if (!pluginConfigFormRef.value || !runConfigFormRef.value) return
-  Promise.all([pluginConfigFormRef.value.validate(), runConfigFormRef.value.validate()])
-    .then(() => {
-      if (props.type === 'add') {
-        emit('submit', {
-          type: 'add',
-          data: {
-            pluginId: props.plugin.id,
-            config: taskPluginConfig.value,
-            ...runConfig,
-          },
-        })
-      } else {
-        emit('submit', {
-          type: 'update',
-          data: {
-            ...props.task,
-            config: taskPluginConfig.value,
-            ...runConfig,
-          },
-        })
-      }
-      visible.value = false
+  if (!(await pluginConfigFormRef.value.validate()) || !(await runConfigFormRef.value.validate())) return
+  if (props.type === 'add') {
+    emit('submit', {
+      type: 'add',
+      data: {
+        pluginId: props.plugin.id,
+        config: taskPluginConfig.value,
+        ...runConfig,
+      },
     })
-    .catch(() => {})
+  } else {
+    emit('submit', {
+      type: 'update',
+      data: {
+        ...props.task,
+        config: taskPluginConfig.value,
+        ...runConfig,
+      },
+    })
+  }
+  visible.value = false
 }
 
 const handleReset = () => {

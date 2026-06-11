@@ -40,6 +40,7 @@ defineExpose({ show, hide })
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :show-close="true"
+    align-center
     @close="handleCancel"
   >
     <div class="content-container">

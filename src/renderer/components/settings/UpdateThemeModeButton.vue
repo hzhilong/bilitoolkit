@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useAppThemeStore } from '@/renderer/stores/app-theme'
-import { switchThemeMode } from 'bilitoolkit-ui'
+import { switchThemeMode, useAppThemeStore } from 'bilitoolkit-ui'
 
 const store = useAppThemeStore()
 const state = store.state

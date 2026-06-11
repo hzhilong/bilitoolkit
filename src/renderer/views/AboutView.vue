@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { useAppThemeStore } from '@/renderer/stores/app-theme'
 import type { AppThemeMode } from 'bilitoolkit-types'
 import type { Ref } from 'vue'
 import { computed } from 'vue'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
-import { switchDefaultTheme, switchThemeMode } from 'bilitoolkit-ui'
+import { switchDefaultTheme, switchThemeMode, useAppThemeStore } from 'bilitoolkit-ui'
 import { appEnv } from '@ybgnb/vite-env/common'
 
 const env = appEnv
