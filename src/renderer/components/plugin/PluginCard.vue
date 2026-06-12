@@ -17,7 +17,7 @@ const { loading, loadingData: WrappedLoad } = useLoadingData({
   singleFlight: true,
 })
 const { hasInstalled } = useAppInstalledPlugins()
-const isInstalled = computed(() => hasInstalled(props.plugin))
+const isInstalled = computed(() => hasInstalled(props.plugin.id))
 const { isStarred, addStar, removeStar } = useStarredPluginsStore()
 const star = computed(() => isStarred(props.plugin.id))
 const showInfoDialog = ref(false)

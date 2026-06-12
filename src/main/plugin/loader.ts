@@ -154,7 +154,7 @@ export async function removeTestPlugin(plugin: InstalledToolkitPlugin) {
 }
 
 /**
- * 加载推荐的插件
+ * 获取推荐的插件
  */
 export async function getRecommendedPlugins() {
   try {
@@ -165,5 +165,20 @@ export async function getRecommendedPlugins() {
     mainLogger.error('获取推荐的插件失败', getErrorMessage(error))
     // 加载本地文件（该版本app推荐的插件）
     return await readJSONFile<ToolkitPlugin[]>(path.join(appPath.appPublicPath, 'recommended-plugins.json'))
+  }
+}
+
+/**
+ * 获取屏蔽的插件id
+ */
+export async function getBlockedPluginIds() {
+  try {
+    // 先尝试从github仓库下载
+    const repo = parseGithubRepoUrl(mainEnv.APP_REPO_URL)
+    return await getGithubRawJson<string[]>({ ...repo, filePath: 'public/blocklist-plugins.json' })
+  } catch (error: unknown) {
+    mainLogger.error('获取推荐的插件失败', getErrorMessage(error))
+    // 加载本地文件（该版本app推荐的插件）
+    return await readJSONFile<string[]>(path.join(appPath.appPublicPath, 'blocklist-plugins.json'))
   }
 }

@@ -1,8 +1,8 @@
 import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { defaultAppInstalledPlugins } from '@/shared/common/app-constants'
 import { defineStore } from 'pinia'
-import { reactive, computed, type Reactive, toRef } from 'vue'
-import type { AppInstalledPlugins, InstalledToolkitPlugin, ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
+import { reactive, computed } from 'vue'
+import type { AppInstalledPlugins, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { updatePluginIconCache, getPluginIconCache } from '@/renderer/services/plugin-icon-service.js'
 
 /**
@@ -39,9 +39,8 @@ export const useAppInstalledPlugins = defineStore(
       }
     }
 
-    const hasInstalled = (plugin: Reactive<ToolkitPlugin>) => {
-      const idRef = toRef(plugin, 'id')
-      return computed(() => state.plugins.some((p) => p.id === idRef.value))
+    const hasInstalled = (pluginId: string) => {
+      return state.plugins.some((p) => p.id === pluginId)
     }
 
     return { init, state, installedPlugins, addPlugin, delPlugin, hasInstalled }

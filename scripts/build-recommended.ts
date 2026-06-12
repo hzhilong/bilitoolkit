@@ -9,8 +9,8 @@ import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
  * 构建 recommended-plugins.json 配置文件
  */
 
-// 插件的插件包
-const pluginIds = ['bilitoolkit-plugin-example']
+// 插件的id
+const pluginIds = ['bilitoolkit-plugin-backup']
 const appVersion = pkg.version
 const plugins: ToolkitPlugin[] = []
 

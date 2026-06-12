@@ -11,6 +11,7 @@ import { getSessionPartition } from '@/main/utils/session.js'
 import { taskService } from '@/main/service/task.service.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
 import { mainLogger } from '@/main/common/main-logger.js'
+import { appEnv } from '@ybgnb/vite-env/common'
 
 /**
  * 下载插件
@@ -31,8 +32,8 @@ export async function downloadPlugin(options: PluginInstallOptions) {
  * 移除插件运行文件
  */
 export async function removePluginFile(plugin: InstalledToolkitPlugin) {
-  // 只删除插件文件，不删除数据库和其他文件
-  if (!plugin.isTest) {
+  // 只删除插件文件
+  if (!plugin.isTest && !appEnv.DEV) {
     rmdirSync(path.resolve(plugin.files.rootPath), { recursive: true })
   }
   // 删除关联任务
@@ -43,5 +44,7 @@ export async function removePluginFile(plugin: InstalledToolkitPlugin) {
     }
   }
   // 清理会话数据
-  getSessionPartition('plugin', plugin).clearData()
+  if (!appEnv.DEV) {
+    getSessionPartition('plugin', plugin).clearData()
+  }
 }

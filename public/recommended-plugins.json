@@ -2,18 +2,18 @@
   "appVersion": "0.0.1",
   "plugins": [
     {
-      "name": "插件示例",
+      "name": "哔哩备份姬",
       "type": "ui",
-      "id": "bilitoolkit-plugin-example",
+      "id": "bilitoolkit-plugin-backup",
       "author": "hzhilong",
-      "description": "哔哩工具姬 插件示例",
-      "version": "0.0.4",
-      "date": "2025-09-22",
+      "description": "一键对B站账号进行数据备份和还原，方便账号数据迁移/快速转生",
+      "version": "0.0.1",
+      "date": "2025-10-01",
       "links": {
-        "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-example",
-        "homepage": "https://github.com/hzhilong/bilitoolkit-plugin-example#readme",
-        "repository": "git+https://github.com/hzhilong/bilitoolkit-plugin-example.git",
-        "bugs": "https://github.com/hzhilong/bilitoolkit-plugin-example/issues"
+        "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-backup",
+        "homepage": "https://github.com/hzhilong/bilitoolkit-plugin-backup#readme",
+        "repository": "git+https://github.com/hzhilong/bilitoolkit-plugin-backup.git",
+        "bugs": "https://github.com/hzhilong/bilitoolkit-plugin-backup/issues"
       }
     }
   ]

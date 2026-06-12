@@ -76,6 +76,11 @@ export interface ToolkitCoreApi {
   getRecommendedPlugins(): Promise<ToolkitPlugin[]>
 
   /**
+   * 获取屏蔽的插件id
+   */
+  getBlockedPluginIds(): Promise<string[]>
+
+  /**
    * 安装插件
    */
   installPlugin(options: PluginInstallOptions): Promise<InstalledToolkitPlugin>

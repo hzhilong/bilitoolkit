@@ -5,6 +5,7 @@ import type { ToolkitPluginWithNpmInfo } from '@/shared/types/toolkit-plugin.js'
 import { onMounted, ref } from 'vue'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
 import { useLoadingData, type PageData } from 'bilitoolkit-ui'
+import { toolkitApi } from '@/renderer/api/toolkit-api'
 
 const defaultPageData: PageData = {
   pageNum: 1,
@@ -16,6 +17,7 @@ const pageData = ref<PageData>(defaultPageData)
 const plugins = ref<ToolkitPluginWithNpmInfo[]>([])
 const { loading, loadingData } = useLoadingData()
 const showThirdPartyPlugins = ref<boolean>(false)
+const blockedPluginIds = ref<string[]>([])
 
 const refreshTableData = loadingData(async () => {
   const { data, ...page } = await PluginUtils.searchNpmPlugins({
@@ -23,7 +25,7 @@ const refreshTableData = loadingData(async () => {
     pageSize: pageData.value.pageSize,
     showThirdPartyPlugins: showThirdPartyPlugins.value,
   })
-  plugins.value = data
+  plugins.value = data.filter((p) => blockedPluginIds.value.indexOf(p.id) < 0)
   pageData.value = page
 })
 
@@ -38,8 +40,9 @@ const refreshTable = () => {
   refreshTableData()
 }
 
-onMounted(() => {
-  refreshTableData()
+onMounted(async () => {
+  blockedPluginIds.value = await toolkitApi.core.getBlockedPluginIds()
+  await refreshTableData()
 })
 
 const handleSizeChange = () => {

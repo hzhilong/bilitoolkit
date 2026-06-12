@@ -12,7 +12,7 @@ import {
 import { IconUtils } from '@/main/utils/icon.js'
 import { pluginManager } from '@/main/plugin/manager.js'
 import { windowManager } from '@/main/window/window-manager.js'
-import { getRecommendedPlugins } from '@/main/plugin/loader.js'
+import { getRecommendedPlugins, getBlockedPluginIds } from '@/main/plugin/loader.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.js'
 import { userService } from '@/main/service/user.service.js'
@@ -56,6 +56,10 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
 
   getRecommendedPlugins(_: ApiCallerContext): Promise<ToolkitPlugin[]> {
     return getRecommendedPlugins()
+  }
+
+  getBlockedPluginIds(_: ApiCallerContext): Promise<string[]> {
+    return getBlockedPluginIds()
   }
 
   async installPlugin(_: ApiCallerContext, options: PluginInstallOptions): Promise<InstalledToolkitPlugin> {
