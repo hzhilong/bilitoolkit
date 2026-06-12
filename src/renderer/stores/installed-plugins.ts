@@ -9,9 +9,11 @@ import { updatePluginIconCache, getPluginIconCache } from '@/renderer/services/p
  * 应用已安装的插件
  */
 export const useAppInstalledPlugins = defineStore(
-  'BiliToolkit-AppInstalledPlugins',
+  'biliToolkit-installed-plugins',
   () => {
     const state = reactive<AppInstalledPlugins>(defaultAppInstalledPlugins)
+
+    const installedPlugins = computed<Array<InstalledToolkitPlugin>>(() => state.plugins)
 
     const init = async () => {
       Object.assign(state, await toolkitApi.core.getInstalledPlugins())
@@ -42,7 +44,7 @@ export const useAppInstalledPlugins = defineStore(
       return computed(() => state.plugins.some((p) => p.id === idRef.value))
     }
 
-    return { init, state, addPlugin, delPlugin, hasInstalled }
+    return { init, state, installedPlugins, addPlugin, delPlugin, hasInstalled }
   },
   {
     // 自己实现配置的持久化

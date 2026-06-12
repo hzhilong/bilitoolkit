@@ -25,6 +25,11 @@ export const appMenus: MenuItem[] = [
     path: '/manage',
   },
   {
+    title: '最近使用',
+    icon: 'history',
+    path: '/recent',
+  },
+  {
     title: '账号管理',
     icon: 'user-settings',
     path: '/userManage',

@@ -26,6 +26,7 @@ const handleClick = () => {
       <div class="plugin-name">{{ plugin.name }}</div>
       <AppTooltip class="plugin-desc" :content="plugin.description" :lines="1"></AppTooltip>
     </div>
+    <slot :plugin="plugin"></slot>
   </div>
 </template>
 
@@ -34,6 +35,7 @@ const handleClick = () => {
 
 .plugin-card-simple {
   @include mixins.card-tech-style;
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;

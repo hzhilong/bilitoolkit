@@ -27,6 +27,11 @@ const router = createRouter({
           component: () => import('../views/PluginManage.vue'),
         },
         {
+          name: '最近使用',
+          path: '/recent',
+          component: () => import('../views/RecentPlugins.vue'),
+        },
+        {
           name: '账号管理',
           path: '/userManage',
           component: () => import('../views/UserManage.vue'),

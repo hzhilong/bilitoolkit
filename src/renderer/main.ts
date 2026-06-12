@@ -11,13 +11,14 @@ import { initHostAppListener } from '@/renderer/init/host-init.js'
 import { handleError, initBilitoolkitUi, useAppThemeStore } from 'bilitoolkit-ui'
 import 'bilitoolkit-ui/style.css'
 import 'remixicon/fonts/remixicon.css'
-import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
-import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.js'
+import { useAppInstalledPlugins } from '@/renderer/stores/installed-plugins'
+import { useStarredPluginsStore } from '@/renderer/stores/starred-plugins'
 import { useUserStore } from '@/renderer/stores/user.js'
 import { appEnv } from '@ybgnb/vite-env/common'
 import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
 import { APP_DB_KEYS } from '@/shared/common/app-db'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel'
+import { useRecentPluginsStore } from '@/renderer/stores/recent-plugins'
 
 async function bootstrapApp() {
   if (appEnv.DEV) {
@@ -63,7 +64,8 @@ async function bootstrapApp() {
     await useAppThemeStore().init()
     await useAppInstalledPlugins().init()
     await useRecommendedPlugins().init()
-    await usePluginStarsStore().init()
+    await useStarredPluginsStore().init()
+    await useRecentPluginsStore().init()
     await useUserStore().init()
     await initHostAppListener()
   }

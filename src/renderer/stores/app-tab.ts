@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 
 export const useAppTabStore = defineStore(
-  'AppTabStore',
+  'biliToolkit-tab',
   () => {
     const visitedViews = reactive<Set<string>>(new Set<string>())
 

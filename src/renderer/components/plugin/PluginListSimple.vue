@@ -17,12 +17,11 @@ const handleClick = (plugin: ToolkitPlugin) => {
 
 <template>
   <div class="plugin-list">
-    <plugin-card-simple
-      v-for="plugin in props.plugins"
-      :key="plugin.id"
-      :plugin="plugin"
-      @click="handleClick(plugin)"
-    />
+    <plugin-card-simple v-for="plugin in props.plugins" :key="plugin.id" :plugin="plugin" @click="handleClick(plugin)">
+      <template v-slot="{ plugin }">
+        <slot :plugin="plugin"></slot>
+      </template>
+    </plugin-card-simple>
   </div>
 </template>
 

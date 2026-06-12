@@ -10,7 +10,7 @@ import { APP_DB_KEYS } from '@/shared/common/app-db.js'
  * 应用设置
  */
 export const useAppSettingsStore = defineStore(
-  'AppSettingsStore',
+  'biliToolkit-settings',
   () => {
     const appSettings = reactive<AppSettings>(defaultAppSettings)
 

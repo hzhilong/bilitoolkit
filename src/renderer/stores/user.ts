@@ -10,7 +10,7 @@ import { toolkitApi } from 'bilitoolkit-ui'
  * 哔哩账号状态 Store
  */
 export const useUserStore = defineStore(
-  'BiliToolkit-BiliUsers',
+  'biliToolkit-users',
   () => {
     const users = reactive<UserInfoWithCookie[]>([])
 

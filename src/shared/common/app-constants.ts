@@ -19,5 +19,3 @@ export const defaultAppInstalledPlugins: AppInstalledPlugins = {
 export const EVENT_PREFIX = {
   TIMER: 'TIMER_',
 }
-
-export const defaultPluginStars: string[] = []

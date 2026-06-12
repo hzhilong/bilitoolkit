@@ -1,12 +1,12 @@
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
 import mitt from 'mitt'
+import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin'
 
 type Events = {
   openPluginView: {
-    plugin: ToolkitPlugin
+    plugin: InstalledToolkitPlugin
   }
   closePluginView: {
-    plugin: ToolkitPlugin
+    plugin: InstalledToolkitPlugin
   }
   hideCurrPluginView: void
 }

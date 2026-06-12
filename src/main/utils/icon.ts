@@ -42,7 +42,7 @@ export class IconUtils {
 
   static async downloadPluginIcon(plugin: ToolkitPlugin) {
     mainLogger.debug('下载插件图标', plugin)
-    if (!plugin.links.repository) {
+    if (!plugin.links?.repository) {
       return this.getDefaultPluginIcon()
     }
     const saveTo = this.getPluginIconCachePath(plugin.id)

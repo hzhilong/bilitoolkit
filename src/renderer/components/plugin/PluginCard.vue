@@ -2,12 +2,12 @@
 import { IconLabel, showToast, useLoadingData, AppTooltip } from 'bilitoolkit-ui'
 import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.js'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
-import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
+import { useAppInstalledPlugins } from '@/renderer/stores/installed-plugins'
 import type { CardType, PluginCardProps } from '@/renderer/components/plugin/types.js'
 import { computed, ref } from 'vue'
 import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
-import { usePluginStarsStore } from '@/renderer/stores/plugin-stars.js'
+import { useStarredPluginsStore } from '@/renderer/stores/starred-plugins'
 import { appEnv } from '@ybgnb/vite-env/common'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
@@ -17,11 +17,10 @@ const { loading, loadingData: WrappedLoad } = useLoadingData({
   singleFlight: true,
 })
 const { hasInstalled } = useAppInstalledPlugins()
-const isInstalled = hasInstalled(props.plugin)
+const isInstalled = computed(() => hasInstalled(props.plugin))
+const { isStarred, addStar, removeStar } = useStarredPluginsStore()
+const star = computed(() => isStarred(props.plugin.id))
 const showInfoDialog = ref(false)
-const { hasStar, addStar, delStar } = usePluginStarsStore()
-
-const star = hasStar(props.plugin.id)
 
 const displayInstallDate = computed(() => {
   if (props.type === 'manage') {
@@ -38,7 +37,7 @@ const displayInstallSize = computed(() => {
   }
 })
 const openPlugin = WrappedLoad(() => {
-  PluginUtils.openPluginView(props.plugin)
+  PluginUtils.openPluginView(props.plugin as InstalledToolkitPlugin)
 })
 const installConfirm = computed(() => {
   if (appEnv.APP_AUTHOR === props.plugin.author) {
@@ -61,7 +60,7 @@ const uninstallPlugin = WrappedLoad(async () => {
 })
 const starPlugin = () => {
   if (star.value) {
-    delStar(props.plugin.id)
+    removeStar(props.plugin.id)
   } else {
     addStar(props.plugin.id)
   }
@@ -70,12 +69,13 @@ const starPlugin = () => {
 
 <template>
   <div class="plugin-card" v-loading="loading" :class="type === 'no-options' ? 'not-tech-style' : ''">
-    <span v-if="type !== 'no-options' && isInstalled" class="badge tag-installed">已安装</span>
+    <span v-if="type !== 'no-options' && isInstalled" class="badge tag-installed"></span>
     <img class="plugin-icon" :src="base64" alt="" />
     <div class="plugin-infos">
       <div class="infos-header">
         <div class="title">
           <div class="plugin-name">{{ plugin.name }}</div>
+          <div v-if="plugin.type === 'task'" class="plugin-task-flag">定时任务</div>
         </div>
         <div class="sub-title">
           <icon-label icon="puzzle">id: {{ plugin.id }}</icon-label>
@@ -198,6 +198,15 @@ const starPlugin = () => {
         font-size: 18px;
         color: var(--el-text-color-primary);
       }
+
+      .plugin-task-flag {
+        font-size: 12px;
+        margin-left: 4px;
+        border-radius: 4px;
+        padding: 0 3px;
+        color: var(--app-color-primary-transparent-55);
+        border: 1px solid var(--app-color-primary-transparent-55);
+      }
     }
 
     .sub-title {
@@ -261,16 +270,25 @@ const starPlugin = () => {
   .badge {
     position: absolute;
     background: var(--app-color-primary-transparent-15);
-    color: var(--app-color-primary-transparent-55);
-    right: -21px;
-    top: -5px;
-    font-size: 10px;
-    line-height: 14px;
-    text-align: center;
-    padding: 15px 15px 0 15px;
-    transform: rotate(45deg);
-    user-select: none;
-    font-family: Arial, Helvetica, sans-serif;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    clip-path: polygon(100% 0, 100% 100%, 0 0);
+
+    &::before {
+      content: '';
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      width: 10px;
+      height: 5px;
+      border-left: 2px solid var(--app-color-primary-transparent-55);
+      border-bottom: 2px solid var(--app-color-primary-transparent-55);
+      transform: rotate(-45deg);
+      transform-origin: center;
+      z-index: 1;
+    }
   }
 }
 </style>

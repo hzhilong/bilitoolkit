@@ -2,7 +2,7 @@
 import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { eventBus } from '@/renderer/utils/event-bus'
 import { PluginUtils } from '@/renderer/utils/plugin-utils'
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
+import type { ToolkitPlugin, InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin'
 import { cloneDeep } from 'lodash-es'
 import { nextTick, ref, reactive, watch, toRaw } from 'vue'
 import { getPluginIconCache } from '@/renderer/services/plugin-icon-service.js'
@@ -13,13 +13,13 @@ import { useAppTabStore } from '@/renderer/stores/app-tab.js'
 const router = useRouter()
 const { removeTab } = useAppTabStore()
 
-const plugins = ref<ToolkitPlugin[]>([])
+const plugins = ref<InstalledToolkitPlugin[]>([])
 const activePluginId = ref('')
 
 const pluginTabRefs = ref<HTMLDivElement[]>([])
 const pluginRefMap = new Map<string, number>()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const setPluginRef = (plugin: ToolkitPlugin, el: any, index: number) => {
+const setPluginRef = (plugin: InstalledToolkitPlugin, el: any, index: number) => {
   if (el) {
     pluginRefMap.set(plugin.id, index)
     pluginTabRefs.value[index] = el
@@ -29,7 +29,7 @@ const getTaskPluginUrl = (pluginId: string) => {
   return `/task-plugin?id=${pluginId}`
 }
 
-async function handleOpenPluginView(plugin: ToolkitPlugin) {
+async function handleOpenPluginView(plugin: InstalledToolkitPlugin) {
   if (plugin.type === 'ui') {
     await toolkitApi.core.openPlugin(cloneDeep(plugin))
   } else {
@@ -96,10 +96,10 @@ eventBus.on('hideCurrPluginView', async () => {
   activePluginId.value = ''
 })
 
-const switchPlugin = async (plugin: ToolkitPlugin) => {
+const switchPlugin = async (plugin: InstalledToolkitPlugin) => {
   await PluginUtils.openPluginView(plugin)
 }
-const closePlugin = async (plugin: ToolkitPlugin) => {
+const closePlugin = async (plugin: InstalledToolkitPlugin) => {
   await PluginUtils.closePluginView(plugin)
 }
 
@@ -209,7 +209,7 @@ const getBase64Icon = (id: string) => {
         class="plugin-tab"
         v-for="(plugin, index) in plugins"
         :key="plugin.id"
-        :ref="(el) => setPluginRef(plugin, el, index)"
+        :ref="(el: any) => setPluginRef(plugin, el, index)"
         :class="plugin.id === activePluginId ? 'active' : ''"
         @click="switchPlugin(plugin)"
       >

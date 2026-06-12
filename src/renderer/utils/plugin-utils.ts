@@ -5,7 +5,7 @@ import type {
   ToolkitPluginWithNpmInfo,
 } from '@/shared/types/toolkit-plugin'
 import { eventBus } from '@/renderer/utils/event-bus.js'
-import { useAppInstalledPlugins } from '@/renderer/stores/app-plugins.js'
+import { useAppInstalledPlugins } from '@/renderer/stores/installed-plugins'
 import { appEnv } from '@ybgnb/vite-env/common'
 import { toolkitApi } from '@/renderer/api/toolkit-api.js'
 import { parseNpmSearchResultPkg } from '@/shared/utils/plugin-parse.js'
@@ -14,13 +14,16 @@ import { getFormattedDate } from '@ybgnb/utils'
 import { searchPackages, type NpmSearchResultItem, SearchText } from 'public-registry-api'
 import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
 import type { PageResult } from 'bilitoolkit-ui'
+import { useRecentPluginsStore } from '@/renderer/stores/recent-plugins'
+import { useStarredPluginsStore } from '@/renderer/stores/starred-plugins'
 
 export class PluginUtils {
-  static async openPluginView(plugin: ToolkitPlugin) {
+  static async openPluginView(plugin: InstalledToolkitPlugin) {
+    useRecentPluginsStore().addRecent(plugin.id)
     eventBus.emit('openPluginView', { plugin: plugin })
   }
 
-  static async closePluginView(plugin: ToolkitPlugin) {
+  static async closePluginView(plugin: InstalledToolkitPlugin) {
     eventBus.emit('closePluginView', { plugin: plugin })
   }
 
@@ -106,9 +109,12 @@ export class PluginUtils {
     useAppInstalledPlugins().addPlugin(installedPlugin)
     return installedPlugin
   }
+
   static async uninstall(plugin: InstalledToolkitPlugin) {
     await this.closePluginView(plugin)
     await toolkitApi.core.uninstallPlugin(plugin.id)
     useAppInstalledPlugins().delPlugin(plugin)
+    useRecentPluginsStore().removeRecent(plugin.id)
+    useStarredPluginsStore().removeStar(plugin.id)
   }
 }
