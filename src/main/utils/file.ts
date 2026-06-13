@@ -7,6 +7,7 @@ import { MainConstants } from '@/main/common/main-constants.js'
 import NpmUtils from '@/main/utils/npm.js'
 import { mainEnv } from '@/main/common/main-env.js'
 import { showInExplorer, ensureDir } from '@ybgnb/utils/node'
+import { AppError } from 'bilitoolkit-types'
 
 /**
  * 获取文件根目录
@@ -56,7 +57,7 @@ export async function resolveSafeFilePath(context: ApiCallerContext, filePath: s
   const absolutePath = path.resolve(context.filePath, filePath)
   // 校验安全路径，防止访问非法路径
   if (!absolutePath.startsWith(context.filePath)) {
-    throw new Error(`非法路径，试图访问受限目录：[${filePath}]`)
+    throw new AppError(`非法路径，试图访问受限目录：[${filePath}]`)
   }
   await ensureDir(path.dirname(absolutePath))
   return absolutePath

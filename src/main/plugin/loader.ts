@@ -19,6 +19,7 @@ import type { TaskPluginInfo } from '@/shared/types/task.js'
 import { loadTaskPluginMeta } from '@/main/plugin/task/loader.js'
 import { readJSONFile, getDirSize, formatFileSizeFromKB, emptyDirectory } from '@ybgnb/utils/node'
 import { getFileRootPath } from '@/main/utils/file.js'
+import { AppError } from 'bilitoolkit-types'
 
 /**
  * 读取插件的 package.json
@@ -69,7 +70,7 @@ export async function loadTestPlugin({ pluginPath }: PluginTestOptions): Promise
     return loadTestUIPluginByUrl(pluginPath)
   }
   if (!path.isAbsolute(pluginPath)) {
-    throw new Error('请输入已构建的项目路径或者访问地址')
+    throw new AppError('请输入已构建的项目路径或者访问地址')
   }
   return loadTestPluginByFile(pluginPath)
 }
@@ -114,7 +115,7 @@ async function loadTestPluginByFile(rootPath: string): Promise<InstalledToolkitP
   const indexPath = path.join(distPath, indexName)
 
   if (!fs.existsSync(indexPath)) {
-    throw new Error(`项目未打包，不存在文件/dist/${indexName}`)
+    throw new AppError(`项目未打包，不存在文件/dist/${indexName}`)
   }
 
   const plugin = {

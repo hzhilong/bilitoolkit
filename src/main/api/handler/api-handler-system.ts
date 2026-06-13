@@ -3,7 +3,7 @@ import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
 import { showItemInFolder as _showItemInFolder } from '@/main/utils/file.js'
 import { nativeTheme, shell } from 'electron'
 import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-toolkit-api.js'
-import type { AppLog, AppThemeState } from 'bilitoolkit-types'
+import { type AppLog, type AppThemeState, AppError } from 'bilitoolkit-types'
 import { getAppThemeState } from '@/main/utils/host-app.js'
 import { getAppLogLevel } from '@/shared/common/app-log.js'
 
@@ -23,7 +23,7 @@ export class SystemApiHandler extends ApiHandleStrategy implements IpcToolkitSys
    * 暂未适配该平台
    */
   notAdaptedCurrPlatform(): never {
-    throw new Error('内部错误，暂未适配该平台的System Api')
+    throw new AppError('内部错误，暂未适配该平台的System Api')
   }
 
   async browsePage(context: ApiCallerContext, path: string): Promise<void> {

@@ -86,6 +86,11 @@ export interface ToolkitCoreApi {
   installPlugin(options: PluginInstallOptions): Promise<InstalledToolkitPlugin>
 
   /**
+   * 更新插件
+   */
+  updatePlugin(plugin: InstalledToolkitPlugin): Promise<InstalledToolkitPlugin>
+
+  /**
    * 卸载插件
    */
   uninstallPlugin(id: string): Promise<void>

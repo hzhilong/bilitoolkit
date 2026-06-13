@@ -8,6 +8,7 @@ import { JSONFileSync } from 'lowdb/node'
 import { LowSync } from 'lowdb'
 import NpmUtils from '@/main/utils/npm.js'
 import { ensureDirSync, findFilesByPrefixAndSuffix, deleteFiles } from '@ybgnb/utils/node'
+import { AppError } from 'bilitoolkit-types'
 
 export default class DBUtils {
   /**
@@ -72,7 +73,7 @@ export default class DBUtils {
    */
   static getExistsDocFilePath(dbPath: string, id: string): string {
     const filePath = this.getDocFilePath(dbPath, id)
-    if (!fs.existsSync(filePath)) throw new Error(`文档[${id}]不存在`)
+    if (!fs.existsSync(filePath)) throw new AppError(`文档[${id}]不存在`)
     return filePath
   }
 

@@ -27,8 +27,13 @@ export const LOG_IGNORED_API_PATHS: (RegExp | string)[] = [
   'system.saveLog',
   'system.getAppThemeState',
   'system.shouldUseDarkColors',
+  'core.getPluginIcon',
+  'core.syncUserList',
+  'core.getRecommendedPlugins',
+  'core.getInstalledPlugins',
+  'user.getMyInfoByCookie',
 ]
 
 // 忽略打印日志的 API 路径
 export const LOG_IGNORED_API_SET = new Set(LOG_IGNORED_API_PATHS)
-export const LOG_IGNORED_API_REGEXP = [/^task\./, /^file\./]
+export const LOG_IGNORED_API_REGEXP = [/^task\./, /^file\./, /^db\./]

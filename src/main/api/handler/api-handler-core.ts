@@ -66,6 +66,10 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return await pluginManager.installPlugin(options)
   }
 
+  async updatePlugin(_: ApiCallerContext, plugin: InstalledToolkitPlugin): Promise<InstalledToolkitPlugin> {
+    return await pluginManager.updatePlugin(plugin)
+  }
+
   async uninstallPlugin(_: ApiCallerContext, id: string): Promise<void> {
     return await pluginManager.uninstallPlugin(id)
   }

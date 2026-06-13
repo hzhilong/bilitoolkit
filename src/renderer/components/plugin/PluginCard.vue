@@ -51,7 +51,7 @@ const installPlugin = WrappedLoad(async () => {
   showToast('插件安装成功')
 })
 const updatePlugin = WrappedLoad(async () => {
-  await PluginUtils.install(props.plugin)
+  await PluginUtils.update(props.plugin)
   showToast('插件更新成功')
 })
 const uninstallPlugin = WrappedLoad(async () => {

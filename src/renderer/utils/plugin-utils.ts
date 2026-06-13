@@ -110,6 +110,15 @@ export class PluginUtils {
     return installedPlugin
   }
 
+  static async update(plugin: ToolkitPlugin) {
+    const installedPlugin = await toolkitApi.core.updatePlugin({
+      ...toIPC(plugin),
+      installDate: getFormattedDate(),
+    })
+    useAppInstalledPlugins().addPlugin(installedPlugin)
+    return installedPlugin
+  }
+
   static async uninstall(plugin: InstalledToolkitPlugin) {
     await this.closePluginView(plugin)
     await toolkitApi.core.uninstallPlugin(plugin.id)

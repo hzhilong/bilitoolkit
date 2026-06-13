@@ -15,6 +15,7 @@ import { taskRuntime } from '@/main/plugin/task/runtime.js'
 import { LOG_IGNORED_API_SET, LOG_IGNORED_API_REGEXP } from '@/main/common/main-constants.js'
 import util from 'node:util'
 import { fileHandleManger } from '@/main/modules/file-handle/file-handle-manager.js'
+import { AppError } from 'bilitoolkit-types'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -113,6 +114,8 @@ export class WindowManager extends BaseWindowManager {
         }
         if (e instanceof BiliApiBusinessError) {
           mainLogger.error(`${logPrefix} 执行错误`, e.message, e.responseCode)
+        } else if (e instanceof AppError) {
+          mainLogger.error(`${logPrefix} 执行错误`, e.message)
         } else {
           mainLogger.error(`${logPrefix} 执行错误`, e)
         }

@@ -2,6 +2,7 @@ import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
 import fs from 'fs'
 import type { ApiCallerContext, IpcToolkitFileApi } from '@/main/types/ipc-toolkit-api.js'
 import { resolveSafeFilePath } from '@/main/utils/file.js'
+import { AppError } from 'bilitoolkit-types'
 
 /**
  * 文件 API 处理器
@@ -26,7 +27,7 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
   async read(context: ApiCallerContext, filePath: string): Promise<Uint8Array> {
     const absolutePath = await resolveSafeFilePath(context, filePath)
     if (!this._exists(absolutePath)) {
-      throw new Error(`文件[${filePath}]不存在`)
+      throw new AppError(`文件[${filePath}]不存在`)
     }
     const buffer = fs.readFileSync(absolutePath)
     return new Uint8Array(buffer)
@@ -54,7 +55,7 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
   async delete(context: ApiCallerContext, filePath: string): Promise<void> {
     const absolutePath = await resolveSafeFilePath(context, filePath)
     if (!this._exists(absolutePath)) {
-      throw new Error(`文件[${filePath}]不存在`)
+      throw new AppError(`文件[${filePath}]不存在`)
     }
     fs.unlinkSync(absolutePath)
   }

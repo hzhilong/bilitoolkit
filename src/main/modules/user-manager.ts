@@ -1,6 +1,7 @@
 import { APP_DB_KEYS } from '@/shared/common/app-db.js'
 import { readHostDBDoc, writeHostDBDoc } from '@/main/utils/host-app.js'
 import type { UserInfo } from '@ybgnb/bili-api'
+import { AppError } from 'bilitoolkit-types'
 
 class UserManager {
   private users = new Map<number, UserInfo>()
@@ -31,7 +32,7 @@ class UserManager {
   // 可选：需要抛异常时提供显式方法
   getBiliUserOrThrow(uid: number): UserInfo {
     const user = this.users.get(uid)
-    if (!user) throw new Error('账号不存在，可能已经登出')
+    if (!user) throw new AppError('账号不存在，可能已经登出')
     return user
   }
 }

@@ -3,6 +3,7 @@ import { session } from 'electron'
 import { BILIBILI_COOKIE_DOMAIN, USER_COOKIE_NAMES } from '@ybgnb/bili-api'
 import { isEmptyArr } from '@ybgnb/utils'
 import { trim } from 'lodash-es'
+import { AppError } from 'bilitoolkit-types'
 
 /**
  * 获取会话分区标识
@@ -24,11 +25,11 @@ export async function getUserCookies(session: Electron.Session) {
   const cookies = await session.cookies.get({ domain: BILIBILI_COOKIE_DOMAIN })
   console.log(`cookie`, cookies)
 
-  if (isEmptyArr(cookies)) throw new Error('获取cookie失败，请确保已登录成功')
+  if (isEmptyArr(cookies)) throw new AppError('获取cookie失败，请确保已登录成功')
 
   const map = Object.fromEntries(cookies.map((c) => [c.name, c.value]))
 
-  if (!map.DedeUserID || !map.bili_jct) throw new Error('当前cookie不完整，请重新登录')
+  if (!map.DedeUserID || !map.bili_jct) throw new AppError('当前cookie不完整，请重新登录')
 
   const userCookies: string[] = []
 

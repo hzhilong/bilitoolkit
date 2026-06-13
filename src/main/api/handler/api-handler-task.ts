@@ -14,6 +14,7 @@ import type {
 import { taskService } from '@/main/service/task.service.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
 import type { PageResult, PageParams } from 'bilitoolkit-ui'
+import { AppError } from 'bilitoolkit-types'
 
 /**
  * 任务API处理器
@@ -25,7 +26,7 @@ export class TaskApiHandler extends ApiHandleStrategy implements IpcToolkitTaskA
 
   async getTaskPluginInfo(context: ApiCallerContext, pluginId: string): Promise<TaskPluginInfo> {
     const plugin = pluginManager.getInstalledPlugin(pluginId)
-    if (plugin.type !== 'task') throw new Error('未找到该任务插件')
+    if (plugin.type !== 'task') throw new AppError('未找到该任务插件')
     return plugin as TaskPluginInfo
   }
 
