@@ -8,16 +8,16 @@
       <el-table height="66vh" :data="tableData" style="width: 100%">
         <el-table-column prop="executionId" label="执行ID" width="100"></el-table-column>
         <el-table-column prop="createdAt" label="日志时间" width="146">
-          <template #default="{ row }: { row: TaskExecutionLog }">
-            {{ new Date(row.createdAt).toLocaleString() }}
+          <template #default="{ row }">
+            {{ new Date((row as TaskExecutionLog).createdAt).toLocaleString() }}
           </template>
         </el-table-column>
         <el-table-column prop="status" label="日志级别" width="90">
-          <template #default="{ row }: { row: TaskExecutionLog }">
-            <el-tag v-if="row.level === 'info'" type="info" disable-transitions>info</el-tag>
-            <el-tag v-if="row.level === 'debug'" type="primary" disable-transitions>debug</el-tag>
-            <el-tag v-if="row.level === 'error'" type="danger" disable-transitions>error</el-tag>
-            <el-tag v-if="row.level === 'warn'" type="warning" disable-transitions>warn</el-tag>
+          <template #default="{ row }">
+            <el-tag v-if="(row as TaskExecutionLog).level === 'info'" type="info" disable-transitions>info</el-tag>
+            <el-tag v-if="(row as TaskExecutionLog).level === 'debug'" type="primary" disable-transitions>debug</el-tag>
+            <el-tag v-if="(row as TaskExecutionLog).level === 'error'" type="danger" disable-transitions>error</el-tag>
+            <el-tag v-if="(row as TaskExecutionLog).level === 'warn'" type="warning" disable-transitions>warn</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="message" label="日志内容" min-width="120"></el-table-column>

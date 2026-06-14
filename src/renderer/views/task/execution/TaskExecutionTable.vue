@@ -8,40 +8,55 @@
       <el-table height="66vh" :data="tableData" style="width: 100%">
         <el-table-column prop="id" label="ID" min-width="50" width="50" />
         <el-table-column prop="status" label="状态" min-width="80" width="80">
-          <template #default="{ row }: { row: TaskExecution }">
-            <el-tag v-if="row.status === 'running'" type="primary" disable-transitions>执行中</el-tag>
-            <el-tag v-if="row.status === 'success'" type="success" disable-transitions>执行成功</el-tag>
-            <el-tag v-if="row.status === 'error'" type="danger" disable-transitions>执行失败</el-tag>
-            <el-tag v-if="row.status === 'canceled'" type="warning" disable-transitions>取消执行</el-tag>
+          <template #default="{ row }">
+            <el-tag v-if="(row as TaskExecution).status === 'running'" type="primary" disable-transitions
+              >执行中</el-tag
+            >
+            <el-tag v-if="(row as TaskExecution).status === 'success'" type="success" disable-transitions
+              >执行成功</el-tag
+            >
+            <el-tag v-if="(row as TaskExecution).status === 'error'" type="danger" disable-transitions>执行失败</el-tag>
+            <el-tag v-if="(row as TaskExecution).status === 'canceled'" type="warning" disable-transitions
+              >取消执行</el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column prop="startedAt" label="启动时间" min-width="86">
-          <template #default="{ row }: { row: TaskExecution }">
-            {{ formatTime(row.startedAt) }}
+          <template #default="{ row }">
+            {{ formatTime((row as TaskExecution).startedAt) }}
           </template>
         </el-table-column>
         <el-table-column prop="endedAt" label="结束时间" min-width="86">
-          <template #default="{ row }: { row: TaskExecution }">
-            {{ formatTime(row.endedAt) }}
+          <template #default="{ row }">
+            {{ formatTime((row as TaskExecution).endedAt) }}
           </template>
         </el-table-column>
         <el-table-column prop="result" label="执行结果" min-width="100">
-          <template #default="{ row }: { row: TaskExecution }">
-            <template v-if="row.result">
-              <AppTooltip :content="row.result.message">
+          <template #default="{ row }">
+            <template v-if="(row as TaskExecution).result">
+              <AppTooltip :content="((row as TaskExecution).result as TaskResult).message">
                 {{ row.result?.message }}
               </AppTooltip>
             </template>
           </template>
         </el-table-column>
         <el-table-column label="操作" min-width="100">
-          <template #default="{ row }: { row: TaskExecution }">
+          <template #default="{ row }">
             <div class="table-row-options">
-              <el-button v-if="row.result" link type="primary" size="small" @click="handleShowResult(row.result)"
+              <el-button
+                v-if="(row as TaskExecution).result"
+                link
+                type="primary"
+                size="small"
+                @click="handleShowResult((row as TaskExecution).result as TaskResult)"
                 >结果</el-button
               >
-              <el-button link type="primary" size="small" @click="handleShowLog(row)">日志</el-button>
-              <el-popconfirm v-if="row.status === 'running'" title="确认取消执行吗？" @confirm="handleAbort(row)">
+              <el-button link type="primary" size="small" @click="handleShowLog(row as TaskExecution)">日志</el-button>
+              <el-popconfirm
+                v-if="(row as TaskExecution).status === 'running'"
+                title="确认取消执行吗？"
+                @confirm="handleAbort(row as TaskExecution)"
+              >
                 <template #reference>
                   <el-button link type="primary" size="small">取消</el-button>
                 </template>

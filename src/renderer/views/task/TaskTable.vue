@@ -8,58 +8,69 @@
     <el-table class="tasks__table" :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="ID" min-width="60" width="60" />
       <el-table-column v-if="!pluginId" prop="pluginId" label="插件信息" min-width="180">
-        <template #default="{ row }: { row: TaskWithPlugin }">
-          <AppTooltip :content="row.pluginId">
-            {{ row.pluginId }}
+        <template #default="{ row }">
+          <AppTooltip :content="(row as TaskWithPlugin).pluginId">
+            {{ (row as TaskWithPlugin).pluginId }}
           </AppTooltip>
           <div>
-            <el-link v-if="row.plugin" type="primary" @click="PluginUtils.openPluginView(row.plugin)">{{
-              row.plugin?.name
-            }}</el-link>
+            <el-link
+              v-if="(row as TaskWithPlugin).plugin"
+              type="primary"
+              @click="PluginUtils.openPluginView((row as TaskWithPlugin).plugin!)"
+              >{{ (row as TaskWithPlugin).plugin?.name }}</el-link
+            >
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="createdAt" label="创建时间" min-width="86">
-        <template #default="{ row }: { row: TaskWithPlugin }">
-          {{ new Date(row.createdAt).toLocaleString() }}
+        <template #default="{ row }">
+          {{ new Date((row as TaskWithPlugin).createdAt).toLocaleString() }}
         </template>
       </el-table-column>
       <el-table-column label="调度规则" min-width="80">
-        <template #default="{ row }: { row: TaskWithPlugin }">
-          <div v-if="row.schedule">
-            <span v-if="row.schedule.type === 'cron'"> {{ row.schedule.value }} </span>
-            <span v-else-if="row.schedule.type === 'interval'"> {{ row.schedule.value }} s</span>
+        <template #default="{ row }">
+          <div v-if="(row as TaskWithPlugin).schedule">
+            <span v-if="(row as TaskWithPlugin).schedule!.type === 'cron'">
+              {{ (row as TaskWithPlugin).schedule!.value }}
+            </span>
+            <span v-else-if="(row as TaskWithPlugin).schedule!.type === 'interval'">
+              {{ (row as TaskWithPlugin).schedule!.value }} s</span
+            >
           </div>
           <span v-else>-</span>
         </template>
       </el-table-column>
       <el-table-column prop="enabled" label="状态" min-width="66">
-        <template #default="{ row }: { row: TaskWithPlugin }">
-          <el-tag :type="row.enabled ? 'success' : 'danger'" disable-transitions>
-            {{ row.enabled ? '启用' : '禁用' }}
+        <template #default="{ row }">
+          <el-tag :type="(row as TaskWithPlugin).enabled ? 'success' : 'danger'" disable-transitions>
+            {{ (row as TaskWithPlugin).enabled ? '启用' : '禁用' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="lastRunAt" label="最后运行" min-width="86">
-        <template #default="{ row }: { row: TaskWithPlugin }">
-          {{ row.lastRunAt ? new Date(row.lastRunAt).toLocaleString() : '' }}
+        <template #default="{ row }">
+          {{ (row as TaskWithPlugin).lastRunAt ? new Date((row as TaskWithPlugin).lastRunAt!).toLocaleString() : '' }}
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="160">
-        <template #default="{ row }: { row: TaskWithPlugin }">
+        <template #default="{ row }">
           <div class="table-row-options">
-            <el-button link type="primary" size="small" @click="openModal('update', row)">编辑</el-button>
-            <el-popconfirm title="确认删除吗？" @confirm="handleDelete(row.id)">
+            <el-button link type="primary" size="small" @click="openModal('update', row as TaskWithPlugin)"
+              >编辑</el-button
+            >
+            <el-popconfirm title="确认删除吗？" @confirm="handleDelete((row as TaskWithPlugin).id)">
               <template #reference>
                 <el-button link type="primary" size="small">删除</el-button>
               </template>
             </el-popconfirm>
-            <el-popconfirm title="确认手动执行吗？" @confirm="handleExecute(row)">
+            <el-popconfirm title="确认手动执行吗？" @confirm="handleExecute(row as TaskWithPlugin)">
               <template #reference>
                 <el-button link type="primary" size="small">执行</el-button>
               </template>
             </el-popconfirm>
-            <el-button link type="primary" size="small" @click="openModal('execution', row)">执行记录</el-button>
+            <el-button link type="primary" size="small" @click="openModal('execution', row as TaskWithPlugin)"
+              >执行记录</el-button
+            >
           </div>
         </template>
       </el-table-column>
