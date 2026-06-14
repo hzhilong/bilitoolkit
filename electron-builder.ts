@@ -15,7 +15,7 @@ export default (): Configuration => {
     // 是否将应用程序的源代码打包成 asar 归档
     asar: true,
     // 版权声明
-    copyright: `Copyright © 2025 ${packageJson.author}`,
+    copyright: `Copyright © 2026 ${packageJson.author}`,
     // 构建的目录配置
     directories: {
       // 输出目录（按版本号分级）
@@ -51,12 +51,13 @@ export default (): Configuration => {
       oneClick: false, // 禁用一键安装
       perMachine: false, // 当前用户安装而非所有用户
       allowToChangeInstallationDirectory: true, // 允许修改安装目录
-      deleteAppDataOnUninstall: false, // 卸载时保留用户数据
+      deleteAppDataOnUninstall: true, // 卸载时保留用户数据
       license: 'LICENSE', // 许可证文件路径
       createDesktopShortcut: true, // 创建桌面快捷方式
       createStartMenuShortcut: true, // 创建开始菜单快捷方式
       installerIcon: installerIcon, // 安装程序图标
       uninstallerIcon: uninstallerIcon, // 卸载程序图标
+      include: 'scripts/installer.nsh',
     },
     // 继承的基础配置（设为 null 禁用继承）
     extends: null,
