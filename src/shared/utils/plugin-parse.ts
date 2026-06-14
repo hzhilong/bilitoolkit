@@ -69,7 +69,16 @@ export const parseNpmPackage = (pkg: NpmPackage) => {
       npm: `https://www.npmjs.com/package/${pkg.name}`,
       homepage: pkg.homepage,
       repository: pkg.repository?.url,
+      repositoryDir: pkg.repository?.directory,
       bugs: pkg.bugs?.url,
     },
   } satisfies ToolkitPlugin
+}
+
+/**
+ * 解析插件图标 url
+ */
+export const parsePluginIconUrl = (pluginId: string) => {
+  //  return `https://unpkg.com/${pluginId}/dist/icon.png`
+  return `https://cdn.jsdelivr.net/npm/${pluginId}/dist/icon.png`
 }

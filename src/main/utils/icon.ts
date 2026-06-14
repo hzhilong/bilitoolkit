@@ -5,8 +5,8 @@ import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs'
 import { mainLogger } from '@/main/common/main-logger.js'
 import NpmUtils from '@/main/utils/npm.js'
 import { APP_FILE_KEYS } from '@/shared/common/app-files.js'
-import { parseGithubRepoUrl, parseGithubRawUrl } from '@ybgnb/utils'
-import { downloadFile } from '@ybgnb/utils/node'
+import { downloadFile, emptyDirectory } from '@ybgnb/utils/node'
+import { parsePluginIconUrl } from '@/shared/utils/plugin-parse.js'
 
 let defaultPluginIcon: string | undefined = undefined
 
@@ -34,6 +34,10 @@ export class IconUtils {
     return path.join(appPath.hostAppFilePath, APP_FILE_KEYS.PLUGIN_ICON, `${NpmUtils.pkgNameToDirName(pluginId)}.icon`)
   }
 
+  static async clearPluginIconCache() {
+    await emptyDirectory(path.join(appPath.hostAppFilePath, APP_FILE_KEYS.PLUGIN_ICON))
+  }
+
   static convertIconFile(filePath: string, mediaType: MediaType) {
     const base64 = this.readIconBase64(filePath, mediaType)
     writeFileSync(filePath, base64, 'utf8')
@@ -41,26 +45,21 @@ export class IconUtils {
   }
 
   static async downloadPluginIcon(plugin: ToolkitPlugin) {
-    mainLogger.debug('下载插件图标', plugin)
-    if (!plugin.links?.repository) {
-      return this.getDefaultPluginIcon()
-    }
     const saveTo = this.getPluginIconCachePath(plugin.id)
     if (existsSync(saveTo)) {
       return readFileSync(saveTo, 'utf8')
     }
     try {
-      const repo = parseGithubRepoUrl(plugin.links.repository)
-      try {
-        await downloadFile(parseGithubRawUrl({ ...repo, filePath: 'public/favicon.ico' }), saveTo)
-        return this.convertIconFile(saveTo, 'image/x-icon')
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (ignored) {
-        await downloadFile(parseGithubRawUrl({ ...repo, filePath: 'public/favicon.png' }), saveTo)
-        return this.convertIconFile(saveTo, 'image/png')
+      const icoUrl = parsePluginIconUrl(plugin.id)
+
+      if (!icoUrl) {
+        return this.getDefaultPluginIcon()
       }
+      mainLogger.debug('下载插件图标', icoUrl)
+      await downloadFile(icoUrl, saveTo)
+      return this.convertIconFile(saveTo, 'image/x-icon')
     } catch (error: unknown) {
-      mainLogger.error('下载插件图标失败', plugin, error)
+      mainLogger.error('下载插件图标失败', error)
       if (existsSync(saveTo)) {
         unlinkSync(saveTo)
       }
@@ -76,13 +75,9 @@ export class IconUtils {
       pluginDist = path.resolve(appPath.pluginsPath, plugin.files.distPath)
     }
 
-    const ico = path.join(pluginDist, 'favicon.ico')
+    const ico = path.join(pluginDist, 'icon.png')
     if (existsSync(ico)) {
-      return this.readIconBase64(ico, 'image/x-icon')
-    }
-    const png = path.join(pluginDist, 'favicon.png')
-    if (existsSync(png)) {
-      return this.readIconBase64(png, 'image/png')
+      return this.readIconBase64(ico, 'image/png')
     }
     return this.getDefaultPluginIcon()
   }

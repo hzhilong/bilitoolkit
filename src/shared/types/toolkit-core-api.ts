@@ -125,6 +125,11 @@ export interface ToolkitCoreApi {
   getPluginIcon(plugin: ToolkitPlugin): Promise<string>
 
   /**
+   * 清理插件图标缓存
+   */
+  clearPluginIconCache(): Promise<void>
+
+  /**
    * 同步用户列表
    */
   syncUserList(users: UserInfoWithCookie[]): Promise<UserListSyncResult>

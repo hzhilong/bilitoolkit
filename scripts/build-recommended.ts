@@ -10,7 +10,7 @@ import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
  */
 
 // 插件的id
-const pluginIds = ['bilitoolkit-plugin-backup']
+const pluginIds = ['bilitoolkit-plugin-backup', 'bilitoolkit-plugin-quick-upgrade']
 const appVersion = pkg.version
 const plugins: ToolkitPlugin[] = []
 

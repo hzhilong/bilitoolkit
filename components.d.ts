@@ -14,7 +14,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
-    ElCheckboxButton: typeof import('element-plus/es')['ElCheckboxButton']
     ElCheckboxGroup: typeof import('element-plus/es')['ElCheckboxGroup']
     ElColorPicker: typeof import('element-plus/es')['ElColorPicker']
     ElDialog: typeof import('element-plus/es')['ElDialog']
@@ -50,7 +49,6 @@ declare module 'vue' {
 declare global {
   const ElButton: typeof import('element-plus/es')['ElButton']
   const ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
-  const ElCheckboxButton: typeof import('element-plus/es')['ElCheckboxButton']
   const ElCheckboxGroup: typeof import('element-plus/es')['ElCheckboxGroup']
   const ElColorPicker: typeof import('element-plus/es')['ElColorPicker']
   const ElDialog: typeof import('element-plus/es')['ElDialog']

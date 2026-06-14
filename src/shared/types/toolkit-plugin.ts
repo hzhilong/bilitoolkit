@@ -18,6 +18,7 @@ export interface ToolkitPlugin {
     npm: string
     homepage?: string
     repository?: string
+    repositoryDir?: string
     bugs?: string
   }
   type: PluginType

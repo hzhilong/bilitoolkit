@@ -9,6 +9,7 @@ import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import TestPluginDialog from '@/renderer/components/plugin/TestPluginDialog.vue'
 import { SettingGroup, SettingItem } from 'bilitoolkit-ui'
 import { getErrorMessage } from '@ybgnb/utils'
+import { clearPluginIconCache } from '@/renderer/services/plugin-icon-service'
 
 const appSettings = useAppSettingsStore().appSettings
 
@@ -28,6 +29,11 @@ initSettingDesc(logsDesc, toolkitApi.core.getLogsFolderSize)
 initSettingDesc(dbsDesc, toolkitApi.core.getDBsFolderSize)
 initSettingDesc(filesDesc, toolkitApi.core.getFilesFolderSize)
 const testPluginDialogVisible = ref<boolean>(false)
+
+const handleClearIcon = async () => {
+  await toolkitApi.core.clearPluginIconCache()
+  clearPluginIconCache()
+}
 </script>
 
 <template>
@@ -48,6 +54,9 @@ const testPluginDialogVisible = ref<boolean>(false)
         </SettingItem>
         <SettingItem title="保存的文件" :desc="filesDesc">
           <el-button type="primary" @click="toolkitApi.core.openFilesFolder()">打开</el-button>
+        </SettingItem>
+        <SettingItem title="清理插件图标缓存">
+          <el-button type="primary" @click="handleClearIcon">清理</el-button>
         </SettingItem>
       </SettingGroup>
       <SettingGroup name="开发者">

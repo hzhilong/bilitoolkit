@@ -101,6 +101,10 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return await IconUtils.downloadPluginIcon(plugin)
   }
 
+  async clearPluginIconCache(_context: ApiCallerContext): Promise<void> {
+    return await IconUtils.clearPluginIconCache()
+  }
+
   syncUserList(context: ApiCallerContext, users: UserInfoWithCookie[]): Promise<UserListSyncResult> {
     return userService.syncUserList(users)
   }

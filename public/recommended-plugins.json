@@ -1,19 +1,36 @@
 {
-  "appVersion": "0.0.1",
+  "appVersion": "0.0.2",
   "plugins": [
     {
       "name": "哔哩备份姬",
       "type": "ui",
       "id": "bilitoolkit-plugin-backup",
       "author": "hzhilong",
-      "description": "一键对B站账号进行数据备份和还原，方便账号数据迁移/快速转生",
-      "version": "0.0.1",
+      "description": "一键备份和还原 B 站账号数据，快速完成账号数据迁移",
+      "version": "0.0.5",
       "date": "2025-10-01",
       "links": {
         "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-backup",
-        "homepage": "https://github.com/hzhilong/bilitoolkit-plugin-backup#readme",
-        "repository": "git+https://github.com/hzhilong/bilitoolkit-plugin-backup.git",
-        "bugs": "https://github.com/hzhilong/bilitoolkit-plugin-backup/issues"
+        "homepage": "https://github.com/hzhilong/bilitoolkit-plugins/tree/main/bilitoolkit-plugin-backup#readme",
+        "repository": "git+https://github.com/hzhilong/bilitoolkit-plugins.git",
+        "repositoryDir": "bilitoolkit-plugin-backup",
+        "bugs": "https://github.com/hzhilong/bilitoolkit-plugins/issues"
+      }
+    },
+    {
+      "name": "速升姬",
+      "type": "task",
+      "id": "bilitoolkit-plugin-quick-upgrade",
+      "author": "hzhilong",
+      "description": "帮助哔哩哔哩用户快速升级",
+      "version": "0.0.2",
+      "date": "2026-06-14",
+      "links": {
+        "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-quick-upgrade",
+        "homepage": "https://github.com/hzhilong/bilitoolkit-plugins/tree/main/bilitoolkit-plugin-quick-upgrade#readme",
+        "repository": "git+https://github.com/hzhilong/bilitoolkit-plugins.git",
+        "repositoryDir": "bilitoolkit-plugin-quick-upgrade",
+        "bugs": "https://github.com/hzhilong/bilitoolkit-plugins/issues"
       }
     }
   ]

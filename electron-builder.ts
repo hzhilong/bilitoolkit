@@ -19,12 +19,14 @@ export default (): Configuration => {
     // 构建的目录配置
     directories: {
       // 输出目录（按版本号分级）
-      output: `release/${packageJson.version}-${process.env.NODE_ENV}`,
+      output: `release/${packageJson.version}`,
     },
     // 需要包含在打包中的文件/目录
     files: [
       'dist', // 主进程和渲染进程构建文件
       'dist-electron', // Electron 相关构建文件
+      'package.json',
+      'node_modules/**/*',
     ],
     // Windows 平台特定配置
     win: {
@@ -34,7 +36,7 @@ export default (): Configuration => {
         {
           // target: "nsis",                      // 使用 NSIS 安装程序
           // target: "portable",                  // 免安装程序
-          target: process.env.NODE_ENV === 'development' ? 'portable' : 'nsis',
+          target: process.env.NODE_ENV === 'development' ? 'dir' : 'nsis',
           arch: [
             // 目标架构
             'x64', // 仅打包 64 位版本

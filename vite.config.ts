@@ -94,6 +94,7 @@ export default defineConfig((env: ConfigEnv) => {
     build: {
       // 生成 Source Map => 开发环境日志打印时输出源码路径和行号
       sourcemap: env.mode !== 'production',
+      minify: process.env.NODE_ENV !== 'development',
       outDir: 'dist-electron/',
       rollupOptions: {
         output: {

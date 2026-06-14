@@ -1,4 +1,3 @@
-import axios from 'axios'
 import path from 'path'
 import { appPath } from '@/main/common/app-path.js'
 import { writeFileSync, unlinkSync } from 'node:fs'
@@ -6,6 +5,7 @@ import * as tar from 'tar'
 import type { PluginDownloadOptions } from '@/shared/types/toolkit-plugin.js'
 import { convertToCommonError } from '@ybgnb/utils'
 import { ensureDirSync } from '@ybgnb/utils/node'
+import { getPackage } from 'public-registry-api'
 
 export default class NpmUtils {
   static pkgNameToDirName(pkgName: string) {
@@ -18,16 +18,15 @@ export default class NpmUtils {
   static async downloadPluginPackage(options: PluginDownloadOptions, version: string = 'latest') {
     try {
       // 获取 package info
-      const registryUrl = `https://registry.npmjs.org/${options.id}`
-      const { data: pkgInfo } = await axios.get(registryUrl)
+      const pkgInfo = await getPackage(options.id)
 
       // 获取指定版本
       const ver = version === 'latest' ? pkgInfo['dist-tags'].latest : version
       const tarballUrl = pkgInfo.versions[ver].dist.tarball
 
       // 下载 tarball
-      const response = await axios.get(tarballUrl, { responseType: 'arraybuffer' })
-      const tarballBuffer = Buffer.from(response.data)
+      const arrayBuffer = await fetch(tarballUrl).then((r) => r.arrayBuffer())
+      const tarballBuffer = Buffer.from(arrayBuffer)
 
       // 临时保存 tarball
       const tempFile = path.join(appPath.temp, `${options.pluginDirName}-${ver}.tgz`)

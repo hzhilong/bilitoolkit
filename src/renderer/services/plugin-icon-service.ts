@@ -38,3 +38,7 @@ export const updatePluginIconCache = (plugin: ToolkitPlugin) => {
   cache.delete(plugin.id)
   return getPluginIconCache(plugin)
 }
+
+export const clearPluginIconCache = () => {
+  cache.clear()
+}

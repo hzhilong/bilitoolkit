@@ -6,6 +6,7 @@ import * as os from 'node:os'
 import { windowManager } from '@/main/window/window-manager.js'
 import { appPath } from '@/main/common/app-path.js'
 import { mainEnv } from '@/main/common/main-env.js'
+import { mainLogger } from '@/main/common/main-logger.js'
 
 if (mainEnv.DEV) {
   // Source Map 支持库 => 开发环境打印日志时输出源码路径和行号
@@ -15,6 +16,16 @@ if (mainEnv.DEV) {
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 app.commandLine.appendSwitch('disable-web-security')
 if (mainEnv.DEV) app.commandLine.appendSwitch('disable-http-cache')
+
+process.on('uncaughtException', (err) => {
+  mainLogger.error('uncaughtException:', err)
+  app.quit()
+})
+
+process.on('unhandledRejection', (reason) => {
+  mainLogger.error('unhandledRejection:', reason)
+  app.quit()
+})
 
 // 设置全局最大监听器数
 ipcMain.setMaxListeners(0)
@@ -68,6 +79,10 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   mainWindow = null
   if (process.platform !== 'darwin') app.quit()
+})
+
+app.on('before-quit', () => {
+  process.exit(0)
 })
 
 app.on('activate', () => {

@@ -109,7 +109,6 @@ const defaultPluginIcon = path.join(appPublicPath, 'images/plugin-default-icon.p
  * workers目录
  */
 const workersDir = path.join(appPublicPath, 'workers')
-ensureDirSync(workersDir)
 
 /**
  * 临时目录
