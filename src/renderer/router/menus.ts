@@ -1,4 +1,5 @@
 import type { MenuItem } from '@/renderer/components/layout/AppMenus.vue'
+import { toolkitApi } from '@/renderer/api/toolkit-api'
 
 /**
  * 忽略当前菜单状态的路由路径前缀
@@ -53,6 +54,8 @@ export const appMenus: MenuItem[] = [
     title: '退出',
     icon: 'shut-down',
     path: '/exit',
-    onclick: () => {},
+    onclick: () => {
+      toolkitApi.window.close().then()
+    },
   },
 ]

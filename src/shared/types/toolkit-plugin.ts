@@ -93,6 +93,14 @@ export interface AppInstalledPlugins {
 }
 
 /**
+ * 应用推荐的插件
+ */
+export interface RecommendedPlugins {
+  appVersion: string
+  plugins: Array<ToolkitPlugin>
+}
+
+/**
  * 插件测试选项
  */
 export interface PluginTestOptions {

@@ -2,9 +2,16 @@ import type {
   PluginTestOptions,
   InstalledToolkitPlugin,
   PluginDownloadOptions,
-  ToolkitPlugin,
+  RecommendedPlugins,
 } from '@/shared/types/toolkit-plugin.js'
-import { getFormattedDate, getErrorMessage, getGithubRawJson, parseGithubRepoUrl } from '@ybgnb/utils'
+import {
+  getFormattedDate,
+  getErrorMessage,
+  getGithubRawJson,
+  parseGithubRepoUrl,
+  parseGithubRawUrl,
+  fetchWithFormat,
+} from '@ybgnb/utils'
 import { parsePluginKeywords } from '@/shared/utils/plugin-parse.js'
 import path from 'path'
 import fs from 'fs'
@@ -161,11 +168,16 @@ export async function getRecommendedPlugins() {
   try {
     // 先尝试从github仓库下载
     const repo = parseGithubRepoUrl(mainEnv.APP_REPO_URL)
-    return await getGithubRawJson<ToolkitPlugin[]>({ ...repo, filePath: 'public/recommended-plugins.json' })
+    const recommendedPlugins = await fetchWithFormat<RecommendedPlugins>(
+      parseGithubRawUrl({ ...repo, filePath: 'public/recommended-plugins.json' }),
+      'json',
+    )
+    return recommendedPlugins.plugins
   } catch (error: unknown) {
     mainLogger.error('获取推荐的插件失败', getErrorMessage(error))
     // 加载本地文件（该版本app推荐的插件）
-    return await readJSONFile<ToolkitPlugin[]>(path.join(appPath.appPublicPath, 'recommended-plugins.json'))
+    return (await readJSONFile<RecommendedPlugins>(path.join(appPath.appPublicPath, 'recommended-plugins.json')))
+      .plugins
   }
 }
 
@@ -178,7 +190,7 @@ export async function getBlockedPluginIds() {
     const repo = parseGithubRepoUrl(mainEnv.APP_REPO_URL)
     return await getGithubRawJson<string[]>({ ...repo, filePath: 'public/blocklist-plugins.json' })
   } catch (error: unknown) {
-    mainLogger.error('获取推荐的插件失败', getErrorMessage(error))
+    mainLogger.error('获取屏蔽的插件id失败', getErrorMessage(error))
     // 加载本地文件（该版本app推荐的插件）
     return await readJSONFile<string[]>(path.join(appPath.appPublicPath, 'blocklist-plugins.json'))
   }
