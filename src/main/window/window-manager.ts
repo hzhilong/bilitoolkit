@@ -1,4 +1,4 @@
-import { BrowserWindow, globalShortcut, ipcMain, type HandlerDetails, Menu } from 'electron'
+import { BrowserWindow, globalShortcut, ipcMain, type HandlerDetails, Menu, dialog } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
 import { execBiz, formatUnitSize, isCanceledError } from '@ybgnb/utils'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
@@ -7,7 +7,7 @@ import { BaseWindowManager } from '@/main/window/base-window-manager.js'
 import { showDevTools } from '@/main/utils/dev-tools.js'
 import { mainLogger, mainConsoleLogger, mainFileLogger } from '@/main/common/main-logger.js'
 import { appPath } from '@/main/common/app-path.js'
-import { updateElectronApp } from 'update-electron-app'
+import electronUpdater, { type UpdateDownloadedEvent } from 'electron-updater'
 import { BiliApiBusinessError } from '@ybgnb/bili-api'
 import { appEnv } from '@ybgnb/vite-env/common'
 import { initDatabase } from '@/main/db/init.js'
@@ -53,7 +53,20 @@ export class WindowManager extends BaseWindowManager {
     Menu.setApplicationMenu(null)
     // 应用更新检测
     if (appEnv.PROD) {
-      updateElectronApp()
+      const autoUpdater = electronUpdater.autoUpdater
+      await autoUpdater.checkForUpdatesAndNotify()
+      autoUpdater.on('update-downloaded', async (event: UpdateDownloadedEvent) => {
+        const { response } = await dialog.showMessageBox({
+          type: 'info',
+          buttons: ['立即安装', '稍后'],
+          title: '检测到新版本',
+          message: `新版本 ${event.version} 已下载完成`,
+        })
+
+        if (response === 0) {
+          autoUpdater.quitAndInstall()
+        }
+      })
     }
     // 在开发环境和生产环境均可通过快捷键打开devTools
     globalShortcut.register('CommandOrControl+Shift+i', function () {

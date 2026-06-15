@@ -1,6 +1,6 @@
 {
   "name": "bilitoolkit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "type": "module",
   "main": "dist-electron/main.js",
@@ -60,6 +60,7 @@
     "consola": "^3.4.2",
     "cron-parser": "^5.5.0",
     "dayjs": "^1.11.18",
+    "electron-updater": "^6.8.9",
     "element-plus": "^2.13.7",
     "iconv-lite": "^0.7.2",
     "kysely": "^0.28.16",
@@ -79,7 +80,6 @@
     "semver": "^7.8.4",
     "source-map-support": "^0.5.21",
     "tar": "^7.5.13",
-    "update-electron-app": "^3.1.1",
     "vue": "^3.5.34",
     "vue-router": "^4.5.1"
   },
