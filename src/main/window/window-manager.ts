@@ -54,7 +54,6 @@ export class WindowManager extends BaseWindowManager {
     // 应用更新检测
     if (appEnv.PROD) {
       const autoUpdater = electronUpdater.autoUpdater
-      await autoUpdater.checkForUpdatesAndNotify()
       autoUpdater.on('update-downloaded', async (event: UpdateDownloadedEvent) => {
         const { response } = await dialog.showMessageBox({
           type: 'info',
@@ -67,6 +66,11 @@ export class WindowManager extends BaseWindowManager {
           autoUpdater.quitAndInstall()
         }
       })
+      try {
+        await autoUpdater.checkForUpdatesAndNotify()
+      } catch (e) {
+        mainLogger.error('检查更新失败', e)
+      }
     }
     // 在开发环境和生产环境均可通过快捷键打开devTools
     globalShortcut.register('CommandOrControl+Shift+i', function () {

@@ -67,7 +67,9 @@ eventBus.on('closePluginView', async ({ plugin }) => {
     const openedPlugin = plugins.value[i]
     if (openedPlugin.id === plugin.id) {
       if (openedPlugin.type === 'ui') {
-        await toolkitApi.core.closePlugin(cloneDeep(plugin))
+        try {
+          await toolkitApi.core.closePlugin(cloneDeep(plugin))
+        } catch (_e) {}
       } else {
         removeTab(getTaskPluginUrl(openedPlugin.id))
       }

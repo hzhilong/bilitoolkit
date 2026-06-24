@@ -108,7 +108,7 @@ class PluginManager {
     )
     this.registerPlugin(plugin)
     mainLogger.info(`插件 ${updatedPlugin.id} ${updatedPlugin.version} 安装成功！`)
-    return plugin
+    return updatedPlugin
   }
 
   async uninstallPlugin(id: string): Promise<void> {
