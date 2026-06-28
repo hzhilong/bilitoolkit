@@ -27,8 +27,6 @@ const props = defineProps<PluginListProps<T>>()
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 20px;
-
-  .plugin-card {
-  }
+  align-content: start;
 }
 </style>

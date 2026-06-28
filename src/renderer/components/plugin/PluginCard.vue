@@ -130,7 +130,7 @@ const starPlugin = () => {
   @include mixins.card-tech-style;
   min-width: 340px;
   max-width: 500px;
-  height: fit-content;
+  height: max-content;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;

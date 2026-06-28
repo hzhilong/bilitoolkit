@@ -188,7 +188,11 @@ export async function getBlockedPluginIds() {
   try {
     // 先尝试从github仓库下载
     const repo = parseGithubRepoUrl(mainEnv.APP_REPO_URL)
-    return await getGithubRawJson<string[]>({ ...repo, filePath: 'public/blocklist-plugins.json' })
+    const json = await fetchWithFormat(
+      parseGithubRawUrl({ ...repo, filePath: 'public/blocklist-plugins.json' }),
+      'text',
+    )
+    return JSON.parse(json) as string[]
   } catch (error: unknown) {
     mainLogger.error('获取屏蔽的插件id失败', getErrorMessage(error))
     // 加载本地文件（该版本app推荐的插件）
