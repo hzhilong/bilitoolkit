@@ -24,8 +24,9 @@ const refreshTableData = loadingData(async () => {
     pageNum: pageData.value.pageNum,
     pageSize: pageData.value.pageSize,
     showThirdPartyPlugins: showThirdPartyPlugins.value,
+    blockedPluginIds: blockedPluginIds.value,
   })
-  plugins.value = data.filter((p) => blockedPluginIds.value.indexOf(p.id) < 0)
+  plugins.value = data
   pageData.value = page
 })
 
