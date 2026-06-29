@@ -8,7 +8,7 @@ export const usePluginCollectionStore = (dbName: string) => {
   const { state } = storeToRefs(useAppInstalledPlugins())
   const pluginIds = ref<string[]>([])
   const plugins = computed(() => {
-    return state.value.plugins.filter((plugin) => pluginIds.value.indexOf(plugin.id) > -1)
+    return pluginIds.value.map((id) => state.value.plugins.find((p) => p.id === id)).filter(Boolean)
   })
 
   const init = async () => {
