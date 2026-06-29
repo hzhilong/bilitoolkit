@@ -1,9 +1,11 @@
+import { readFileSync } from 'node:fs'
 import type { Configuration } from 'electron-builder'
-import packageJson from './package.json'
 
 const winIcon = 'public/favicon.ico'
 const installerIcon = 'public/favicon.ico'
 const uninstallerIcon = 'public/favicon.ico'
+
+const packageJson = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf-8'))
 
 export default (): Configuration => {
   console.log('============正在打包electron============')
@@ -60,7 +62,7 @@ export default (): Configuration => {
       include: 'scripts/installer.nsh',
     },
     // 继承的基础配置（设为 null 禁用继承）
-    extends: null,
+    //  extends: null,
     // 需要额外打包到应用根目录的文件
     extraFiles: [
       {

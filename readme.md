@@ -13,6 +13,7 @@
 | [哔哩备份姬](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-backup) | 一键备份和还原 B 站账号数据，快速完成账号数据迁移。 |
 | [速升姬](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-quick-upgrade) | 用于自动完成每日经验任务，包括每日登录、观看、投币和分享。 |
 | [弹幕工具箱](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-danmaku) | 快速查询弹幕及发送者。 |
+| [图片下载](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-image-downloader) | 快速下载视频封面、专栏图片、用户头像、动态和评论表情包。 |
 
 ## [开发说明](./doc/development.md)
 
