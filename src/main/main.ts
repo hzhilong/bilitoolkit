@@ -15,7 +15,7 @@ if (mainEnv.DEV) {
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 app.commandLine.appendSwitch('disable-web-security')
-if (mainEnv.DEV) app.commandLine.appendSwitch('disable-http-cache')
+//if (mainEnv.DEV) app.commandLine.appendSwitch('disable-http-cache')
 
 process.on('uncaughtException', (err) => {
   mainLogger.error('uncaughtException:', err)
@@ -64,11 +64,19 @@ const createWindow = async () => {
 // 部分 API 在 ready 事件触发后才能使用。
 app.whenReady().then(() => {
   if (mainEnv.DEV) {
-    // 进一步确保请求不走缓存
     session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-      details.requestHeaders['Pragma'] = 'no-cache'
-      details.requestHeaders['Cache-Control'] = 'no-cache'
-      callback({ cancel: false, requestHeaders: details.requestHeaders })
+      const url = details.url
+      const isImage = /\.(png|jpg|jpeg|gif|webp|svg|bmp|ico)(\?|$)/i.test(url)
+
+      if (!isImage) {
+        // 非图片请求：强制禁用缓存
+        details.requestHeaders['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        details.requestHeaders['Pragma'] = 'no-cache'
+        callback({ cancel: false, requestHeaders: details.requestHeaders })
+        return
+      }
+      // 图片请求：不修改头，保持默认缓存策略
+      callback({ cancel: true, requestHeaders: details.requestHeaders })
     })
   }
   createWindow().then()
