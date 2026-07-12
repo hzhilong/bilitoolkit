@@ -76,7 +76,10 @@ app.whenReady().then(() => {
         return
       }
       // 图片请求：不修改头，保持默认缓存策略
-      callback({ cancel: true, requestHeaders: details.requestHeaders })
+      callback({
+        cancel: false,
+        requestHeaders: details.requestHeaders,
+      })
     })
   }
   createWindow().then()

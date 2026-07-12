@@ -55,6 +55,8 @@ const handleClearIcon = async () => {
         <SettingItem title="保存的文件" :desc="filesDesc">
           <el-button type="primary" @click="toolkitApi.core.openFilesFolder()">打开</el-button>
         </SettingItem>
+      </SettingGroup>
+      <SettingGroup name="插件设置">
         <SettingItem title="清理插件图标缓存">
           <el-button type="primary" @click="handleClearIcon">清理</el-button>
         </SettingItem>
