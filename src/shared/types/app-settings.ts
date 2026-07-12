@@ -12,4 +12,8 @@ export enum DevToolsType {
  */
 export interface AppSettings {
   devToolsType: DevToolsType
+  // 卸载插件时删除浏览器 本地存储
+  removeStorageOnUninstall: boolean
+  // 卸载插件时删除文件、数据库等磁盘数据
+  removeFilesOnUninstall: boolean
 }

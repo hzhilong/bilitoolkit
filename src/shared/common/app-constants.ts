@@ -6,6 +6,8 @@ import type { AppInstalledPlugins } from '@/shared/types/toolkit-plugin.js'
  */
 export const defaultAppSettings: AppSettings = {
   devToolsType: DevToolsType.MAIN,
+  removeFilesOnUninstall: false,
+  removeStorageOnUninstall: false,
 } as const
 
 export const defaultAppInstalledPlugins: AppInstalledPlugins = {

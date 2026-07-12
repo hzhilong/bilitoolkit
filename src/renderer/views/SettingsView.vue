@@ -58,6 +58,12 @@ const handleClearIcon = async () => {
         <SettingItem title="清理插件图标缓存">
           <el-button type="primary" @click="handleClearIcon">清理</el-button>
         </SettingItem>
+        <setting-item title="卸载插件时删除浏览器本地存储">
+          <el-switch v-model="appSettings.removeStorageOnUninstall" />
+        </setting-item>
+        <setting-item title="卸载插件时删除文件、数据库等磁盘数据">
+          <el-switch v-model="appSettings.removeFilesOnUninstall" />
+        </setting-item>
       </SettingGroup>
       <SettingGroup name="开发者">
         <SettingItem title="开发者工具调试对象" desc="Ctrl+Shift+i 启动开发者工具">

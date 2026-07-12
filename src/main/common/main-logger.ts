@@ -60,6 +60,7 @@ log4js.configure({
       // 开发模式启用调用堆栈，打印行号
       enableCallStack: mainEnv.DEV,
     },
+
     onlyConsole: {
       appenders: ['console'],
       level: level,

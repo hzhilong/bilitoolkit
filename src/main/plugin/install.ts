@@ -12,6 +12,7 @@ import { taskService } from '@/main/service/task.service.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
 import { mainLogger } from '@/main/common/main-logger.js'
 import { appEnv } from '@ybgnb/vite-env/common'
+import { getAppSettings } from '@/main/utils/host-app.js'
 
 /**
  * 下载插件
@@ -32,8 +33,9 @@ export async function downloadPlugin(options: PluginInstallOptions) {
  * 移除插件运行文件
  */
 export async function removePluginFile(plugin: InstalledToolkitPlugin) {
+  const { removeFilesOnUninstall, removeStorageOnUninstall } = getAppSettings()
   // 只删除插件文件
-  if (!plugin.isTest && !appEnv.DEV) {
+  if (!plugin.isTest && !appEnv.DEV && removeFilesOnUninstall) {
     rmdirSync(path.resolve(plugin.files.rootPath), { recursive: true })
   }
   // 删除关联任务
@@ -44,7 +46,7 @@ export async function removePluginFile(plugin: InstalledToolkitPlugin) {
     }
   }
   // 清理会话数据
-  if (!appEnv.DEV) {
+  if (!appEnv.DEV && removeStorageOnUninstall) {
     getSessionPartition('plugin', plugin).clearData()
   }
 }
