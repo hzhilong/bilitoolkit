@@ -61,4 +61,64 @@ export async function initDatabase() {
     .columns(['executionId', 'createdAt'])
     .ifNotExists()
     .execute()
+
+  // ================= 下载记录 =================
+  await db.schema
+    .createTable('download_records')
+    .ifNotExists()
+    .addColumn('id', 'integer', (col) => col.primaryKey().autoIncrement())
+    .addColumn('title', 'text', (col) => col.notNull())
+    .addColumn('pluginId', 'text', (col) => col.notNull())
+    .addColumn('videos', 'text', (col) => col.notNull())
+    .addColumn('status', 'text', (col) => col.notNull())
+    .addColumn('progress', 'text')
+    .addColumn('result', 'text')
+    .addColumn('error', 'text')
+    .addColumn('createdAt', 'integer', (col) => col.notNull())
+    .addColumn('updatedAt', 'integer')
+    .addColumn('userCookie', 'text')
+    .addColumn('settings', 'text')
+    .execute()
+
+  await db.schema
+    .createIndex('idx_download_records_status')
+    .on('download_records')
+    .column('status')
+    .ifNotExists()
+    .execute()
+
+  await db.schema
+    .createIndex('idx_download_records_createdAt')
+    .on('download_records')
+    .column('createdAt')
+    .ifNotExists()
+    .execute()
+
+  await db.schema
+    .createIndex('idx_download_records_title')
+    .on('download_records')
+    .column('title')
+    .ifNotExists()
+    .execute()
+
+  await db.schema
+    .createIndex('idx_download_records_status_createdAt')
+    .on('download_records')
+    .columns(['status', 'createdAt'])
+    .ifNotExists()
+    .execute()
+
+  await db.schema
+    .createIndex('idx_download_records_status_pluginId_createdAt')
+    .on('download_records')
+    .columns(['status', 'pluginId', 'createdAt'])
+    .ifNotExists()
+    .execute()
+
+  await db.schema
+    .createIndex('idx_download_records_pluginId_createdAt')
+    .on('download_records')
+    .columns(['pluginId', 'createdAt'])
+    .ifNotExists()
+    .execute()
 }

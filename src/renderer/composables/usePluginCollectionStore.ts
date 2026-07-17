@@ -3,12 +3,13 @@ import { useAppInstalledPlugins } from '@/renderer/stores/installed-plugins'
 import { ref, computed, watch } from 'vue'
 import { toolkitApi } from '@/renderer/api/toolkit-api'
 import { toIPC } from 'bilitoolkit-runtime'
+import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin'
 
 export const usePluginCollectionStore = (dbName: string) => {
   const { state } = storeToRefs(useAppInstalledPlugins())
   const pluginIds = ref<string[]>([])
   const plugins = computed(() => {
-    return pluginIds.value.map((id) => state.value.plugins.find((p) => p.id === id)).filter(Boolean)
+    return pluginIds.value.map((id) => state.value.plugins.find((p) => p.id === id)).filter(Boolean) as ToolkitPlugin[]
   })
 
   const init = async () => {

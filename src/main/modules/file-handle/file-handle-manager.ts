@@ -9,7 +9,7 @@ import fs from 'fs'
 import { execBiz } from '@ybgnb/utils'
 import { OpenedFile } from '@/main/modules/file-handle/opened-file.js'
 
-export class FileHandleManger {
+export class FileHandleManager {
   openedFiles = new Map<FileHandleId, OpenedFile>()
 
   init() {
@@ -55,4 +55,4 @@ export class FileHandleManger {
   }
 }
 
-export const fileHandleManger = new FileHandleManger()
+export const fileHandleManager = new FileHandleManager()

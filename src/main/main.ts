@@ -7,6 +7,9 @@ import { windowManager } from '@/main/window/window-manager.js'
 import { appPath } from '@/main/common/app-path.js'
 import { mainEnv } from '@/main/common/main-env.js'
 import { mainLogger } from '@/main/common/main-logger.js'
+import { initFFmpeg } from '@/main/modules/ffmpeg/init.js'
+
+initFFmpeg()
 
 if (mainEnv.DEV) {
   // Source Map 支持库 => 开发环境打印日志时输出源码路径和行号

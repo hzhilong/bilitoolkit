@@ -18,6 +18,7 @@ import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.js'
 import { userService } from '@/main/service/user.service.js'
 import { getFileSizeKB, formatFileSizeFromKB } from '@ybgnb/utils/node'
 import { showItemInFolder } from '@/main/utils/file.js'
+import { appUpdateManager } from '@/main/modules/update/update-manager.js'
 
 /**
  * 核心API处理器
@@ -105,7 +106,17 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
     return await IconUtils.clearPluginIconCache()
   }
 
-  syncUserList(context: ApiCallerContext, users: UserInfoWithCookie[]): Promise<UserListSyncResult> {
+  syncUserList(_context: ApiCallerContext, users: UserInfoWithCookie[]): Promise<UserListSyncResult> {
     return userService.syncUserList(users)
+  }
+
+  checkUpdateApp(_context: ApiCallerContext): Promise<void> {
+    appUpdateManager.showLastCheckUpToDateTip = true
+    return appUpdateManager.checkUpdate()
+  }
+
+  cancelCheckUpdateApp(_context: ApiCallerContext): Promise<void> {
+    appUpdateManager.showLastCheckUpToDateTip = false
+    return appUpdateManager.cancelCheck()
   }
 }

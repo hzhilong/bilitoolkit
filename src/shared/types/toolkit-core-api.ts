@@ -133,6 +133,16 @@ export interface ToolkitCoreApi {
    * 同步用户列表
    */
   syncUserList(users: UserInfoWithCookie[]): Promise<UserListSyncResult>
+
+  /**
+   * 检查更新应用
+   */
+  checkUpdateApp(): Promise<void>
+
+  /**
+   * 取消检查更新应用
+   */
+  cancelCheckUpdateApp(): Promise<void>
 }
 
 /**

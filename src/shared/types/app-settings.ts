@@ -16,4 +16,6 @@ export interface AppSettings {
   removeStorageOnUninstall: boolean
   // 卸载插件时删除文件、数据库等磁盘数据
   removeFilesOnUninstall: boolean
+  // 启动时自动更新 APP
+  autoUpdateOnStartup: boolean
 }

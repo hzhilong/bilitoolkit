@@ -36,6 +36,11 @@ export const appMenus: MenuItem[] = [
     path: '/userManage',
   },
   {
+    title: '下载管理',
+    icon: 'download',
+    path: '/downloadManage',
+  },
+  {
     title: '任务管理',
     icon: 'task',
     path: '/taskManage',

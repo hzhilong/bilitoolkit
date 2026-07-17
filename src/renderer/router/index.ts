@@ -37,6 +37,11 @@ const router = createRouter({
           component: () => import('../views/UserManage.vue'),
         },
         {
+          name: '下载管理',
+          path: '/downloadManage',
+          component: () => import('../views/DownloadManage.vue'),
+        },
+        {
           name: '任务管理',
           path: '/taskManage',
           component: () => import('../views/task/TaskManageView.vue'),

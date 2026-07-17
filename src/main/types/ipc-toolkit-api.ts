@@ -12,6 +12,7 @@ import type {
   ToolkitWindowApi,
   ToolkitUserApi,
   ToolkitTimerApi,
+  ToolkitDownloadApi,
 } from 'bilitoolkit-types'
 import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.js'
 
@@ -197,3 +198,10 @@ export type GeneratedIpcToolkitTimerApi = AddApiCallerContext<ToolkitTimerApi>
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IpcToolkitTimerApi extends GeneratedIpcToolkitTimerApi {}
+
+/**
+ * 下载API（添加API调用的上下文参数）
+ */
+export type GeneratedIpcToolkitDownloadApi = AddApiCallerContext<Omit<ToolkitDownloadApi, 'onUpdated'>>
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IpcToolkitDownloadApi extends GeneratedIpcToolkitDownloadApi {}

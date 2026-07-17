@@ -15,6 +15,7 @@ import { UserApiHandler } from '@/main/api/handler/api-handler-user.js'
 import { TaskApiHandler } from '@/main/api/handler/api-handler-task.js'
 import { HOST_API_MODULES } from '@/main/common/main-constants.js'
 import { TimerApiHandler } from '@/main/api/handler/api-handler-timer.js'
+import { DownloadApiHandler } from '@/main/api/handler/api-handler-download.js'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -38,6 +39,7 @@ export class ToolkitApiDispatcher extends ApiDispatcher<ToolkitApiWithCore> {
     this.register('core', new CoreApiHandler())
     this.register('task', new TaskApiHandler())
     this.register('timer', new TimerApiHandler())
+    this.register('download', new DownloadApiHandler())
   }
 
   /**

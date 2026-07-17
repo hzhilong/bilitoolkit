@@ -5,6 +5,7 @@ import type { ToolkitApiWithCore } from '@/shared/types/toolkit-core-api.js'
 import { baseInvokeApi } from '@/main/api/invoke/base-invoke.js'
 import { timerApi } from '@/main/api/invoke/invoke-api-timer.js'
 import { fileApi } from '@/main/api/invoke/invoke-api-file.js'
+import { downloadApi } from '@/main/api/invoke/invoke-api-download.js'
 
 /**
  * 基础调用方法（不需要单独实现 invoke 方法的）
@@ -18,6 +19,7 @@ const commonToolkitApi = {
   event: eventApi,
   timer: timerApi,
   file: fileApi,
+  download: downloadApi,
 }
 
 /**

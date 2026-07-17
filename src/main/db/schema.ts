@@ -1,5 +1,6 @@
 import type { Selectable, Generated } from 'kysely'
 import type { Task, TaskExecution, TaskExecutionLog } from '@/shared/types/task.js'
+import type { DownloadTaskStatus } from 'bilitoolkit-types'
 
 // 定义数据库结构
 export interface TaskTable extends Omit<Task, 'id' | 'config' | 'schedule' | 'enabled'> {
@@ -18,10 +19,30 @@ export interface TaskExecutionLogTable extends Omit<TaskExecutionLog, 'id'> {
   id: Generated<number>
 }
 
+export interface DownloadRecordTable {
+  id: Generated<number>
+  title: string
+
+  videos: string
+  status: DownloadTaskStatus
+
+  progress?: string
+  result?: string
+  error?: string
+
+  createdAt: number
+  updatedAt?: number
+  userCookie: string
+  settings?: string
+
+  pluginId: string
+}
+
 export interface DatabaseSchema {
   tasks: TaskTable
   task_executions: TaskExecutionTable
   task_execution_logs: TaskExecutionLogTable
+  download_records: DownloadRecordTable
 }
 
 export type TableName = keyof DatabaseSchema
@@ -34,3 +55,5 @@ export type TaskRow = Selectable<TaskTable>
 export type TaskExecutionRow = Selectable<TaskExecutionTable>
 
 export type TaskExecutionLogRow = Selectable<TaskExecutionLogTable>
+
+export type DownloadRecordRow = Selectable<DownloadRecordTable>

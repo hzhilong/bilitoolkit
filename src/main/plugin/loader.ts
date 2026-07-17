@@ -4,14 +4,7 @@ import type {
   PluginDownloadOptions,
   RecommendedPlugins,
 } from '@/shared/types/toolkit-plugin.js'
-import {
-  getFormattedDate,
-  getErrorMessage,
-  getGithubRawJson,
-  parseGithubRepoUrl,
-  parseGithubRawUrl,
-  fetchWithFormat,
-} from '@ybgnb/utils'
+import { getFormattedDate, getErrorMessage, parseGithubRepoUrl, parseGithubRawUrl, fetchWithFormat } from '@ybgnb/utils'
 import { parsePluginKeywords } from '@/shared/utils/plugin-parse.js'
 import path from 'path'
 import fs from 'fs'

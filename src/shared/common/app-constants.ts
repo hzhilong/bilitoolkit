@@ -8,6 +8,7 @@ export const defaultAppSettings: AppSettings = {
   devToolsType: DevToolsType.MAIN,
   removeFilesOnUninstall: false,
   removeStorageOnUninstall: false,
+  autoUpdateOnStartup: false,
 } as const
 
 export const defaultAppInstalledPlugins: AppInstalledPlugins = {

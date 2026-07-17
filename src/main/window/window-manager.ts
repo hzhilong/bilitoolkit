@@ -1,4 +1,4 @@
-import { BrowserWindow, globalShortcut, ipcMain, type HandlerDetails, Menu, dialog } from 'electron'
+import { BrowserWindow, globalShortcut, ipcMain, type HandlerDetails, Menu } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
 import { execBiz, formatUnitSize, isCanceledError } from '@ybgnb/utils'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
@@ -7,15 +7,15 @@ import { BaseWindowManager } from '@/main/window/base-window-manager.js'
 import { showDevTools } from '@/main/utils/dev-tools.js'
 import { mainLogger, mainConsoleLogger, mainFileLogger } from '@/main/common/main-logger.js'
 import { appPath } from '@/main/common/app-path.js'
-import electronUpdater, { type UpdateDownloadedEvent } from 'electron-updater'
 import { BiliApiBusinessError } from '@ybgnb/bili-api'
-import { appEnv } from '@ybgnb/vite-env/common'
 import { initDatabase } from '@/main/db/init.js'
 import { taskRuntime } from '@/main/plugin/task/runtime.js'
 import { LOG_IGNORED_API_SET, LOG_IGNORED_API_REGEXP } from '@/main/common/main-constants.js'
 import util from 'node:util'
-import { fileHandleManger } from '@/main/modules/file-handle/file-handle-manager.js'
+import { fileHandleManager } from '@/main/modules/file-handle/file-handle-manager.js'
 import { AppError } from 'bilitoolkit-types'
+import { appUpdateManager } from '@/main/modules/update/update-manager.js'
+import { downloadManager } from '@/main/modules/download/download-manager.js'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -52,26 +52,7 @@ export class WindowManager extends BaseWindowManager {
     // 设置菜单
     Menu.setApplicationMenu(null)
     // 应用更新检测
-    if (appEnv.PROD) {
-      const autoUpdater = electronUpdater.autoUpdater
-      autoUpdater.on('update-downloaded', async (event: UpdateDownloadedEvent) => {
-        const { response } = await dialog.showMessageBox({
-          type: 'info',
-          buttons: ['立即安装', '稍后'],
-          title: '检测到新版本',
-          message: `新版本 ${event.version} 已下载完成`,
-        })
-
-        if (response === 0) {
-          autoUpdater.quitAndInstall()
-        }
-      })
-      try {
-        await autoUpdater.checkForUpdatesAndNotify()
-      } catch (e) {
-        mainLogger.error('检查更新失败', e)
-      }
-    }
+    appUpdateManager.init()
     // 在开发环境和生产环境均可通过快捷键打开devTools
     globalShortcut.register('CommandOrControl+Shift+i', function () {
       showDevTools()
@@ -82,8 +63,10 @@ export class WindowManager extends BaseWindowManager {
     await this.initAppDialogView()
     // 初始化任务调度
     void taskRuntime.bootstrap()
+    // 初始化下载管理
+    void downloadManager.bootstrap()
     // 初始化文件句柄API
-    fileHandleManger.init()
+    fileHandleManager.init()
     if (appPath.devUrl) {
       // 开发
       mainWindow.loadURL(appPath.devUrl).then(() => {})

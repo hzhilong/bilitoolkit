@@ -71,6 +71,12 @@ export default (): Configuration => {
       },
     ],
     // 需要打包到应用资源目录的额外资源
-    extraResources: [],
+    extraResources: [
+      {
+        from: 'node_modules/ffmpeg-static/bin',
+        to: 'ffmpeg-static/bin',
+        filter: ['**/*'],
+      },
+    ],
   }
 }
