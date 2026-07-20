@@ -2,7 +2,7 @@ import { downloadRecordRepository } from '@/main/db/repository/download.js'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.js'
 import { AppError, type DownloadTask, type DownloadTaskFilters, type DownloadCreateOptions } from 'bilitoolkit-types'
 import { DownloadRunner } from '@/main/modules/download/download-runner.js'
-import type { DownloadRecord } from '@/main/types/download.js'
+import type { DownloadRecord } from '@/shared/types/download.js'
 import { mapDownloadRecordToRow } from '@/main/db/utils/db.js'
 import { toDownloadTask } from '@/main/utils/download.js'
 import { getErrorMessage } from '@ybgnb/utils'
@@ -10,7 +10,6 @@ import type { PageParams, PageResult } from 'bilitoolkit-ui'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
 import { webContents } from 'electron'
 import { windowManager } from '@/main/window/window-manager.js'
-import { mainLogger } from '@/main/common/main-logger.js'
 
 class DownloadManager {
   runners: Map<number, DownloadRunner> = new Map()
@@ -22,25 +21,22 @@ class DownloadManager {
   }
 
   async addToQueue(runner: DownloadRunner) {
-    mainLogger.debug('addToQueue')
     await runner.pending()
     if (!this.downloadQueue.includes(runner)) {
       this.downloadQueue.push(runner)
     }
     if (this.downloadQueue.length === 1) {
-      runner.download().then()
+      runner.download().then().catch()
     }
   }
 
   removeFromQueue(runner?: DownloadRunner) {
-    mainLogger.debug('removeFromQueue')
     if (runner && this.downloadQueue.includes(runner)) {
       this.downloadQueue.splice(this.downloadQueue.indexOf(runner), 1)
     }
   }
 
   getFirstInQueue(): DownloadRunner | null {
-    mainLogger.debug('getFirstInQueue')
     if (this.downloadQueue.length === 0) {
       return null
     } else {
@@ -66,13 +62,11 @@ class DownloadManager {
   }
 
   async create(context: ApiCallerContext, { userCookie, videos, title, settings }: DownloadCreateOptions) {
-    mainLogger.debug('create')
-    const now = Date.now()
     const record: Omit<DownloadRecord, 'id'> = {
       title: title,
       videos: videos,
       status: 'pending',
-      createdAt: now,
+      createdAt: Math.floor(new Date().getTime() / 1000),
       userCookie: userCookie,
       pluginId: this.getPluginId(context),
       settings: settings,
@@ -105,7 +99,7 @@ class DownloadManager {
   }
 
   async onTaskUpdate(id: DownloadTask['id'], update: Partial<Omit<DownloadTask, 'id'>>) {
-    mainLogger.debug('updateTask')
+    update.updatedAt = Math.floor(new Date().getTime() / 1000)
     const task = await downloadRecordRepository.getById(id)
     if (task) {
       if (update.status === 'completed') {
@@ -135,14 +129,13 @@ class DownloadManager {
   private dispatching = false
 
   private dispatch() {
-    mainLogger.debug('dispatch')
     if (this.dispatching) return
 
     this.dispatching = true
     try {
       const runner = this.getFirstInQueue()
       if (runner) {
-        runner.download().then()
+        runner.download().then().catch()
       }
     } finally {
       this.dispatching = false
@@ -234,6 +227,7 @@ class DownloadManager {
     }
     this.removeFromQueue(runner)
     this.runners.delete(id)
+    await downloadRecordRepository.deleteById(id)
   }
 
   async fetchPage(

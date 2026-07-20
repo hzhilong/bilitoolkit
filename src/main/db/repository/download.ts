@@ -2,7 +2,7 @@ import { db } from '../client.js'
 
 import { BaseRepository } from '@/main/db/repository/base.js'
 import { type Updateable, type Insertable, sql } from 'kysely'
-import type { DownloadRecord } from '@/main/types/download.js'
+import type { DownloadRecord } from '@/shared/types/download.js'
 import { mapRowToDownloadRecord } from '@/main/db/utils/db.js'
 import type { DownloadRecordTable, DownloadRecordRow } from '@/main/db/schema.js'
 import type { PageParams, PageResult } from 'bilitoolkit-ui'
@@ -35,6 +35,10 @@ export class DownloadRecordRepository extends BaseRepository {
   async getById(id: number): Promise<DownloadRecord | null> {
     const row = await db.selectFrom('download_records').selectAll().where('id', '=', id).executeTakeFirst()
     return row ? mapRowToDownloadRecord(row) : null
+  }
+
+  async deleteById(id: number) {
+    await db.deleteFrom('download_records').where('id', '=', id).execute()
   }
 
   async getDownloadList(pluginId: string): Promise<DownloadRecord[]> {
@@ -84,7 +88,7 @@ export class DownloadRecordRepository extends BaseRepository {
     if (filters.title) {
       // 转义用户输入中的通配符 % 和 _
       const escapeLike = (value: string) => value.replace(/[%_]/g, '\\$&')
-      query = query.where(sql<boolean>`title LIKE '%' || ${escapeLike} || '%' ESCAPE '\\'`)
+      query = query.where(sql<boolean>`title LIKE '%' || ${escapeLike(filters.title)} || '%' ESCAPE '\\'`)
     }
 
     query = query.orderBy('createdAt', 'desc')

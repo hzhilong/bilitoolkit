@@ -33,6 +33,12 @@
       "@/shared": ["./src/shared"]
     }
   },
-  "include": ["./src/main/**/*.ts", "./src/main/**/*.d.ts", "./src/shared/**/*.d.ts", "./src/shared/**/*.ts"],
+  "include": [
+    "./src/main/**/*.ts",
+    "./src/main/**/*.d.ts",
+    "./src/shared/**/*.d.ts",
+    "./src/shared/**/*.ts",
+    "./src/shared/**/*.js"
+  ],
   "exclude": ["./node_modules", ".yalc", "yalc.lock", "./src/**/__tests__/*", "./public"]
 }

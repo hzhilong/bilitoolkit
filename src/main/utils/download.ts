@@ -1,4 +1,4 @@
-import type { DownloadRecord } from '@/main/types/download.js'
+import type { DownloadRecord } from '@/shared/types/download.js'
 import { type DownloadTask } from 'bilitoolkit-types'
 
 export const toDownloadTask = (record: DownloadRecord): DownloadTask => {

@@ -7,10 +7,6 @@ import {
 } from 'bilitoolkit-types'
 import type { UserCookie } from '@ybgnb/bili-api'
 
-export interface DownloadRecord extends DownloadTask {
-  pluginId: string
-}
-
 export type DownloadProgress = Pick<DownloadTaskProgress, 'totalBytes' | 'completedBytes' | 'speedKBps'>
 
 export interface DownloaderListener {

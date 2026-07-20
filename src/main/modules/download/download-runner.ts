@@ -119,24 +119,32 @@ export class DownloadRunner {
   async pending() {
     if (this.downloader) {
       await this.downloader.pended()
+    } else {
+      this.onStatusUpdate('pending')
     }
   }
 
   async pause() {
     if (this.downloader) {
       await this.downloader.pause()
+    } else {
+      this.onStatusUpdate('paused')
     }
   }
 
   async resume() {
     if (this.downloader) {
       await this.downloader.resume()
+    } else {
+      this.download().then()
     }
   }
 
   async cancel() {
     if (this.downloader) {
       await this.downloader.cancel()
+    } else {
+      this.onStatusUpdate('canceled')
     }
   }
 

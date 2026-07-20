@@ -16,9 +16,10 @@ import { getRecommendedPlugins, getBlockedPluginIds } from '@/main/plugin/loader
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.js'
 import { userService } from '@/main/service/user.service.js'
-import { getFileSizeKB, formatFileSizeFromKB } from '@ybgnb/utils/node'
+import { getFileSizeKB } from '@ybgnb/utils/node'
 import { showItemInFolder } from '@/main/utils/file.js'
 import { appUpdateManager } from '@/main/modules/update/update-manager.js'
+import { formatFileSizeFromKB } from '@ybgnb/utils'
 
 /**
  * 核心API处理器

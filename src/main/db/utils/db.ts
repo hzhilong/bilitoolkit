@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { TaskRow, TaskExecutionRow, DownloadRecordRow, DownloadRecordTable } from '@/main/db/schema.js'
 import type { Task, TaskExecution } from '@/shared/types/task.js'
-import type { DownloadRecord } from '@/main/types/download.js'
+import type { DownloadRecord } from '@/shared/types/download.js'
 import type { DownloadTaskStatus, DownloadVideo } from 'bilitoolkit-types'
 import type { UserCookie } from '@ybgnb/bili-api'
 import type { Updateable, Selectable, Insertable } from 'kysely'

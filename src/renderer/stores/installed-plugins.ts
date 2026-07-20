@@ -43,7 +43,11 @@ export const useAppInstalledPlugins = defineStore(
       return state.plugins.some((p) => p.id === pluginId)
     }
 
-    return { init, state, installedPlugins, addPlugin, delPlugin, hasInstalled }
+    const getInstalledPluginInfo = (pluginId: string) => {
+      return state.plugins.find((p) => p.id === pluginId)
+    }
+
+    return { init, state, installedPlugins, addPlugin, delPlugin, hasInstalled, getInstalledPluginInfo }
   },
   {
     // 自己实现配置的持久化
