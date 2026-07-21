@@ -17,11 +17,14 @@ toolkitApi.global.register(HOST_GLOBAL_DATA.CONTENT_BOUNDS, () => {
       throw new Error('内部错误：窗口未被加载')
     }
     const rect = mainContentRef.value.getBoundingClientRect()
+    const style = getComputedStyle(mainContentRef.value)
+    const borderLeft = parseFloat(style.borderLeftWidth) || 0
+    const borderTop = parseFloat(style.borderTopWidth) || 0
     return {
-      width: rect.width - 2,
-      height: rect.height - 2,
-      x: rect.x + 1,
-      y: rect.y + 1,
+      width: Math.round(rect.width - 2 * borderLeft),
+      height: Math.round(rect.height - 2 * borderTop),
+      x: Math.round(rect.x + borderLeft),
+      y: Math.round(rect.y + borderTop),
     }
   })
 })
