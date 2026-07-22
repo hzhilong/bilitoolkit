@@ -80,5 +80,5 @@ export const parseNpmPackage = (pkg: NpmPackage) => {
  */
 export const parsePluginIconUrl = (pluginId: string) => {
   //  return `https://unpkg.com/${pluginId}/dist/icon.png`
-  return `https://cdn.jsdelivr.net/npm/${pluginId}/dist/icon.png`
+  return `https://cdn.jsdelivr.net/npm/${pluginId}@latest/dist/icon.png`
 }
