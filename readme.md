@@ -14,6 +14,7 @@
 | [速升姬](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-quick-upgrade) | 用于自动完成每日经验任务，包括每日登录、观看、投币和分享。     |
 | [弹幕工具箱](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-danmaku) | 快速查询弹幕及发送者。                       |
 | [图片下载](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-image-downloader) | 快速下载专栏、动态、评论中的图片与表情包，以及视频封面、直播封面和用户头像。 |
+| [视频下载](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-video-downloader) | 下载视频、音频、弹幕、字幕、封面等资源|
 
 ## [开发说明](./doc/development.md)
 

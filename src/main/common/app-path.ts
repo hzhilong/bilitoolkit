@@ -34,6 +34,13 @@ const programRoot = devUrl ? appRootPath : path.dirname(app.getPath('exe'))
  * 构建后的资源路径（开发环境不要使用）
  */
 const appResourcesPath = path.dirname(appRootPath)
+
+/**
+ * 解包的模块根路径（开发环境不要使用）
+ * app.asar.unpacked/node_modules
+ */
+const unpackedModulesPath = path.join(appResourcesPath, 'app.asar.unpacked/node_modules')
+
 /**
  * 前端代码打包后的目录（渲染进程）
  */
@@ -121,6 +128,7 @@ export const appPath = {
   appRootPath,
   programRoot,
   appResourcesPath,
+  unpackedModulesPath,
   appRendererDist,
   appMainDist,
   appPublicPath,

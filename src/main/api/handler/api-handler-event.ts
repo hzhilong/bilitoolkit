@@ -1,9 +1,9 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
 import { HOST_EVENT_CHANNELS, type HostEventChannel } from '@/shared/types/host-event-channel.js'
-import type { IpcEventEmiter } from '@/main/types/ipc-event.js'
+import type { IpcEventEmitter } from '@/main/types/ipc-event.js'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
 import type { ApiCallerContext, IpcToolkitEventApi } from '@/main/types/ipc-toolkit-api.js'
-import { webContents } from 'electron'
+import { webContents, type WebContents } from 'electron'
 import { eventBus } from '@/main/event/event-bus.js'
 import { windowManager } from '@/main/window/window-manager.js'
 
@@ -16,7 +16,7 @@ export const emit = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...data: any[]
 ) => {
-  const emitter: IpcEventEmiter = {
+  const emitter: IpcEventEmitter = {
     channel: channel,
     payload: data,
   }
@@ -39,7 +39,7 @@ export const emitHost = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...data: any[]
 ) => {
-  const emitter: IpcEventEmiter = {
+  const emitter: IpcEventEmitter = {
     channel: channel,
     payload: data,
   }
@@ -49,6 +49,20 @@ export const emitHost = (
 
   // 发送给渲染进程
   windowManager.getHostWebContents().send(IPC_CHANNELS.TOOLKIT_EVENT, emitter)
+}
+
+export const onlyEmitHost = (
+  channel: HostEventChannel | string,
+  hostWeb: WebContents | null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ...data: any[]
+) => {
+  const emitter: IpcEventEmitter = {
+    channel: channel,
+    payload: data,
+  }
+
+  ;(hostWeb ?? windowManager.getHostWebContents()).send(IPC_CHANNELS.TOOLKIT_EVENT, emitter)
 }
 
 /**

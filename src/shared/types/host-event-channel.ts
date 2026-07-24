@@ -15,4 +15,6 @@ export const HOST_EVENT_CHANNELS = {
   REQ_SHOW_MSG: 'REQ_SHOW_MSG',
   // 任务插件的日志记录器监听
   TASK_PLUGIN_LOGGER: 'TASK_PLUGIN_LOGGER',
+  // 下载任务变化
+  DOWNLOAD_TASK_CHANGE: 'DOWNLOAD_TASK_CHANGE',
 } as const

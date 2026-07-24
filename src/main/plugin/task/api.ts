@@ -13,7 +13,7 @@ export function buildTaskPluginApiCallerContext(plugin: InstalledToolkitPlugin) 
     window: windowManager.mainWindow!,
     webContents: windowManager.mainWindow!.webContents,
     dbPath: DBUtils.getDBPath('plugin', plugin),
-    filePath: getFileRootPath('plugin', plugin),
+    filePath: getFileRootPath('plugin', plugin.id),
   } satisfies PluginApiCallerContext
 }
 

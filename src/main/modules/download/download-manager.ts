@@ -2,7 +2,7 @@ import { downloadRecordRepository } from '@/main/db/repository/download.js'
 import type { ApiCallerContext } from '@/main/types/ipc-toolkit-api.js'
 import { AppError, type DownloadTask, type DownloadTaskFilters, type DownloadCreateOptions } from 'bilitoolkit-types'
 import { DownloadRunner } from '@/main/modules/download/download-runner.js'
-import type { DownloadRecord } from '@/shared/types/download.js'
+import type { DownloadRecord, DownloadTaskChangePayload } from '@/shared/types/download.js'
 import { mapDownloadRecordToRow } from '@/main/db/utils/db.js'
 import { toDownloadTask } from '@/main/utils/download.js'
 import { getErrorMessage } from '@ybgnb/utils'
@@ -10,6 +10,9 @@ import type { PageParams, PageResult } from 'bilitoolkit-ui'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
 import { webContents } from 'electron'
 import { windowManager } from '@/main/window/window-manager.js'
+import path from 'path'
+import { getFileRootPath, showItemInFolder } from '@/main/utils/file.js'
+import { onlyEmitHost } from '@/main/api/handler/api-handler-event.js'
 
 class DownloadManager {
   runners: Map<number, DownloadRunner> = new Map()
@@ -84,6 +87,7 @@ class DownloadManager {
       await this.addToQueue(runner)
       this.runners.set(recordId, runner)
       this.webIds.set(recordId, context.webContents.id)
+      this.notifyRenderer(task.id, 'create')
       return task
     } catch (error) {
       if (recordId != null) {
@@ -112,18 +116,29 @@ class DownloadManager {
 
       const updatedTask = await downloadRecordRepository.getById(id)
       if (updatedTask) {
-        const pluginWebId = this.webIds.get(id)
-        const hostWeb = windowManager.getHostWebContents()
-        hostWeb.send(IPC_CHANNELS.DOWNLOAD_TASK_UPDATE, updatedTask)
-        if (pluginWebId != null && pluginWebId !== hostWeb.id) {
-          webContents.fromId(pluginWebId)?.send(IPC_CHANNELS.DOWNLOAD_TASK_UPDATE, updatedTask)
-        }
+        this.notifyRenderer(id, 'update', updatedTask)
       }
     }
     if (update.status != null && update.status !== 'downloading' && update.status !== 'merging') {
       this.removeFromQueue(this.runners.get(id))
       this.dispatch()
     }
+  }
+
+  private notifyRenderer(id: number, type: 'update' | 'create' | 'remove', updatedTask?: DownloadRecord) {
+    const hostWeb = windowManager.getHostWebContents()
+    if (type === 'update') {
+      const pluginWebId = this.webIds.get(id)
+      if (pluginWebId != null && pluginWebId !== hostWeb.id) {
+        webContents.fromId(pluginWebId)?.send(IPC_CHANNELS.DOWNLOAD_TASK_UPDATE, updatedTask)
+      }
+      hostWeb.send(IPC_CHANNELS.DOWNLOAD_TASK_UPDATE, updatedTask)
+    }
+    onlyEmitHost('DOWNLOAD_TASK_CHANGE', hostWeb, {
+      type,
+      id,
+      task: updatedTask,
+    } as DownloadTaskChangePayload)
   }
 
   private dispatching = false
@@ -162,9 +177,16 @@ class DownloadManager {
     if (this.runners.has(record.id)) {
       return this.runners.get(record.id)!
     } else {
+      let fileRoot
+      if (record.pluginId === 'core') {
+        fileRoot = getFileRootPath('host')
+      } else {
+        fileRoot = getFileRootPath('plugin', record.pluginId)
+      }
+
       const runner = new DownloadRunner({
         task: record,
-        fileRoot: context.filePath,
+        fileRoot: fileRoot,
         listener: this,
       })
       this.runners.set(record.id, runner)
@@ -228,6 +250,7 @@ class DownloadManager {
     this.removeFromQueue(runner)
     this.runners.delete(id)
     await downloadRecordRepository.deleteById(id)
+    this.notifyRenderer(id, 'remove')
   }
 
   async fetchPage(
@@ -237,6 +260,37 @@ class DownloadManager {
   ): Promise<PageResult<DownloadTask>> {
     const pluginId = this.getPluginId(context)
     return downloadRecordRepository.fetchPage(pageParams, filter, pluginId === 'core' ? undefined : pluginId)
+  }
+
+  async openFolder(context: ApiCallerContext, id: number, videoIndex: number, partIndex: number) {
+    const ipcPluginId = this.getPluginId(context)
+
+    const task = await downloadRecordRepository.getById(id)
+    if (task) {
+      if (context.envType !== 'host' && ipcPluginId !== task.pluginId) {
+        throw new AppError(`非法访问下载任务[${id}]`)
+      }
+      const video = task.videos[videoIndex]
+      if (video) {
+        const part = video.parts[partIndex]
+        if (part) {
+          let fileRoot
+          if (task.pluginId === 'core') {
+            fileRoot = getFileRootPath('host')
+          } else {
+            fileRoot = getFileRootPath('plugin', task.pluginId)
+          }
+          if (part.subdirectory) {
+            await showItemInFolder(path.join(fileRoot, part.subdirectory))
+          } else {
+            await showItemInFolder(fileRoot)
+          }
+          return
+        }
+      }
+    }
+
+    throw new AppError('下载任务不存在')
   }
 }
 

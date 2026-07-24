@@ -1,11 +1,12 @@
 import { invokeModuleApi } from './base-invoke.js'
 import type { LeafFunctionPaths } from '@/main/types/ipc-toolkit-api.js'
-import type { EventListener, IpcEventEmiter } from '@/main/types/ipc-event.js'
+import type { EventListener, IpcEventEmitter } from '@/main/types/ipc-event.js'
 import { HOST_EVENT_CHANNELS, type HostEventChannel } from '@/shared/types/host-event-channel.js'
 import { ipcRenderer } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
 import type { AppThemeState, ToolkitEventApi } from 'bilitoolkit-types'
 import type { UserCard } from '@ybgnb/bili-api'
+
 type IpcRendererEvent = Electron.IpcRendererEvent
 
 export const invokeEventApi = async <T = void>(
@@ -20,12 +21,17 @@ export const invokeEventApi = async <T = void>(
  * 监听事件
  */
 export const listenEvent = async (channel: HostEventChannel | string, listener: EventListener) => {
-  // 监听主进程的请求
-  ipcRenderer.on(IPC_CHANNELS.TOOLKIT_EVENT, async (event: IpcRendererEvent, emitter: IpcEventEmiter) => {
+  const ipcListener = async (event: IpcRendererEvent, emitter: IpcEventEmitter) => {
     if (channel === emitter.channel) {
       listener(...emitter.payload)
     }
-  })
+  }
+  // 监听主进程的请求
+  ipcRenderer.on(IPC_CHANNELS.TOOLKIT_EVENT, ipcListener)
+
+  return () => {
+    ipcRenderer.off(IPC_CHANNELS.TOOLKIT_EVENT, ipcListener)
+  }
 }
 /**
  * 监听宿主环境的事件
@@ -35,21 +41,21 @@ export const listenHostEvent = async (channel: HostEventChannel, listener: Event
 }
 
 export const eventApi: ToolkitEventApi = {
-  onUpdateAppTheme: function (listener: (theme: AppThemeState) => void): Promise<void> {
+  onUpdateAppTheme: function (listener: (theme: AppThemeState) => void): Promise<() => void> {
     return listenHostEvent('UPDATE_APP_THEME', listener)
   },
-  onUserLogout: function (listener: (user: UserCard) => void): Promise<void> {
+  onUserLogout: function (listener: (user: UserCard) => void): Promise<() => void> {
     return listenHostEvent('USER_LOGOUT', listener)
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  on: function (eventName: string, listener: (...data: any[]) => void): Promise<void> {
+  on: function (eventName: string, listener: (...data: any[]) => void): Promise<() => void> {
     return listenEvent(eventName, listener)
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   emit: function (eventName: string, ...data: any[]): Promise<void> {
     return invokeEventApi('emit', eventName, ...data)
   },
-  onWindowShown: function (listener: () => void): Promise<void> {
+  onWindowShown: function (listener: () => void): Promise<() => void> {
     return listenHostEvent(HOST_EVENT_CHANNELS.WINDOW_SHOWN, listener)
   },
 }

@@ -19,6 +19,7 @@ import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
 import { APP_DB_KEYS } from '@/shared/common/app-db'
 import { HOST_EVENT_CHANNELS } from '@/shared/types/host-event-channel'
 import { useRecentPluginsStore } from '@/renderer/stores/recent-plugins'
+import '@/shared/utils/polyfills'
 
 async function bootstrapApp() {
   if (appEnv.DEV) {

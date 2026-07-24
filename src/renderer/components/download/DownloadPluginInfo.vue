@@ -51,5 +51,6 @@ const handleClick = () => {
   padding: 0 8px;
   cursor: pointer;
   margin-left: 10px;
+  text-wrap: nowrap;
 }
 </style>

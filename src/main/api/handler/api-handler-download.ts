@@ -53,4 +53,8 @@ export class DownloadApiHandler extends ApiHandleStrategy implements IpcToolkitD
   ): Promise<PageResult<DownloadTask>> {
     return downloadManager.fetchPage(context, pageParams, filter)
   }
+
+  openFolder(context: ApiCallerContext, id: number, videoIndex: number, partIndex: number): Promise<void> {
+    return downloadManager.openFolder(context, id, videoIndex, partIndex)
+  }
 }

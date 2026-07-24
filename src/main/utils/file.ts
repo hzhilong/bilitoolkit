@@ -1,6 +1,5 @@
 import { shell } from 'electron'
 import path from 'path'
-import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import type { ApiCallerEnvType, ApiCallerContext } from '@/main/types/ipc-toolkit-api.js'
 import { appPath } from '@/main/common/app-path.js'
 import { MainConstants } from '@/main/common/main-constants.js'
@@ -17,19 +16,19 @@ export function getFileRootPath(env: 'host'): string
 /**
  * 获取文件根目录
  * @param env     调用环境
- * @param plugin  关联的插件
+ * @param pluginId  关联的插件id
  */
-export function getFileRootPath(env: 'plugin', plugin: ToolkitPlugin): string
+export function getFileRootPath(env: 'plugin', pluginId: string): string
 /**
  * 获取文件根目录
  * @param env     调用环境
  * @param plugin  关联的插件
  */
-export function getFileRootPath(env: ApiCallerEnvType, plugin?: ToolkitPlugin): string {
+export function getFileRootPath(env: ApiCallerEnvType, pluginId?: string): string {
   if (env === 'host') {
     return path.resolve(path.join(appPath.filePath, MainConstants.FILE.CORE_NAME))
   } else {
-    return path.resolve(path.join(appPath.filePath, NpmUtils.pkgNameToDirName(plugin!.id)))
+    return path.resolve(path.join(appPath.filePath, NpmUtils.pkgNameToDirName(pluginId!)))
   }
 }
 

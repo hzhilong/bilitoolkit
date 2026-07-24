@@ -152,7 +152,7 @@ async function loadTestPluginByFile(rootPath: string): Promise<InstalledToolkitP
  */
 export async function removeTestPlugin(plugin: InstalledToolkitPlugin) {
   await emptyDirectory(DBUtils.getDBPath('plugin', plugin))
-  await emptyDirectory(getFileRootPath('plugin', plugin))
+  await emptyDirectory(getFileRootPath('plugin', plugin.id))
 }
 
 /**

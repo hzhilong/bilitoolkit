@@ -3,7 +3,7 @@ import type { HostEventChannel } from '@/shared/types/host-event-channel.js'
 /**
  * IPC 事件发射者
  */
-export interface IpcEventEmiter {
+export interface IpcEventEmitter {
   // 事件通道
   channel: HostEventChannel | string
   // 数据负载

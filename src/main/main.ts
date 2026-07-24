@@ -8,6 +8,7 @@ import { appPath } from '@/main/common/app-path.js'
 import { mainEnv } from '@/main/common/main-env.js'
 import { mainLogger } from '@/main/common/main-logger.js'
 import { initFFmpeg } from '@/main/modules/ffmpeg/init.js'
+import '@/shared/utils/polyfills'
 
 initFFmpeg()
 

@@ -11,7 +11,7 @@ import type { BaseDownloader } from '@/main/modules/download/downloader/base-dow
 import { DMDownloader } from '@/main/modules/download/downloader/dm-downloader.js'
 import path from 'path'
 import { CommonDownloader } from '@/main/modules/download/downloader/common-downloader.js'
-import { isCanceledError, sleepRandom } from '@ybgnb/utils'
+import { isCanceledError, sleepRandom, getErrorMessage } from '@ybgnb/utils'
 import { deleteFiles, ensureDir } from '@ybgnb/utils/node'
 import { mergeAudioAndVideo } from '@/main/modules/ffmpeg/merge.js'
 import { downloadRecordRepository } from '@/main/db/repository/download.js'
@@ -136,7 +136,11 @@ export class DownloadRunner {
     if (this.downloader) {
       await this.downloader.resume()
     } else {
-      this.download().then()
+      this.download()
+        .then()
+        .catch((e) => {
+          this.onStatusUpdate('failed', getErrorMessage(e))
+        })
     }
   }
 

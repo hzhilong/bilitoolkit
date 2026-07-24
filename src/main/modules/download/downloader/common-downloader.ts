@@ -5,12 +5,16 @@ import { ensureDir } from '@ybgnb/utils/node'
 import fs from 'node:fs'
 import { publicClient } from 'bilitoolkit-runtime/biliapi'
 import { getErrorMessage, isCanceledError } from '@ybgnb/utils'
+import { mainLogger } from '@/main/common/main-logger.js'
 
 export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover' | 'subtitle'> {
-  private readonly url: string
+  private url: string
 
   private lastCompletedBytes = 0
   private lastUpdateTime = 0
+
+  private backupUrls: string[] = []
+  private backupUrlIndex = 0
 
   constructor(context: DownloaderContext<'audio' | 'video' | 'cover' | 'subtitle'>) {
     super(context)
@@ -18,17 +22,29 @@ export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover'
     switch (context.type) {
       case 'audio':
         this.url = context.source.audio.base_url
+        this.backupUrls = context.source.audio.backupUrl || []
         break
       case 'video':
         this.url = context.source.video.base_url
+        this.backupUrls = context.source.video.backupUrl || []
         break
       case 'cover':
         this.url = context.source.coverUrl
         break
       case 'subtitle':
-        this.url = context.source.subtitleItem.subtitle_url
+        this.url = 'https:' + context.source.subtitleItem.subtitle_url
         break
     }
+  }
+
+  private getNextBackupUrl() {
+    if (this.backupUrls.length === 0) return null
+    const url = this.backupUrls[this.backupUrlIndex]
+    if (url) {
+      this.backupUrlIndex++
+      return url
+    }
+    return null
   }
 
   /**
@@ -54,7 +70,7 @@ export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover'
         cookie: this.context.userCookie.cookie,
         referer: 'https://www.bilibili.com',
       }
-      headers['Range'] = `bytes=${completedBytes}-`
+      headers['Range'] = `bytes=0-`
 
       const response = await fetch(this.url, {
         headers,
@@ -62,6 +78,14 @@ export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover'
       })
 
       if (!response.ok && response.status !== 206) {
+        mainLogger.error(`url [${this.url}] http 错误，状态码 ${response.status} ${response.statusText ?? ''}`)
+        const nextBackupUrl = this.getNextBackupUrl()
+        if (nextBackupUrl) {
+          mainLogger.log(`尝试下一个备份 url：[${nextBackupUrl}]`)
+          this.url = nextBackupUrl
+          return await this.download()
+        }
+
         throw new Error(`HTTP 错误! 状态码: ${response.status}`)
       }
 
