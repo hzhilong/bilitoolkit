@@ -15,7 +15,7 @@ class AppUpdateManager {
       if (this.showLastCheckUpToDateTip) {
         dialog.showMessageBox({
           type: 'info',
-          buttons: ['立即安装', '暂不安装'],
+          buttons: ['确定'],
           title: '提示',
           message: `当前已经是最新版本`,
         })
