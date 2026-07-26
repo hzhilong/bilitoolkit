@@ -9,6 +9,7 @@ import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
 import { useStarredPluginsStore } from '@/renderer/stores/starred-plugins'
 import { appEnv } from '@ybgnb/vite-env/common'
+import App from '@/renderer/App.vue'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
@@ -78,7 +79,8 @@ const starPlugin = () => {
           <div v-if="plugin.type === 'task'" class="plugin-task-flag">定时任务</div>
         </div>
         <div class="sub-title">
-          <icon-label icon="puzzle">id: {{ plugin.id }}</icon-label>
+          <AppTooltip class="plugin-id" :content="plugin.id" iconClass="puzzle"></AppTooltip>
+          <!--          <icon-label icon="puzzle">id: {{ plugin.id }}</icon-label>-->
           <icon-label icon="git-commit">版本: {{ plugin.version }}</icon-label>
         </div>
       </div>
@@ -212,9 +214,19 @@ const starPlugin = () => {
     .sub-title {
       width: 100%;
       display: flex;
+      flex-wrap: nowrap;
       align-items: center;
       justify-content: space-between;
       font-size: 12px;
+
+      .plugin-id {
+        min-width: 0;
+        flex: 1;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 2px;
+      }
     }
   }
 

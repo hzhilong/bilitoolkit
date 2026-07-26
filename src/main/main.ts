@@ -50,7 +50,7 @@ const createWindow = async () => {
   mainWindow = windowManager.createWindow(
     {
       width: 1000,
-      height: 700,
+      height: 720,
       minWidth: 1000,
       minHeight: 700,
       webPreferences: {
