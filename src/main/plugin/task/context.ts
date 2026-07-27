@@ -1,6 +1,7 @@
 import type { TaskContext, TaskPluginToolkitApi } from 'bilitoolkit-types'
 import type { Task, TaskExecution } from '@/shared/types/task.js'
 import { buildLogger } from '@/main/plugin/task/logger.js'
+import { mainEnv } from '@/main/common/main-env.js'
 
 /**
  * 任务上下文工厂，用于创建任务执行时的上下文对象。
@@ -14,6 +15,7 @@ export class TaskContextFactory {
       api: api,
       config: task.config,
       logger: buildLogger(task.pluginId, taskExecution),
+      isDev: mainEnv.DEV,
     }
   }
 }

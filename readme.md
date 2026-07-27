@@ -18,6 +18,8 @@
 | [透明头像](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-transparent-avatar) | 上传半透明的用户头像                             |
 | [评论搜索](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-comment-search)   | 根据 UID 或关键词，快速搜索评论区评论                    |
 | [移除机器人粉丝](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-remove-bot-followers)   | 批量移除并拉黑粉丝中的机器人或片姐                    |
+| [视频存档](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-video-archive)   | 自动保存指定用户的最新视频投稿，方便补档                    |
+
 
 
 

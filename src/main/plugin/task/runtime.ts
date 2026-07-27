@@ -276,7 +276,7 @@ export class TaskRuntime {
     const baseTime = task.lastRunAt ?? task.createdAt
 
     if (task.schedule.type === 'interval') {
-      return now - baseTime >= Number(task.schedule.value)
+      return now - baseTime >= Number(task.schedule.value) * 1000
     }
 
     if (task.schedule.type === 'cron') {

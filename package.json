@@ -1,6 +1,6 @@
 {
   "name": "bilitoolkit",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "type": "module",
   "main": "dist-electron/main.js",
@@ -59,6 +59,7 @@
     "bilitoolkit-ui": "workspace:^",
     "consola": "^3.4.2",
     "cron-parser": "^5.5.0",
+    "cron-validator": "^1.4.0",
     "dayjs": "^1.11.18",
     "electron-updater": "^6.8.9",
     "element-plus": "^2.13.7",

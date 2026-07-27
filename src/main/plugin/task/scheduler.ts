@@ -44,9 +44,12 @@ export class TaskScheduler {
     }
 
     if (task.schedule.type === 'interval') {
-      const timer = setInterval(() => {
-        void this.onTrigger(task.id)
-      }, Number(task.schedule.value))
+      const timer = setInterval(
+        () => {
+          void this.onTrigger(task.id)
+        },
+        Number(task.schedule.value) * 1000,
+      )
 
       this.intervalTimers.set(task.id, timer)
     }

@@ -2,6 +2,7 @@ import { toValue, computed } from 'vue'
 import type { FormRules } from 'element-plus'
 import type { Task } from '@/shared/types/task.js'
 import type { MaybeRefOrGetter } from '@vueuse/core'
+import { isValidCron } from 'cron-validator'
 
 export const useRunConfigRules = (runConfig: MaybeRefOrGetter<Pick<Task, 'schedule' | 'enabled'>>) => {
   return computed(() => {
@@ -19,7 +20,7 @@ export const useRunConfigRules = (runConfig: MaybeRefOrGetter<Pick<Task, 'schedu
             const scheduleType = runConfigData.schedule?.type
 
             if (scheduleType === 'cron') {
-              if (!/^([0-5]?\d|\*) ([0-1]?\d|2[0-3]|\*) ([1-3]?\d|\*) ([1-9]|1[0-2]|\*) ([0-6]|\*)$/.test(value)) {
+              if (!isValidCron(value)) {
                 throw new Error('Cron 表达式格式错误')
               }
             } else if (scheduleType === 'interval') {
