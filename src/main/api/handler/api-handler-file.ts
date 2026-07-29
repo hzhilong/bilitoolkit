@@ -1,8 +1,9 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
-import fs from 'fs'
+import fs from 'node:fs'
 import type { ApiCallerContext, IpcToolkitFileApi } from '@/main/types/ipc-toolkit-api.js'
-import { resolveSafeFilePath } from '@/main/utils/file.js'
+import * as FileUtils from '@/main/utils/file.js'
 import { AppError } from 'bilitoolkit-types'
+import path from 'node:path'
 
 /**
  * 文件 API 处理器
@@ -21,11 +22,11 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
   }
 
   async exists(context: ApiCallerContext, filePath: string): Promise<boolean> {
-    return this._exists(await resolveSafeFilePath(context, filePath))
+    return this._exists(await FileUtils.resolveSafeFilePath(context, filePath))
   }
 
   async read(context: ApiCallerContext, filePath: string): Promise<Uint8Array> {
-    const absolutePath = await resolveSafeFilePath(context, filePath)
+    const absolutePath = await FileUtils.resolveSafeFilePath(context, filePath)
     if (!this._exists(absolutePath)) {
       throw new AppError(`文件[${filePath}]不存在`)
     }
@@ -34,7 +35,7 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
   }
 
   async write(context: ApiCallerContext, filePath: string, content: Uint8Array): Promise<void> {
-    const absolutePath = await resolveSafeFilePath(context, filePath)
+    const absolutePath = await FileUtils.resolveSafeFilePath(context, filePath)
     const fd = fs.openSync(absolutePath, 'as+')
     fs.writeSync(fd, content)
     fs.closeSync(fd)
@@ -46,14 +47,14 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
     content: Uint8Array,
     position: number | undefined,
   ): Promise<void> {
-    const absolutePath = await resolveSafeFilePath(context, filePath)
+    const absolutePath = await FileUtils.resolveSafeFilePath(context, filePath)
     const fd = fs.openSync(absolutePath, 'as+')
     fs.writeSync(fd, content, 0, content.length, position || 0)
     fs.closeSync(fd)
   }
 
   async delete(context: ApiCallerContext, filePath: string): Promise<void> {
-    const absolutePath = await resolveSafeFilePath(context, filePath)
+    const absolutePath = await FileUtils.resolveSafeFilePath(context, filePath)
     if (!this._exists(absolutePath)) {
       throw new AppError(`文件[${filePath}]不存在`)
     }
@@ -64,7 +65,7 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
     const absolutePaths = []
     // 验证路径合法性
     for (const filePath of filePaths) {
-      absolutePaths.push(await resolveSafeFilePath(context, filePath))
+      absolutePaths.push(await FileUtils.resolveSafeFilePath(context, filePath))
     }
     // 删除文件
     for (const absolutePath of absolutePaths) {
@@ -72,5 +73,10 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
         fs.unlinkSync(absolutePath)
       } catch {}
     }
+  }
+
+  async getUniqueFileName(context: ApiCallerContext, fileName: string, fileDir?: string): Promise<string> {
+    const paths = [context.filePath, fileDir, fileName].filter((s) => s != null && s !== '') as string[]
+    return await FileUtils.getUniqueFileName(path.join(...paths))
   }
 }

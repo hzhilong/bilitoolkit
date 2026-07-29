@@ -19,6 +19,8 @@ import fs from 'node:fs/promises'
 
 type ItemIndex = number
 type ItemResource = {
+  bvid: string
+  cid: number
   absoluteFilePath: string
 } & DownloadResource
 
@@ -46,6 +48,8 @@ export class DownloadRunner {
       for (const part of video.parts) {
         for (const resource of part.resources) {
           this.items.set(index, {
+            bvid: video.snapshot.bvid,
+            cid: part.snapshot.cid,
             absoluteFilePath: this.buildAbsoluteFilePath(part, resource),
             ...resource,
           })
@@ -88,6 +92,7 @@ export class DownloadRunner {
       listener: this,
       userCookie: this.task.userCookie,
       completedBytes: (await downloadRecordRepository.getById(this.task.id))?.progress?.completedBytes,
+      autoReparseOnUrlExpired: this.task.settings?.autoReparseOnUrlExpired,
     }
     if (context.type === 'dm') {
       return new DMDownloader({
@@ -144,9 +149,9 @@ export class DownloadRunner {
     }
   }
 
-  async cancel() {
+  async cancel(deleteFiles: boolean = false) {
     if (this.downloader) {
-      await this.downloader.cancel()
+      await this.downloader.cancel(deleteFiles)
     } else {
       this.onStatusUpdate('canceled')
     }

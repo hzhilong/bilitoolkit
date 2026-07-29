@@ -201,7 +201,7 @@ class DownloadManager {
 
   async cancel(context: ApiCallerContext, id: number) {
     const runner = await this.baseGetRunner(context, id)
-    await runner.cancel()
+    await runner.cancel(true)
     this.removeFromQueue(runner)
     this.dispatch()
   }
@@ -243,7 +243,7 @@ class DownloadManager {
     },
   ) {
     const runner = await this.baseGetRunner(context, id)
-    await runner.cancel()
+    await runner.cancel(false)
     if (options?.deleteFiles) {
       await runner.deleteAllFile()
     }

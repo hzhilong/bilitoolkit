@@ -9,7 +9,6 @@ import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
 import { useStarredPluginsStore } from '@/renderer/stores/starred-plugins'
 import { appEnv } from '@ybgnb/vite-env/common'
-import App from '@/renderer/App.vue'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 

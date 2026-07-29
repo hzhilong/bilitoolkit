@@ -1,5 +1,6 @@
 import { shell } from 'electron'
 import path from 'path'
+import fs from 'node:fs/promises'
 import type { ApiCallerEnvType, ApiCallerContext } from '@/main/types/ipc-toolkit-api.js'
 import { appPath } from '@/main/common/app-path.js'
 import { MainConstants } from '@/main/common/main-constants.js'
@@ -22,7 +23,7 @@ export function getFileRootPath(env: 'plugin', pluginId: string): string
 /**
  * 获取文件根目录
  * @param env     调用环境
- * @param plugin  关联的插件
+ * @param pluginId  关联的插件 id
  */
 export function getFileRootPath(env: ApiCallerEnvType, pluginId?: string): string {
   if (env === 'host') {
@@ -60,4 +61,64 @@ export async function resolveSafeFilePath(context: ApiCallerContext, filePath: s
   }
   await ensureDir(path.dirname(absolutePath))
   return absolutePath
+}
+
+/**
+ * 获取唯一文件路径
+ * 如果文件已存在，则自动添加序号避免重名
+ * 例如：file.mp4 -> file - 1.mp4
+ */
+export async function getUniqueFilePath(filePath: string): Promise<string> {
+  if (!(await exists(filePath))) {
+    return filePath
+  }
+
+  const dir = path.dirname(filePath)
+  const ext = path.extname(filePath)
+  const name = path.basename(filePath, ext)
+
+  let index = 1
+
+  while (true) {
+    const newName = `${name} (${index})${ext}`
+    const newPath = path.join(dir, newName)
+
+    if (!(await exists(newPath))) {
+      return newPath
+    }
+
+    index++
+  }
+}
+
+export async function getUniqueFileName(filePath: string): Promise<string> {
+  const dir = path.dirname(filePath)
+  const ext = path.extname(filePath)
+  const name = path.basename(filePath, ext)
+
+  if (!(await exists(filePath))) {
+    return name + ext
+  }
+
+  let index = 1
+
+  while (true) {
+    const newName = `${name} (${index})${ext}`
+    const newPath = path.join(dir, newName)
+
+    if (!(await exists(newPath))) {
+      return newName
+    }
+
+    index++
+  }
+}
+
+async function exists(filePath: string): Promise<boolean> {
+  try {
+    await fs.access(filePath)
+    return true
+  } catch {
+    return false
+  }
 }

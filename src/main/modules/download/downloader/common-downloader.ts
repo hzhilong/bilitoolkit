@@ -6,6 +6,8 @@ import fs from 'node:fs'
 import { publicClient } from 'bilitoolkit-runtime/biliapi'
 import { getErrorMessage, isCanceledError } from '@ybgnb/utils'
 import { mainLogger } from '@/main/common/main-logger.js'
+import { AppError } from 'bilitoolkit-types'
+import { biliClients } from '@/main/modules/bili-api-client.js'
 
 export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover' | 'subtitle'> {
   private url: string
@@ -15,6 +17,8 @@ export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover'
 
   private backupUrls: string[] = []
   private backupUrlIndex = 0
+
+  private reparsed = false
 
   constructor(context: DownloaderContext<'audio' | 'video' | 'cover' | 'subtitle'>) {
     super(context)
@@ -47,6 +51,47 @@ export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover'
     return null
   }
 
+  private async reparseUrl(): Promise<string | null> {
+    const { type, bvid, cid, userCookie, source } = this.context
+    if (type === 'cover') {
+      return null
+    }
+
+    const client = biliClients.get(userCookie, undefined, true)
+    const partQuery = {
+      bvid,
+      cid,
+    }
+
+    if (type === 'subtitle') {
+      const { lan } = source.subtitleItem
+      const subtitleItems = await client.videoPlayer.getSubtitles(partQuery)
+      for (const subtitleItem of subtitleItems) {
+        if (subtitleItem.lan === lan) {
+          return subtitleItem.subtitle_url
+        }
+      }
+      return null
+    }
+
+    const playData = await client.videoPlayer.getPlayUrl(partQuery)
+    if (!playData) throw new AppError('重新解析url：视频不存在')
+
+    if (type === 'audio') {
+      const { audioQuality } = source
+      const stream = playData.dash?.audio?.find((a) => {
+        return a.id === audioQuality
+      })
+      return stream?.base_url ?? null
+    }
+
+    const { videoQuality, videoCodec } = source
+    const stream = playData.dash?.video?.find((a) => {
+      return a.id === videoQuality && a.codecid === videoCodec
+    })
+    return stream?.base_url ?? null
+  }
+
   /**
    * 开始下载
    */
@@ -56,11 +101,11 @@ export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover'
       this.abortController = new AbortController()
       await ensureDir(path.dirname(this.filePath))
 
+      const dbCompletedBytes = this.context.completedBytes ?? 0
       let completedBytes = 0
-      // 检查本地已下载的文件大小
-      if (fs.existsSync(this.filePath)) {
-        const stat = fs.statSync(this.filePath)
-        completedBytes = Math.min(stat.size, this.context.completedBytes ?? 0)
+
+      if (dbCompletedBytes > 0 && fs.existsSync(this.filePath)) {
+        completedBytes = fs.statSync(this.filePath).size
       }
 
       // 配置请求头，实现断点续传
@@ -86,7 +131,16 @@ export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover'
           return await this.download()
         }
 
-        throw new Error(`HTTP 错误! 状态码: ${response.status}`)
+        if (this.context.autoReparseOnUrlExpired && !this.reparsed) {
+          const reparseUrl = await this.reparseUrl()
+          this.reparsed = true
+          if (reparseUrl) {
+            this.url = reparseUrl
+            return await this.download()
+          }
+        }
+
+        throw new AppError(`资源链接无效`)
       }
 
       // 计算总字节数
@@ -111,12 +165,7 @@ export class CommonDownloader extends BaseDownloader<'audio' | 'video' | 'cover'
         completedBytes = 0 // 重置进度
       }
 
-      // 根据服务器响应决定是追加写入还是覆盖写入
-      // 如果服务器不支持 Range，则从头覆盖；支持则从 completedBytes 继续写
-      const fileHandle = await fs.promises.open(
-        this.filePath,
-        response.status === 206 ? (completedBytes > 0 ? 'r+' : 'w+') : 'w',
-      )
+      const fileHandle = await fs.promises.open(this.filePath, completedBytes > 0 ? 'r+' : 'w')
 
       if (!response.body) {
         await fileHandle.close()

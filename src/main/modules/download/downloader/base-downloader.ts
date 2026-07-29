@@ -48,12 +48,12 @@ export abstract class BaseDownloader<Type extends DownloadResourceType> {
   /**
    * 取消下载（会删除未下载完的临时文件）
    */
-  async cancel(): Promise<void> {
+  async cancel(deleteFiles: boolean = false): Promise<void> {
     this.abortController?.abort()
     this.updateStatus('canceled')
 
     // 删除不完整的本地文件
-    if (fs.existsSync(this.filePath)) {
+    if (deleteFiles && fs.existsSync(this.filePath)) {
       try {
         fs.unlinkSync(this.filePath)
       } catch {

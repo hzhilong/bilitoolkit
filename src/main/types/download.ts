@@ -19,7 +19,10 @@ export type DownloaderContext<Type extends DownloadResourceType> = DownloadResou
   listener: DownloaderListener
   userCookie: UserCookie
   absoluteFilePath: string
+  bvid: string
+  cid: number
   completedBytes?: number
+  autoReparseOnUrlExpired?: boolean
 }
 
 export interface RunnerListener {
