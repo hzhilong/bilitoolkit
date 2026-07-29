@@ -1,5 +1,5 @@
 {
-  "appVersion": "0.0.7",
+  "appVersion": "0.0.9",
   "plugins": [
     {
       "name": "哔哩备份姬",
@@ -14,6 +14,38 @@
         "homepage": "https://github.com/hzhilong/bilitoolkit-plugins/tree/main/bilitoolkit-plugin-backup#readme",
         "repository": "git+https://github.com/hzhilong/bilitoolkit-plugins.git",
         "repositoryDir": "bilitoolkit-plugin-backup",
+        "bugs": "https://github.com/hzhilong/bilitoolkit-plugins/issues"
+      }
+    },
+    {
+      "name": "视频下载",
+      "type": "ui",
+      "id": "bilitoolkit-plugin-video-downloader",
+      "author": "hzhilong",
+      "description": "下载视频、音频、弹幕、字幕、封面等资源",
+      "version": "0.0.4",
+      "date": "2026-07-25",
+      "links": {
+        "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-video-downloader",
+        "homepage": "https://github.com/hzhilong/bilitoolkit-plugins/tree/main/bilitoolkit-plugin-video-downloader#readme",
+        "repository": "git+https://github.com/hzhilong/bilitoolkit-plugins.git",
+        "repositoryDir": "bilitoolkit-plugin-video-downloader",
+        "bugs": "https://github.com/hzhilong/bilitoolkit-plugins/issues"
+      }
+    },
+    {
+      "name": "视频存档",
+      "type": "task",
+      "id": "bilitoolkit-plugin-video-archive",
+      "author": "hzhilong",
+      "description": "自动保存指定用户的最新视频投稿，方便补档",
+      "version": "0.0.1",
+      "date": "2026-07-27",
+      "links": {
+        "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-video-archive",
+        "homepage": "https://github.com/hzhilong/bilitoolkit-plugins/tree/main/bilitoolkit-plugin-video-archive#readme",
+        "repository": "git+https://github.com/hzhilong/bilitoolkit-plugins.git",
+        "repositoryDir": "bilitoolkit-plugin-video-archive",
         "bugs": "https://github.com/hzhilong/bilitoolkit-plugins/issues"
       }
     },

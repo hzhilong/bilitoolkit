@@ -201,7 +201,7 @@ class DownloadManager {
 
   async cancel(context: ApiCallerContext, id: number) {
     const runner = await this.baseGetRunner(context, id)
-    await runner.cancel(true)
+    await runner.cancel(false)
     this.removeFromQueue(runner)
     this.dispatch()
   }
