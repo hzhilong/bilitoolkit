@@ -14,8 +14,9 @@ export interface MenuProp {
 
 export interface MenuItem {
   icon: string
-  title: string
+  name: string
   path: string
+  beforeSwitch?: () => Promise<void | boolean>
   onclick?: () => void
 }
 
@@ -40,7 +41,10 @@ const menuItemClass = (item: MenuItem, index: number) => {
   return menuIndex.value === index ? 'menu__item--active' : ''
 }
 
-const handleMenuItemClick = async (event: MouseEvent, menu: MenuItem, index: number) => {
+const handleMenuItemClick = async (_event: MouseEvent, menu: MenuItem, index: number) => {
+  if (menu.beforeSwitch && (await menu.beforeSwitch()) === false) {
+    return
+  }
   menuIndex.value = index
   if (menu.onclick) {
     menu.onclick()
@@ -63,7 +67,7 @@ const handleMenuItemClick = async (event: MouseEvent, menu: MenuItem, index: num
       @click="handleMenuItemClick($event, item, index)"
     >
       <AppIcon class="menu__item__icon" :icon="item.icon" />
-      <span class="menu__item__text">{{ item.title }}</span>
+      <span class="menu__item__text">{{ item.name }}</span>
     </div>
   </div>
 </template>

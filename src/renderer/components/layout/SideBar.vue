@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { appMenus } from '@/renderer/router/menus'
 import { ref } from 'vue'
 import AppMenus, { type MenuProp } from './AppMenus.vue'
+import { buildAppMenus } from '@/renderer/router/menus'
 
 const menu = ref<MenuProp>({
-  menus: appMenus,
+  menus: buildAppMenus(),
 })
 
 const appName = import.meta.env.APP_PRODUCT_CN_NAME
