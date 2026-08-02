@@ -31,6 +31,7 @@ export async function loadTaskPluginMeta(plugin: InstalledToolkitPlugin): Promis
     if (metaJson && typeof metaJson === 'object') {
       meta.taskConfigSchema = metaJson.taskConfigSchema
       meta.taskSchedule = metaJson.taskSchedule
+      meta.alert = metaJson.alert
     }
   } catch {}
   return meta

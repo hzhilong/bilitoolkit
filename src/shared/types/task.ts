@@ -18,6 +18,9 @@ export interface TaskPluginInfo extends InstalledToolkitPlugin {
    * - 不提供则表示该任务仅支持手动执行
    */
   taskSchedule?: TaskSchedule
+
+  /** 提示信息 */
+  alert?: string
 }
 
 /**

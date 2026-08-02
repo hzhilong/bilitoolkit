@@ -6,6 +6,7 @@ import type { ApiCallerContext, IpcToolkitSystemApi } from '@/main/types/ipc-too
 import { type AppLog, type AppThemeState, AppError } from 'bilitoolkit-types'
 import { getAppThemeState } from '@/main/utils/host-app.js'
 import { getAppLogLevel } from '@/shared/common/app-log.js'
+import path from 'node:path'
 
 /**
  * 系统相关API处理器
@@ -47,8 +48,12 @@ export class SystemApiHandler extends ApiHandleStrategy implements IpcToolkitSys
     }
   }
 
-  async showItemInFolder(context: ApiCallerContext, path: string): Promise<void> {
-    return _showItemInFolder(path)
+  async showItemInFolder(context: ApiCallerContext, absolutePath: string): Promise<void> {
+    return _showItemInFolder(absolutePath)
+  }
+
+  async showItemInPluginFolder(context: ApiCallerContext, relativePath: string): Promise<void> {
+    return _showItemInFolder(path.join(context.filePath, relativePath))
   }
 
   async shouldUseDarkColors(_: ApiCallerContext): Promise<boolean> {

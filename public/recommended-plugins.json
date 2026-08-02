@@ -23,7 +23,7 @@
       "id": "bilitoolkit-plugin-video-downloader",
       "author": "hzhilong",
       "description": "下载视频、音频、弹幕、字幕、封面等资源",
-      "version": "0.0.4",
+      "version": "0.0.5",
       "date": "2026-07-25",
       "links": {
         "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-video-downloader",
@@ -39,7 +39,7 @@
       "id": "bilitoolkit-plugin-video-archive",
       "author": "hzhilong",
       "description": "自动保存指定用户的最新视频投稿，方便补档",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "date": "2026-07-27",
       "links": {
         "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-video-archive",

@@ -34,9 +34,9 @@ export class FileApiHandler extends ApiHandleStrategy implements IpcToolkitFileA
     return new Uint8Array(buffer)
   }
 
-  async write(context: ApiCallerContext, filePath: string, content: Uint8Array): Promise<void> {
+  async write(context: ApiCallerContext, filePath: string, content: Uint8Array, overwrite?: boolean): Promise<void> {
     const absolutePath = await FileUtils.resolveSafeFilePath(context, filePath)
-    const fd = fs.openSync(absolutePath, 'as+')
+    const fd = fs.openSync(absolutePath, overwrite ? 'w' : 'as+')
     fs.writeSync(fd, content)
     fs.closeSync(fd)
   }
