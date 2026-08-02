@@ -89,6 +89,10 @@ eventBus.on('closePluginView', async ({ plugin }) => {
           activePluginId.value = ''
         }
       }
+
+      if (plugins.value.length < 1) {
+        eventBus.emit('showPrevMenu')
+      }
       return
     }
   }

@@ -81,32 +81,32 @@ class PluginManager {
     return plugin
   }
 
-  async updatePlugin(plugin: InstalledToolkitPlugin) {
-    mainLogger.info(`插件 ${plugin.id} ${plugin.version} 更新中…`)
+  async updatePlugin(oldPlugin: InstalledToolkitPlugin) {
+    mainLogger.info(`插件 ${oldPlugin.id} ${oldPlugin.version} 更新中…`)
     let pkg: NpmPackage
     try {
-      pkg = await getPackage(plugin.id)
+      pkg = await getPackage(oldPlugin.id)
     } catch {
       throw new AppError('未查询到该插件的包信息，请确认是否已发布到 npm 仓库')
     }
 
     const lastVersion = pkg['dist-tags'].latest
 
-    if (lt(lastVersion, plugin.version)) {
+    if (lt(lastVersion, oldPlugin.version)) {
       throw new AppError('当前插件版本高于npm仓库的版本')
     }
 
-    if (eq(lastVersion, plugin.version)) {
+    if (eq(lastVersion, oldPlugin.version)) {
       throw new AppError('当前插件已经是最新版本')
     }
 
     const updatedPlugin = await loadInstalledPlugin(
       await downloadPlugin({
-        ...plugin,
+        ...oldPlugin,
         version: lastVersion,
       }),
     )
-    this.registerPlugin(plugin)
+    this.registerPlugin(updatedPlugin)
     mainLogger.info(`插件 ${updatedPlugin.id} ${updatedPlugin.version} 安装成功！`)
     return updatedPlugin
   }

@@ -39,6 +39,10 @@ export const useAppInstalledPlugins = defineStore(
       }
     }
 
+    const find = (pluginId: string): InstalledToolkitPlugin | undefined => {
+      return state.plugins.find((p) => p.id === pluginId)
+    }
+
     const hasInstalled = (pluginId: string) => {
       return state.plugins.some((p) => p.id === pluginId)
     }
@@ -47,7 +51,7 @@ export const useAppInstalledPlugins = defineStore(
       return state.plugins.find((p) => p.id === pluginId)
     }
 
-    return { init, state, installedPlugins, addPlugin, delPlugin, hasInstalled, getInstalledPluginInfo }
+    return { init, state, installedPlugins, addPlugin, delPlugin, hasInstalled, getInstalledPluginInfo, find }
   },
   {
     // 自己实现配置的持久化

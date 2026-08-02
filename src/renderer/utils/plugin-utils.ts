@@ -16,6 +16,7 @@ import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
 import type { PageResult } from 'bilitoolkit-ui'
 import { useRecentPluginsStore } from '@/renderer/stores/recent-plugins'
 import { useStarredPluginsStore } from '@/renderer/stores/starred-plugins'
+import { AppError } from 'bilitoolkit-types'
 
 export class PluginUtils {
   static async openPluginView(plugin: InstalledToolkitPlugin) {
@@ -115,11 +116,16 @@ export class PluginUtils {
   }
 
   static async update(plugin: ToolkitPlugin) {
+    const appInstalledPlugins = useAppInstalledPlugins()
+    const oldPlugin = appInstalledPlugins.find(plugin.id)
+    if (!oldPlugin) throw new AppError('内部错误，插件未安装。请刷新后重试')
+
+    await PluginUtils.closePluginView(oldPlugin)
     const installedPlugin = await toolkitApi.core.updatePlugin({
-      ...toIPC(plugin),
+      ...toIPC(oldPlugin),
       installDate: getFormattedDate(),
     })
-    useAppInstalledPlugins().addPlugin(installedPlugin)
+    appInstalledPlugins.addPlugin(installedPlugin)
     return installedPlugin
   }
 

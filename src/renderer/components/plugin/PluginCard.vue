@@ -9,6 +9,7 @@ import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
 import { useStarredPluginsStore } from '@/renderer/stores/starred-plugins'
 import { appEnv } from '@ybgnb/vite-env/common'
+import { lte } from 'semver'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
@@ -16,11 +17,23 @@ const { base64 } = usePluginIconBase64(() => props.plugin)
 const { loading, loadingData: WrappedLoad } = useLoadingData({
   singleFlight: true,
 })
-const { hasInstalled } = useAppInstalledPlugins()
+const { hasInstalled, find } = useAppInstalledPlugins()
+const installedPlugin = computed(() => {
+  return find(props.plugin.id)
+})
 const isInstalled = computed(() => hasInstalled(props.plugin.id))
+const canUpdate = computed(() => {
+  if (props.type !== 'market') return false
+
+  if (installedPlugin.value == null) return false
+
+  if (lte(props.plugin.version, installedPlugin.value.version)) return false
+
+  return true
+})
 const { isStarred, addStar, removeStar } = useStarredPluginsStore()
 const star = computed(() => isStarred(props.plugin.id))
-const showInfoDialog = ref(false)
+const infoDialogVisible = ref(false)
 
 const displayInstallDate = computed(() => {
   if (props.type === 'manage') {
@@ -101,26 +114,30 @@ const starPlugin = () => {
           :class="star ? 'ri-star-fill' : 'ri-star-line'"
           @click="starPlugin"
         ></i>
-        <el-button @click="showInfoDialog = true" size="small">查看</el-button>
-        <el-button v-if="isInstalled" @click="openPlugin" size="small">打开</el-button>
-        <el-popconfirm v-if="!isInstalled" :title="installConfirm" @confirm="installPlugin">
-          <template #reference>
-            <el-button size="small">安装</el-button>
-          </template>
-        </el-popconfirm>
-        <el-popconfirm v-else title="确认更新吗？" @confirm="updatePlugin">
-          <template #reference>
-            <el-button size="small">更新</el-button>
-          </template>
-        </el-popconfirm>
-        <el-popconfirm v-if="isInstalled" title="确认卸载吗？" @confirm="uninstallPlugin">
-          <template #reference>
-            <el-button size="small">卸载</el-button>
-          </template>
-        </el-popconfirm>
+        <el-button @click="infoDialogVisible = true" size="small">查看</el-button>
+        <template v-if="isInstalled">
+          <el-button @click="openPlugin" size="small">打开</el-button>
+          <el-popconfirm v-if="canUpdate" title="确认更新吗？" @confirm="updatePlugin">
+            <template #reference>
+              <el-button size="small">更新</el-button>
+            </template>
+          </el-popconfirm>
+          <el-popconfirm title="确认卸载吗？" @confirm="uninstallPlugin">
+            <template #reference>
+              <el-button size="small">卸载</el-button>
+            </template>
+          </el-popconfirm>
+        </template>
+        <template v-else>
+          <el-popconfirm :title="installConfirm" @confirm="installPlugin">
+            <template #reference>
+              <el-button size="small">安装</el-button>
+            </template>
+          </el-popconfirm>
+        </template>
       </div>
     </div>
-    <PluginInfoDialog v-bind="plugin" v-model="showInfoDialog" />
+    <PluginInfoDialog v-bind="plugin" v-model="infoDialogVisible" />
   </div>
 </template>
 

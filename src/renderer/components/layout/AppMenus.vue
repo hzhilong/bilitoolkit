@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { PluginUtils } from '@/renderer/utils/plugin-utils.js'
 import { AppIcon } from 'bilitoolkit-ui'
 import { IGNORE_MENU_PATH_PREFIXES } from '@/renderer/router/menus.js'
+import { eventBus } from '@/renderer/utils/event-bus'
 
 /**
  * 应用菜单
@@ -55,6 +56,12 @@ const handleMenuItemClick = async (_event: MouseEvent, menu: MenuItem, index: nu
   }
   setTimeout(async () => await PluginUtils.hideCurrPluginView(), 50)
 }
+
+eventBus.on('showPrevMenu', async () => {
+  await router.push({
+    path: props.menus[menuIndex.value ?? 0].path,
+  })
+})
 </script>
 
 <template>

@@ -29,10 +29,15 @@ watch(visible, async (newValue) => {
   if (!plugin?.id) {
     return
   }
-
   const pkg = parseNpmPackage(await getPackage(plugin.id))
 
-  const readme = await fetch(`https://cdn.jsdelivr.net/npm/${pkg.id}@${pkg.version}/README.md`).then((r) => r.text())
+  let readme
+  const rep = await fetch(`https://cdn.jsdelivr.net/npm/${pkg.id}@${pkg.version}/README.md`)
+  if (rep.ok) {
+    readme = await rep.text()
+  } else {
+    readme = await fetch(`https://cdn.jsdelivr.net/npm/${pkg.id}@${pkg.version}/readme.md`).then((r) => r.text())
+  }
   let html: string
 
   if (!pkg.links.repository) {

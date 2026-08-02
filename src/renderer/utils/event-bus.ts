@@ -9,6 +9,7 @@ type Events = {
     plugin: InstalledToolkitPlugin
   }
   hideCurrPluginView: void
+  showPrevMenu: void
 }
 
 export const eventBus = mitt<Events>()
