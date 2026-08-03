@@ -83,7 +83,7 @@ const handleCheckUpdate = async () => {
         <SettingItem title="手动检查更新">
           <el-button type="primary" @click="handleCheckUpdate">检查更新</el-button>
         </SettingItem>
-        <setting-item title="启动时自动更新 APP">
+        <setting-item title="启动时自动更新">
           <el-switch v-model="appSettings.autoUpdateOnStartup" />
         </setting-item>
       </SettingGroup>
