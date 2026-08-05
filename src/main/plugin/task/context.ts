@@ -15,6 +15,7 @@ export class TaskContextFactory {
       api: api,
       config: task.config,
       logger: buildLogger(task.pluginId, taskExecution),
+      taskConfigCreatedAt: Math.floor(Date.now() / 1000),
       isDev: mainEnv.DEV,
     }
   }

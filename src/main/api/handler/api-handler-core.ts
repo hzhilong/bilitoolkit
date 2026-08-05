@@ -17,9 +17,10 @@ import type { UserInfoWithCookie } from '@ybgnb/bili-api'
 import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.js'
 import { userService } from '@/main/service/user.service.js'
 import { getFileSizeKB } from '@ybgnb/utils/node'
-import { showItemInFolder } from '@/main/utils/file.js'
+import { showItemInFolder, getPluginFileRootPath, showItemInFolder as _showItemInFolder } from '@/main/utils/file.js'
 import { appUpdateManager } from '@/main/modules/update/update-manager.js'
 import { formatFileSizeFromKB } from '@ybgnb/utils'
+import path from 'node:path'
 
 /**
  * 核心API处理器
@@ -119,5 +120,9 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   cancelCheckUpdateApp(_context: ApiCallerContext): Promise<void> {
     appUpdateManager.showLastCheckUpToDateTip = false
     return appUpdateManager.cancelCheck()
+  }
+
+  showItemInPluginFolder(_context: ApiCallerContext, pluginId: string, relativePath: string): Promise<void> {
+    return _showItemInFolder(path.join(getPluginFileRootPath(pluginId), relativePath))
   }
 }

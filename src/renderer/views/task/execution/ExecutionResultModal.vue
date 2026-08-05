@@ -1,8 +1,61 @@
 <script setup lang="ts">
 import type { TaskResult } from 'bilitoolkit-types'
+import { ref } from 'vue'
+import { toolkitApi } from '@/renderer/api/toolkit-api'
 
-withDefaults(defineProps<{ result: TaskResult }>(), {})
+const props = withDefaults(defineProps<{ result: TaskResult; pluginId: string }>(), {})
 const visible = defineModel({ required: true, type: Boolean })
+
+const showImagePreview = ref<boolean>(false)
+const imgSrcList = ref<string[]>([])
+const imgInitialIndex = ref<number>(0)
+
+const handleOpenFile = async (actionId: string) => {
+  for (const action of props.result.actions ?? []) {
+    if (action.type === 'open-plugin-file' && action.actionId === actionId) {
+      await toolkitApi.core.showItemInPluginFolder(props.pluginId, action.filePath)
+      return
+    }
+  }
+}
+
+const handleLink = async (actionId: string) => {
+  for (const action of props.result.actions ?? []) {
+    if (action.type === 'link' && action.actionId === actionId) {
+      window.open(action.url)
+      return
+    }
+  }
+}
+
+const handleImagePreview = async (el: HTMLElement, actionId: string) => {
+  for (const action of props.result.actions ?? []) {
+    if (action.type === 'image-preview' && action.actionId === actionId) {
+      const index = Number(el.getAttribute('data-index') ?? 0)
+      if (action.srcList?.length > 0) {
+        imgSrcList.value = action.srcList
+        imgInitialIndex.value = Math.min(action.srcList.length - 1, index)
+        showImagePreview.value = true
+        return
+      }
+    }
+  }
+}
+const handleHtmlClick = async (e: MouseEvent) => {
+  const target = (e.target as HTMLElement).closest('[data-action-id][data-action-type]')
+
+  if (!target) return
+
+  const type = target.getAttribute('data-action-type')
+  const actionId = target.getAttribute('data-action-id')!
+  if (type === 'image-preview') {
+    await handleImagePreview(e.target as HTMLElement, actionId)
+  } else if (type === 'link') {
+    await handleLink(actionId)
+  } else if (type === 'open-plugin-file') {
+    await handleOpenFile(actionId)
+  }
+}
 </script>
 
 <template>
@@ -24,8 +77,15 @@ const visible = defineModel({ required: true, type: Boolean })
         <span class="result-message">{{ result.message }}</span>
       </div>
       <el-divider />
-      <div class="details-container" v-if="result.details" v-html="result.details"></div>
+      <div class="details-container" v-if="result.details" v-html="result.details" @click="handleHtmlClick"></div>
     </div>
+    <el-image-viewer
+      v-if="showImagePreview"
+      :url-list="imgSrcList"
+      show-progress
+      :initial-index="imgInitialIndex"
+      @close="showImagePreview = false"
+    />
   </el-dialog>
 </template>
 

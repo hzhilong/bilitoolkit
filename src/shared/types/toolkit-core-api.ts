@@ -143,6 +143,11 @@ export interface ToolkitCoreApi {
    * 取消检查更新应用
    */
   cancelCheckUpdateApp(): Promise<void>
+
+  /**
+   * 打开资源管理器并定位到文件或者文件夹（相对于插件文件夹的路径）
+   */
+  showItemInPluginFolder(pluginId: string, relativePath: string): Promise<void>
 }
 
 /**
