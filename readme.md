@@ -24,6 +24,8 @@
 | [批量取关](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-batch-unfollow)   | 批量取消关注用户，可选择关注分组进行操作                  |
 | [黑名单分享](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-blacklist-share)   | 支持黑名单列表导出与导入，方便用户共享黑名单数据并批量拉黑                  |
 | [评论清空](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-comment-clear)   | 批量删除自己发布过的评论                  |
+| [动态互动数据](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-dynamic-interactions)   | 查看图文动态的点赞与转发用户                  |
+| [动态存档](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-dynamic-archive)   | 自动保存指定用户的最新图文动态                  |
 
 
 
