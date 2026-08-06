@@ -22,7 +22,7 @@ class BiliApiProxy {
     this.clients.set(id, client)
     return {
       id: id,
-      ...(omit(client.config, 'fetcher', 'logger', 'logLevel', 'referer') as Omit<
+      ...(omit(client.config, 'fetcher', 'logger', 'logLevel', 'referer', 'cookieUpdater') as Omit<
         BiliClientConfig,
         'fetcher' | 'logging' | 'logLevel' | 'referer'
       >),
