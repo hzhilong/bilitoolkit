@@ -4,6 +4,7 @@ import { type BaseWindowManager } from '@/main/window/base-window-manager.js'
 import type { BiliApiClientConfig, BiliApiMethod, ApiProxyContext } from 'bilitoolkit-types'
 import { biliApiProxy } from '@/main/modules/bili-api-proxy.js'
 import { type BizResult, execBiz } from '@ybgnb/utils'
+import { buildCookieUpdater } from '@/main/utils/cookie.js'
 
 /**
  * bili API处理器
@@ -24,7 +25,13 @@ export class BiliApiHandler extends ApiHandleStrategy implements IpcToolkitBiliA
     context: ApiCallerContext,
     config?: Partial<Omit<BiliApiClientConfig, 'id'>>,
   ): Promise<BiliApiClientConfig> {
-    return biliApiProxy.create(config, context.envType !== 'host' ? context.plugin : undefined)
+    return biliApiProxy.create(
+      {
+        ...config,
+        cookieUpdater: buildCookieUpdater(context.webContents.session),
+      },
+      context.envType !== 'host' ? context.plugin : undefined,
+    )
   }
 
   /**

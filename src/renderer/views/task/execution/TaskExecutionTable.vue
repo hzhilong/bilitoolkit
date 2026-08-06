@@ -5,7 +5,7 @@
       <el-button @click="refreshTable">刷新</el-button>
     </div>
     <div ref="tableWrapperRef" class="table-page__table">
-      <el-table height="66vh" :data="tableData" style="width: 100%">
+      <el-table height="66vh" :data="tableData" style="width: 100%" tableLayout="auto">
         <el-table-column prop="id" label="ID" min-width="50" width="50" />
         <el-table-column prop="status" label="状态" min-width="80" width="80">
           <template #default="{ row }">
@@ -21,12 +21,12 @@
             >
           </template>
         </el-table-column>
-        <el-table-column prop="startedAt" label="启动时间" min-width="86">
+        <el-table-column prop="startedAt" label="启动时间" width="150">
           <template #default="{ row }">
             {{ formatTime((row as TaskExecution).startedAt) }}
           </template>
         </el-table-column>
-        <el-table-column prop="endedAt" label="结束时间" min-width="86">
+        <el-table-column prop="endedAt" label="结束时间" width="150">
           <template #default="{ row }">
             {{ formatTime((row as TaskExecution).endedAt) }}
           </template>
@@ -81,7 +81,12 @@
       :task-execution-id="currRowExecutionId"
       v-model="logModalVisible"
     />
-    <ExecutionResultModal v-if="currExecutionResult" :result="currExecutionResult" v-model="resultModalVisible" />
+    <ExecutionResultModal
+      v-if="currExecutionResult"
+      :result="currExecutionResult"
+      v-model="resultModalVisible"
+      :pluginId="pluginId"
+    />
   </div>
 </template>
 
@@ -97,6 +102,7 @@ import { formatTime } from '@ybgnb/utils'
 
 interface TaskExecutionTableProps {
   taskId: number
+  pluginId: string
 }
 
 const props = defineProps<TaskExecutionTableProps>()

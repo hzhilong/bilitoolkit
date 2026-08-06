@@ -23,7 +23,6 @@ export function getSessionPartition(envType: 'host' | 'host-dialog' | 'plugin', 
 
 export async function getUserCookies(session: Electron.Session) {
   const cookies = await session.cookies.get({ domain: BILIBILI_COOKIE_DOMAIN })
-  console.log(`cookie`, cookies)
 
   if (isEmptyArr(cookies)) throw new AppError('获取cookie失败，请确保已登录成功')
 

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useUserStore } from '@/renderer/stores/user.js'
-import type { UserInfo } from '@ybgnb/bili-api'
-import { biliClient } from '@/renderer/api/bili-client.js'
+import { type UserInfo, BiliClient } from '@ybgnb/bili-api'
 import { toolkitApi } from '@/renderer/api/toolkit-api.js'
 import QRCode from 'qrcode'
 
@@ -24,6 +23,12 @@ const handleCancel = () => {
 }
 
 const startLogin = async () => {
+  await toolkitApi.user.delCurrUserCookie()
+  const biliClient = new BiliClient({
+    cookieUpdater: async (cookie) => {
+      return await toolkitApi.user.setCookie(cookie)
+    },
+  })
   const context = await biliClient.user.loginWithQRCode(
     {
       async cookieProvider(): Promise<string[]> {

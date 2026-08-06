@@ -95,6 +95,7 @@
     <TaskExecutionsModal
       v-if="currRowTask"
       :task-id="currRowTask.id"
+      :plugin-id="currRowTask.pluginId"
       v-model="executionModalVisible"
     ></TaskExecutionsModal>
   </div>

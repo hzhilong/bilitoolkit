@@ -2,7 +2,7 @@
 import TaskExecutionTable from '@/renderer/views/task/execution/TaskExecutionTable.vue'
 import { useTemplateRef, watch } from 'vue'
 
-withDefaults(defineProps<{ taskId: number }>(), {})
+withDefaults(defineProps<{ taskId: number; pluginId: string }>(), {})
 const visible = defineModel({ required: true, type: Boolean })
 const tableRef = useTemplateRef<InstanceType<typeof TaskExecutionTable>>('tableRef')
 
@@ -24,7 +24,7 @@ watch(visible, (newVal) => {
     :show-close="true"
     align-center
   >
-    <TaskExecutionTable ref="tableRef" :task-id="taskId"></TaskExecutionTable>
+    <TaskExecutionTable ref="tableRef" :task-id="taskId" :pluginId="pluginId"></TaskExecutionTable>
   </el-dialog>
 </template>
 

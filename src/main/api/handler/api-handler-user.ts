@@ -3,7 +3,7 @@ import type { ApiCallerContext, IpcToolkitUserApi } from '@/main/types/ipc-toolk
 import { type BaseWindowManager } from '@/main/window/base-window-manager.js'
 import { HOST_GLOBAL_DATA } from '@/shared/common/host-global-data.js'
 import { _getGlobalData } from '@/main/api/handler/api-handler-global.js'
-import type { UserInfoWithCookie, UserCookie } from '@ybgnb/bili-api'
+import { type UserInfoWithCookie, type UserCookie, type CookiesSetDetails, BILIBILI_COOKIE_URL } from '@ybgnb/bili-api'
 import { sleep } from '@ybgnb/utils'
 import { setUserCookies, delUserCookies, getUserCookies } from '@/main/utils/session.js'
 import { userService } from '@/main/service/user.service.js'
@@ -47,5 +47,27 @@ export class UserApiHandler extends ApiHandleStrategy implements IpcToolkitUserA
   }
   async getMyInfoByCookie(context: ApiCallerContext, userCookie: UserCookie): Promise<UserInfoWithCookie> {
     return userService.getMyInfoByCookie(userCookie)
+  }
+
+  async setCookie(context: ApiCallerContext, details: CookiesSetDetails): Promise<void> {
+    await context.webContents.session.cookies.set(details)
+  }
+
+  async getCookie(context: ApiCallerContext, name: string): Promise<CookiesSetDetails[]> {
+    const list =
+      (await context.webContents.session.cookies.get({
+        url: BILIBILI_COOKIE_URL,
+        name: name,
+      })) ?? []
+    return list.map((item) => {
+      return {
+        ...item,
+        url: BILIBILI_COOKIE_URL,
+      }
+    })
+  }
+
+  async removeCookie(context: ApiCallerContext, name: string): Promise<void> {
+    await context.webContents.session.cookies.remove(BILIBILI_COOKIE_URL, name)
   }
 }

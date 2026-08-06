@@ -12,7 +12,7 @@
       <div class="plugin-info__row">
         <span class="plugin-info__desc">{{ plugin.description }}</span>
       </div>
-      <div v-if="plugin.alert" class="plugin-info__row">
+      <div v-if="plugin.alert" class="plugin-info__row" style="margin-top: 4px">
         <el-alert type="info" :title="plugin.alert"></el-alert>
       </div>
     </div>

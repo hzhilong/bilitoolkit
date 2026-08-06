@@ -35,6 +35,7 @@ const handleImagePreview = async (el: HTMLElement, actionId: string) => {
       if (action.srcList?.length > 0) {
         imgSrcList.value = action.srcList
         imgInitialIndex.value = Math.min(action.srcList.length - 1, index)
+        console.log(imgInitialIndex.value)
         showImagePreview.value = true
         return
       }
@@ -49,56 +50,89 @@ const handleHtmlClick = async (e: MouseEvent) => {
   const type = target.getAttribute('data-action-type')
   const actionId = target.getAttribute('data-action-id')!
   if (type === 'image-preview') {
+    e.stopPropagation()
     await handleImagePreview(e.target as HTMLElement, actionId)
   } else if (type === 'link') {
+    e.stopPropagation()
     await handleLink(actionId)
   } else if (type === 'open-plugin-file') {
+    e.stopPropagation()
     await handleOpenFile(actionId)
   }
 }
 </script>
 
 <template>
-  <el-dialog
-    v-model="visible"
-    width="76%"
-    style="max-width: 96%; min-width: 76%; max-height: 90vh; overflow: hidden"
-    :close-on-click-modal="true"
-    :close-on-press-escape="true"
-    :show-close="true"
-    align-center
-  >
-    <div class="result-card">
-      <div class="summary-row">
-        <span class="status-tag">
-          <el-tag v-if="result.success" type="success" disable-transitions>执行成功</el-tag>
-          <el-tag v-else type="danger" disable-transitions>执行失败</el-tag>
-        </span>
-        <span class="result-message">{{ result.message }}</span>
+  <div class="execution-result-modal">
+    <el-dialog
+      v-model="visible"
+      width="76%"
+      style="max-width: 96%; min-width: 76%; max-height: 80vh; overflow: hidden"
+      :close-on-click-modal="true"
+      :close-on-press-escape="true"
+      :show-close="true"
+      align-center
+    >
+      <template #footer> </template>
+      <div class="result-card">
+        <div class="summary-row">
+          <span class="status-tag">
+            <el-tag v-if="result.success" type="success" disable-transitions>执行成功</el-tag>
+            <el-tag v-else type="danger" disable-transitions>执行失败</el-tag>
+          </span>
+          <span class="result-message">{{ result.message }}</span>
+        </div>
+        <div class="details-container" v-if="result.details" v-html="result.details" @click="handleHtmlClick"></div>
       </div>
-      <el-divider />
-      <div class="details-container" v-if="result.details" v-html="result.details" @click="handleHtmlClick"></div>
-    </div>
-    <el-image-viewer
-      v-if="showImagePreview"
-      :url-list="imgSrcList"
-      show-progress
-      :initial-index="imgInitialIndex"
-      @close="showImagePreview = false"
-    />
-  </el-dialog>
+      <el-image-viewer
+        v-if="showImagePreview"
+        :url-list="imgSrcList"
+        show-progress
+        :initial-index="imgInitialIndex"
+        @close="showImagePreview = false"
+      />
+    </el-dialog>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.summary-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-}
-.details-container {
-  padding: 10px;
-  box-sizing: border-box;
-  border-radius: 10px;
+.execution-result-modal {
+  display: contents;
+
+  ::v-deep(.el-dialog) {
+    display: flex;
+    flex-direction: column;
+
+    .el-dialog__body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .el-dialog__footer {
+      display: none;
+    }
+  }
+  .summary-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  .result-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+  }
+  .details-container {
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+  }
 }
 </style>

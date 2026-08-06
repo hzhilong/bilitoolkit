@@ -68,3 +68,14 @@ body .el-dialog {
   box-sizing: border-box;
 }
 
+.el-image-viewer__wrapper {
+  top: $body-padding !important;
+  bottom: $body-padding !important;
+  left: $body-padding !important;
+  right: $body-padding !important;
+  border-radius: $app-border-radius !important;
+}
+
+.el-image-viewer__mask {
+  border-radius: $app-border-radius !important;
+}
