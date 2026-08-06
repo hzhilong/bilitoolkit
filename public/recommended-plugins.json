@@ -55,7 +55,7 @@
       "id": "bilitoolkit-plugin-quick-upgrade",
       "author": "hzhilong",
       "description": "帮助哔哩哔哩用户快速升级",
-      "version": "0.0.7",
+      "version": "0.0.8",
       "date": "2026-06-14",
       "links": {
         "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-quick-upgrade",
