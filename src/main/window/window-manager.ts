@@ -16,6 +16,7 @@ import { fileHandleManager } from '@/main/modules/file-handle/file-handle-manage
 import { AppError } from 'bilitoolkit-types'
 import { appUpdateManager } from '@/main/modules/update/update-manager.js'
 import { downloadManager } from '@/main/modules/download/download-manager.js'
+import { userManager } from '@/main/modules/user-manager.js'
 
 type IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 
@@ -59,6 +60,7 @@ export class WindowManager extends BaseWindowManager {
     })
     // 初始化数据库
     await initDatabase()
+    await userManager.init()
     // 初始化对话框视图
     await this.initAppDialogView()
     // 初始化任务调度

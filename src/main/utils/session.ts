@@ -4,6 +4,7 @@ import { BILIBILI_COOKIE_DOMAIN, USER_COOKIE_NAMES } from '@ybgnb/bili-api'
 import { isEmptyArr } from '@ybgnb/utils'
 import { trim } from 'lodash-es'
 import { AppError } from 'bilitoolkit-types'
+import { BILIBILI_COOKIE_URL } from '@ybgnb/bili-api'
 
 /**
  * 获取会话分区标识
@@ -51,14 +52,14 @@ export async function setUserCookies(session: Electron.Session, cookie: string) 
     const v = map[name]
     if (v) {
       await session.cookies.set({
-        url: 'https://www.bilibili.com',
-        name: name,
-        value: v,
+        url: BILIBILI_COOKIE_URL,
         domain: BILIBILI_COOKIE_DOMAIN,
         path: '/',
+        httpOnly: false,
         secure: true,
         sameSite: 'no_restriction',
-        httpOnly: name === 'SESSDATA',
+        name: name,
+        value: v,
       })
     }
   }
