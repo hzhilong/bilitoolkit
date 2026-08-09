@@ -52,7 +52,7 @@ log4js.configure({
   categories: {
     default: {
       appenders: ['pluginMultiAppender'],
-      level: process.env.APP_LOG_LEVEL || 'info',
+      level: import.meta.env.APP_LOG_LEVEL || 'info',
     },
     main: {
       appenders: ['all', 'console', 'errorFilter'],
