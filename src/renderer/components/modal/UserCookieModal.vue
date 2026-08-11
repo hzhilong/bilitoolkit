@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { watch, ref } from 'vue'
-import { USER_COOKIE_NAMES, type UserCookie } from '@ybgnb/bili-api'
+import { USER_COOKIE_NAMES, type UserCookie, userCookieBuilders } from '@ybgnb/bili-api'
 import type { FormInstance } from 'element-plus'
-import { showWarning } from 'bilitoolkit-ui'
+import { showWarning, showError } from 'bilitoolkit-ui'
 
 const props = withDefaults(
   defineProps<{
@@ -83,75 +83,111 @@ const handleParseCookieStr = () => {
     })
   }
 }
+const handleComplete = async () => {
+  const uid = userCookie.value.DedeUserID
+  if (uid == null || uid.trim().length === 0) {
+    showError('DedeUserID 为空')
+    return
+  }
+  for (const [key, valueBuilder] of userCookieBuilders) {
+    if (userCookie.value[key as UserCookieKey] == null || userCookie.value[key as UserCookieKey] === '') {
+      userCookie.value[key as UserCookieKey] = await valueBuilder(Number(uid))
+    }
+  }
+}
 </script>
 
 <template>
-  <el-dialog
-    title="用户 cookie"
-    v-model="visible"
-    width="76%"
-    style="max-width: 96%; min-width: 76%; max-height: 90vh; overflow: hidden"
-    :close-on-click-modal="true"
-    :close-on-press-escape="true"
-    :show-close="true"
-    align-center
-  >
-    <div class="content">
-      <div class="cookie-hint">
-        <pre>
+  <div class="user-cookie-modal">
+    <el-dialog
+      title="用户 cookie"
+      v-model="visible"
+      width="76%"
+      style="max-width: 96%; min-width: 76%; max-height: 90vh; overflow: hidden"
+      :close-on-click-modal="true"
+      :close-on-press-escape="true"
+      :show-close="true"
+      align-center
+    >
+      <div class="content">
+        <div class="cookie-hint">
+          <pre>
 建议改成自己常用浏览器中的 Cookie 信息，以避免风控。
 以 Chrome 为例：打开 B站 → 按 F12 → 顶部[应用] → 左侧[Cookie] →
 选中左侧其中一个条目后，即可在右侧查看 cookie 名称和对应值。</pre
-        >
+          >
+        </div>
+
+        <el-form ref="formRef" class="cookie-form" :model="userCookie" label-position="left" label-width="auto">
+          <el-form-item label="解析cookie字符串" style="flex-wrap: nowrap">
+            <div style="width: 100%; display: flex; align-items: center">
+              <el-input v-model="cookieString" :placeholder="`使用请求头的 Cookie 字符串快速解析`" clearable />
+              <el-button style="margin-left: 10px" @click="handleParseCookieStr">解析</el-button>
+            </div>
+          </el-form-item>
+          <el-form-item
+            v-for="name in USER_COOKIE_NAMES"
+            :key="name"
+            :prop="name"
+            :label="name"
+            :required="name !== 'sid'"
+          >
+            <el-input v-model="userCookie[name]" :placeholder="`请输入 ${name}`" clearable />
+          </el-form-item>
+        </el-form>
       </div>
 
-      <el-form ref="formRef" class="cookie-form" :model="userCookie" label-position="left" label-width="auto">
-        <el-form-item label="解析cookie字符串" style="flex-wrap: nowrap">
-          <div style="width: 100%; display: flex; align-items: center">
-            <el-input v-model="cookieString" :placeholder="`使用请求头的 Cookie 字符串快速解析`" clearable />
-            <el-button style="margin-left: 10px" @click="handleParseCookieStr">解析</el-button>
-          </div>
-        </el-form-item>
-        <el-form-item
-          v-for="name in USER_COOKIE_NAMES"
-          :key="name"
-          :prop="name"
-          :label="name"
-          :required="name !== 'sid'"
-        >
-          <el-input v-model="userCookie[name]" :placeholder="`请输入 ${name}`" clearable />
-        </el-form-item>
-      </el-form>
-    </div>
-
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="handleCancel">取消</el-button>
-        <el-button type="primary" @click="handleSubmit">确认</el-button>
-      </div>
-    </template>
-  </el-dialog>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="handleCancel">取消</el-button>
+          <el-button type="primary" @click="handleComplete">自动补全部分 cookie</el-button>
+          <el-button type="primary" @click="handleSubmit">确认</el-button>
+        </div>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.user-cookie-modal {
+  display: contents;
 
-  .cookie-hint {
-    font-size: 14px;
-    line-height: 1.6;
-    font-weight: bold;
-    color: var(--app-color-primary-transparent-85);
-    border-radius: 10px;
-    border: 2px dashed var(--app-color-primary-transparent-85);
-    text-shadow: 0px 1px 2px var(--app-color-primary-transparent-5);
-    text-align: center;
+  ::v-deep(.el-dialog) {
+    display: flex;
+    flex-direction: column;
+
+    .el-dialog__body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
   }
+  .content {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 
-  .cookie-form {
-    margin-top: 4px;
+    .cookie-hint {
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: bold;
+      color: var(--app-color-primary-transparent-85);
+      border-radius: 10px;
+      border: 2px dashed var(--app-color-primary-transparent-85);
+      text-shadow: 0px 1px 2px var(--app-color-primary-transparent-5);
+      text-align: center;
+    }
+
+    .cookie-form {
+      min-height: 0;
+      flex: 1;
+      overflow-y: auto;
+      margin-top: 4px;
+      padding-right: 10px;
+    }
   }
 }
 </style>

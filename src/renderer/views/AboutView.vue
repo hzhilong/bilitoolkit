@@ -5,6 +5,7 @@ import { computed } from 'vue'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import { switchDefaultTheme, switchThemeMode, useAppThemeStore } from 'bilitoolkit-ui'
 import { appEnv } from '@ybgnb/vite-env/common'
+import { toolkitApi } from '@/renderer/api/toolkit-api'
 
 const env = appEnv
 const appVersion = env.PROD ? env.APP_VERSION : `${env.APP_VERSION} ${env.MODE}`
@@ -44,7 +45,9 @@ const newThemeMode: Ref<AppThemeMode> = computed(() => {
         </div>
         <div class="about__info-list__item">
           <span class="about__info-list__item__title">开源：</span>
-          <span class="about__info-list__item__desc url">{{ env.APP_PRODUCT_URL }}</span>
+          <span class="about__info-list__item__desc url" @click="toolkitApi.system.browsePage(env.APP_PRODUCT_URL)">{{
+            env.APP_PRODUCT_URL
+          }}</span>
         </div>
       </div>
     </div>
