@@ -29,10 +29,6 @@
 | [弹幕投票](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-danmaku-poll)   | 直播弹幕投票（非官方投票功能）                  |
 | [收藏夹存档](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-fav-archive)   | 自动下载收藏夹中所有视频                  |
 
-
-
-
-
 ## [开发说明](./doc/development.md)
 
 ## 截图
