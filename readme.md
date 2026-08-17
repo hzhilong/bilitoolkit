@@ -28,6 +28,8 @@
 | [动态存档](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-dynamic-archive) | 自动保存指定用户的最新图文动态                  |
 | [弹幕投票](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-danmaku-poll)   | 直播弹幕投票（非官方投票功能）                  |
 | [收藏夹存档](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-fav-archive)   | 自动下载收藏夹中所有视频                  |
+| [合集管理](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-collection-manager)   | 视频合集管理，方便UP主批量归类视频                  |
+
 
 ## 截图
 
