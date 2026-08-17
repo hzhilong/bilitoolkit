@@ -33,7 +33,7 @@
 
 ## 截图
 
-![v-002.png](doc/screenshots/v-002.png)
+![plugins.png](doc/screenshots/plugins.png)
 
 ## 注意事项
 
