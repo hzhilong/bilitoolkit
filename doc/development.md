@@ -5,7 +5,6 @@
 ### 项目模块
 
 - [bilitoolkit](https://github.com/hzhilong/bilitoolkit) 哔哩工具姬
-- [bili-api](https://github.com/hzhilong/bili-api) biliapi 库
 - [bilitoolkit-types](https://github.com/hzhilong/bilitoolkit-types) 类型库
 - [bilitoolkit-runtime](https://github.com/hzhilong/bilitoolkit-runtime) 运行库
 - [bilitoolkit-ui](https://github.com/hzhilong/bilitoolkit-ui) UI 库
