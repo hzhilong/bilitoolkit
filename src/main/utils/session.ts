@@ -51,6 +51,7 @@ export async function setUserCookies(session: Electron.Session, cookie: string) 
   for (const name of USER_COOKIE_NAMES) {
     const v = map[name]
     if (v) {
+      await session.cookies.remove(BILIBILI_COOKIE_URL, name)
       await session.cookies.set({
         url: BILIBILI_COOKIE_URL,
         domain: BILIBILI_COOKIE_DOMAIN,
