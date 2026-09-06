@@ -18,6 +18,7 @@ const plugins = ref<ToolkitPluginWithNpmInfo[]>([])
 const { loading, loadingData } = useLoadingData()
 const showThirdPartyPlugins = ref<boolean>(false)
 const blockedPluginIds = ref<string[]>([])
+const pluginName = ref<string>()
 
 const refreshTableData = loadingData(async () => {
   const { data, ...page } = await PluginUtils.searchNpmPlugins({
@@ -25,7 +26,9 @@ const refreshTableData = loadingData(async () => {
     pageSize: pageData.value.pageSize,
     showThirdPartyPlugins: showThirdPartyPlugins.value,
     blockedPluginIds: blockedPluginIds.value,
+    name: pluginName.value,
   })
+  console.log(`refreshTableData`, page)
   plugins.value = data
   pageData.value = page
 })
@@ -58,7 +61,7 @@ const handleCurrentChange = () => {
 <template>
   <PageContainer v-loading="loading">
     <div class="header">
-      <div>目前共有 {{ pageData.total }} 个插件</div>
+      <div>当前共有 {{ pageData.total }} 个插件</div>
       <el-switch
         v-model="showThirdPartyPlugins"
         inline-prompt
@@ -66,8 +69,9 @@ const handleCurrentChange = () => {
         inactive-text="不显示第三方插件"
         @change="refreshTable"
       />
+      <el-input v-model="pluginName" clearable placeholder="插件完整名称" size="small" style="width: 120px"></el-input>
       <div class="options">
-        <el-button @click="refreshTable">刷新</el-button>
+        <el-button @click="refreshTable" size="small">查询</el-button>
       </div>
     </div>
     <plugin-list class="list-container" :plugins="plugins" :type="'market'" />

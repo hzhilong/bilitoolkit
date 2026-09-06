@@ -70,13 +70,20 @@ export class PluginUtils {
     pageSize = 20,
     showThirdPartyPlugins = false,
     blockedPluginIds = [],
+    name,
   }: {
     pageNum?: number
     pageSize?: number
     blockedPluginIds?: string[]
     showThirdPartyPlugins?: boolean
+    name?: string
   }): Promise<PageResult<ToolkitPluginWithNpmInfo>> {
-    const searchText = SearchText.create().keywords(['bilitoolkit-plugin'])
+    const searchText = SearchText.create()
+    if (name) {
+      searchText.keywords([`bilitoolkit-plugin:name:${name}`])
+    } else {
+      searchText.keywords(['bilitoolkit-plugin'])
+    }
     if (!showThirdPartyPlugins) {
       searchText.author(appEnv.APP_AUTHOR)
     }
@@ -85,13 +92,12 @@ export class PluginUtils {
       size: pageSize,
       from: (pageNum - 1) * 20,
     })
-    result.objects = (await this.sortNpmPlugins(result.objects)).filter(
-      (p) => blockedPluginIds.indexOf(p.package.name) < 0,
-    )
+    const currPageList = await this.sortNpmPlugins(result.objects)
+    result.objects = currPageList.filter((p) => blockedPluginIds.indexOf(p.package.name) < 0)
     return {
       pageNum: pageNum,
       pageSize: pageSize,
-      total: result.total - blockedPluginIds.length,
+      total: result.total,
       totalPages: Math.floor(result.total / pageSize) + 1,
       data: result.objects.map((p) => {
         return {

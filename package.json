@@ -1,6 +1,6 @@
 {
   "name": "bilitoolkit",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "type": "module",
   "main": "dist-electron/main.js",
@@ -77,7 +77,7 @@
     "node-cron": "^4.2.1",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",
-    "public-registry-api": "^0.0.3",
+    "public-registry-api": "^0.0.4",
     "qrcode": "^1.5.4",
     "remixicon": "^4.6.0",
     "semver": "^7.8.4",

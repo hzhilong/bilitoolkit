@@ -1,5 +1,5 @@
 {
-  "appVersion": "0.1.5",
+  "appVersion": "0.1.6",
   "plugins": [
     {
       "name": "哔哩备份姬",
@@ -23,7 +23,7 @@
       "id": "bilitoolkit-plugin-video-downloader",
       "author": "hzhilong",
       "description": "下载视频、音频、弹幕、字幕、封面等资源",
-      "version": "0.0.9",
+      "version": "0.1.0",
       "date": "2026-07-25",
       "links": {
         "npm": "https://www.npmjs.com/package/bilitoolkit-plugin-video-downloader",
