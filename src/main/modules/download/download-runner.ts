@@ -6,6 +6,8 @@ import {
   type DownloadResourceType,
   type DownloadResource,
   type DownloadVideoPart,
+  type VideoInfoSnapshot,
+  type VideoPartSnapshot,
 } from 'bilitoolkit-types'
 import type { BaseDownloader } from '@/main/modules/download/downloader/base-downloader.js'
 import { DMDownloader } from '@/main/modules/download/downloader/dm-downloader.js'
@@ -16,9 +18,12 @@ import { deleteFiles, ensureDir } from '@ybgnb/utils/node'
 import { mergeAudioAndVideo } from '@/main/modules/ffmpeg/merge.js'
 import { downloadRecordRepository } from '@/main/db/repository/download.js'
 import fs from 'node:fs/promises'
+import { SubtitleDownloader } from '@/main/modules/download/downloader/subtitle-downloader.js'
 
 type ItemIndex = number
 type ItemResource = {
+  video: VideoInfoSnapshot
+  part: VideoPartSnapshot
   bvid: string
   cid: number
   absoluteFilePath: string
@@ -48,6 +53,8 @@ export class DownloadRunner {
       for (const part of video.parts) {
         for (const resource of part.resources) {
           this.items.set(index, {
+            video: video.snapshot,
+            part: part.snapshot,
             bvid: video.snapshot.bvid,
             cid: part.snapshot.cid,
             absoluteFilePath: this.buildAbsoluteFilePath(part, resource),
@@ -93,16 +100,23 @@ export class DownloadRunner {
       userCookie: this.task.userCookie,
       completedBytes: (await downloadRecordRepository.getById(this.task.id))?.progress?.completedBytes,
       autoReparseOnUrlExpired: this.task.settings?.autoReparseOnUrlExpired,
+      video: itemResource.video,
+      part: itemResource.part,
     }
     if (context.type === 'dm') {
       return new DMDownloader({
         ...context,
         type: 'dm',
       })
+    } else if (context.type === 'subtitle') {
+      return new SubtitleDownloader({
+        ...context,
+        type: 'subtitle',
+      })
     } else {
       return new CommonDownloader({
         ...context,
-      } as DownloaderContext<'audio' | 'video' | 'cover' | 'subtitle'>)
+      } as DownloaderContext<'audio' | 'video' | 'cover'>)
     }
   }
 
@@ -114,9 +128,9 @@ export class DownloadRunner {
         await sleepRandom(1111, 2222)
         this.currentItem++
       }
-    } catch (error) {
-      if (!isCanceledError(error)) {
-        throw error
+    } catch (e) {
+      if (!isCanceledError(e)) {
+        throw e
       }
     }
   }
@@ -141,11 +155,9 @@ export class DownloadRunner {
     if (this.downloader) {
       await this.downloader.resume()
     } else {
-      this.download()
-        .then()
-        .catch((e) => {
-          this.onStatusUpdate('failed', getErrorMessage(e))
-        })
+      this.download().catch((e) => {
+        this.onStatusUpdate('failed', getErrorMessage(e))
+      })
     }
   }
 

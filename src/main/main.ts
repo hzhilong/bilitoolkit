@@ -9,6 +9,7 @@ import { mainEnv } from '@/main/common/main-env.js'
 import { mainLogger } from '@/main/common/main-logger.js'
 import { initFFmpeg } from '@/main/modules/ffmpeg/init.js'
 import '@/shared/utils/polyfills'
+import windowStateKeeper from 'electron-window-state'
 
 initFFmpeg()
 
@@ -47,18 +48,27 @@ if (process.platform === 'win32') app.setAppUserModelId(app.getName())
 
 // 创建窗口 https://www.electronjs.org/zh/docs/latest/api/browser-window
 const createWindow = async () => {
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 720,
+  })
+
   mainWindow = windowManager.createWindow(
     {
-      width: 1000,
-      height: 720,
       minWidth: 1000,
-      minHeight: 700,
+      minHeight: 720,
+      x: mainWindowState.x,
+      y: mainWindowState.y,
+      width: mainWindowState.width,
+      height: mainWindowState.height,
       webPreferences: {
         preload: appPath.preloadJS,
       },
     },
     { show: true },
   )
+
+  mainWindowState.manage(mainWindow)
 
   // 初始化主窗口相关的 IPC 事件监听和处理
   await windowManager.initMainWindow(mainWindow)

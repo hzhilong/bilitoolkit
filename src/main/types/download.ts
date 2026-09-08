@@ -4,6 +4,9 @@ import {
   type DownloadResourceType,
   type DownloadTaskStatus,
   type DownloadResource,
+  type DownloadSettings,
+  type VideoPartSnapshot,
+  type VideoInfoSnapshot,
 } from 'bilitoolkit-types'
 import type { UserCookie } from '@ybgnb/bili-api'
 
@@ -22,8 +25,9 @@ export type DownloaderContext<Type extends DownloadResourceType> = DownloadResou
   bvid: string
   cid: number
   completedBytes?: number
-  autoReparseOnUrlExpired?: boolean
-}
+  video: VideoInfoSnapshot
+  part: VideoPartSnapshot
+} & Partial<Pick<DownloadSettings, 'autoReparseOnUrlExpired'>>
 
 export interface RunnerListener {
   onTaskUpdate(id: DownloadTask['id'], update: Partial<Omit<DownloadTask, 'id'>>): void

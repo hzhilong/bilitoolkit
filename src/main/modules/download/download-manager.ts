@@ -13,6 +13,7 @@ import { windowManager } from '@/main/window/window-manager.js'
 import path from 'path'
 import { getFileRootPath, showItemInFolder } from '@/main/utils/file.js'
 import { onlyEmitHost } from '@/main/api/handler/api-handler-event.js'
+import { mainLogger } from '@/main/common/main-logger.js'
 
 class DownloadManager {
   runners: Map<number, DownloadRunner> = new Map()
@@ -29,7 +30,9 @@ class DownloadManager {
       this.downloadQueue.push(runner)
     }
     if (this.downloadQueue.length === 1) {
-      runner.download().then().catch()
+      runner.download().catch((error) => {
+        mainLogger.error('下载失败:', error)
+      })
     }
   }
 
@@ -150,7 +153,9 @@ class DownloadManager {
     try {
       const runner = this.getFirstInQueue()
       if (runner) {
-        runner.download().then().catch()
+        runner.download().catch((error) => {
+          mainLogger.error('下载失败:', error)
+        })
       }
     } finally {
       this.dispatching = false
