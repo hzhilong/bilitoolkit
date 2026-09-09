@@ -1,4 +1,4 @@
-import { type WebContents, webContents, BrowserWindow, WebContentsView } from 'electron'
+import { type WebContents, webContents, BrowserWindow, WebContentsView, type HandlerDetails } from 'electron'
 import type { CreateWindowOptions } from '@/main/types/create-window.js'
 import type { ApiCallerContext, HostApiCallerContext, PluginApiCallerContext } from '@/main/types/ipc-toolkit-api.js'
 import { isToolkitPlugin, type ToolkitPlugin, type InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
@@ -189,6 +189,7 @@ export abstract class BaseWindowManager {
         additionalArguments: injectingPluginMetadata(plugin),
       },
     })
+    this.configureChildWindowBehavior(view)
     // 更新视图边界
     const updateBounds = async () => {
       const bounds = (await _getGlobalData(
@@ -328,4 +329,28 @@ export abstract class BaseWindowManager {
     context.window.contentView.removeChildView(this.appDialogWebContentsView)
   }
   public closeAppDialogView() {}
+
+  public configureChildWindowBehavior(window: BrowserWindow | WebContentsView) {
+    window.webContents.setWindowOpenHandler((details: HandlerDetails) => {
+      console.log('拦截到打开新窗口请求:', details.url)
+      // 获取当前窗口的屏幕坐标和宽高 (x, y, width, height)
+      const bounds = this.mainWindow!.getBounds()
+
+      return {
+        action: 'allow',
+        overrideBrowserWindowOptions: {
+          x: bounds.x,
+          y: bounds.y,
+          width: bounds.width,
+          height: bounds.height,
+          menu: null,
+          icon: appPath.defaultWindowIcon,
+        },
+      }
+    })
+    window.webContents.on('did-create-window', (childWindow) => {
+      this.configureChildWindowBehavior(childWindow)
+      childWindow.setMenu(null)
+    })
+  }
 }

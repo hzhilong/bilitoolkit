@@ -1,4 +1,4 @@
-import { BrowserWindow, globalShortcut, ipcMain, type HandlerDetails, Menu } from 'electron'
+import { BrowserWindow, globalShortcut, ipcMain, Menu } from 'electron'
 import { IPC_CHANNELS } from '@/shared/types/electron-ipc.js'
 import { execBiz, formatUnitSize, isCanceledError } from '@ybgnb/utils'
 import type { PluginApiInvokeOptions } from '@/shared/types/api-invoke.js'
@@ -46,6 +46,12 @@ export class WindowManager extends BaseWindowManager {
    */
   public async initMainWindow(mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow
+    this.configureChildWindowBehavior(mainWindow)
+    // 监听主窗口的 close 事件
+    mainWindow.on('close', async () => {
+      // 取消所有任务
+      await taskRuntime.cancelAll()
+    })
     // 初始化插件API监听
     ipcMain.handle(IPC_CHANNELS.PLUGIN_APIS, async (event: IpcMainInvokeEvent, options: PluginApiInvokeOptions) => {
       return await this.handlePluginApiInvoke(options, event)
@@ -76,20 +82,6 @@ export class WindowManager extends BaseWindowManager {
       // 生产
       mainWindow.loadFile(appPath.appURL).then(() => {})
     }
-    // 监听主窗口的 close 事件
-    mainWindow.on('close', async () => {
-      // 取消所有任务
-      await taskRuntime.cancelAll()
-    })
-    mainWindow.webContents.setWindowOpenHandler((_: HandlerDetails) => {
-      return {
-        action: 'allow',
-        overrideBrowserWindowOptions: {
-          menu: null,
-          icon: appPath.defaultWindowIcon,
-        },
-      }
-    })
   }
 
   /**
