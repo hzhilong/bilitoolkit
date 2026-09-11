@@ -218,13 +218,13 @@ export abstract class BaseWindowManager {
 
     if (path.isAbsolute(plugin.files.indexPath)) {
       // 测试环境：绝对路径
-      await view.webContents.loadURL(plugin.files.indexPath)
+      await view.webContents.loadFile(plugin.files.indexPath)
     } else if (isHttpUrl(plugin.files.indexPath)) {
       // 测试环境：开发服务器URL
       await view.webContents.loadURL(plugin.files.indexPath)
     } else {
       // 生产环境
-      await view.webContents.loadURL(path.resolve(appPath.pluginsPath, plugin.files.indexPath))
+      await view.webContents.loadFile(path.resolve(appPath.pluginsPath, plugin.files.indexPath))
     }
   }
   public showPluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {

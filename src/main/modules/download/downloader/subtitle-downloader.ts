@@ -1,6 +1,5 @@
 import { BaseDownloader } from '@/main/modules/download/downloader/base-downloader.js'
 import type { DownloaderContext } from '@/main/types/download.js'
-import { biliClients } from '@/main/modules/bili-api-client.js'
 import { writeJSONFile, getFileSize } from '@ybgnb/utils/node'
 import { isCanceledError, getErrorMessage } from '@ybgnb/utils'
 import type { Subtitle } from '@/main/types/video-subtitle.js'
@@ -47,7 +46,6 @@ export class SubtitleDownloader extends BaseDownloader<'subtitle'> {
         speedKBps: 0,
       })
       this.abortController = new AbortController()
-      const client = biliClients.get(this.context.userCookie)
       const subtitleUrl = subtitleItem.subtitle_url.startsWith('http')
         ? subtitleItem.subtitle_url
         : `https:${subtitleItem.subtitle_url}`
