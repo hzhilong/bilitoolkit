@@ -1,6 +1,6 @@
 {
   "name": "bilitoolkit",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "private": true,
   "type": "module",
   "main": "dist-electron/main.js",
@@ -105,7 +105,7 @@
     "@vue/eslint-config-typescript": "^14.6.0",
     "cross-env": "^10.1.0",
     "electron": "38.1.0",
-    "electron-builder": "26.15.3",
+    "electron-builder": "26.16.1",
     "eslint": "^9.31.0",
     "eslint-plugin-vue": "~10.3.0",
     "jiti": "^2.4.2",
