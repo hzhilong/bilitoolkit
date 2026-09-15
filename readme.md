@@ -30,6 +30,7 @@
 | [收藏夹存档](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-fav-archive)   | 自动下载收藏夹中所有视频                        |
 | [合集管理](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-collection-manager)   | 视频合集管理，方便UP主批量归类视频                  |
 | [专栏下载](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-opus-downloader)   | 专栏下载器，可保存为markdown/docx/txt                 |
+| [稿件管理](https://github.com/hzhilong/bilitoolkit-plugins/blob/main/bilitoolkit-plugin-archive-manager)   | 批量修改稿件可见范围                 |
 
 
 ## 截图
