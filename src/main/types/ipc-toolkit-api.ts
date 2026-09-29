@@ -15,6 +15,7 @@ import type {
   ToolkitDownloadApi,
 } from 'bilitoolkit-types'
 import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.js'
+import type { ToolkitMediaApi } from '@/shared/types/toolkit-media-api.js'
 
 /**
  * API调用环境：宿主环境|插件环境
@@ -130,6 +131,10 @@ export interface IpcToolkitBiliApi extends GeneratedIpcToolkitBiliApi {}
 export type GeneratedIpcToolkitCoreApi = AddApiCallerContext<ToolkitCoreApi>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IpcToolkitCoreApi extends GeneratedIpcToolkitCoreApi {}
+
+export type GeneratedIpcToolkitMediaApi = AddApiCallerContext<ToolkitMediaApi>
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IpcToolkitMediaApi extends GeneratedIpcToolkitMediaApi {}
 
 /**
  * 任务API（添加API调用的上下文参数）

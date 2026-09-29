@@ -11,10 +11,20 @@ const platformMap = {
   linux: 'ffmpeg',
 }
 
+let resolvedFFmpegPath: string | null = null
+
+export const getFFmpegPath = () => {
+  if (!resolvedFFmpegPath) {
+    throw new Error('FFmpeg 尚未初始化')
+  }
+  return resolvedFFmpegPath
+}
+
 export const initFFmpeg = () => {
   const exeName = (platformMap as any)[process.platform] ?? platformMap.win32
   const fullPath = app.isPackaged
     ? path.join(appPath.unpackedModulesPath, 'ffmpeg-static/', exeName)
     : (ffmpegStatic as unknown as string)
+  resolvedFFmpegPath = fullPath
   ffmpeg.setFfmpegPath(fullPath)
 }
