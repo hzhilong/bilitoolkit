@@ -7,9 +7,10 @@ import { useAppSettingsStore } from '@/renderer/stores/app-settings.js'
 import { DevToolsType } from '@/shared/types/app-settings.js'
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import TestPluginDialog from '@/renderer/components/plugin/TestPluginDialog.vue'
-import { SettingGroup, SettingItem, loadingDialog } from 'bilitoolkit-ui'
+import { SettingGroup, SettingItem } from 'bilitoolkit-ui'
 import { getErrorMessage } from '@ybgnb/utils'
 import { clearPluginIconCache } from '@/renderer/services/plugin-icon-service'
+import { useAppUpdate } from '@/renderer/composables/use-app-update.js'
 
 const appSettings = useAppSettingsStore().appSettings
 
@@ -29,22 +30,11 @@ initSettingDesc(logsDesc, toolkitApi.core.getLogsFolderSize)
 initSettingDesc(dbsDesc, toolkitApi.core.getDBsFolderSize)
 initSettingDesc(filesDesc, toolkitApi.core.getFilesFolderSize)
 const testPluginDialogVisible = ref<boolean>(false)
+const { updateStatus, updateStatusDesc, isUpdateBusy, updateButtonText, handleCheckUpdate } = useAppUpdate()
 
 const handleClearIcon = async () => {
   await toolkitApi.core.clearPluginIconCache()
   clearPluginIconCache()
-}
-const handleCheckUpdate = async () => {
-  toolkitApi.core.checkUpdateApp().finally(() => {
-    loadingDialog.close()
-  })
-  loadingDialog.show({
-    showCancel: true,
-    message: '正在检查更新',
-    onCancel: () => {
-      toolkitApi.core.cancelCheckUpdateApp()
-    },
-  })
 }
 </script>
 
@@ -80,8 +70,18 @@ const handleCheckUpdate = async () => {
         </setting-item>
       </SettingGroup>
       <SettingGroup name="更新设置">
-        <SettingItem title="手动检查更新">
-          <el-button type="primary" @click="handleCheckUpdate">检查更新</el-button>
+        <SettingItem title="软件更新" :desc="updateStatusDesc">
+          <div class="update-control">
+            <el-progress
+              v-if="updateStatus.phase === 'downloading'"
+              :percentage="Math.round(updateStatus.percent ?? 0)"
+              :stroke-width="8"
+              :show-text="false"
+            />
+            <el-button type="primary" :loading="updateStatus.phase === 'checking'" :disabled="isUpdateBusy" @click="handleCheckUpdate">
+              {{ updateButtonText }}
+            </el-button>
+          </div>
         </SettingItem>
         <setting-item title="启动时自动更新">
           <el-switch v-model="appSettings.autoUpdateOnStartup" />
@@ -104,4 +104,14 @@ const handleCheckUpdate = async () => {
 
 <style scoped lang="scss">
 @use '@/renderer/assets/scss/pages/settings';
+
+.update-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .el-progress {
+    width: 180px;
+  }
+}
 </style>

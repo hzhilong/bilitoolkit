@@ -23,6 +23,18 @@ export interface ToolkitApiWithCore extends ToolkitApi {
   task: ToolkitTaskApi
 }
 
+export type AppUpdatePhase = 'idle' | 'checking' | 'downloading' | 'downloaded' | 'up-to-date' | 'error'
+
+export interface AppUpdateStatus {
+  phase: AppUpdatePhase
+  version?: string
+  percent?: number
+  bytesPerSecond?: number
+  transferred?: number
+  total?: number
+  message?: string
+}
+
 /**
  * 哔哩工具姬 API的模块分类
  */
@@ -138,6 +150,11 @@ export interface ToolkitCoreApi {
    * 检查更新应用
    */
   checkUpdateApp(): Promise<void>
+
+  /**
+   * 获取软件检查及下载更新的当前状态
+   */
+  getAppUpdateStatus(): Promise<AppUpdateStatus>
 
   /**
    * 取消检查更新应用
