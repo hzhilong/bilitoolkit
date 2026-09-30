@@ -89,4 +89,29 @@
     }
   }
 
+  &__version-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 8px;
+  }
+
+  &__update-button {
+    margin-left: 4px;
+  }
+
+  &__update-status {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    gap: 8px;
+    margin-left: 48px;
+    color: var(--el-text-color-secondary);
+    font-size: 13px;
+
+    .el-progress {
+      width: 120px;
+    }
+  }
+
 }

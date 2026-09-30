@@ -6,9 +6,11 @@ import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import { switchDefaultTheme, switchThemeMode, useAppThemeStore } from 'bilitoolkit-ui'
 import { appEnv } from '@ybgnb/vite-env/common'
 import { toolkitApi } from '@/renderer/api/toolkit-api'
+import { useAppUpdate } from '@/renderer/composables/use-app-update.js'
 
 const env = appEnv
 const appVersion = env.PROD ? env.APP_VERSION : `${env.APP_VERSION} ${env.MODE}`
+const { updateStatus, updateStatusDesc, isUpdateBusy, updateButtonText, handleCheckUpdate } = useAppUpdate()
 
 const state = useAppThemeStore().state
 const themeToggleMap: Record<AppThemeMode, AppThemeMode> = {
@@ -31,9 +33,28 @@ const newThemeMode: Ref<AppThemeMode> = computed(() => {
           <span class="about__info-list__item__title">名称：</span>
           <span class="about__info-list__item__desc">{{ env.APP_PRODUCT_CN_NAME }}</span>
         </div>
-        <div class="about__info-list__item">
+        <div class="about__info-list__item about__version-item">
           <span class="about__info-list__item__title">版本：</span>
           <span class="about__info-list__item__desc">{{ appVersion }}</span>
+          <el-button
+            class="about__update-button"
+            type="primary"
+            size="small"
+            :loading="updateStatus.phase === 'checking'"
+            :disabled="isUpdateBusy"
+            @click="handleCheckUpdate"
+          >
+            {{ updateButtonText }}
+          </el-button>
+          <div v-if="updateStatus.phase !== 'idle'" class="about__update-status">
+            <el-progress
+              v-if="updateStatus.phase === 'downloading'"
+              :percentage="Math.round(updateStatus.percent ?? 0)"
+              :stroke-width="6"
+              :show-text="false"
+            />
+            <span>{{ updateStatusDesc }}</span>
+          </div>
         </div>
         <div class="about__info-list__item">
           <span class="about__info-list__item__title">描述：</span>

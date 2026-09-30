@@ -14,7 +14,7 @@ import { pluginManager } from '@/main/plugin/manager.js'
 import { windowManager } from '@/main/window/window-manager.js'
 import { getRecommendedPlugins, getBlockedPluginIds } from '@/main/plugin/loader.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
-import type { UserListSyncResult } from '@/shared/types/toolkit-core-api.js'
+import type { AppUpdateStatus, UserListSyncResult } from '@/shared/types/toolkit-core-api.js'
 import { userService } from '@/main/service/user.service.js'
 import { getFileSizeKB } from '@ybgnb/utils/node'
 import { showItemInFolder, getPluginFileRootPath, showItemInFolder as _showItemInFolder } from '@/main/utils/file.js'
@@ -115,6 +115,10 @@ export class CoreApiHandler extends ApiHandleStrategy implements IpcToolkitCoreA
   checkUpdateApp(_context: ApiCallerContext): Promise<void> {
     appUpdateManager.showLastCheckUpToDateTip = true
     return appUpdateManager.checkUpdate()
+  }
+
+  async getAppUpdateStatus(_context: ApiCallerContext): Promise<AppUpdateStatus> {
+    return appUpdateManager.getStatus()
   }
 
   cancelCheckUpdateApp(_context: ApiCallerContext): Promise<void> {
