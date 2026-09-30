@@ -8,14 +8,11 @@ import type {
 } from '@/shared/types/toolkit-plugin.js'
 import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.js'
 import type { UserInfoWithCookie } from '@ybgnb/bili-api'
-import type { ToolkitMediaApi } from '@/shared/types/toolkit-media-api.js'
 
 /**
  * 哔哩工具姬API（包含核心API）
  */
 export interface ToolkitApiWithCore extends ToolkitApi {
-  /** 视频等媒体文件的受控处理能力，插件环境也可使用 */
-  media: ToolkitMediaApi
   /**
    * 软件核心相关API
    */

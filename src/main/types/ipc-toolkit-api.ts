@@ -13,9 +13,9 @@ import type {
   ToolkitUserApi,
   ToolkitTimerApi,
   ToolkitDownloadApi,
+  ToolkitMediaApi,
 } from 'bilitoolkit-types'
 import type { ToolkitTaskApi } from '@/shared/types/toolkit-task-api.js'
-import type { ToolkitMediaApi } from '@/shared/types/toolkit-media-api.js'
 
 /**
  * API调用环境：宿主环境|插件环境

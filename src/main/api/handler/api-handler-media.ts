@@ -1,7 +1,7 @@
 import { ApiHandleStrategy } from '@/main/types/api-dispatcher.js'
 import type { ApiCallerContext, IpcToolkitMediaApi } from '@/main/types/ipc-toolkit-api.js'
 import { videoWatermarkService } from '@/main/modules/ffmpeg/video-watermark.js'
-import type { CreateVideoWatermarkJobOptions } from '@/shared/types/toolkit-media-api.js'
+import type { CreateVideoWatermarkJobOptions } from 'bilitoolkit-types'
 
 const getCallerKey = (context: ApiCallerContext) =>
   context.envType === 'host' ? 'host' : `${context.envType}:${context.plugin.id}`

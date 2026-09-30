@@ -12,7 +12,7 @@ import type {
   VideoPreview,
   VideoWatermarkJob,
   WatermarkRegion,
-} from '@/shared/types/toolkit-media-api.js'
+} from 'bilitoolkit-types'
 
 const VIDEO_EXTENSIONS = new Set(['.mp4', '.mkv', '.mov', '.flv', '.avi', '.webm', '.m4v', '.ts'])
 
@@ -362,4 +362,3 @@ export class VideoWatermarkService {
 }
 
 export const videoWatermarkService = new VideoWatermarkService()
-
