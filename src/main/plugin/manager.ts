@@ -11,13 +11,15 @@ import { getAppInstalledPlugins, writeHostDBDoc } from '@/main/utils/host-app.js
 import { mainLogger } from '@/main/common/main-logger.js'
 import { cloneDeep } from 'lodash-es'
 import { APP_DB_KEYS } from '@/shared/common/app-db.js'
-import { loadTestPlugin, loadInstalledPlugin } from '@/main/plugin/loader.js'
+import { loadTestPlugin, loadInstalledPlugin, restoreInstalledPluginMetadata } from '@/main/plugin/loader.js'
 import { downloadPlugin, removePluginFile } from '@/main/plugin/install.js'
 import fs from 'fs'
 import path from 'path'
 import { getPackage, type NpmPackage } from 'public-registry-api'
 import { lt, eq } from 'semver'
 import { AppError } from 'bilitoolkit-types'
+import { parseNpmPackage } from '@/shared/utils/plugin-parse.js'
+import { getFormattedDate } from '@ybgnb/utils'
 
 type PluginRegistry = {
   appVersion: string
@@ -28,7 +30,16 @@ class PluginManager {
   private readonly registry: PluginRegistry
 
   private buildRegistryPlugins(plugins: InstalledToolkitPlugin[]) {
-    return new Map<string, InstalledToolkitPlugin>(plugins.map((plugin) => [plugin.id, plugin]))
+    return new Map<string, InstalledToolkitPlugin>(
+      plugins.map((plugin) => {
+        try {
+          return [plugin.id, restoreInstalledPluginMetadata(plugin)]
+        } catch (error) {
+          mainLogger.warn(`无法校正插件 ${plugin.id} 的安装信息`, error)
+          return [plugin.id, plugin]
+        }
+      }),
+    )
   }
 
   constructor() {
@@ -37,6 +48,7 @@ class PluginManager {
       appVersion: installedPlugins.appVersion,
       plugins: this.buildRegistryPlugins(installedPlugins.plugins),
     }
+    this.updateDB()
     mainLogger.info(`插件已加载`, Array.from(this.registry.plugins.keys()))
   }
 
@@ -82,6 +94,7 @@ class PluginManager {
   }
 
   async updatePlugin(oldPlugin: InstalledToolkitPlugin) {
+    oldPlugin = this.getInstalledPlugin(oldPlugin.id)
     mainLogger.info(`插件 ${oldPlugin.id} ${oldPlugin.version} 更新中…`)
     let pkg: NpmPackage
     try {
@@ -103,7 +116,8 @@ class PluginManager {
     const updatedPlugin = await loadInstalledPlugin(
       await downloadPlugin({
         ...oldPlugin,
-        version: lastVersion,
+        ...parseNpmPackage(pkg),
+        installDate: getFormattedDate(),
       }),
     )
     this.registerPlugin(updatedPlugin)
@@ -135,7 +149,7 @@ class PluginManager {
       //      removeTestPlugin(installedPlugin)
       //      this.unregisterPlugin(plugin.id)
     }
-    windowManager.closePluginView(context, plugin)
+    await windowManager.closePluginView(context, plugin)
   }
 
   async hideCurrPlugin(context: ApiCallerContext) {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PageContainer from '@/renderer/components/layout/PageContainer.vue'
 import PluginList from '@/renderer/components/plugin/PluginList.vue'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onActivated } from 'vue'
 import { useAppInstalledPlugins } from '@/renderer/stores/installed-plugins'
 import { useStarredPluginsStore } from '@/renderer/stores/starred-plugins'
 import PluginListSimple from '@/renderer/components/plugin/PluginListSimple.vue'
@@ -9,6 +9,9 @@ import type { InstalledToolkitPlugin, ToolkitPlugin, PluginType } from '@/shared
 import { PluginUtils } from '@/renderer/utils/plugin-utils'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { usePluginUpdates } from '@/renderer/stores/plugin-updates'
+import { showToast } from 'bilitoolkit-ui'
+import { getErrorMessage } from '@ybgnb/utils'
 
 const { state } = storeToRefs(useAppInstalledPlugins())
 const { isStarred } = useStarredPluginsStore()
@@ -16,6 +19,33 @@ const route = useRoute()
 const isShowStarred = ref(false)
 const isDetailedView = ref(false)
 const showType = ref<'' | PluginType>('')
+const updates = usePluginUpdates()
+const updatingAll = ref(false)
+onMounted(() => updates.checkUpdates())
+onActivated(() => updates.checkUpdates())
+
+async function updateAllPlugins() {
+  if (updatingAll.value) return
+  updatingAll.value = true
+  const plugins = [...updates.available]
+  const failures: string[] = []
+  let completed = 0
+  try {
+    for (const plugin of plugins) {
+      try {
+        await PluginUtils.update(plugin)
+        completed++
+      } catch (error) {
+        failures.push(`${plugin.name}：${getErrorMessage(error)}`)
+      }
+    }
+    showToast(
+      failures.length ? `已更新 ${completed} 个插件；失败：${failures.join('；')}` : `已更新 ${completed} 个插件`,
+    )
+  } finally {
+    updatingAll.value = false
+  }
+}
 
 watch(
   () => [route.query.starred, route.query.type],
@@ -50,7 +80,23 @@ const handleItemClick = (plugin: ToolkitPlugin) => {
 <template>
   <PageContainer>
     <div class="header">
-      <div>{{ pluginCountDesc }}</div>
+      <div class="installed-summary">
+        <span>{{ pluginCountDesc }}</span>
+        <el-button
+          v-if="updates.available.length"
+          size="small"
+          type="primary"
+          :loading="updatingAll"
+          :disabled="Object.values(updates.updating).some(Boolean) && !updatingAll"
+          @click="updateAllPlugins"
+        >
+          一键更新插件（{{ updates.available.length }}）
+        </el-button>
+        <el-button size="small" link :loading="updates.checking" :disabled="updatingAll" @click="updates.checkUpdates"
+          >检查更新</el-button
+        >
+        <span v-if="updates.failedChecks" class="check-error">{{ updates.failedChecks }} 个插件检查失败，请重试</span>
+      </div>
       <div class="actions">
         <el-radio-group v-model="isShowStarred" size="small">
           <el-radio-button label="全部" :value="false" />

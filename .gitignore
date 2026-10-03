@@ -41,3 +41,5 @@ temp
 plugins
 plugin-icons
 /release/
+.playwright-cli/
+output/playwright/

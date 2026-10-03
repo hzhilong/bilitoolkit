@@ -242,10 +242,10 @@ export abstract class BaseWindowManager {
     }
     context.window.contentView.removeChildView(view)
   }
-  public closePluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
+  public async closePluginView(context: ApiCallerContext, plugin: ToolkitPlugin) {
     const view = this.pluginToViewMap.get(plugin.id)
     if (!view) {
-      throw new Error('该插件未创建视图，关闭失败')
+      return
     }
     this.webContentsToPluginMap.get(view.webContents.id)
     this.webContentsToPluginMap.delete(view.webContents.id)
@@ -256,9 +256,12 @@ export abstract class BaseWindowManager {
       context.window.removeListener('resize', this.pluginResizeListeners.get(plugin.id)!)
       this.pluginResizeListeners.delete(plugin.id)
     }
-    context.window.contentView.removeChildView(view)
+    if (context.window.contentView.children.includes(view)) context.window.contentView.removeChildView(view)
     if (!view.webContents.isDestroyed()) {
-      view.webContents.close()
+      await new Promise<void>((resolve) => {
+        view.webContents.once('destroyed', resolve)
+        view.webContents.close()
+      })
     }
   }
 

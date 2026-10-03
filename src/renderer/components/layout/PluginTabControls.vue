@@ -66,11 +66,7 @@ eventBus.on('closePluginView', async ({ plugin }) => {
   for (let i = 0; i < plugins.value.length; i++) {
     const openedPlugin = plugins.value[i]
     if (openedPlugin.id === plugin.id) {
-      if (openedPlugin.type === 'ui') {
-        try {
-          await toolkitApi.core.closePlugin(cloneDeep(plugin))
-        } catch (_e) {}
-      } else {
+      if (openedPlugin.type !== 'ui') {
         removeTab(getTaskPluginUrl(openedPlugin.id))
       }
       plugins.value.splice(i, 1)

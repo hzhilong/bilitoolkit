@@ -84,6 +84,7 @@
         @submit="handleModalSubmit"
       />
       <TaskModal
+        v-if="currRowTask"
         type="update"
         :plugin="currRowPlugin"
         :task="currRowTask"
