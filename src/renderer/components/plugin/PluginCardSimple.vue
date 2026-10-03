@@ -2,6 +2,9 @@
 import { usePluginIconBase64 } from '@/renderer/composables/usePluginIcon.js'
 import type { ToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import { AppTooltip } from 'bilitoolkit-ui'
+import { showToast, handleError } from 'bilitoolkit-ui'
+import { usePluginUpdates } from '@/renderer/stores/plugin-updates'
+import { PluginUtils } from '@/renderer/utils/plugin-utils'
 
 const props = withDefaults(
   defineProps<{
@@ -11,10 +14,20 @@ const props = withDefaults(
 )
 
 const { base64 } = usePluginIconBase64(() => props.plugin)
+const updates = usePluginUpdates()
+async function updatePlugin() {
+  try {
+    await PluginUtils.update(props.plugin)
+    showToast('插件更新成功')
+  } catch (error) {
+    handleError(error)
+  }
+}
 const emits = defineEmits<{
   click: []
 }>()
 const handleClick = () => {
+  if (updates.updating[props.plugin.id]) return
   emits('click')
 }
 </script>
@@ -25,7 +38,19 @@ const handleClick = () => {
     <div class="plugin-info">
       <div class="plugin-name">{{ plugin.name }}</div>
       <AppTooltip class="plugin-desc" :content="plugin.description" :lines="1"></AppTooltip>
+      <span v-if="updates.canUpdate(plugin.id)" class="plugin-desc"
+        >可更新至 {{ updates.latest[plugin.id]?.version }}</span
+      >
     </div>
+    <el-button
+      v-if="updates.canUpdate(plugin.id)"
+      size="small"
+      type="primary"
+      plain
+      :loading="updates.updating[plugin.id]"
+      @click.stop="updatePlugin"
+      >更新</el-button
+    >
     <slot :plugin="plugin"></slot>
   </div>
 </template>

@@ -25,7 +25,9 @@ export default class NpmUtils {
       const tarballUrl = pkgInfo.versions[ver].dist.tarball
 
       // 下载 tarball
-      const arrayBuffer = await fetch(tarballUrl).then((r) => r.arrayBuffer())
+      const response = await fetch(tarballUrl)
+      if (!response.ok) throw new Error(`下载安装包失败：HTTP ${response.status}`)
+      const arrayBuffer = await response.arrayBuffer()
       const tarballBuffer = Buffer.from(arrayBuffer)
 
       // 临时保存 tarball

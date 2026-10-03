@@ -9,7 +9,7 @@ import type { InstalledToolkitPlugin } from '@/shared/types/toolkit-plugin.js'
 import PluginInfoDialog from '@/renderer/components/plugin/PluginInfoDialog.vue'
 import { useStarredPluginsStore } from '@/renderer/stores/starred-plugins'
 import { appEnv } from '@ybgnb/vite-env/common'
-import { lte } from 'semver'
+import { usePluginUpdates } from '@/renderer/stores/plugin-updates'
 
 const props = withDefaults(defineProps<PluginCardProps<T>>(), {})
 
@@ -17,19 +17,11 @@ const { base64 } = usePluginIconBase64(() => props.plugin)
 const { loading, loadingData: WrappedLoad } = useLoadingData({
   singleFlight: true,
 })
-const { hasInstalled, find } = useAppInstalledPlugins()
-const installedPlugin = computed(() => {
-  return find(props.plugin.id)
-})
+const { hasInstalled } = useAppInstalledPlugins()
+const updates = usePluginUpdates()
 const isInstalled = computed(() => hasInstalled(props.plugin.id))
 const canUpdate = computed(() => {
-  if (props.type !== 'market') return false
-
-  if (installedPlugin.value == null) return false
-
-  if (lte(props.plugin.version, installedPlugin.value.version)) return false
-
-  return true
+  return updates.canUpdate(props.plugin.id)
 })
 const { isStarred, addStar, removeStar } = useStarredPluginsStore()
 const star = computed(() => isStarred(props.plugin.id))
@@ -81,13 +73,18 @@ const starPlugin = () => {
 </script>
 
 <template>
-  <div class="plugin-card" v-loading="loading" :class="type === 'no-options' ? 'not-tech-style' : ''">
+  <div
+    class="plugin-card"
+    v-loading="loading || updates.updating[plugin.id]"
+    :class="type === 'no-options' ? 'not-tech-style' : ''"
+  >
     <span v-if="type !== 'no-options' && isInstalled" class="badge tag-installed"></span>
     <img class="plugin-icon" :src="base64" alt="" />
     <div class="plugin-infos">
       <div class="infos-header">
         <div class="title">
           <div class="plugin-name">{{ plugin.name }}</div>
+          <el-tag v-if="canUpdate" size="small" type="warning">可更新 {{ updates.latest[plugin.id]?.version }}</el-tag>
           <div v-if="plugin.type === 'task'" class="plugin-task-flag">定时任务</div>
         </div>
         <div class="sub-title">

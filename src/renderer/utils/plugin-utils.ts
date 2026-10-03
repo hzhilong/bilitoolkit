@@ -12,6 +12,7 @@ import { parseNpmSearchResultPkg } from '@/shared/utils/plugin-parse.js'
 import { toIPC } from 'bilitoolkit-runtime'
 import { getFormattedDate } from '@ybgnb/utils'
 import { searchPackages, type NpmSearchResultItem, SearchText } from 'public-registry-api'
+import { usePluginUpdates } from '@/renderer/stores/plugin-updates'
 import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
 import type { PageResult } from 'bilitoolkit-ui'
 import { useRecentPluginsStore } from '@/renderer/stores/recent-plugins'
@@ -25,6 +26,7 @@ export class PluginUtils {
   }
 
   static async closePluginView(plugin: InstalledToolkitPlugin) {
+    if (plugin.type === 'ui') await toolkitApi.core.closePlugin(toIPC(plugin))
     eventBus.emit('closePluginView', { plugin: plugin })
   }
 
@@ -94,6 +96,7 @@ export class PluginUtils {
     })
     const currPageList = await this.sortNpmPlugins(result.objects)
     result.objects = currPageList.filter((p) => blockedPluginIds.indexOf(p.package.name) < 0)
+    for (const entry of result.objects) usePluginUpdates().recordLatest(parseNpmSearchResultPkg(entry.package))
     return {
       pageNum: pageNum,
       pageSize: pageSize,
@@ -122,17 +125,24 @@ export class PluginUtils {
   }
 
   static async update(plugin: ToolkitPlugin) {
-    const appInstalledPlugins = useAppInstalledPlugins()
-    const oldPlugin = appInstalledPlugins.find(plugin.id)
-    if (!oldPlugin) throw new AppError('内部错误，插件未安装。请刷新后重试')
+    const updates = usePluginUpdates()
+    if (updates.updating[plugin.id]) throw new AppError('该插件正在更新')
+    updates.updating[plugin.id] = true
+    try {
+      const appInstalledPlugins = useAppInstalledPlugins()
+      const oldPlugin = appInstalledPlugins.find(plugin.id)
+      if (!oldPlugin) throw new AppError('内部错误，插件未安装。请刷新后重试')
 
-    await PluginUtils.closePluginView(oldPlugin)
-    const installedPlugin = await toolkitApi.core.updatePlugin({
-      ...toIPC(oldPlugin),
-      installDate: getFormattedDate(),
-    })
-    appInstalledPlugins.addPlugin(installedPlugin)
-    return installedPlugin
+      await PluginUtils.closePluginView(oldPlugin)
+      const installedPlugin = await toolkitApi.core.updatePlugin({
+        ...toIPC(oldPlugin),
+        installDate: getFormattedDate(),
+      })
+      appInstalledPlugins.addPlugin(installedPlugin)
+      return installedPlugin
+    } finally {
+      delete updates.updating[plugin.id]
+    }
   }
 
   static async uninstall(plugin: InstalledToolkitPlugin) {

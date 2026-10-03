@@ -5,7 +5,7 @@ import type {
   RecommendedPlugins,
 } from '@/shared/types/toolkit-plugin.js'
 import { getFormattedDate, getErrorMessage, parseGithubRepoUrl, parseGithubRawUrl, fetchWithFormat } from '@ybgnb/utils'
-import { parsePluginKeywords } from '@/shared/utils/plugin-parse.js'
+import { parsePluginKeywords, parsePluginManifest } from '@/shared/utils/plugin-parse.js'
 import path from 'path'
 import fs from 'fs'
 import type { PackageJSON } from '@npm/types'
@@ -30,6 +30,22 @@ export function readPluginPackage(pluginRootPath: string) {
   return readJSONFile<PackageJSON>(path.join(pluginRootPath, 'package.json'))
 }
 
+/** 校正旧程序保存的插件信息，保留安装日期、文件大小和任务配置。 */
+export function restoreInstalledPluginMetadata(plugin: InstalledToolkitPlugin): InstalledToolkitPlugin {
+  if (plugin.isTest) return plugin
+  const pkg = JSON.parse(fs.readFileSync(path.join(plugin.files.rootPath, 'package.json'), 'utf8')) as PackageJSON
+  if (pkg.name !== plugin.id) throw new AppError('已安装插件的包名与登记信息不符')
+  const metadata = parsePluginManifest(pkg, plugin.author)
+  return {
+    ...plugin,
+    ...metadata,
+    files: {
+      ...plugin.files,
+      indexPath: path.join(plugin.files.rootPath, 'dist', metadata.type === 'ui' ? 'index.html' : 'index.js'),
+    },
+  }
+}
+
 /**
  * 加载已安装的插件
  * @param options   插件下载选项
@@ -39,14 +55,22 @@ export async function loadInstalledPlugin(
   options: PluginDownloadOptions,
   cacheIcon: boolean = true,
 ): Promise<InstalledToolkitPlugin | TaskPluginInfo> {
+  const pkg = await readPluginPackage(options.rootDirPath)
+  if (pkg.name !== options.id || pkg.version !== options.version) {
+    throw new AppError(
+      `插件安装包与请求版本不符：期望 ${options.id}@${options.version}，实际 ${pkg.name}@${pkg.version}`,
+    )
+  }
+  const metadata = parsePluginManifest(pkg, options.author)
   const size = (await getDirSize(options.rootDirPath)) / 1024
   const sizeDesc = formatFileSizeFromKB(size)
   const installed = {
     ...options,
+    ...metadata,
     files: {
       rootPath: options.rootDirPath,
       distPath: path.join(options.rootDirPath, 'dist'),
-      indexPath: path.join(options.rootDirPath, 'dist', options.type === 'ui' ? 'index.html' : 'index.js'),
+      indexPath: path.join(options.rootDirPath, 'dist', metadata.type === 'ui' ? 'index.html' : 'index.js'),
       size: size,
       sizeDesc: sizeDesc,
     },

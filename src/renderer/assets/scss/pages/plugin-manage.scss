@@ -1,15 +1,29 @@
 .header {
+  flex-wrap: wrap;
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
 
-  .actions{
+  .actions {
+    flex-wrap: wrap;
     margin-left: auto;
     display: flex;
     align-items: center;
     gap: 22px;
   }
+}
+
+.installed-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.check-error {
+  color: var(--el-color-warning);
+  font-size: 12px;
 }
 
 .list-wrapper {

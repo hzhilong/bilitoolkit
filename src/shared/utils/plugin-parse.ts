@@ -2,6 +2,21 @@ import type { PluginType, ToolkitPlugin } from '@/shared/types/toolkit-plugin.js
 import { pluginKeywordsPrefix } from '@/shared/common/plugin-keywords.js'
 import type { SearchResultPackage, NpmPackage } from 'public-registry-api'
 import { getFormattedDate } from '@ybgnb/utils'
+import type { PackageJSON } from '@npm/types'
+
+export const parsePluginManifest = (pkg: PackageJSON, fallbackAuthor = '') => ({
+  ...parsePluginKeywords(pkg.name, pkg.keywords),
+  version: pkg.version,
+  description: pkg.description || '',
+  author: typeof pkg.author === 'string' ? pkg.author : pkg.author?.name || fallbackAuthor,
+  links: {
+    npm: `https://www.npmjs.com/package/${pkg.name}`,
+    homepage: pkg.homepage,
+    repository: typeof pkg.repository === 'object' ? pkg.repository.url : pkg.repository,
+    repositoryDir: typeof pkg.repository === 'object' ? pkg.repository.directory : undefined,
+    bugs: typeof pkg.bugs === 'object' ? pkg.bugs.url : pkg.bugs,
+  },
+})
 
 /**
  * 解析插件关键词
@@ -58,19 +73,22 @@ export const parseNpmSearchResultPkg = (pkg: SearchResultPackage) => {
  * 解析 npm 包（版本获取最新的）
  */
 export const parseNpmPackage = (pkg: NpmPackage) => {
+  const latestVersion = pkg['dist-tags'].latest
+  const manifest = pkg.versions[latestVersion]
+  if (!manifest) throw new Error(`npm 包缺少 latest 版本: ${pkg.name}`)
   return {
-    ...parsePluginKeywords(pkg.name, pkg.keywords),
+    ...parsePluginKeywords(pkg.name, manifest.keywords),
     id: pkg.name,
-    author: pkg.author?.name ?? '',
-    description: pkg.description ?? '',
-    version: pkg['dist-tags'].latest,
-    date: getFormattedDate(new Date(pkg.time.created)),
+    author: typeof manifest.author === 'string' ? manifest.author : (manifest.author?.name ?? ''),
+    description: manifest.description ?? '',
+    version: latestVersion,
+    date: getFormattedDate(new Date(pkg.time[latestVersion] || pkg.time.created)),
     links: {
       npm: `https://www.npmjs.com/package/${pkg.name}`,
-      homepage: pkg.homepage,
-      repository: pkg.repository?.url,
-      repositoryDir: pkg.repository?.directory,
-      bugs: pkg.bugs?.url,
+      homepage: manifest.homepage,
+      repository: manifest.repository?.url,
+      repositoryDir: manifest.repository?.directory,
+      bugs: manifest.bugs?.url,
     },
   } satisfies ToolkitPlugin
 }
