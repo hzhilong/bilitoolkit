@@ -69,7 +69,15 @@ const handleCurrentChange = () => {
         inactive-text="不显示第三方插件"
         @change="refreshTable"
       />
-      <el-input v-model="pluginName" clearable placeholder="插件完整名称" size="small" style="width: 120px"></el-input>
+      <el-input
+        v-model="pluginName"
+        clearable
+        placeholder="名称、包名或描述关键词"
+        size="small"
+        style="width: 210px"
+        @keyup.enter="refreshTable"
+        @clear="refreshTable"
+      ></el-input>
       <div class="options">
         <el-button @click="refreshTable" size="small">查询</el-button>
       </div>

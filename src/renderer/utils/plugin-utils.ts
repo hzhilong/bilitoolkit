@@ -13,6 +13,7 @@ import { toIPC } from 'bilitoolkit-runtime'
 import { getFormattedDate } from '@ybgnb/utils'
 import { searchPackages, type NpmSearchResultItem, SearchText } from 'public-registry-api'
 import { usePluginUpdates } from '@/renderer/stores/plugin-updates'
+import { matchesPluginSearch } from '@/shared/utils/plugin-search'
 import { useRecommendedPlugins } from '@/renderer/stores/recommended-plugins'
 import type { PageResult } from 'bilitoolkit-ui'
 import { useRecentPluginsStore } from '@/renderer/stores/recent-plugins'
@@ -81,28 +82,33 @@ export class PluginUtils {
     name?: string
   }): Promise<PageResult<ToolkitPluginWithNpmInfo>> {
     const searchText = SearchText.create()
-    if (name) {
-      searchText.keywords([`bilitoolkit-plugin:name:${name}`])
-    } else {
-      searchText.keywords(['bilitoolkit-plugin'])
-    }
+    searchText.keywords(['bilitoolkit-plugin'])
     if (!showThirdPartyPlugins) {
       searchText.author(appEnv.APP_AUTHOR)
     }
-    const result = await searchPackages({
-      text: searchText.toString(),
-      size: pageSize,
-      from: (pageNum - 1) * 20,
-    })
-    const currPageList = await this.sortNpmPlugins(result.objects)
-    result.objects = currPageList.filter((p) => blockedPluginIds.indexOf(p.package.name) < 0)
-    for (const entry of result.objects) usePluginUpdates().recordLatest(parseNpmSearchResultPkg(entry.package))
+    const all: NpmSearchResultItem[] = []
+    let total = 0
+    do {
+      const result = await searchPackages({ text: searchText.toString(), size: 250, from: all.length })
+      all.push(...result.objects)
+      total = result.total
+      if (!result.objects.length) break
+    } while (all.length < total)
+    const matches = await this.sortNpmPlugins(
+      all.filter(
+        (p) =>
+          !blockedPluginIds.includes(p.package.name) &&
+          matchesPluginSearch(parseNpmSearchResultPkg(p.package), name || ''),
+      ),
+    )
+    for (const entry of matches) usePluginUpdates().recordLatest(parseNpmSearchResultPkg(entry.package))
+    const resultPage = matches.slice((pageNum - 1) * pageSize, pageNum * pageSize)
     return {
       pageNum: pageNum,
       pageSize: pageSize,
-      total: result.total,
-      totalPages: Math.floor(result.total / pageSize) + 1,
-      data: result.objects.map((p) => {
+      total: matches.length,
+      totalPages: Math.ceil(matches.length / pageSize),
+      data: resultPage.map((p) => {
         return {
           ...parseNpmSearchResultPkg(p.package),
           downloads: {

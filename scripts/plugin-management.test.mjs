@@ -21,6 +21,7 @@ const parseUrl = moduleUrl('../src/shared/utils/plugin-parse.ts', {
   '@ybgnb/utils': import.meta.resolve('@ybgnb/utils'),
 })
 const { parseNpmPackage } = await import(parseUrl)
+const { matchesPluginSearch } = await import(moduleUrl('../src/shared/utils/plugin-search.ts'))
 
 test('startup repairs stale saved metadata from installed files even when saved version is already latest', async () => {
   const source = ts.createSourceFile(
@@ -100,6 +101,22 @@ test('latest manifest replaces stale top-level name, description, author and rep
   assert.match(result.links.repository, /plugin-struggle0929$/)
 })
 
+test('partial keyword search returns every matching plugin and supports package/description fields', () => {
+  const plugins = ['弹幕工具箱', '直播弹幕查询', '直播弹幕投票', '评论搜索'].map((name, i) => ({
+    name,
+    id: `bilitoolkit-plugin-${i}`,
+    description: i === 1 ? '按房间号或UID查询' : '',
+  }))
+  assert.deepEqual(
+    plugins.filter((p) => matchesPluginSearch(p, '弹幕')).map((p) => p.name),
+    plugins.slice(0, 3).map((p) => p.name),
+  )
+  assert.equal(plugins.filter((p) => matchesPluginSearch(p, '房间号')).length, 1)
+  assert.equal(plugins.filter((p) => matchesPluginSearch(p, 'PLUGIN-2')).length, 1)
+  assert.equal(plugins.filter((p) => matchesPluginSearch(p, '直播 投票')).length, 1)
+  assert.equal(plugins.filter((p) => matchesPluginSearch(p, '  ')).length, 4)
+})
+
 test('update awaits old UI closure, then replaces installed object and always releases update lock', async () => {
   let finishClosing
   const events = []
@@ -158,7 +175,7 @@ test('update awaits old UI closure, then replaces installed object and always re
     ].map((name) => [name, mocked]),
   )
   imports['@/shared/utils/plugin-parse.js'] = parseUrl
-
+  imports['@/shared/utils/plugin-search'] = moduleUrl('../src/shared/utils/plugin-search.ts')
   const { PluginUtils } = await import(moduleUrl('../src/renderer/utils/plugin-utils.ts', imports))
   const updating = PluginUtils.update(oldPlugin)
   await new Promise((resolve) => setImmediate(resolve))
